@@ -15,13 +15,11 @@ app.use(cors());
 dotenv.config();
 
 app.use(session({
-    secret: process.env.GOOGLE_CLIENT_SECRET,
+    secret: process.env.GOOGLE_SECRET_SESSION,
     resave: false,
     saveUninitialized: true
 }));
 
-// app.use(passport.initialize());
-// app.use(passport.session());
 app.use(passport.initialize());
 app.use(passport.session());
 connectDB();
