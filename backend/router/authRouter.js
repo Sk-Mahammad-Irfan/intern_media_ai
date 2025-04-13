@@ -13,17 +13,18 @@ router.get("/google", passport.authenticate("google", {
 }))
 
 router.get("/google/callback", passport.authenticate("google", {
-    successRedirect: "/success",
-    failureRedirect: "/failure",
+    successRedirect: "http://localhost:5000/api/auth/success",
+    failureRedirect: "http://localhost:5000/api/auth/failure",
     session: true
 }))
 
 router.get("/success", (req, res) => {
-    res.send("success");
+    console.log(req.user);
+    res.send("success login using google");
 })
 
 router.get("/failure", (req, res) => {
-    res.send("failure");
+    res.send("failure login using google");
 })
 
 
