@@ -136,3 +136,19 @@ export const failureGoogleLogin = async (req, res) => {
         });
     }
 }
+
+// test protected route
+export const testProtectedRoute = async (req, res) => {
+    try {
+        res.status(200).send({
+            success: true,
+            message: "test authenticated route",
+        });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: "Error in testAuthenticated",
+            error,
+        });
+    }
+}

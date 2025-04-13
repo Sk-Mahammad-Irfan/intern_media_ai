@@ -4,7 +4,6 @@ import authRouter from "./router/authRouter.js";
 import connectDB from "./config/db.js"
 import dotenv from "dotenv";
 import session from "express-session";
-// import passport from "passport";
 import "./google_auth/passportConfig.js";
 import passport from "passport";
 

@@ -1,6 +1,7 @@
 import express from "express";
-import { registerController, loginController } from "../controller/authController.js";
+import { registerController, loginController, testProtectedRoute } from "../controller/authController.js";
 import passport from "passport";
+import { requireSignIn } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -26,6 +27,9 @@ router.get("/success", (req, res) => {
 router.get("/failure", (req, res) => {
     res.send("failure login using google");
 })
+
+// test protected route
+router.get("/test", requireSignIn, testProtectedRoute)
 
 
 export default router;

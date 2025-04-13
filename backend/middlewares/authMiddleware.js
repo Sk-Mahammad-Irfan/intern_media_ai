@@ -9,6 +9,10 @@ export const requireSignIn = async (req, res, next) => {
         req.user = decode;
         next();
     } catch (error) {
-        console.log(error);
+        res.status(401).send({
+            success: false,
+            message: "Unauthorized",
+            error,
+        });
     }
 };
