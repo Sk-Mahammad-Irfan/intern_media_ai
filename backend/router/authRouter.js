@@ -1,5 +1,5 @@
 import express from "express";
-import { registerController, loginController, testProtectedRoute } from "../controller/authController.js";
+import { registerController, loginController, testProtectedRoute, successGoogleLogin, failureGoogleLogin } from "../controller/authController.js";
 import passport from "passport";
 import { requireSignIn } from "../middlewares/authMiddleware.js";
 
@@ -14,19 +14,14 @@ router.get("/google", passport.authenticate("google", {
 }))
 
 router.get("/google/callback", passport.authenticate("google", {
-    successRedirect: "http://localhost:5000/api/auth/success",
-    failureRedirect: "http://localhost:5000/api/auth/failure",
+    successRedirect: "/api/auth/success",
+    failureRedirect: "/api/auth/failure",
     session: true
 }))
 
-router.get("/success", (req, res) => {
-    console.log(req.user);
-    res.send("success login using google");
-})
+router.get("/success", successGoogleLogin)
 
-router.get("/failure", (req, res) => {
-    res.send("failure login using google");
-})
+router.get("/failure", failureGoogleLogin)
 
 // test protected route
 router.get("/test", requireSignIn, testProtectedRoute)
