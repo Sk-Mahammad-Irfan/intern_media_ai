@@ -29,10 +29,13 @@ passport.use(
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
           expiresIn: "7d",
         });
-        user._doc.token = token;
+
+        user = user.toObject();
+        user.token = token;
 
         return done(null, user);
       } catch (err) {
+        console.error("Google Strategy Error:", err);
         return done(err, null);
       }
     }

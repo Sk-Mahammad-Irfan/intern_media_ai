@@ -117,16 +117,38 @@ export const loginController = async (req, res) => {
 
 export const successGoogleLogin = async (req, res) => {
   try {
+    // Check if user exists
+    if (!req.user) {
+      return res.status(401).send({
+        success: false,
+        message: "User not authenticated",
+      });
+    }
+
+    // Generate JWT token for the user
+    const token = JWT.sign({ _id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // Create user object with token
+    const userWithToken = {
+      ...(typeof req.user.toObject === "function"
+        ? req.user.toObject()
+        : req.user),
+      token: token,
+    };
+
     res.status(200).send({
       success: true,
       message: "success login using google",
-      user: req.user,
+      user: userWithToken,
     });
   } catch (error) {
+    console.error("Error in successGoogleLogin:", error);
     res.status(500).send({
       success: false,
       message: "Error in successGoogleLogin",
-      error,
+      error: error.message || error,
     });
   }
 };

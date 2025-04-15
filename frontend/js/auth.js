@@ -101,8 +101,6 @@ form.addEventListener("submit", async (e) => {
 });
 
 document.getElementById("google-login").addEventListener("click", () => {
-  // Store the current URL in localStorage to redirect back after Google auth
-  localStorage.setItem("redirect_after_auth", window.location.href);
   window.location.href = "http://localhost:5000/api/auth/google";
 });
 
