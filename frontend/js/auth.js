@@ -114,3 +114,92 @@ window.addEventListener("load", () => {
     window.location.href = "credits.html";
   }
 });
+
+/**
+ * Authentication utility functions
+ */
+
+// Check if user is authenticated
+function isAuthenticated() {
+  const userData = localStorage.getItem("user_data");
+  const authToken = localStorage.getItem("Auth_token");
+
+  return !!(userData || authToken);
+}
+
+// Update UI based on authentication state
+function updateAuthUI() {
+  const signInButtons = document.querySelectorAll(".auth-sign-in-button");
+
+  if (isAuthenticated()) {
+    // User is authenticated, hide sign in buttons
+    signInButtons.forEach((button) => {
+      button.style.display = "none";
+    });
+  } else {
+    // User is not authenticated, show sign in buttons
+    signInButtons.forEach((button) => {
+      button.style.display = "block";
+    });
+  }
+}
+
+// Update sidebar active state based on current page
+function updateSidebarActiveState() {
+  // Get current page path
+  const currentPath =
+    window.location.pathname.split("/").pop() || "dashboard.html";
+
+  // Remove active class from all nav links
+  document.querySelectorAll(".sidebar .nav-link").forEach((link) => {
+    link.classList.remove(
+      "active",
+      "text-primary",
+      "bg-primary",
+      "bg-opacity-10"
+    );
+    link.classList.add("text-secondary");
+  });
+
+  // Add active class to current page link
+  const currentLink = document.querySelector(
+    `.sidebar .nav-link[href="${currentPath}"]`
+  );
+  if (currentLink) {
+    currentLink.classList.remove("text-secondary");
+    currentLink.classList.add(
+      "active",
+      "text-primary",
+      "bg-primary",
+      "bg-opacity-10"
+    );
+  }
+
+  // Also update mobile menu active state
+  document.querySelectorAll(".offcanvas-body .nav-link").forEach((link) => {
+    const linkPath = link.getAttribute("href");
+    if (linkPath === currentPath) {
+      link.classList.remove("text-secondary");
+      link.classList.add(
+        "active",
+        "text-primary",
+        "bg-primary",
+        "bg-opacity-10"
+      );
+    } else {
+      link.classList.remove(
+        "active",
+        "text-primary",
+        "bg-primary",
+        "bg-opacity-10"
+      );
+      link.classList.add("text-secondary");
+    }
+  });
+}
+
+// Initialize authentication UI when DOM is loaded
+document.addEventListener("DOMContentLoaded", function () {
+  updateAuthUI();
+  updateSidebarActiveState();
+});
