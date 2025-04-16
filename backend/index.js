@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRouter from "./router/authRouter.js";
 import creditRouter from "./router/creditRouter.js";
+import adapterRouter from "./router/adapterRouter.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import session from "express-session";
@@ -31,6 +32,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use("/api/auth", authRouter);
 app.use("/api/credits", creditRouter);
+app.use("/api/video", adapterRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
