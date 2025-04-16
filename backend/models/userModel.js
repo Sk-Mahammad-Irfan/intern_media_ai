@@ -16,17 +16,20 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      require: true,
+      require: function () {
+        // Password is required only if googleId is not provided
+        return !this.googleId;
+      },
       minLength: 8,
       maxLength: 100,
-    },
-    googleId: {
-      type: String,
-      default: null,
     },
     credits: {
       type: Number,
       default: 0,
+    },
+    googleId: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }
