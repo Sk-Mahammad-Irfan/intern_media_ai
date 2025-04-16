@@ -13,7 +13,7 @@ export const generateVideo = async (req, res) => {
       { prompt },
       {
         headers: {
-          Authorization: "Bearer LOt00HYBeSYqH5Xzoh24xzPJMWqv48YO",
+          Authorization: `Bearer ${process.env.API}`,
           "Content-Type": "application/json",
         },
       }
