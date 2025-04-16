@@ -60,7 +60,7 @@
         class="container-fluid d-flex flex-wrap align-items-center justify-content-between gap-2"
       >
         <!-- Brand -->
-        <a class="navbar-brand fw-bold text-primary" href="#">Media Ai</a>
+        <a class="navbar-brand fw-bold text-primary" href="dashboard.html">Media Ai</a>
 
         <!-- Mobile Toggle Button -->
         <button
@@ -128,7 +128,7 @@
       </div>
       <div class="offcanvas-body px-3">
         <nav class="nav flex-column">
-          <a class="nav-link" href="videomodel.html">Models</a>
+          <a class="nav-link" href="model.html">Models</a>
           <a class="nav-link" href="#">Chat</a>
           <a class="nav-link" href="#">Rankings</a>
           <a class="nav-link" href="#">Docs</a>
@@ -223,9 +223,10 @@
       <!-- Main Content -->
       <div class="main-content">
         <div class="container py-4">
-          <h1>Privacy Settings</h1>
+          <h1 class="mb-3">Privacy Settings</h1>
           <p class="lead">Manage your privacy settings and data preferences.</p>
-
+      
+          <!-- Data Collection Card -->
           <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
               <h5 class="mb-0">Data Collection</h5>
@@ -238,13 +239,14 @@
                   id="allowAnalytics"
                   checked
                 />
-                <label class="form-check-label" for="allowAnalytics"
-                  >Allow analytics data collection</label
-                >
+                <label class="form-check-label" for="allowAnalytics">
+                  Allow analytics data collection
+                </label>
                 <div class="text-muted small">
                   We collect anonymous usage data to improve our services
                 </div>
               </div>
+      
               <div class="form-check form-switch mb-3">
                 <input
                   class="form-check-input"
@@ -252,16 +254,17 @@
                   id="allowPersonalization"
                   checked
                 />
-                <label class="form-check-label" for="allowPersonalization"
-                  >Allow personalization</label
-                >
+                <label class="form-check-label" for="allowPersonalization">
+                  Allow personalization
+                </label>
                 <div class="text-muted small">
                   We use your data to personalize your experience
                 </div>
               </div>
             </div>
           </div>
-
+      
+          <!-- Model Usage Data Card -->
           <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
               <h5 class="mb-0">Model Usage Data</h5>
@@ -274,52 +277,53 @@
                   id="saveModelData"
                   checked
                 />
-                <label class="form-check-label" for="saveModelData"
-                  >Save model interactions</label
-                >
+                <label class="form-check-label" for="saveModelData">
+                  Save model interactions
+                </label>
                 <div class="text-muted small">
-                  Your prompts and model responses will be saved for improving
-                  AI models
+                  Your prompts and model responses will be saved for improving AI models
                 </div>
               </div>
+      
               <div class="form-check form-switch mb-3">
                 <input
                   class="form-check-input"
                   type="checkbox"
                   id="shareModelData"
                 />
-                <label class="form-check-label" for="shareModelData"
-                  >Share data with model providers</label
-                >
+                <label class="form-check-label" for="shareModelData">
+                  Share data with model providers
+                </label>
                 <div class="text-muted small">
                   Allow us to share anonymized data with our model providers
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="card shadow-sm">
+      
+          <!-- Data Management Card -->
+          <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
               <h5 class="mb-0">Data Management</h5>
             </div>
             <div class="card-body">
               <p>
-                You can download your data or request deletion of all your data
-                from our servers.
+                You can download your data or request deletion of all your data from our servers.
               </p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary">
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-outline-primary w-100 w-sm-auto">
                   Download My Data
                 </button>
-                <button class="btn btn-outline-danger">
+                <button class="btn btn-outline-danger w-100 w-sm-auto">
                   Request Data Deletion
                 </button>
               </div>
             </div>
           </div>
+      
         </div>
       </div>
-    </div>
+      
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
