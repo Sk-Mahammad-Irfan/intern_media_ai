@@ -1,159 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generate Lemon Video</title>
-
-    <!-- Bootstrap CSS -->
+    <title>Media Ai Dashboard</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <style>
       body {
+        margin: 0;
         background-color: #f8f9fa;
       }
 
-      .chat-container {
-        max-width: 700px;
-        margin: 40px auto;
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        padding: 30px;
+      .navbar {
+        z-index: 1045;
       }
 
-      .message-box {
-        background-color: #f1f1f1;
-        border-radius: 15px;
-        padding: 15px;
-        margin-bottom: 15px;
-        text-align: left;
+      .main-container {
+        display: flex;
+        flex-direction: row;
+        min-height: calc(100vh - 56px);
       }
 
-      .user-message {
-        background-color: #e0f7fa;
-        text-align: right;
+      .sidebar {
+        width: 220px;
+        background-color: #fff;
+        min-height: 100%;
       }
 
-      #videoContainer video {
-        max-width: 100%;
-        border-radius: 10px;
-      }
-
-      #downloadLink {
-        display: none;
-        margin-top: 10px;
-        font-weight: bold;
-        text-decoration: none;
+      .sidebar .nav-link.active {
+        background-color: rgba(13, 110, 253, 0.1);
         color: #0d6efd;
+        font-weight: 500;
       }
 
-      #loading {
-        display: none;
-      }
-
-      /* Responsive navbar styling */
-      @media (max-width: 768px) {
-        .navbar {
-          padding: 0.5rem 0;
-        }
-        .navbar-nav {
-          flex-direction: column;
-          align-items: center;
-        }
-        .navbar-nav .nav-item {
-          margin-bottom: 1rem;
-        }
-        .navbar-nav .nav-item .nav-link {
-          font-size: 1.2rem;
-        }
-        .navbar-toggler {
-          margin-bottom: 1rem;
+      @media (max-width: 767px) {
+        .sidebar {
+          display: none;
         }
       }
     </style>
   </head>
-  <body>
+  <body class="bg-light d-flex flex-column min-vh-100">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">AI Media Hub</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div
+        class="container-fluid d-flex flex-wrap align-items-center justify-content-between gap-2"
+      >
+        <a class="navbar-brand fw-bold text-primary" href="index.html"
+          >Media Ai</a
+        >
+
         <button
-          class="navbar-toggler"
+          class="navbar-toggler d-lg-none"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMobile"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="model.html">Models</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="chat.html">Chat</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="ranking.html">Ranking</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="docs.html">Docs</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <a
-              href="settings.html"
-              class="btn text-bg-info text-info-emphasis me-2"
-              >Settings</a
-            >
-            <a href="api-keys.html" class="btn text-info-emphasis">API Keys</a>
-          </div>
-        </div>
+
+        <form class="d-none d-lg-block flex-grow-1 mx-3">
+          <input
+            class="form-control rounded-pill bg-light w-100"
+            type="search"
+            placeholder="Search models"
+          />
+        </form>
+
+        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+          <li class="nav-item mx-1">
+            <a class="nav-link" href="model.html">Models</a>
+          </li>
+          <li class="nav-item mx-1"><a class="nav-link" href="#">Chat</a></li>
+          <li class="nav-item mx-1">
+            <a class="nav-link" href="#">Rankings</a>
+          </li>
+          <li class="nav-item mx-1"><a class="nav-link" href="#">Docs</a></li>
+          <li class="nav-item ms-2">
+            <a class="nav-link p-0" href="#"
+              ><img
+                src="assets/profile.jpg"
+                alt="Profile"
+                class="rounded-circle border"
+                width="32"
+                height="32"
+            /></a>
+          </li>
+        </ul>
+
+        <form class="d-block d-lg-none w-100 mt-2">
+          <input
+            class="form-control rounded-pill bg-light"
+            type="search"
+            placeholder="Search models"
+          />
+        </form>
       </div>
     </nav>
 
-    <!-- Chat Prompt UI -->
-    <div class="chat-container">
-      <h4 class="mb-4 text-center">🎬 Video Prompt Generator</h4>
-
-      <div class="mb-3">
-        <label for="promptInput" class="form-label">Enter your prompt</label>
-        <textarea
-          class="form-control"
-          id="promptInput"
-          rows="4"
-          placeholder="Describe the video you want to generate..."
-        ></textarea>
+    <!-- Mobile Offcanvas Menu -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMobile">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold text-primary">Media Ai</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
       </div>
-
-      <div class="d-grid gap-2">
-        <button class="btn btn-primary" onclick="generateVideo()">
-          Generate 🍋
-        </button>
-      </div>
-
-      <div id="loading" class="text-center mt-4">
-        <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-2">Generating your video...</p>
-      </div>
-
-      <div id="videoContainer" class="mt-4 text-center"></div>
-      <div class="text-center">
-        <a id="downloadLink" href="#" download="generated-video.mp4"
-          >⬇️ Download Video</a
-        >
+      <div class="offcanvas-body px-3">
+        <nav class="nav flex-column">
+          <a class="nav-link" href="model.html">Models</a>
+          <a class="nav-link" href="#">Chat</a>
+          <a class="nav-link" href="#">Rankings</a>
+          <a class="nav-link" href="#">Docs</a>
+          <h6 class="text-muted mt-4 mb-2">Account</h6>
+          <a class="nav-link d-flex align-items-center" href="settings.html"
+            ><i class="bi bi-gear me-2"></i> Settings</a
+          >
+          <a class="nav-link d-flex align-items-center" href="credits.html"
+            ><i class="bi bi-credit-card me-2"></i> Credits</a
+          >
+          <a class="nav-link d-flex align-items-center" href="api-keys.html"
+            ><i class="bi bi-key me-2"></i> API Keys</a
+          >
+          <a class="nav-link d-flex align-items-center" href="provisioning.html"
+            ><i class="bi bi-hdd me-2"></i> Provisioning Keys</a
+          >
+          <a class="nav-link d-flex align-items-center" href="auth.html"
+            ><i class="bi bi-puzzle me-2"></i> Integrations</a
+          >
+          <a class="nav-link d-flex align-items-center" href="privacy.html"
+            ><i class="bi bi-shield-lock me-2"></i> Privacy</a
+          >
+          <div class="mt-4 auth-sign-in-button">
+            <a href="auth.html"
+              ><button class="btn btn-outline-primary w-100">Sign in</button></a
+            >
+          </div>
+        </nav>
       </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main Content -->
+    <div class="container-fluid main-container">
+      <!-- Sidebar -->
+      <div class="sidebar d-none d-md-block p-3">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a
+              href="settings.html"
+              class="nav-link text-secondary d-flex align-items-center"
+              ><i class="bi bi-gear me-2"></i> Settings</a
+            >
+          </li>
+          <li class="nav-item mb-2">
+            <a
+              href="credits.html"
+              class="nav-link text-secondary d-flex align-items-center"
+              ><i class="bi bi-credit-card me-2"></i> Credits</a
+            >
+          </li>
+          <li class="nav-item mb-2">
+            <a
+              href="api-keys.html"
+              class="nav-link active d-flex align-items-center"
+              ><i class="bi bi-key me-2"></i> API Keys</a
+            >
+          </li>
+          <li class="nav-item mb-2">
+            <a
+              href="provisioning.html"
+              class="nav-link text-secondary d-flex align-items-center"
+              ><i class="bi bi-hdd me-2"></i> Provisioning Keys</a
+            >
+          </li>
+          <li class="nav-item mb-2">
+            <a
+              href="integrations.html"
+              class="nav-link text-secondary d-flex align-items-center"
+              ><i class="bi bi-puzzle me-2"></i> Integrations</a
+            >
+          </li>
+          <li class="nav-item mb-2">
+            <a
+              href="privacy.html"
+              class="nav-link text-secondary d-flex align-items-center"
+              ><i class="bi bi-shield-lock me-2"></i> Privacy</a
+            >
+          </li>
+        </ul>
+      </div>
 
+      <!-- Page Content -->
+      <div class="container py-4">
+        <div class="chat-container">
+          <h4 class="mb-4 text-center">🎬 Video Prompt Generator</h4>
+
+          <div class="mb-3">
+            <label for="promptInput" class="form-label"
+              >Enter your prompt</label
+            >
+            <textarea
+              class="form-control"
+              id="promptInput"
+              rows="4"
+              placeholder="Describe the video you want to generate..."
+            ></textarea>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" onclick="generateVideo()">
+              Generate 🍋
+            </button>
+          </div>
+
+          <div id="loading" class="text-center mt-4" style="display: none">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Generating your video...</p>
+          </div>
+
+          <div id="videoContainer" class="mt-4 text-center"></div>
+          <div class="text-center mt-2">
+            <a
+              id="downloadLink"
+              href="#"
+              download="generated-video.mp4"
+              style="display: none"
+              >⬇️ Download Video</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       async function generateVideo() {
         const prompt = document.getElementById("promptInput").value.trim();
@@ -185,6 +275,8 @@
             const videoElement = document.createElement("video");
             videoElement.controls = true;
             videoElement.src = data.video_url;
+            videoElement.classList.add("mt-3");
+            videoElement.style.maxWidth = "100%";
 
             document.getElementById("videoContainer").appendChild(videoElement);
 
