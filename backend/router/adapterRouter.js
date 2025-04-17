@@ -1,8 +1,13 @@
 import express from "express";
 const router = express.Router();
-import { generateVideoFal } from "../controller/falController.js";
-import { generateVideo } from "../controller/deepinfraController.js";
+import {
+  generateVideoDeepinfra,
+  generateVideoFal,
+  generateVideoReplicate,
+} from "../controller/deepinfraController.js";
 
-router.post("/generate-video", generateVideo);
+router.post("/generate-video/fal", generateVideoFal);
+router.post("/generate-video/deep", generateVideoDeepinfra);
+router.post("/generate-video/repli", generateVideoReplicate);
 
 export default router;
