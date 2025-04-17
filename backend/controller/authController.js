@@ -9,35 +9,31 @@ export const registerController = async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).send({
         success: false,
-        message: "Please fill all field",
+        message: "Please fill all fields",
       });
     }
 
-    // if (username.length > 10 || email.length > 10 || password.length > 10) {
-    //   return res.status(400).send({
-    //     success: false,
-    //     message:
-    //       "Invalid username, email or password,length should be 10 character for each",
-    //   });
-    // }
-
-    if (
-      !validator.isEmail(email) ||
-      !validator.isAlpha(username) ||
-      !validator.isStrongPassword(password)
-    ) {
+    if (!validator.isEmail(email)) {
       return res.status(400).send({
         success: false,
-        message: "Invalid email or username or password,tp",
+        message: "Invalid email",
       });
     }
 
-    const exisitingUser = await userModel.findOne({ email });
+    if (!validator.isStrongPassword(password)) {
+      return res.status(400).send({
+        success: false,
+        message:
+          "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      });
+    }
 
-    if (exisitingUser) {
+    const existingUser = await userModel.findOne({ email });
+
+    if (existingUser) {
       return res.status(401).send({
         success: false,
-        message: "user already exisits",
+        message: "User already exists",
       });
     }
 
