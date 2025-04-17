@@ -13,13 +13,13 @@ export const registerController = async (req, res) => {
       });
     }
 
-    if (username.length > 10 || email.length > 10 || password.length > 10) {
-      return res.status(400).send({
-        success: false,
-        message:
-          "Invalid username, email or password,length should be 10 character for each",
-      });
-    }
+    // if (username.length > 10 || email.length > 10 || password.length > 10) {
+    //   return res.status(400).send({
+    //     success: false,
+    //     message:
+    //       "Invalid username, email or password,length should be 10 character for each",
+    //   });
+    // }
 
     if (
       !validator.isEmail(email) ||
