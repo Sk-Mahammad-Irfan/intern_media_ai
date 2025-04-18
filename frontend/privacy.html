@@ -12,33 +12,17 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+
+    <link rel="stylesheet" href="styles.css"/>
     <style>
-      body {
-        margin: 0;
-        background-color: #f8f9fa;
-      }
-
-      .navbar {
-        z-index: 1045;
-      }
-
+  
       .main-container {
         display: flex;
         flex-direction: row;
         min-height: calc(100vh - 56px); /* Account for navbar height */
       }
 
-      .sidebar {
-        width: 220px;
-        background-color: #fff;
-        min-height: 100%;
-      }
-
-      .sidebar .nav-link.active {
-        background-color: rgba(13, 110, 253, 0.1);
-        color: #0d6efd;
-        font-weight: 500;
-      }
+  
 
       .main-content {
         flex-grow: 1;
@@ -46,174 +30,142 @@
         background-color: #fff;
       }
 
-      @media (max-width: 767px) {
-        .sidebar {
-          display: none;
-        }
-      }
+  
+
     </style>
   </head>
   <body class="bg-light d-flex flex-column min-vh-100">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-      <div
-        class="container-fluid d-flex flex-wrap align-items-center justify-content-between gap-2"
-      >
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
         <!-- Brand -->
-        <a class="navbar-brand fw-bold text-primary" href="dashboard.html">Media Ai</a>
+        <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
 
-        <!-- Mobile Toggle Button -->
-        <button
-          class="navbar-toggler border-0 d-lg-none"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#sidebarMobile"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- Mobile controls -->
+        <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+          <div class="dropdown">
+            <a
+              href="#"
+              class="d-flex align-items-center text-decoration-none dropdown-toggle"
+              id="navbarDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div
+                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                style="width: 32px; height: 32px; font-size: 14px;"
+              >
+                U
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+              <li>
+                <h6 class="dropdown-header" id="account-username">Username</h6>
+                <p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="model.html">Models</a></li>
+              <li><a class="dropdown-item" href="credits.html">Chat</a></li>
+              <li><a class="dropdown-item" href="#">Rankings</a></li>
+              <li><a class="dropdown-item" href="#">Docs</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
+              <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
+              <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
+              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
+              <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
+              </a></li>
+            </ul>
+          </div>
+        </div>
 
-        <!-- Search for desktop -->
-        <form class="d-none d-lg-block flex-grow-1 mx-3">
-          <input
-            class="form-control rounded-pill bg-light w-100"
-            type="search"
-            placeholder="Search models"
-          />
+        <!-- Search (Desktop only) -->
+        <form class="d-none d-lg-block mx-3 flex-grow-1">
+          <input class="form-control rounded-pill bg-light desktop-search" type="search" placeholder="Search models" />
         </form>
 
-        <!-- Navbar Links -->
+        <!-- Desktop Nav Items -->
         <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-          <li class="nav-item mx-1">
-            <a class="nav-link" href="model.html">Models</a>
-          </li>
-          <li class="nav-item mx-1"><a class="nav-link" href="#">Chat</a></li>
-          <li class="nav-item mx-1">
-            <a class="nav-link" href="#">Rankings</a>
-          </li>
-          <li class="nav-item mx-1"><a class="nav-link" href="#">Docs</a></li>
-          <li class="nav-item ms-2">
-            <a class="nav-link p-0" href="#">
-              <img
-                src="assets/profile.jpg"
-                alt="Profile"
-                class="rounded-circle border"
-                width="32"
-                height="32"
-              />
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+          <li class="nav-item mx-1" id="signInDesktop">
+            <a class="nav-link fw-medium" href="auth.html">
+              <button type="button" class="btn btn-outline-primary">Sign in</button>
             </a>
           </li>
+          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+            <a
+              class="nav-link dropdown-toggle d-flex align-items-center"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                U
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
+              <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+              <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
+              <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
+              <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
+              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+              <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+            </ul>
+          </li>
         </ul>
-
-        <!-- Mobile Search -->
-        <form class="d-block d-lg-none w-100 mt-2">
-          <input
-            class="form-control rounded-pill bg-light"
-            type="search"
-            placeholder="Search models"
-          />
-        </form>
       </div>
     </nav>
 
-    <!-- Mobile Offcanvas Menu -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMobile">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title fw-bold text-primary">Media Ai</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="offcanvas-body px-3">
-        <nav class="nav flex-column">
-          <a class="nav-link" href="model.html">Models</a>
-          <a class="nav-link" href="#">Chat</a>
-          <a class="nav-link" href="#">Rankings</a>
-          <a class="nav-link" href="#">Docs</a>
-
-          <h6 class="text-muted mt-4 mb-2">Account</h6>
-          <a class="nav-link d-flex align-items-center" href="settings.html"
-            ><i class="bi bi-gear me-2"></i> Settings</a
-          >
-          <a class="nav-link d-flex align-items-center" href="credits.html"
-            ><i class="bi bi-credit-card me-2"></i> Credits</a
-          >
-          <a class="nav-link d-flex align-items-center" href="api-keys.html"
-            ><i class="bi bi-key me-2"></i> API Keys</a
-          >
-          <a class="nav-link d-flex align-items-center" href="provisioning.html"
-            ><i class="bi bi-hdd me-2"></i> Provisioning Keys</a
-          >
-          <a class="nav-link d-flex align-items-center" href="auth.html"
-            ><i class="bi bi-puzzle me-2"></i> Integrations</a
-          >
-          <a
-            class="nav-link d-flex align-items-center active"
-            href="privacy.html"
-            ><i class="bi bi-shield-lock me-2"></i> Privacy</a
-          >
-
-          <div class="mt-4 auth-sign-in-button">
-            <a href="auth.html"
-              ><button class="btn btn-outline-primary w-100">Sign in</button></a
-            >
-          </div>
-        </nav>
+        </div>
       </div>
     </div>
+    
 
-    <!-- Main Page Content -->
+    <!-- Main Container -->
     <div class="container-fluid main-container">
-      <!-- Sidebar -->
+      <!-- Desktop Sidebar -->
       <div class="sidebar d-none d-md-block p-3">
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
-            <a
-              href="settings.html"
-              class="nav-link text-secondary d-flex align-items-center"
-            >
+            <a href="settings.html" class="nav-link text-secondary">
               <i class="bi bi-gear me-2"></i> Settings
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a
-              href="credits.html"
-              class="nav-link text-secondary d-flex align-items-center"
-            >
+            <a href="credits.html" class="nav-link text-secondary">
               <i class="bi bi-credit-card me-2"></i> Credits
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a
-              href="api-keys.html"
-              class="nav-link text-secondary d-flex align-items-center"
-            >
+            <a href="api-keys.html" class="nav-link text-secondary">
               <i class="bi bi-key me-2"></i> API Keys
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a
-              href="provisioning.html"
-              class="nav-link text-secondary d-flex align-items-center"
-            >
+            <a href="provisioning.html" class="nav-link">
               <i class="bi bi-hdd me-2"></i> Provisioning Keys
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a
-              href="auth.html"
-              class="nav-link text-secondary d-flex align-items-center"
-            >
+            <a href="integrations.html" class="nav-link text-secondary">
               <i class="bi bi-puzzle me-2"></i> Integrations
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a
-              href="privacy.html"
-              class="nav-link active d-flex align-items-center"
-            >
+            <a href="privacy.html" class="nav-link active">
               <i class="bi bi-shield-lock me-2"></i> Privacy
             </a>
           </li>
@@ -225,7 +177,7 @@
         <div class="container py-4">
           <h1 class="mb-3">Privacy Settings</h1>
           <p class="lead">Manage your privacy settings and data preferences.</p>
-      
+
           <!-- Data Collection Card -->
           <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
@@ -233,37 +185,19 @@
             </div>
             <div class="card-body">
               <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowAnalytics"
-                  checked
-                />
-                <label class="form-check-label" for="allowAnalytics">
-                  Allow analytics data collection
-                </label>
-                <div class="text-muted small">
-                  We collect anonymous usage data to improve our services
-                </div>
+                <input class="form-check-input" type="checkbox" id="allowAnalytics" checked />
+                <label class="form-check-label" for="allowAnalytics">Allow analytics data collection</label>
+                <div class="text-muted small">We collect anonymous usage data to improve our services</div>
               </div>
-      
+
               <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowPersonalization"
-                  checked
-                />
-                <label class="form-check-label" for="allowPersonalization">
-                  Allow personalization
-                </label>
-                <div class="text-muted small">
-                  We use your data to personalize your experience
-                </div>
+                <input class="form-check-input" type="checkbox" id="allowPersonalization" checked />
+                <label class="form-check-label" for="allowPersonalization">Allow personalization</label>
+                <div class="text-muted small">We use your data to personalize your experience</div>
               </div>
             </div>
           </div>
-      
+
           <!-- Model Usage Data Card -->
           <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
@@ -271,100 +205,52 @@
             </div>
             <div class="card-body">
               <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="saveModelData"
-                  checked
-                />
-                <label class="form-check-label" for="saveModelData">
-                  Save model interactions
-                </label>
-                <div class="text-muted small">
-                  Your prompts and model responses will be saved for improving AI models
-                </div>
+                <input class="form-check-input" type="checkbox" id="saveModelData" checked />
+                <label class="form-check-label" for="saveModelData">Save model interactions</label>
+                <div class="text-muted small">Your prompts and model responses will be saved for improving AI models</div>
               </div>
-      
+
               <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="shareModelData"
-                />
-                <label class="form-check-label" for="shareModelData">
-                  Share data with model providers
-                </label>
-                <div class="text-muted small">
-                  Allow us to share anonymized data with our model providers
-                </div>
+                <input class="form-check-input" type="checkbox" id="shareModelData" />
+                <label class="form-check-label" for="shareModelData">Share data with model providers</label>
+                <div class="text-muted small">Allow us to share anonymized data with our model providers</div>
               </div>
             </div>
           </div>
-      
+
           <!-- Data Management Card -->
           <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
               <h5 class="mb-0">Data Management</h5>
             </div>
             <div class="card-body">
-              <p>
-                You can download your data or request deletion of all your data from our servers.
-              </p>
+              <p>You can download your data or request deletion of all your data from our servers.</p>
               <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary w-100 w-sm-auto">
-                  Download My Data
-                </button>
-                <button class="btn btn-outline-danger w-100 w-sm-auto">
-                  Request Data Deletion
-                </button>
+                <button class="btn btn-outline-primary w-100 w-sm-auto">Download My Data</button>
+                <button class="btn btn-outline-danger w-100 w-sm-auto">Request Data Deletion</button>
               </div>
             </div>
           </div>
-      
         </div>
       </div>
-      
+    </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
     <script>
-      // Initialize tooltips
-      var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
-
-      // Handle sidebar active state
       document.addEventListener("DOMContentLoaded", function () {
-        // Get current page path
-        const currentPath =
-          window.location.pathname.split("/").pop() || "dashboard.html";
+        const currentPath = window.location.pathname.split("/").pop() || "dashboard.html";
 
-        // Remove active class from all nav links
         document.querySelectorAll(".nav-link").forEach((link) => {
-          link.classList.remove(
-            "active",
-            "text-white",
-            "bg-primary",
-            "bg-opacity-10"
-          );
+          link.classList.remove("active", "text-white", "bg-primary", "bg-opacity-10");
           link.classList.add("text-secondary");
         });
 
-        // Add active class to current page link
-        const currentLink = document.querySelector(
-          `.nav-link[href="${currentPath}"]`
-        );
+        const currentLink = document.querySelector(`.nav-link[href="${currentPath}"]`);
         if (currentLink) {
           currentLink.classList.remove("text-secondary");
-          currentLink.classList.add(
-            "active",
-            "text-white",
-            "bg-primary",
-            "bg-opacity-25"
-          );
+          currentLink.classList.add("active", "text-white", "bg-primary", "bg-opacity-25");
         }
       });
     </script>

@@ -202,4 +202,29 @@ function updateSidebarActiveState() {
 document.addEventListener("DOMContentLoaded", function () {
   updateAuthUI();
   updateSidebarActiveState();
+
+  const token = getCookie("auth_token");
+  const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+
+  if (token && userData) {
+    // Show avatar dropdown
+    const userDropdown = document.getElementById("userAvatarDropdown");
+    if (userDropdown) {
+      userDropdown.classList.remove("d-none");
+    }
+
+    // Set initials
+    const avatar = document.getElementById("navbar-avatar");
+    if (avatar && userData.username) {
+      avatar.textContent = userData.username.charAt(0).toUpperCase();
+    }
+
+    // Set user info in dropdown
+    const nameElem = document.getElementById("account-username");
+    const emailElem = document.getElementById("account-email");
+    if (nameElem && emailElem) {
+      nameElem.textContent = userData.username || "User";
+      emailElem.textContent = userData.email || "No email";
+    }
+  }
 });
