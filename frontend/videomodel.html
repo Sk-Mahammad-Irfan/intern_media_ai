@@ -1,206 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generate Lemon Video</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #f8f9fa;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generate Lemon Video</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .chat-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+
+    .message-box {
+      background-color: #f1f1f1;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .user-message {
+      background-color: #e0f7fa;
+      text-align: right;
+    }
+
+    #videoContainer video {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    #downloadLink {
+      display: none;
+      margin-top: 10px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #0d6efd;
+    }
+
+    #loading {
+      display: none;
+    }
+
+    /* Responsive navbar styling */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0.5rem 0;
       }
 
-      .chat-container {
-        max-width: 700px;
-        margin: 40px auto;
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        padding: 30px;
+      .navbar-nav {
+        flex-direction: column;
+        align-items: center;
       }
 
-      .message-box {
-        background-color: #f1f1f1;
-        border-radius: 15px;
-        padding: 15px;
-        margin-bottom: 15px;
-        text-align: left;
+      .navbar-nav .nav-item {
+        margin-bottom: 1rem;
       }
 
-      .user-message {
-        background-color: #e0f7fa;
-        text-align: right;
+      .navbar-nav .nav-item .nav-link {
+        font-size: 1.2rem;
       }
 
-      #videoContainer video {
-        max-width: 100%;
-        border-radius: 10px;
+      .navbar-toggler {
+        margin-bottom: 1rem;
       }
+    }
+  </style>
+</head>
 
-      #downloadLink {
-        display: none;
-        margin-top: 10px;
-        font-weight: bold;
-        text-decoration: none;
-        color: #0d6efd;
-      }
-
-      #loading {
-        display: none;
-      }
-
-      /* Responsive navbar styling */
-      @media (max-width: 768px) {
-        .navbar {
-          padding: 0.5rem 0;
-        }
-        .navbar-nav {
-          flex-direction: column;
-          align-items: center;
-        }
-        .navbar-nav .nav-item {
-          margin-bottom: 1rem;
-        }
-        .navbar-nav .nav-item .nav-link {
-          font-size: 1.2rem;
-        }
-        .navbar-toggler {
-          margin-bottom: 1rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">AI Media Hub</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="videomodel.html">Models</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="chat.html">Chat</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="ranking.html">Ranking</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="docs.html">Docs</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <a
-              href="settings.html"
-              class="btn text-bg-info text-info-emphasis me-2"
-              >Settings</a
-            >
-            <a href="api-keys.html" class="btn text-info-emphasis">API Keys</a>
-          </div>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body-secondary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">AI Media Hub</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="videomodel.html">Models</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="chat.html">Chat</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="ranking.html">Ranking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="docs.html">Docs</a>
+          </li>
+        </ul>
+        <div class="d-flex">
+          <a href="settings.html" class="btn text-bg-info text-info-emphasis me-2">Settings</a>
+          <a href="api-keys.html" class="btn text-info-emphasis">API Keys</a>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <!-- Chat Prompt UI -->
-    <div class="chat-container">
-      <h4 class="mb-4 text-center">🎬 Video Prompt Generator</h4>
+  <!-- Chat Prompt UI -->
+  <div class="chat-container">
+    <h4 class="mb-4 text-center">🎬 Video Prompt Generator</h4>
 
-      <div class="mb-3">
-        <label for="promptInput" class="form-label">Enter your prompt</label>
-        <textarea
-          class="form-control"
-          id="promptInput"
-          rows="4"
-          placeholder="Describe the video you want to generate..."
-        ></textarea>
-      </div>
-
-      <div class="d-grid gap-2">
-        <button class="btn btn-primary" onclick="generateVideo()">
-          Generate 🍋
-        </button>
-      </div>
-
-      <div id="loading" class="text-center mt-4">
-        <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-2">Generating your video...</p>
-      </div>
-
-      <div id="videoContainer" class="mt-4 text-center"></div>
-      <div class="text-center">
-        <a id="downloadLink" href="#" download="generated-video.mp4"
-          >⬇️ Download Video</a
-        >
-      </div>
+    <div class="mb-3">
+      <label for="promptInput" class="form-label">Enter your prompt</label>
+      <textarea class="form-control" id="promptInput" rows="4"
+        placeholder="Describe the video you want to generate..."></textarea>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" onclick="generateVideo()">
+        Generate 🍋
+      </button>
+    </div>
 
-    <script>
-      async function generateVideo() {
-        const prompt = document.getElementById("promptInput").value.trim();
+    <div id="loading" class="text-center mt-4">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Generating your video...</p>
+    </div>
 
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          return;
-        }
+    <div id="videoContainer" class="mt-4 text-center"></div>
+    <div class="text-center">
+      <a id="downloadLink" href="#" download="generated-video.mp4">⬇️ Download Video</a>
+    </div>
+  </div>
 
-        document.getElementById("loading").style.display = "block";
-        document.getElementById("videoContainer").innerHTML = "";
-        document.getElementById("downloadLink").style.display = "none";
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        try {
-          const response = await fetch(
-            "http://localhost:5000/api/video/generate-video",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ prompt }),
-            }
-          );
+  <script>
+    async function generateVideo() {
+      const prompt = document.getElementById("promptInput").value.trim();
 
-          const data = await response.json();
-
-          if (data.video_url) {
-            const videoElement = document.createElement("video");
-            videoElement.controls = true;
-            videoElement.src = data.video_url;
-
-            document.getElementById("videoContainer").appendChild(videoElement);
-
-            const downloadLink = document.getElementById("downloadLink");
-            downloadLink.href = data.video_url;
-            downloadLink.style.display = "inline-block";
-          } else {
-            alert("Video generation failed.");
-          }
-        } catch (error) {
-          alert("Error generating video.");
-          console.error(error);
-        } finally {
-          document.getElementById("loading").style.display = "none";
-        }
+      if (!prompt) {
+        alert("Please enter a prompt.");
+        return;
       }
-    </script>
-  </body>
+
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("videoContainer").innerHTML = "";
+      document.getElementById("downloadLink").style.display = "none";
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/ai/generate-video",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.video_url) {
+          const videoElement = document.createElement("video");
+          videoElement.controls = true;
+          videoElement.src = data.video_url;
+
+          document.getElementById("videoContainer").appendChild(videoElement);
+
+          const downloadLink = document.getElementById("downloadLink");
+          downloadLink.href = data.video_url;
+          downloadLink.style.display = "inline-block";
+        } else {
+          alert("Video generation failed.");
+        }
+      } catch (error) {
+        alert("Error generating video.");
+        console.error(error);
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+  </script>
+</body>
+
 </html>

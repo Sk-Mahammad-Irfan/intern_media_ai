@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use("/api/auth", authRouter);
 app.use("/api/credits", creditRouter);
-app.use("/api/video", adapterRouter);
+app.use("/api/ai", adapterRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
