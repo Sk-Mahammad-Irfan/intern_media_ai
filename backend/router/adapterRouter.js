@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
 import {
-  generateVideoDeepinfra,
-  generateVideoFal,
-  generateVideoReplicate,
+  generateAudio,
+  generateImage,
+  generateVideo,
 } from "../controller/deepinfraController.js";
+import { requireSignIn } from "../middlewares/authMiddleware.js";
 
-router.post("/generate-video/fal", generateVideoFal);
-router.post("/generate-video/deep", generateVideoDeepinfra);
-router.post("/generate-video/repli", generateVideoReplicate);
+router.post("/generate-video", generateVideo);
+router.post("/generate-image", generateImage);
+router.post("/generate-audio", generateAudio);
 
 export default router;

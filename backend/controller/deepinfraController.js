@@ -1,4 +1,17 @@
 import axios from "axios";
+import FormData from "form-data";
+import { fal } from "@fal-ai/client";
+import dotenv from "dotenv";
+dotenv.config();
+
+fal.config({
+  credentials: process.env.FAL_AI_API,
+});
+fal.config({
+  credentials:
+    process.env.FAL_AI_AUDIO_API ||
+    "ecc99927-def0-4f61-9c54-97b6371ebadf:e71eaba34872ae890feabaa56e6b230c",
+});
 
 export const generateVideoDeepinfra = async (req, res) => {
   const prompt = req.body.prompt;
@@ -29,100 +42,74 @@ export const generateVideoDeepinfra = async (req, res) => {
   }
 };
 
-export const generateVideoReplicate = async (req, res) => {
-  const prompt = req.body.prompt;
+export const generateImage = async (req, res) => {
+  const { prompt } = req.body;
 
   if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required" });
+    return res.status(400).json({ error: "Prompt is required." });
   }
 
   try {
-    const response = await axios.post(
-      "https://api.replicate.com/v1/models/wan-video/wan-2.1-1.3b/predictions",
-      {
-        input: {
-          prompt: prompt,
-        },
+    const result = await fal.subscribe("fal-ai/fooocus", {
+      input: { prompt },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          update.logs?.forEach((log) => {
+            // console.log(`[FAL LOG]: ${log.message}`);
+          });
+        }
       },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
-          "Content-Type": "application/json",
-          Prefer: "wait",
-        },
-      }
-    );
+    });
+    // console.log("FAL API:", process.env.FAL_AI_API);
 
-    res.status(200).json(response.data);
+    const imageUrl = result?.data?.images?.[0]?.url;
+
+    if (!imageUrl) {
+      return res
+        .status(500)
+        .json({ error: "Image URL not found in response." });
+    }
+
+    res.json({ imageUrl });
   } catch (error) {
-    console.error(
-      "Replicate API error:",
-      error.response?.data || error.message
-    );
-    res.status(500).json({ error: "Failed to generate video" });
+    console.error("Error generating image:", error);
+    res.status(500).json({ error: "Image generation failed." });
   }
 };
 
-export const generateVideoFal = async (req, res) => {
-  const prompt = req.body.prompt;
+export const generateAudio = async (req, res) => {
+  const { prompt, duration = 30 } = req.body;
 
   if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required" });
+    return res.status(400).json({ error: "Prompt is required." });
   }
 
   try {
-    // Step 1: Submit prompt to Fal API
-    const startResponse = await axios.post(
-      "https://queue.fal.run/fal-ai/wan/v2.1/1.3b/text-to-video",
-      { prompt },
-      {
-        headers: {
-          Authorization: `Key ${process.env.FAL_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const result = await fal.subscribe("cassetteai/sound-effects-generator", {
+      input: { prompt, duration },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          update.logs?.forEach((log) => {
+            // console.log(`[FAL LOG]: ${log.message}`);
+          });
+        }
+      },
+    });
+    // console.log(result);
+    const audioUrl = result?.data?.audio_file?.url;
+    // console.log(audioUrl);
 
-    const requestId = startResponse.data.request_id;
-
-    if (!requestId) {
+    if (!audioUrl) {
       return res
         .status(500)
-        .json({ error: "No request_id returned from Fal API" });
+        .json({ error: "Audio URL not found in response." });
     }
 
-    // Step 2: Polling function
-    const pollForResult = async (requestId, retries = 30, delay = 4000) => {
-      const statusUrl = `https://queue.fal.run/fal-ai/wan/v2.1/1.3b/text-to-video/requests/${requestId}/status`;
-
-      for (let i = 0; i < retries; i++) {
-        const statusResponse = await axios.get(statusUrl, {
-          headers: {
-            Authorization: `Key ${process.env.FAL_KEY}`,
-          },
-        });
-
-        const { status, output } = statusResponse.data;
-
-        if (status === "COMPLETED" && output?.video_url) {
-          return output.video_url;
-        } else if (status === "FAILED") {
-          throw new Error("Video generation failed.");
-        }
-
-        // Wait before next attempt
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-
-      throw new Error("Video generation timed out.");
-    };
-
-    // Step 3: Get video URL or timeout
-    const videoUrl = await pollForResult();
-
-    res.status(200).json({ video_url: videoUrl });
+    res.json({ audioUrl });
   } catch (error) {
-    console.error("Fal API error:", error.response?.data || error.message);
-    res.status(500).json({ error: "Failed to generate video" });
+    console.error("Error generating audio:", error);
+    res.status(500).json({ error: "Audio generation failed." });
   }
 };

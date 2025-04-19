@@ -175,14 +175,14 @@
       async function generateVideo() {
         const prompt = document.getElementById("promptInput").value.trim();
 
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          return;
-        }
+      if (!prompt) {
+        alert("Please enter a prompt.");
+        return;
+      }
 
-        document.getElementById("loading").style.display = "block";
-        document.getElementById("videoContainer").innerHTML = "";
-        document.getElementById("downloadLink").style.display = "none";
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("videoContainer").innerHTML = "";
+      document.getElementById("downloadLink").style.display = "none";
 
         try {
           const response = await fetch(
@@ -196,7 +196,7 @@
             }
           );
 
-          const data = await response.json();
+        const data = await response.json();
 
           if (data.video_url) {
             const videoElement = document.createElement("video");
@@ -205,21 +205,22 @@
             videoElement.classList.add("mt-3");
             videoElement.style.maxWidth = "100%";
 
-            document.getElementById("videoContainer").appendChild(videoElement);
+          document.getElementById("videoContainer").appendChild(videoElement);
 
-            const downloadLink = document.getElementById("downloadLink");
-            downloadLink.href = data.video_url;
-            downloadLink.style.display = "inline-block";
-          } else {
-            alert("Video generation failed.");
-          }
-        } catch (error) {
-          alert("Error generating video.");
-          console.error(error);
-        } finally {
-          document.getElementById("loading").style.display = "none";
+          const downloadLink = document.getElementById("downloadLink");
+          downloadLink.href = data.video_url;
+          downloadLink.style.display = "inline-block";
+        } else {
+          alert("Video generation failed.");
         }
+      } catch (error) {
+        alert("Error generating video.");
+        console.error(error);
+      } finally {
+        document.getElementById("loading").style.display = "none";
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
