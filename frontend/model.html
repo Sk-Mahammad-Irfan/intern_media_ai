@@ -13,10 +13,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="css/styles.css" />
     <style>
-     
-
       .main-container {
         display: flex;
         flex-direction: column;
@@ -47,20 +45,26 @@
         vertical-align: middle;
         margin-left: 8px;
       }
-
-  
     </style>
   </head>
   <body class="bg-light d-flex flex-column min-vh-100">
     <div class="main-container">
       <!-- Top Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
+      <nav
+        class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top"
+      >
+        <div
+          class="container-fluid d-flex align-items-center justify-content-between"
+        >
           <!-- Brand -->
-          <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+          <a class="navbar-brand fw-bold text-primary" href="index.html"
+            >Media Ai</a
+          >
 
           <!-- Mobile controls -->
-          <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+          <div
+            class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
+          >
             <div class="dropdown">
               <a
                 href="#"
@@ -71,15 +75,22 @@
               >
                 <div
                   class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                  style="width: 32px; height: 32px; font-size: 14px;"
+                  style="width: 32px; height: 32px; font-size: 14px"
                 >
                   U
                 </div>
               </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="mobileAvatarDropdown"
+              >
                 <li>
-                  <h6 class="dropdown-header" id="account-username">Username</h6>
-                  <p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p>
+                  <h6 class="dropdown-header" id="account-username">
+                    Username
+                  </h6>
+                  <p class="dropdown-item-text mb-1 small" id="account-email">
+                    email@example.com
+                  </p>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="model.html">Models</a></li>
@@ -87,34 +98,70 @@
                 <li><a class="dropdown-item" href="#">Rankings</a></li>
                 <li><a class="dropdown-item" href="#">Docs</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+                <li>
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="provisioning.html"
+                    >Provisioning Keys</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="integrations.html"
+                    >Integrations</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="privacy.html">Privacy</a>
+                </li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
-                <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
-                </a></li>
+                <li>
+                  <a class="dropdown-item" href="index.html" onclick="logout()"
+                    >Logout</a
+                  >
+                </li>
+                <li>
+                  <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                    <button type="button" class="btn btn-outline-primary w-100">
+                      Sign in
+                    </button>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
 
           <!-- Search (Desktop only) -->
           <form class="d-none d-lg-block mx-3 flex-grow-1">
-            <input class="form-control rounded-pill bg-light desktop-search" type="search" placeholder="Search models" />
+            <input
+              class="form-control rounded-pill bg-light desktop-search"
+              type="search"
+              placeholder="Search models"
+            />
           </form>
 
           <!-- Desktop Nav Items -->
           <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="model.html">Models</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="credits.html">Chat</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="#">Rankings</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="#">Docs</a>
+            </li>
             <li class="nav-item mx-1" id="signInDesktop">
               <a class="nav-link fw-medium" href="auth.html">
-                <button type="button" class="btn btn-outline-primary">Sign in</button>
+                <button type="button" class="btn btn-outline-primary">
+                  Sign in
+                </button>
               </a>
             </li>
             <li class="nav-item dropdown d-none" id="userAvatarDropdown">
@@ -126,21 +173,56 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                <div
+                  id="navbar-avatar"
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px"
+                >
                   U
                 </div>
               </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
-                <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <h6 class="dropdown-header" id="account-username">
+                    Username
+                  </h6>
+                </li>
+                <li>
+                  <p class="dropdown-item-text mb-1 small" id="account-email">
+                    email@example.com
+                  </p>
+                </li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="credits.html">Dashboard</a></li>
-                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                <li>
+                  <a class="dropdown-item" href="credits.html">Dashboard</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="provisioning.html"
+                    >Provisioning Keys</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="integrations.html"
+                    >Integrations</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="privacy.html">Privacy</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()"
+                    >Logout</a
+                  >
+                </li>
               </ul>
             </li>
           </ul>
@@ -152,36 +234,84 @@
         <h2 class="mb-4">Available Models</h2>
         <div class="d-flex flex-column gap-4">
           <!-- DeepInfra Card -->
-          <div class="model-card" onclick="window.location.href='model-details.html?id=deepinfra-wan2.1'">
+          <div
+            class="model-card"
+            onclick="window.location.href='model-details.html?id=deepinfra-wan2.1'"
+          >
             <h5 class="fw-semibold">
               DeepInfra: Wan2.1-T2V-1.3B
               <i class="bi bi-gift text-success model-icon"></i>
-              <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+              <i
+                class="bi bi-box-arrow-up-right text-secondary model-icon"
+                title="Open"
+              ></i>
             </h5>
-            <p class="text-muted mb-1">Text-to-video model available via DeepInfra platform, optimized for performance and cost.</p>
-            <small class="text-muted">Source: <a href="https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B" target="_blank">deepinfra.com</a></small>
+            <p class="text-muted mb-1">
+              Text-to-video model available via DeepInfra platform, optimized
+              for performance and cost.
+            </p>
+            <small class="text-muted"
+              >Source:
+              <a
+                href="https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B"
+                target="_blank"
+                >deepinfra.com</a
+              ></small
+            >
           </div>
 
           <!-- Replicate Card -->
-          <div class="model-card" onclick="window.location.href='model-details.html?id=replicate-wan2.1'">
+          <div
+            class="model-card"
+            onclick="window.location.href='model-details.html?id=replicate-wan2.1'"
+          >
             <h5 class="fw-semibold">
               Replicate: wan-2.1-1.3b
               <i class="bi bi-cpu text-warning model-icon"></i>
-              <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+              <i
+                class="bi bi-box-arrow-up-right text-secondary model-icon"
+                title="Open"
+              ></i>
             </h5>
-            <p class="text-muted mb-1">Same base model as DeepInfra, hosted on Replicate for flexible deployment and usage.</p>
-            <small class="text-muted">Source: <a href="https://replicate.com/wan-video/wan-2.1-1.3b" target="_blank">replicate.com</a></small>
+            <p class="text-muted mb-1">
+              Same base model as DeepInfra, hosted on Replicate for flexible
+              deployment and usage.
+            </p>
+            <small class="text-muted"
+              >Source:
+              <a
+                href="https://replicate.com/wan-video/wan-2.1-1.3b"
+                target="_blank"
+                >replicate.com</a
+              ></small
+            >
           </div>
 
           <!-- FAL AI Card -->
-          <div class="model-card" onclick="window.location.href='model-details.html?id=fal-wan2.1'">
+          <div
+            class="model-card"
+            onclick="window.location.href='model-details.html?id=fal-wan2.1'"
+          >
             <h5 class="fw-semibold">
               FAL AI: wan v2.1/1.3b
               <i class="bi bi-cloud text-info model-icon"></i>
-              <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+              <i
+                class="bi bi-box-arrow-up-right text-secondary model-icon"
+                title="Open"
+              ></i>
             </h5>
-            <p class="text-muted mb-1">Hosted by FAL AI, this adapter allows full access to the same model via their pipeline.</p>
-            <small class="text-muted">Source: <a href="https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video" target="_blank">fal.ai</a></small>
+            <p class="text-muted mb-1">
+              Hosted by FAL AI, this adapter allows full access to the same
+              model via their pipeline.
+            </p>
+            <small class="text-muted"
+              >Source:
+              <a
+                href="https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video"
+                target="_blank"
+                >fal.ai</a
+              ></small
+            >
           </div>
         </div>
       </div>
