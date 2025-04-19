@@ -13,7 +13,7 @@ fal.config({
     "ecc99927-def0-4f61-9c54-97b6371ebadf:e71eaba34872ae890feabaa56e6b230c",
 });
 
-export const generateVideoDeepinfra = async (req, res) => {
+export const generateVideo = async (req, res) => {
   const prompt = req.body.prompt;
 
   if (!prompt) {
