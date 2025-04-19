@@ -2,6 +2,7 @@ import axios from "axios";
 import FormData from "form-data";
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
+import { decreaseCredits } from "./creditController.js";
 dotenv.config();
 
 fal.config({
@@ -14,13 +15,19 @@ fal.config({
 });
 
 export const generateVideo = async (req, res) => {
-  const prompt = req.body.prompt;
+  const { prompt, userId } = req.body;
 
-  if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required" });
+  if (!prompt || !userId) {
+    return res.status(400).json({ error: "Prompt and User ID are required" });
   }
 
   try {
+    try {
+      await decreaseCredits(userId, 5);
+    } catch (err) {
+      return res.status(402).json({ error: err.message });
+    }
+
     const response = await axios.post(
       "https://api.deepinfra.com/v1/inference/Wan-AI/Wan2.1-T2V-1.3B",
       { prompt },
@@ -34,22 +41,27 @@ export const generateVideo = async (req, res) => {
 
     res.status(200).json(response.data);
   } catch (error) {
-    console.error(
-      "DeepInfra API error:",
-      error.response?.data || error.message
-    );
-    res.status(500).json({ error: "Failed to generate video" });
+    console.error("Video Generation Error:", error.message || error);
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to generate video" });
   }
 };
 
 export const generateImage = async (req, res) => {
-  const { prompt } = req.body;
+  const { prompt, userId } = req.body;
 
-  if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required." });
+  if (!prompt || !userId) {
+    return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
   try {
+    try {
+      await decreaseCredits(userId, 2);
+    } catch (err) {
+      return res.status(402).json({ error: err.message });
+    }
+
     const result = await fal.subscribe("fal-ai/fooocus", {
       input: { prompt },
       logs: true,
@@ -61,7 +73,6 @@ export const generateImage = async (req, res) => {
         }
       },
     });
-    // console.log("FAL API:", process.env.FAL_AI_API);
 
     const imageUrl = result?.data?.images?.[0]?.url;
 
@@ -73,19 +84,27 @@ export const generateImage = async (req, res) => {
 
     res.json({ imageUrl });
   } catch (error) {
-    console.error("Error generating image:", error);
-    res.status(500).json({ error: "Image generation failed." });
+    console.error("Image Generation Error:", error.message || error);
+    res
+      .status(500)
+      .json({ error: error.message || "Image generation failed." });
   }
 };
 
 export const generateAudio = async (req, res) => {
-  const { prompt, duration = 30 } = req.body;
+  const { prompt, duration = 30, userId } = req.body;
 
-  if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required." });
+  if (!prompt || !userId) {
+    return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
   try {
+    try {
+      await decreaseCredits(userId, 3);
+    } catch (err) {
+      return res.status(402).json({ error: err.message });
+    }
+
     const result = await fal.subscribe("cassetteai/sound-effects-generator", {
       input: { prompt, duration },
       logs: true,
@@ -97,9 +116,8 @@ export const generateAudio = async (req, res) => {
         }
       },
     });
-    // console.log(result);
+
     const audioUrl = result?.data?.audio_file?.url;
-    // console.log(audioUrl);
 
     if (!audioUrl) {
       return res
@@ -109,7 +127,9 @@ export const generateAudio = async (req, res) => {
 
     res.json({ audioUrl });
   } catch (error) {
-    console.error("Error generating audio:", error);
-    res.status(500).json({ error: "Audio generation failed." });
+    console.error("Audio Generation Error:", error.message || error);
+    res
+      .status(500)
+      .json({ error: error.message || "Audio generation failed." });
   }
 };

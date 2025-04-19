@@ -46,11 +46,6 @@ export const updateCreditsController = async (req, res) => {
   }
 };
 
-/**
- * Get user credits
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- */
 export const getCreditsController = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -84,4 +79,30 @@ export const getCreditsController = async (req, res) => {
       err: err.message,
     });
   }
+};
+
+export const decreaseCredits = async (userId, amount) => {
+  if (!userId || amount === undefined) {
+    throw new Error("User ID and amount are required");
+  }
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.credits < amount) {
+    throw new Error("Insufficient credits");
+  }
+
+  user.credits -= amount;
+
+  await user.save();
+
+  return {
+    username: user.username,
+    email: user.email,
+    credits: user.credits,
+  };
 };

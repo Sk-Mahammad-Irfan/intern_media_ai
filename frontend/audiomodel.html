@@ -1,87 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generate Lemon Video</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+      }
 
-        textarea {
-            width: 100%;
-            height: 100px;
-            font-size: 16px;
-        }
+      textarea {
+        width: 100%;
+        height: 100px;
+        font-size: 16px;
+      }
 
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            font-size: 16px;
-        }
+      button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        font-size: 16px;
+      }
 
-        #result {
-            margin-top: 20px;
-        }
+      #result {
+        margin-top: 20px;
+      }
 
-        img {
-            max-width: 100%;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+      img {
+        max-width: 100%;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-body-secondary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">AI Media Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="videomodel.html">Models</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="chat.html">Chat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="ranking.html">Ranking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="docs.html">Docs</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="settings.html" class="btn text-bg-info text-info-emphasis me-2">Settings</a>
-                    <a href="api-keys.html" class="btn text-info-emphasis">API Keys</a>
-                </div>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">AI Media Hub</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="videomodel.html">Models</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="chat.html">Chat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ranking.html">Ranking</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="docs.html">Docs</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+            <a
+              href="settings.html"
+              class="btn text-bg-info text-info-emphasis me-2"
+              >Settings</a
+            >
+            <a href="api-keys.html" class="btn text-info-emphasis">API Keys</a>
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Chat Prompt UI -->
     <h2>🎧 Generate Sound Effect</h2>
 
-    <label for="prompt">Prompt:</label><br>
-    <input id="prompt" type="text" placeholder="e.g. dog barking in the rain" /><br><br>
+    <label for="prompt">Prompt:</label><br />
+    <input
+      id="prompt"
+      type="text"
+      placeholder="e.g. dog barking in the rain"
+    /><br /><br />
 
-    <label for="duration">Duration (1–60 seconds):</label><br>
-    <input id="duration" type="number" min="1" max="60" value="30" /><br><br>
+    <label for="duration">Duration (1–60 seconds):</label><br />
+    <input
+      id="duration"
+      type="number"
+      min="1"
+      max="60"
+      value="30"
+    /><br /><br />
 
     <button onclick="generate()">Generate Sound</button>
 
@@ -89,46 +111,54 @@
     <audio id="audio" controls></audio>
 
     <script>
-        async function generate() {
-            const prompt = document.getElementById("prompt").value;
-            const duration = parseInt(document.getElementById("duration").value);
-            const status = document.getElementById("status");
-            const audio = document.getElementById("audio");
+      async function generate() {
+        const prompt = document.getElementById("prompt").value;
+        const duration = parseInt(document.getElementById("duration").value);
+        const status = document.getElementById("status");
+        const audio = document.getElementById("audio");
+        const userId = localStorage.getItem("userId");
 
-            if (!prompt.trim()) {
-                return alert("Please enter a prompt.");
-            }
-            if (isNaN(duration) || duration < 1 || duration > 60) {
-                return alert("Please enter a valid duration between 1 and 60 seconds.");
-            }
-
-            status.innerText = "⏳ Generating... please wait...";
-            audio.src = ""; // Reset audio source
-
-            try {
-                const res = await fetch("http://localhost:5000/api/ai/generate-audio", { // Fixed URL
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt, duration }),
-                });
-
-                const data = await res.json();
-                if (data.audioUrl) {
-                    audio.src = data.audioUrl; // Set the audio source
-                    audio.play(); // Automatically start playing
-                    status.innerText = "✅ Sound ready!";
-                } else {
-                    status.innerText = "❌ Failed to generate sound.";
-                }
-            } catch (err) {
-                console.error(err);
-                status.innerText = "❌ Error generating sound.";
-            }
+        if (!prompt.trim()) {
+          return alert("Please enter a prompt.");
+        }
+        if (isNaN(duration) || duration < 1 || duration > 60) {
+          return alert(
+            "Please enter a valid duration between 1 and 60 seconds."
+          );
         }
 
+        status.innerText = "⏳ Generating... please wait...";
+        audio.src = "";
+
+        try {
+          const requestBody = {
+            prompt: prompt,
+            duration: duration,
+            userId: userId,
+          };
+
+          const res = await fetch(
+            "http://localhost:5000/api/ai/generate-audio",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
+          const data = await res.json();
+          if (data.audioUrl) {
+            audio.src = data.audioUrl; // Set the audio source
+            audio.play(); // Automatically start playing
+            status.innerText = "✅ Sound ready!";
+          } else {
+            status.innerText = "❌ Failed to generate sound.";
+          }
+        } catch (err) {
+          console.error(err);
+          status.innerText = "❌ Error generating sound.";
+        }
+      }
     </script>
-
-
-</body>
-
+  </body>
 </html>
