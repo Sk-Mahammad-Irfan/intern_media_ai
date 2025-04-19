@@ -65,6 +65,32 @@
           <div
             class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
           >
+          <button
+      id="mobileSearchBtn"
+      class="btn btn-light rounded-circle "
+      style="width: 36px; height: 36px"
+    >
+     <i class="bi bi-search"></i>
+    </button>
+
+   <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+   <div
+     id="mobileSearchSidebar"
+     class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+     style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;"
+     >
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Search</h5>
+        <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <input
+        type="text"
+        class="form-control rounded-pill"
+        placeholder="Search models..."
+      />
+    </div>
             <div class="dropdown">
               <a
                 href="#"
@@ -84,45 +110,54 @@
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="mobileAvatarDropdown"
               >
+              <div class="mobile-auth-only dnone">
                 <li>
-                  <h6 class="dropdown-header" id="account-username">
+                  <h6 class="dropdown-header" id="account-username-mobile">
                     Username
                   </h6>
-                  <p class="dropdown-item-text mb-1 small" id="account-email">
+                  <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
                     email@example.com
                   </p>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
+              </div>
                 <li><a class="dropdown-item" href="model.html">Models</a></li>
-                <li><a class="dropdown-item" href="credits.html">Chat</a></li>
+                <li><a class="dropdown-item" href="#">Chat</a></li>
                 <li><a class="dropdown-item" href="#">Rankings</a></li>
                 <li><a class="dropdown-item" href="#">Docs</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="settings.html">Settings</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="api-keys.html">API Keys</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="provisioning.html"
-                    >Provisioning Keys</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" href="integrations.html"
-                    >Integrations</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" href="privacy.html">Privacy</a>
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="index.html" onclick="logout()"
-                    >Logout</a
-                  >
-                </li>
+                <div class="mobile-auth-only dnone">
+                  <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+                  <li>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="provisioning.html"
+                      >Provisioning Keys</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="integrations.html"
+                      >Integrations</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="privacy.html">Privacy</a>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                     
+                  <li>
+                    <a
+                      class="dropdown-item text-danger"
+                      href="index.html"
+                      onclick="logout()"
+                      >Logout</a
+                    >
+                  </li>
+                 </div>
                 <li>
                   <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
                     <button type="button" class="btn btn-outline-primary w-100">
@@ -219,7 +254,7 @@
                   <a class="dropdown-item" href="privacy.html">Privacy</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" onclick="logout()"
+                  <a class="dropdown-item text-danger" href="#" onclick="logout()"
                     >Logout</a
                   >
                 </li>
@@ -232,87 +267,96 @@
       <!-- Main Content -->
       <div class="main-content">
         <h2 class="mb-4">Available Models</h2>
-        <div class="d-flex flex-column gap-4">
-          <!-- DeepInfra Card -->
-          <div
-            class="model-card"
-            onclick="window.location.href='model-details.html?id=deepinfra-wan2.1'"
-          >
-            <h5 class="fw-semibold">
-              DeepInfra: Wan2.1-T2V-1.3B
-              <i class="bi bi-gift text-success model-icon"></i>
-              <i
-                class="bi bi-box-arrow-up-right text-secondary model-icon"
-                title="Open"
-              ></i>
-            </h5>
-            <p class="text-muted mb-1">
-              Text-to-video model available via DeepInfra platform, optimized
-              for performance and cost.
-            </p>
-            <small class="text-muted"
-              >Source:
-              <a
-                href="https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B"
-                target="_blank"
-                >deepinfra.com</a
-              ></small
-            >
-          </div>
+        
+          <!-- Text-to-Image Models -->
+<h4 class="mt-5 mb-3">Text-to-Image</h4>
 
-          <!-- Replicate Card -->
-          <div
-            class="model-card"
-            onclick="window.location.href='model-details.html?id=replicate-wan2.1'"
-          >
-            <h5 class="fw-semibold">
-              Replicate: wan-2.1-1.3b
-              <i class="bi bi-cpu text-warning model-icon"></i>
-              <i
-                class="bi bi-box-arrow-up-right text-secondary model-icon"
-                title="Open"
-              ></i>
-            </h5>
-            <p class="text-muted mb-1">
-              Same base model as DeepInfra, hosted on Replicate for flexible
-              deployment and usage.
-            </p>
-            <small class="text-muted"
-              >Source:
-              <a
-                href="https://replicate.com/wan-video/wan-2.1-1.3b"
-                target="_blank"
-                >replicate.com</a
-              ></small
-            >
-          </div>
+<!-- DeepInfra Text-to-Image
+<div class="model-card" onclick="window.location.href='model-details.html?id=deepinfra-tti'">
+  <h5 class="fw-semibold">
+    DeepInfra: Text-to-Image
+    <i class="bi bi-image text-danger model-icon"></i>
+    <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+  </h5>
+  <p class="text-muted mb-1">
+    Image generation model available through DeepInfra, optimized for creativity and performance.
+  </p>
+  <small class="text-muted">
+    Source:
+    <a href="https://deepinfra.com/models/text-to-image" target="_blank">deepinfra.com</a>
+  </small>
+</div> -->
 
-          <!-- FAL AI Card -->
-          <div
-            class="model-card"
-            onclick="window.location.href='model-details.html?id=fal-wan2.1'"
-          >
-            <h5 class="fw-semibold">
-              FAL AI: wan v2.1/1.3b
-              <i class="bi bi-cloud text-info model-icon"></i>
-              <i
-                class="bi bi-box-arrow-up-right text-secondary model-icon"
-                title="Open"
-              ></i>
-            </h5>
-            <p class="text-muted mb-1">
-              Hosted by FAL AI, this adapter allows full access to the same
-              model via their pipeline.
-            </p>
-            <small class="text-muted"
-              >Source:
-              <a
-                href="https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video"
-                target="_blank"
-                >fal.ai</a
-              ></small
-            >
-          </div>
+<!-- FAL AI Text-to-Image -->
+<div class="model-card" onclick="window.location.href='model-details.html?id=fal-tti'">
+  <h5 class="fw-semibold">
+    FAL AI: Text-to-Image
+    <i class="bi bi-image-alt text-primary model-icon"></i>
+    <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+  </h5>
+  <p class="text-muted mb-1">
+    A broad selection of text-to-image models hosted by FAL AI, customizable for various use cases.
+  </p>
+  <small class="text-muted">
+    Source:
+    <a href="https://fal.ai/models?keywords=audio&categories=text-to-image" target="_blank">fal.ai</a>
+  </small>
+</div>
+
+<!-- Text-to-Video (More sources) -->
+<h4 class="mt-5 mb-3">Text-to-Video</h4>
+
+<!-- DeepInfra Text-to-Video -->
+<div class="model-card" onclick="window.location.href='model-details.html?id=deepinfra-ttv'">
+  <h5 class="fw-semibold">
+    DeepInfra: Text-to-Video
+    <i class="bi bi-film text-info model-icon"></i>
+    <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+  </h5>
+  <p class="text-muted mb-1">
+    Collection of text-to-video models, powered by DeepInfra for fast video rendering from text prompts.
+  </p>
+  <small class="text-muted">
+    Source:
+    <a href="https://deepinfra.com/models/text-to-video/" target="_blank">deepinfra.com</a>
+  </small>
+</div>
+
+<!-- FAL AI Text-to-Video -->
+<!-- <div class="model-card" onclick="window.location.href='model-details.html?id=fal-ttv'">
+  <h5 class="fw-semibold">
+    FAL AI: Text-to-Video
+    <i class="bi bi-camera-reels text-warning model-icon"></i>
+    <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+  </h5>
+  <p class="text-muted mb-1">
+    Rich video generation suite from FAL AI with advanced rendering capabilities and models.
+  </p>
+  <small class="text-muted">
+    Source:
+    <a href="https://fal.ai/models?keywords=audio&categories=text-to-video" target="_blank">fal.ai</a>
+  </small>
+</div> -->
+
+<!-- Text-to-Audio -->
+<h4 class="mt-5 mb-3">Text-to-Audio</h4>
+
+<!-- FAL AI Text-to-Audio -->
+<div class="model-card" onclick="window.location.href='model-details.html?id=fal-tta'">
+  <h5 class="fw-semibold">
+    FAL AI: Text-to-Audio
+    <i class="bi bi-soundwave text-success model-icon"></i>
+    <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+  </h5>
+  <p class="text-muted mb-1">
+    A range of audio synthesis models available through FAL AI, turning text into lifelike speech or sound.
+  </p>
+  <small class="text-muted">
+    Source:
+    <a href="https://fal.ai/models?keywords=audio&categories=text-to-audio" target="_blank">fal.ai</a>
+  </small>
+</div>
+
         </div>
       </div>
     </div>
