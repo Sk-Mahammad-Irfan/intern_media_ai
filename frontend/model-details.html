@@ -162,7 +162,7 @@
                 </p>
               </div>
               <div class="d-flex gap-2">
-                <a href="videomodel.html" class="btn btn-primary">
+                <a id="chat-button" class="btn btn-primary">
                   <i class="bi bi-chat-dots-fill me-1"></i> Chat
                 </a>
                 <button class="btn btn-outline-secondary">
@@ -183,54 +183,93 @@
     <script src="js/auth.js"></script>
     <script src="js/script.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const modelId = urlParams.get("id");
 
-        const modelData = {
-          "deepinfra-wan2.1": {
-            title: "DeepInfra: Wan2.1-T2V-1.3B",
-            description:
-              "Text-to-video model available via DeepInfra platform, optimized for performance and cost.",
-            link: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B",
-            fullDetails:
-              "Wan2.1-T2V-1.3B is hosted by DeepInfra. It is a high-performance text-to-video model offering improved inference time, scalable deployment, and affordable API access. Great for creators and developers looking to generate short form content programmatically.",
-          },
-          "replicate-wan2.1": {
-            title: "Replicate: wan-2.1-1.3b",
-            description:
-              "Same base model as DeepInfra, hosted on Replicate for flexible deployment and usage.",
-            link: "https://replicate.com/wan-video/wan-2.1-1.3b",
-            fullDetails:
-              "Replicate's version of the Wan 2.1 model enables users to experiment with the same model in a serverless setting. It's suited for prototypes and experiments without worrying about infrastructure setup.",
-          },
-          "fal-wan2.1": {
-            title: "FAL AI: wan v2.1/1.3b",
-            description:
-              "Hosted by FAL AI, this adapter allows full access to the same model via their pipeline.",
-            link: "https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video",
-            fullDetails:
-              "FAL AI offers this model via a seamless pipeline API. Users can integrate this into their applications directly, with easy-to-follow API keys and real-time rendering. Great for production pipelines and media automation.",
-          },
-        };
+  document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelId = urlParams.get("id");
 
-        const model = modelData[modelId];
+    const modelData = {
+      // Text-to-Image
+      // "deepinfra-tti": {
+      //   title: "DeepInfra: Text-to-Image",
+      //   description:
+      //     "Image generation model available through DeepInfra, optimized for creativity and performance.",
+      //   link: "https://deepinfra.com/models/text-to-image",
+      //   fullDetails:
+      //     "DeepInfra provides a set of models that convert text prompts into high-quality images. These models are optimized for style control, fast inference, and use cases in design, marketing, and content creation.",
+      //   chatPage: "imagemodel.html",
+      // },
 
-        if (model) {
-          document.getElementById("model-title").textContent = model.title;
-          document.getElementById("model-description").textContent =
-            model.description;
-          document.getElementById("model-link").textContent = model.link;
-          document.getElementById("model-link").href = model.link;
-          document.getElementById("model-full-details").textContent =
-            model.fullDetails;
-        } else {
-          document.getElementById("model-title").textContent =
-            "Model Not Found";
-          document.getElementById("model-full-details").textContent =
-            "The requested model ID is invalid or not available.";
-        }
-      });
+      "fal-tti": {
+        title: "FAL AI: Text-to-Image",
+        description:
+          "A broad selection of text-to-image models hosted by FAL AI, customizable for various use cases.",
+        link: "https://fal.ai/models?keywords=audio&categories=text-to-image",
+        fullDetails:
+          "FAL AI's text-to-image offerings include a variety of diffusion and generative models, allowing fine-tuned control over image outputs from textual input. Great for creative apps and AI-assisted design tools.",
+        chatPage: "imagemodel.html",
+      },
+
+      // Text-to-Video
+      "deepinfra-ttv": {
+        title: "DeepInfra: Text-to-Video",
+        description:
+          "Collection of text-to-video models, powered by DeepInfra for fast video rendering from text prompts.",
+        link: "https://deepinfra.com/models/text-to-video/",
+        fullDetails:
+          "DeepInfra hosts multiple text-to-video models designed for performance and scalability. Ideal for marketing teams, AI video creators, and content automation solutions.",
+        chatPage: "videomodel.html",
+      },
+
+      // "fal-ttv": {
+      //   title: "FAL AI: Text-to-Video",
+      //   description:
+      //     "Rich video generation suite from FAL AI with advanced rendering capabilities and models.",
+      //   link: "https://fal.ai/models?keywords=audio&categories=text-to-video",
+      //   fullDetails:
+      //     "FAL AI’s library features a growing collection of state-of-the-art text-to-video models, supporting variable length outputs, styles, and motion interpolation. Excellent for AI storytelling and media R&D.",
+      //   chatPage: "videomodel.html",
+      // },
+
+      // Text-to-Audio
+      "fal-tta": {
+        title: "FAL AI: Text-to-Audio",
+        description:
+          "A range of audio synthesis models available through FAL AI, turning text into lifelike speech or sound.",
+        link: "https://fal.ai/models?keywords=audio&categories=text-to-audio",
+        fullDetails:
+          "FAL AI provides diverse models for speech synthesis, music generation, and sound design. These models support multiple languages and vocal tones, making them ideal for apps, podcasts, games, and accessibility tools.",
+        chatPage: "audiomodel.html",
+      },
+
+    };
+
+    const model = modelData[modelId];
+
+    if (model) {
+      document.getElementById("model-title").textContent = model.title;
+      document.getElementById("model-description").textContent = model.description;
+      document.getElementById("model-link").textContent = model.link;
+      document.getElementById("model-link").href = model.link;
+      document.getElementById("model-full-details").textContent = model.fullDetails;
+
+      // Optional: Set up chat button redirection
+      const chatButton = document.getElementById("chat-button");
+      if (chatButton) {
+        chatButton.addEventListener("click", function () {
+          if (model.chatPage) {
+            window.location.href = `${model.chatPage}?id=${modelId}`;
+          }
+        });
+      }
+    } else {
+      document.getElementById("model-title").textContent = "Model Not Found";
+      document.getElementById("model-full-details").textContent =
+        "The requested model ID is invalid or not available.";
+    }
+  });
+
+
     </script>
   </body>
 </html>
