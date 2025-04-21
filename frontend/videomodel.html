@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Media Ai Dashboard</title>
+    <title>Video Model</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,215 +15,438 @@
     <link rel="stylesheet" href="css/styles.css"/>
     <style>
 
-      .main-container {
-        display: flex;
-        flex-direction: row;
-        min-height: calc(100vh - 56px);
-      }
+      body, html {
+      height: 100%;
+      overflow: hidden;
+    }
+    #chat {
+   height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding: 1rem;
+  padding-bottom: 130px; 
+  background-color: #f8f9fa;
+}
+    #promptInputSection {
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  right: 0;
+  padding: 1rem;
+  
+  box-sizing: border-box;
+  max-width: calc(100vw - 250px);
+  overflow-x: hidden;
+  z-index: 1000; 
+}
+    #sidebar {
+      width: 250px;
+      height: 100vh;
+      border-right: 1px solid #dee2e6;
+      overflow-y: auto;
+    }
+    .model-card {
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 1rem;
+      background-color: white;
+      height: 100px;
+    }
+
+    .user-message {
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 20px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.ai-message {
+  background-color: #e9ecef;
+  border-radius: 20px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+
+  .modern-select {
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #ced4da;
+    background-color: #f8f9fa;
+    font-size: 0.9rem;
+    width: auto;
+    min-width: 160px;
+  }
+
+  .model-hr {
+  border-top: 1.5px solid #6c757d; 
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  #promptInputSection {
+    left: 0;
+    max-width: 100vw;
+  }
+}
 
     </style>
   </head>
-  <body class="bg-light d-flex flex-column min-vh-100">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
-          <div class="container-fluid d-flex align-items-center justify-content-between">
-            <!-- Brand -->
-            <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
-  
-            <!-- Mobile controls -->
-            <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
-              <div class="dropdown">
-                <a
-                  href="#"
-                  class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                  id="navbarDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+  <body>
+    <div class="main-container">
+      <!-- Top Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+          <!-- Brand -->
+          <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+
+          <!-- Mobile controls -->
+          <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+            <button
+    id="mobileSearchBtn"
+    class="btn btn-light rounded-circle "
+    style="width: 36px; height: 36px"
+  >
+   <i class="bi bi-search"></i>
+  </button>
+
+ <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+ <div
+   id="mobileSearchSidebar"
+   class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+   style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;"
+   >
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Search</h5>
+      <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <input
+      type="text"
+      class="form-control rounded-pill"
+      placeholder="Search models..."
+    />
+  </div>
+            <div class="dropdown">
+              <a
+                href="#"
+                class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                id="navbarDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px;"
                 >
-                  <div
-                    class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                    style="width: 32px; height: 32px; font-size: 14px;"
-                  >
-                    U
-                  </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+                  U
+                </div>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+                <div class="mobile-auth-only dnone">
                   <li>
-                    <h6 class="dropdown-header" id="account-username">Username</h6>
-                    <p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p>
+                    <h6 class="dropdown-header" id="account-username-mobile">
+                      Username
+                    </h6>
+                    <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                      email@example.com
+                    </p>
                   </li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="model.html">Models</a></li>
-                  <li><a class="dropdown-item" href="credits.html">Chat</a></li>
-                  <li><a class="dropdown-item" href="#">Rankings</a></li>
-                  <li><a class="dropdown-item" href="#">Docs</a></li>
+                </div>
+                <li><a class="dropdown-item" href="model.html">Models</a></li>
+                <li><a class="dropdown-item" href="#">Chat</a></li>
+                <li><a class="dropdown-item" href="#">Rankings</a></li>
+                <li><a class="dropdown-item" href="#">Docs</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <div class="mobile-auth-only dnone">
+                  <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+                  <li>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="provisioning.html"
+                      >Provisioning Keys</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="integrations.html"
+                      >Integrations</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="privacy.html">Privacy</a>
+                  </li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                  <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                  <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                  <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
-                  <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                    <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
-                  </a></li>
-                </ul>
-              </div>
+                     
+                  <li>
+                    <a
+                      class="dropdown-item text-danger"
+                      href="index.html"
+                      onclick="logout()"
+                      >Logout</a
+                    >
+                  </li>
+                 </div>
+                <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                  <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
+                </a></li>
+              </ul>
             </div>
-  
-            <!-- Search (Desktop only) -->
-            <form class="d-none d-lg-block mx-3 flex-grow-1">
-              <input class="form-control rounded-pill bg-light desktop-search" type="search" placeholder="Search models" />
-            </form>
-  
-            <!-- Desktop Nav Items -->
-            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
-              <li class="nav-item mx-1" id="signInDesktop">
-                <a class="nav-link fw-medium" href="auth.html">
-                  <button type="button" class="btn btn-outline-primary">Sign in</button>
-                </a>
-              </li>
-              <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
-                    U
-                  </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
-                  <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="credits.html">credits</a></li>
-                  <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                  <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                  <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                  <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                  <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container-fluid main-container">
-      <!-- Sidebar -->
-     
-
-      <!-- Page Content -->
-      <div class="container py-4">
-        <div class="chat-container">
-          <h4 class="mb-4 text-center">Video Prompt Generator</h4>
-
-          <div class="mb-3">
-            <label for="promptInput" class="form-label"
-              >Enter your prompt</label
-            >
-            <textarea
-              class="form-control"
-              id="promptInput"
-              rows="4"
-              placeholder="Describe the video you want to generate..."
-            ></textarea>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-primary" onclick="generateVideo()">
-              Generate 🍋
-            </button>
-          </div>
+          <!-- Search (Desktop only) -->
+          <form class="d-none d-lg-block mx-3 flex-grow-1">
+            <input class="form-control rounded-pill bg-light desktop-search" type="search" placeholder="Search models" />
+          </form>
 
-          <div id="loading" class="text-center mt-4" style="display: none">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="mt-2">Generating your video...</p>
-          </div>
-
-          <div id="videoContainer" class="mt-4 text-center"></div>
-          <div class="text-center mt-2">
-            <a
-              id="downloadLink"
-              href="#"
-              download="generated-video.mp4"
-              style="display: none"
-              >⬇️ Download Video</a
-            >
-          </div>
+          <!-- Desktop Nav Items -->
+          <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
+            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
+            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
+            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+            <li class="nav-item mx-1" id="signInDesktop">
+              <a class="nav-link fw-medium" href="auth.html">
+                <button type="button" class="btn btn-outline-primary">Sign in</button>
+              </a>
+            </li>
+            <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                  U
+                </div>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
+                <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="credits.html">Dashboard</a></li>
+                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
+                <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
+                <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
+                <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </nav>
+
+
+      <!-- Main Content -->
+      <div class="d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="p-3">
+          <button class="btn btn-outline-secondary w-100 mb-3">New Room</button>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2"><em>Untitled Chat</em></li>
+     
+          </ul>
+        </div>
+    
+        <!-- Main Area -->
+        <div class="flex-grow-1 d-flex flex-column">
+
+        <!-- Model Selector Header -->
+<!-- Model Selector Header -->
+<div class="px-4 pt-3">
+  <div class="d-flex align-items-center justify-content-between mb-4"> <!-- changed mb-3 to mb-4 for more bottom space -->
+    <div class="d-flex align-items-center gap-2">
+      <label class="fw-semibold mb-0">Model:</label>
+      <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
+        <option value="audio">Text to Audio</option>
+        <option value="video" selected>Text to Video</option>
+        <option value="image">Text to Image</option>
+      </select>
+    </div>
+  </div>
+  <hr class="model-hr" />
+</div>
+
+    
+    
+          <!-- Chat Section -->
+          <div id="chat" class="container-fluid mt-4">
+            <!-- Chat messages with audio will appear here -->
+          </div>
+    
+          
+              
+  <!-- Chat Input Bar -->
+<div id="promptInputSection" class="container my-3">
+  <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2" style="max-width: 100%;">
+
+    <!-- Prompt Input -->
+    <input 
+    type="text" 
+    id="promptInput"  
+    class="form-control border-0 bg-transparent text-dark"
+    placeholder="Start a message..." 
+    style="box-shadow: none; outline: none;"
+  >
+
+    <!-- Send Button -->
+    <button 
+    class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" 
+    style="width: 40px; height: 40px;" 
+    onclick="generateVideo()"  
+  >
+    <i class="bi bi-send-fill"></i>
+  </button>
+  
+
+  </div>
+</div>
       </div>
     </div>
-
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/model-selector.js"></script>
     <script>
-      async function generateVideo() {
-        const prompt = document.getElementById("promptInput").value.trim();
-        const userId = localStorage.getItem("userId");
+      
+  const chat = document.getElementById("chat");
 
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          return;
-        }
+  function appendUserMessage(prompt) {
+    const userWrapper = document.createElement("div");
+    userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
 
-        document.getElementById("loading").style.display = "block";
-        document.getElementById("videoContainer").innerHTML = "";
-        document.getElementById("downloadLink").style.display = "none";
+    userWrapper.innerHTML = `
+      <div class="user-message p-3">
+        ${prompt}
+      </div>
+      <i 
+        class="bi bi-clipboard-fill text-secondary mt-1" 
+        style="cursor: pointer; font-size: 14px;" 
+        onclick="copyToClipboard(this)"
+        title="Copy"
+      ></i>
+    `;
+    chat.appendChild(userWrapper);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
-        try {
-          const requestBody = {
-            prompt: prompt,
-            userId: userId,
-          };
+  function appendGeneratingVideoMessage() {
+    const aiDiv = document.createElement("div");
+    aiDiv.className = "d-flex justify-content-start mb-3";
+    aiDiv.innerHTML = `
+      <div class="ai-message p-3">
+        <i class="bi bi-camera-reels me-2"></i>Generating video...
+      </div>
+    `;
+    chat.appendChild(aiDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function appendGeneratedVideo(videoUrl) {
+  const chatMessages = document.getElementById("chat");
 
-          const response = await fetch("http://localhost:5000/api/ai/generate-video", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          });
+  // Remove the "Generating video..." message
+  const loadingMessage = document.querySelector(".generating-video");
+  if (loadingMessage) {
+    loadingMessage.remove();
+  }
 
-          const data = await response.json();
+  // Create a message container for the AI
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
 
-          if (data.video_url) {
-            const videoElement = document.createElement("video");
-            videoElement.controls = true;
-            videoElement.src = data.video_url;
-            videoElement.classList.add("mt-3");
-            videoElement.style.maxWidth = "100%";
+  // Create the message bubble
+  const bubble = document.createElement("div");
+  bubble.className = "ai-message p-3";
 
-            document.getElementById("videoContainer").appendChild(videoElement);
+  // Caption
+  const caption = document.createElement("div");
+  caption.textContent = "Generated Video:";
+  caption.classList.add("mb-2");
 
-            const downloadLink = document.getElementById("downloadLink");
-            downloadLink.href = data.video_url;
-            downloadLink.style.display = "inline-block";
-          } else {
-            alert("Video generation failed.");
-          }
-        } catch (error) {
-          alert("Error generating video.");
-          console.error(error);
-        } finally {
-          document.getElementById("loading").style.display = "none";
-        }
+  // Video
+  const videoElement = document.createElement("video");
+  videoElement.controls = true;
+  videoElement.src = videoUrl;
+  videoElement.classList.add("rounded", "w-100", "shadow");
+  videoElement.style.maxWidth = "500px";
 
-      }
-    </script>
+  // Append
+  bubble.appendChild(caption);
+  bubble.appendChild(videoElement);
+  messageElement.appendChild(bubble);
+  chatMessages.appendChild(messageElement);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function generateVideo() {
+  const prompt = document.getElementById("promptInput").value.trim();
+  const userId = localStorage.getItem("userId");
+
+  if (!prompt) {
+    alert("Please enter a prompt.");
+    console.warn("[generateVideo] Empty prompt — user must type something.");
+    return;
+  }
+
+  console.log(`[generateVideo] Sending prompt: "${prompt}" with userId: ${userId}`);
+
+  appendUserMessage(prompt);
+  appendGeneratingVideoMessage();
+
+  try {
+    const response = await fetch("http://localhost:5000/api/ai/generate-video", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, userId }),
+    });
+
+    console.log("[generateVideo] Response received from server");
+
+    if (!response.ok) {
+      console.error(`[generateVideo] Server responded with status: ${response.status}`);
+      alert("Server error while generating video.");
+      return;
+    }
+
+    const data = await response.json();
+    console.log("[generateVideo] JSON parsed:", data);
+
+    if (data.video_url) {
+      console.log(`[generateVideo] Video generated successfully: ${data.video_url}`);
+      appendGeneratedVideo(data.video_url);
+    } else {
+      console.warn("[generateVideo] No video_url in response:", data);
+      alert("Video generation failed. Check server logs.");
+    }
+  } catch (error) {
+    console.error("[generateVideo] Fetch error:", error);
+    alert("Error connecting to server.");
+  }
+}
+
+
+  function copyToClipboard(icon) {
+    const messageText = icon.previousElementSibling.innerText.trim();
+    navigator.clipboard.writeText(messageText).then(() => {
+      icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+      setTimeout(() => {
+        icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+      }, 1500);
+    }).catch(err => {
+      console.error("Copy failed:", err);
+    });
+  }
+</script>
   </body>
 </html>
