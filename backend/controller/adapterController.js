@@ -1,17 +1,18 @@
-import axios from "axios";
-import FormData from "form-data";
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 import { decreaseCredits } from "./creditController.js";
+import {
+  generateWithDeepInfra,
+  generateWithFAL,
+  generateWithReplicate,
+} from "../services/videoServices.js";
 dotenv.config();
 
 fal.config({
   credentials: process.env.FAL_AI_API,
 });
 fal.config({
-  credentials:
-    process.env.FAL_AI_AUDIO_API ||
-    "ecc99927-def0-4f61-9c54-97b6371ebadf:e71eaba34872ae890feabaa56e6b230c",
+  credentials: process.env.FAL_AI_AUDIO_API,
 });
 
 export const generateVideo = async (req, res) => {
@@ -22,29 +23,67 @@ export const generateVideo = async (req, res) => {
   }
 
   try {
-    try {
-      await decreaseCredits(userId, 5);
-    } catch (err) {
-      return res.status(402).json({ error: err.message });
+    // API priority
+    const apiPriority = [
+      { name: "DeepInfra", handler: generateWithDeepInfra },
+      { name: "FAL", handler: generateWithFAL },
+      { name: "Replicate", handler: generateWithReplicate },
+    ];
+
+    // Credit values per provider
+    const amt = {
+      FAL: 8,
+      Replicate: 6,
+      DeepInfra: 4,
+    };
+
+    // Try each provider
+    for (const api of apiPriority) {
+      try {
+        const rawData = await api.handler(prompt);
+
+        // Skip if no data returned
+        if (!rawData) throw new Error(`${api.name} returned no data`);
+
+        // Extract the video URL based on API source
+        let video_url = null;
+
+        switch (api.name) {
+          case "DeepInfra":
+            video_url = rawData.video_url || rawData.data?.video_url;
+            break;
+          case "FAL":
+            video_url = rawData.video?.url;
+            break;
+          case "Replicate":
+            // Assuming Replicate returns a direct URL or array of outputs
+            video_url = Array.isArray(rawData)
+              ? rawData[0]
+              : rawData?.video_url || rawData?.url;
+            break;
+        }
+
+        if (!video_url)
+          throw new Error(`${api.name} did not return a valid video URL`);
+
+        // Deduct credits
+        try {
+          await decreaseCredits(userId, amt[api.name]);
+        } catch (creditErr) {
+          return res.status(402).json({ error: creditErr.message });
+        }
+
+        return res.status(200).json({ video_url });
+      } catch (error) {
+        console.warn(`Error with ${api.name}:`, error.message || error);
+      }
     }
 
-    const response = await axios.post(
-      "https://api.deepinfra.com/v1/inference/Wan-AI/Wan2.1-T2V-1.3B",
-      { prompt },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    res.status(200).json(response.data);
-  } catch (error) {
-    console.error("Video Generation Error:", error.message || error);
-    res
-      .status(500)
-      .json({ error: error.message || "Failed to generate video" });
+    // If all services fail
+    res.status(500).json({ error: "All video generation services failed." });
+  } catch (err) {
+    console.error("Video Generation Error:", err.message || err);
+    res.status(500).json({ error: err.message || "Failed to generate video" });
   }
 };
 
