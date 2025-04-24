@@ -6,6 +6,10 @@ import {
   generateWithFAL,
   generateWithReplicate,
 } from "../services/videoServices.js";
+import {
+  generateWithDeepInfraImage,
+  generateWithFALImage,
+} from "../services/imageServices.js";
 dotenv.config();
 
 fal.config({
@@ -94,39 +98,56 @@ export const generateImage = async (req, res) => {
     return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
+  // API priority
+  const apiPriority = [
+    { name: "DeepInfra", handler: generateWithDeepInfraImage },
+    { name: "FAL", handler: generateWithFALImage },
+  ];
+
+  // Credit values per provider
+  const amt = {
+    FAL: 2,
+    DeepInfra: 3,
+  };
+
   try {
-    try {
-      await decreaseCredits(userId, 2);
-    } catch (err) {
-      return res.status(402).json({ error: err.message });
-    }
+    for (const api of apiPriority) {
+      try {
+        const rawData = await api.handler(prompt);
 
-    const result = await fal.subscribe("fal-ai/fooocus", {
-      input: { prompt },
-      logs: true,
-      onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
-          update.logs?.forEach((log) => {
-            // console.log(`[FAL LOG]: ${log.message}`);
-          });
+        if (!rawData) throw new Error(`${api.name} returned no data`);
+
+        let imageUrl = null;
+
+        switch (api.name) {
+          case "FAL":
+            imageUrl = rawData?.images?.[0]?.url;
+            break;
+          case "DeepInfra":
+            const base64 = rawData?.data?.[0]?.b64_json;
+            imageUrl = `data:image/jpeg;base64,${base64}`;
+            break;
         }
-      },
-    });
 
-    const imageUrl = result?.data?.images?.[0]?.url;
+        if (!imageUrl)
+          throw new Error(`${api.name} did not return a valid image URL`);
 
-    if (!imageUrl) {
-      return res
-        .status(500)
-        .json({ error: "Image URL not found in response." });
+        try {
+          await decreaseCredits(userId, amt[api.name]);
+        } catch (creditErr) {
+          return res.status(402).json({ error: creditErr.message });
+        }
+
+        return res.status(200).json({ imageUrl });
+      } catch (err) {
+        console.warn(`Error with ${api.name}:`, err.message || err);
+      }
     }
 
-    res.json({ imageUrl });
-  } catch (error) {
-    console.error("Image Generation Error:", error.message || error);
-    res
-      .status(500)
-      .json({ error: error.message || "Image generation failed." });
+    res.status(500).json({ error: "All image generation services failed." });
+  } catch (err) {
+    console.error("Image Generation Error:", err.message || err);
+    res.status(500).json({ error: err.message || "Failed to generate image" });
   }
 };
 
