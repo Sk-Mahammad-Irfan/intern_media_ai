@@ -6,6 +6,7 @@ import {
   generateWithFAL,
   generateWithReplicate,
 } from "../services/videoServices.js";
+import { generateAudioWithFal } from "../services/audioServices.js";
 dotenv.config();
 
 fal.config({
@@ -129,46 +130,57 @@ export const generateImage = async (req, res) => {
       .json({ error: error.message || "Image generation failed." });
   }
 };
-
 export const generateAudio = async (req, res) => {
-  const { prompt, duration = 30, userId } = req.body;
+  const { prompt, userId, duration = 20 } = req.body;
 
   if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required." });
+    return res.status(400).json({ error: "Prompt and User ID are required" });
   }
 
   try {
-    try {
-      await decreaseCredits(userId, 3);
-    } catch (err) {
-      return res.status(402).json({ error: err.message });
-    }
+    // Define priority list of APIs
+    const apiPriority = [
+      { name: "FAL", handler: generateAudioWithFal },
+      // You can add other providers like DeepInfra, Replicate here
+    ];
 
-    const result = await fal.subscribe("cassetteai/sound-effects-generator", {
-      input: { prompt, duration },
-      logs: true,
-      onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
-          update.logs?.forEach((log) => {
-            // console.log(`[FAL LOG]: ${log.message}`);
-          });
+    // Credit costs per provider
+    const creditsRequired = {
+      FAL: 8,
+      Replicate: 6,
+      DeepInfra: 4,
+    };
+
+    for (const api of apiPriority) {
+      try {
+        const audioUrl = await api.handler(prompt, duration); // Passing duration
+
+        if (!audioUrl) {
+          throw new Error(`${api.name} returned an empty audio URL`);
         }
-      },
-    });
 
-    const audioUrl = result?.data?.audio_file?.url;
+        // Deduct credits
+        try {
+          await decreaseCredits(userId, creditsRequired[api.name]);
+        } catch (creditErr) {
+          return res.status(402).json({ error: creditErr.message });
+        }
 
-    if (!audioUrl) {
-      return res
-        .status(500)
-        .json({ error: "Audio URL not found in response." });
+        // Success response
+        return res.status(200).json({ audioUrl }); // NOTE: renamed to `audioUrl` for consistency
+      } catch (error) {
+        console.warn(`Error with ${api.name}:`, error.message || error);
+      }
     }
 
-    res.json({ audioUrl });
-  } catch (error) {
-    console.error("Audio Generation Error:", error.message || error);
-    res
+    // If all services failed
+    return res
       .status(500)
-      .json({ error: error.message || "Audio generation failed." });
+      .json({ error: "All audio generation services failed." });
+  } catch (err) {
+    console.error("Audio Generation Error:", err.message || err);
+    return res
+      .status(500)
+      .json({ error: err.message || "Failed to generate audio" });
   }
 };
