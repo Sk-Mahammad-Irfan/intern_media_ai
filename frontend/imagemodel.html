@@ -356,7 +356,7 @@ function appendGeneratingMessage() {
         }
       }
 
-      async function generateImage() {
+async function generateImage() {
   const promptInput = document.getElementById("prompt");
   const prompt = promptInput.value.trim();
   const userId = localStorage.getItem("userId");
@@ -375,10 +375,21 @@ function appendGeneratingMessage() {
   // Show generating message
   appendGeneratingMessage("image");
 
+  // Determine API priority based on URL
+  const currentUrl = window.location.href;
+  let apiPriority = ["FAL", "DeepInfra"]; // Default
+
+  if (currentUrl.includes("imagemodel.html?id=deepinfra-tti")) {
+    apiPriority = ["DeepInfra", "FAL"];
+  } else if (currentUrl.includes("imagemodel.html?id=fal-tti")) {
+    apiPriority = [  "FAL","DeepInfra"];
+  }
+
   try {
     const requestBody = {
       prompt: prompt,
       userId: userId,
+      apiPriority: apiPriority,
     };
 
     const res = await fetch("http://localhost:5000/api/ai/generate-image", {
@@ -396,27 +407,26 @@ function appendGeneratingMessage() {
     if (genMsg) genMsg.remove();
 
     if (data.imageUrl) {
-  const aiDiv = document.createElement("div");
-  aiDiv.className = "d-flex justify-content-start mb-3";
-  aiDiv.innerHTML = `
-    <div class="ai-message p-2">
-      <div class="d-flex flex-column align-items-start">
-        <div class="mb-2 text-muted small">
-          <i class="bi bi-image-fill me-2"></i>Generated Image
+      const aiDiv = document.createElement("div");
+      aiDiv.className = "d-flex justify-content-start mb-3";
+      aiDiv.innerHTML = `
+        <div class="ai-message p-2">
+          <div class="d-flex flex-column align-items-start">
+            <div class="mb-2 text-muted small">
+              <i class="bi bi-image-fill me-2"></i>Generated Image
+            </div>
+            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
+              <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+              <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-          <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-          <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-            <i class="bi bi-box-arrow-up-right"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
-  chat.appendChild(aiDiv);
-  chat.scrollTop = chat.scrollHeight;
-}
-else {
+      `;
+      chat.appendChild(aiDiv);
+      chat.scrollTop = chat.scrollHeight;
+    } else {
       replaceWithErrorMessage("Image generation failed.");
     }
   } catch (err) {

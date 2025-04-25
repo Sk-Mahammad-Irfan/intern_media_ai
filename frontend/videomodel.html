@@ -322,6 +322,7 @@
       
   const chat = document.getElementById("chat");
 
+
   function appendUserMessage(prompt) {
     const userWrapper = document.createElement("div");
     userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
@@ -404,11 +405,21 @@ async function generateVideo() {
   appendUserMessage(prompt);
   appendGeneratingVideoMessage();
 
+  // Determine the priority based on the URL
+  const currentUrl = window.location.href;
+  let apiPriority = ["FAL", "Replicate", "DeepInfra"]; // Default priority
+
+  if (currentUrl.includes("videomodel.html?id=deepinfra-ttv")) {
+    apiPriority = ["DeepInfra", "FAL", "Replicate"];
+  } else if (currentUrl.includes("videomodel.html?id=fal-ttv")) {
+    apiPriority = ["FAL","DeepInfra", "Replicate"];
+  }
+
   try {
     const response = await fetch("http://localhost:5000/api/ai/generate-video", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, userId }),
+      body: JSON.stringify({ prompt, userId, apiPriority }),
     });
 
     console.log("[generateVideo] Response received from server");

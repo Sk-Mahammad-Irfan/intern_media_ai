@@ -20,36 +20,51 @@ fal.config({
 });
 
 export const generateVideo = async (req, res) => {
-  const { prompt, userId } = req.body;
+  const { prompt, userId, apiPriority: clientApiPriority } = req.body;
 
   if (!prompt || !userId) {
     return res.status(400).json({ error: "Prompt and User ID are required" });
   }
 
+  // Handlers for the different APIs
+  const apiHandlers = {
+    DeepInfra: generateWithDeepInfra,
+    FAL: generateWithFAL,
+    Replicate: generateWithReplicate,
+  };
+
+  // Credit values per provider
+  const amt = {
+    FAL: 8,
+    Replicate: 6,
+    DeepInfra: 4,
+  };
+
+  // Validate and build the API priority array
+  const apiPriority = (
+    Array.isArray(clientApiPriority) ? clientApiPriority : []
+  )
+    .filter((name) => Object.keys(apiHandlers).includes(name))
+    .map((name) => ({
+      name,
+      handler: apiHandlers[name],
+    }));
+
+  if (apiPriority.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Invalid or missing API priority list" });
+  }
+
   try {
-    // API priority
-    const apiPriority = [
-      { name: "DeepInfra", handler: generateWithDeepInfra },
-      { name: "FAL", handler: generateWithFAL },
-      { name: "Replicate", handler: generateWithReplicate },
-    ];
-
-    // Credit values per provider
-    const amt = {
-      FAL: 8,
-      Replicate: 6,
-      DeepInfra: 4,
-    };
-
-    // Try each provider
+    // Try each provider in the given order
     for (const api of apiPriority) {
       try {
         const rawData = await api.handler(prompt);
 
-        // Skip if no data returned
         if (!rawData) throw new Error(`${api.name} returned no data`);
 
-        // Extract the video URL based on API source
+        // Extract the video URL based on the provider
         let video_url = null;
 
         switch (api.name) {
@@ -60,15 +75,15 @@ export const generateVideo = async (req, res) => {
             video_url = rawData.video?.url;
             break;
           case "Replicate":
-            // Assuming Replicate returns a direct URL or array of outputs
             video_url = Array.isArray(rawData)
               ? rawData[0]
               : rawData?.video_url || rawData?.url;
             break;
         }
 
-        if (!video_url)
+        if (!video_url) {
           throw new Error(`${api.name} did not return a valid video URL`);
+        }
 
         // Deduct credits
         try {
@@ -92,23 +107,38 @@ export const generateVideo = async (req, res) => {
 };
 
 export const generateImage = async (req, res) => {
-  const { prompt, userId } = req.body;
+  const { prompt, userId, apiPriority: clientApiPriority } = req.body;
 
   if (!prompt || !userId) {
     return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  // API priority
-  const apiPriority = [
-    { name: "DeepInfra", handler: generateWithDeepInfraImage },
-    { name: "FAL", handler: generateWithFALImage },
-  ];
+  // All available handlers
+  const apiHandlers = {
+    DeepInfra: generateWithDeepInfraImage,
+    FAL: generateWithFALImage,
+  };
 
   // Credit values per provider
   const amt = {
     FAL: 2,
     DeepInfra: 3,
   };
+
+  // Validate and build priority list from frontend
+  const apiPriority = (
+    Array.isArray(clientApiPriority) ? clientApiPriority : []
+  )
+    .filter((name) => Object.keys(apiHandlers).includes(name))
+    .map((name) => ({
+      name,
+      handler: apiHandlers[name],
+    }));
+  if (apiPriority.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Invalid or missing API priority list." });
+  }
 
   try {
     for (const api of apiPriority) {
@@ -125,7 +155,7 @@ export const generateImage = async (req, res) => {
             break;
           case "DeepInfra":
             const base64 = rawData?.data?.[0]?.b64_json;
-            imageUrl = `data:image/jpeg;base64,${base64}`;
+            imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
             break;
         }
 
