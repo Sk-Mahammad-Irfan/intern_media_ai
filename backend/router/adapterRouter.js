@@ -8,7 +8,7 @@ import {
 import { requireSignIn } from "../middlewares/authMiddleware.js";
 
 router.post("/generate-video", generateVideo);
-router.post("/generate-image", generateImage);
+router.post("/generate-image/:id", generateImage);
 router.post("/generate-audio", generateAudio);
 
 export default router;

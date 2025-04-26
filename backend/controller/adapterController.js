@@ -10,6 +10,12 @@ import {
   generateWithDeepInfraImage,
   generateWithFALImage,
 } from "../services/imageServices.js";
+import { deepFluxProV1_1, falFluxProV1_1 } from "../services/flux11Service.js";
+import { falFooocus } from "../services/fooocusService.js";
+import {
+  falRecraftV3,
+  segmindRecraftV3,
+} from "../services/recraftv3Service.js";
 dotenv.config();
 
 fal.config({
@@ -107,78 +113,98 @@ export const generateVideo = async (req, res) => {
 };
 
 export const generateImage = async (req, res) => {
-  const { prompt, userId, apiPriority: clientApiPriority } = req.body;
+  const { id } = req.params;
+  const { prompt, userId } = req.body;
 
   if (!prompt || !userId) {
     return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  // All available handlers
-  const apiHandlers = {
-    DeepInfra: generateWithDeepInfraImage,
-    FAL: generateWithFALImage,
-  };
+  // All generation handlers and their metadata
+  const generationHandlers = [
+    {
+      model: "flux-pro",
+      handler: falFluxProV1_1,
+      credits: 3,
+    },
+    {
+      model: "flux-pro",
+      handler: deepFluxProV1_1,
+      credits: 6,
+    },
+    {
+      model: "recraft-v3",
+      handler: falRecraftV3,
+      credits: 4,
+    },
+    {
+      model: "recraft-v3",
+      handler: segmindRecraftV3,
+      credits: 2,
+    },
+    {
+      model: "fooocus",
+      handler: falFooocus,
+      credits: 4,
+    },
+  ];
 
-  // Credit values per provider
-  const amt = {
-    FAL: 2,
-    DeepInfra: 3,
-  };
+  // Find all handlers matching the requested model
+  const matchingHandlers = generationHandlers
+    .filter((h) => h.model === id)
+    .sort((a, b) => a.credits - b.credits); // Sort by cheapest first
 
-  // Validate and build priority list from frontend
-  const apiPriority = (
-    Array.isArray(clientApiPriority) ? clientApiPriority : []
-  )
-    .filter((name) => Object.keys(apiHandlers).includes(name))
-    .map((name) => ({
-      name,
-      handler: apiHandlers[name],
-    }));
-  if (apiPriority.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "Invalid or missing API priority list." });
+  if (matchingHandlers.length === 0) {
+    return res.status(400).json({ error: "Invalid model ID." });
   }
 
-  try {
-    for (const api of apiPriority) {
-      try {
-        const rawData = await api.handler(prompt);
+  // Try each handler until one succeeds
+  for (const { handler, credits } of matchingHandlers) {
+    try {
+      console.log("handler", handler);
+      const rawData = await handler(prompt);
 
-        if (!rawData) throw new Error(`${api.name} returned no data`);
+      let imageUrl = null;
 
-        let imageUrl = null;
+      switch (handler) {
+        case falFluxProV1_1:
+        case falRecraftV3:
+        case falFooocus:
+          imageUrl = rawData?.images?.[0]?.url;
+          break;
 
-        switch (api.name) {
-          case "FAL":
-            imageUrl = rawData?.images?.[0]?.url;
-            break;
-          case "DeepInfra":
-            const base64 = rawData?.data?.[0]?.b64_json;
-            imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
-            break;
-        }
+        case deepFluxProV1_1:
+          const base64 = rawData?.data?.[0]?.b64_json;
+          imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
+          break;
 
-        if (!imageUrl)
-          throw new Error(`${api.name} did not return a valid image URL`);
-
-        try {
-          await decreaseCredits(userId, amt[api.name]);
-        } catch (creditErr) {
-          return res.status(402).json({ error: creditErr.message });
-        }
-
-        return res.status(200).json({ imageUrl });
-      } catch (err) {
-        console.warn(`Error with ${api.name}:`, err.message || err);
+        case segmindRecraftV3:
+          imageUrl = rawData?.output?.[0];
+          break;
       }
-    }
 
-    res.status(500).json({ error: "All image generation services failed." });
-  } catch (err) {
-    console.error("Image Generation Error:", err.message || err);
-    res.status(500).json({ error: err.message || "Failed to generate image" });
+      if (!imageUrl) {
+        console.warn(
+          "Handler did not return a valid image, trying next one..."
+        );
+        continue; // Try next cheaper handler
+      }
+
+      // Decrease credits after successful generation
+      try {
+        await decreaseCredits(userId, credits);
+      } catch (creditError) {
+        return res.status(402).json({ error: creditError.message });
+      }
+
+      return res.status(200).json({ imageUrl });
+    } catch (error) {
+      console.error("Handler error, trying next one:", error.message || error);
+      continue; // Try next cheaper handler
+    }
   }
+
+  res.status(500).json({ error: "All handlers failed to generate image." });
 };
 
 export const generateAudio = async (req, res) => {

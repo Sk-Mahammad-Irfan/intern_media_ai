@@ -246,25 +246,35 @@
     const modelId = urlParams.get("id");
 
     const modelData = {
-      "deepinfra-tti": {
-        title: "DeepInfra: Text-to-Image - stabilityai/sd3.5",
-        description:
-          "Image generation model available through DeepInfra, optimized for creativity and performance.",
-        link: "https://deepinfra.com/stabilityai/sd3.5",
-        fullDetails:
-          "DeepInfra provides a set of models that convert text prompts into high-quality images. These models are optimized for style control, fast inference, and use cases in design, marketing, and content creation.",
-        chatPage: "imagemodel.html",
+      "black-forest-labs-flux-1-1-pro": {
+          title: "Black Forest Labs: FLUX-1.1 Pro",
+          description:
+            "Black Forest Labs' latest state-of-the-art proprietary model offering exceptional prompt following, visual quality, detail, and output diversity.",
+          link: "https://deepinfra.com/black-forest-labs/FLUX-1.1-pro",
+          fullDetails:
+            "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
+          chatPage: "imagemodel.html",
       },
 
-      "fal-tti": {
-        title: "FAL AI: Text-to-Image",
-        description:
-          "A broad selection of text-to-image models hosted by FAL AI, customizable for various use cases.",
-        link: "https://fal.ai/models?keywords=audio&categories=text-to-image",
-        fullDetails:
-          "FAL AI's text-to-image offerings include a variety of diffusion and generative models, allowing fine-tuned control over image outputs from textual input. Great for creative apps and AI-assisted design tools.",
-        chatPage: "imagemodel.html",
-      },
+
+      "recraft-v3": {
+  "title": "Recraft V3: Text-to-Image",
+  "description": 
+    "Recraft V3 is a state-of-the-art text-to-image model capable of generating long texts, vector art, images in brand styles, and much more. Proven by Hugging Face's leading Text-to-Image Benchmark by Artificial Analysis.",
+  "link": "https://huggingface.co",
+  "fullDetails": 
+    "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
+  "chatPage": "imagemodel.html"
+},
+"fooocus": {
+  "title": "Fooocus: Base Model",
+  "description": 
+    "Fooocus is a powerful text-to-image model offering base parameters with automated optimizations and quality improvements for rapid and high-quality image generation.",
+  "link": "https://fal.ai",
+  "fullDetails": 
+    "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements. It serves as a flexible solution for a wide range of creative applications, from general design to professional content creation.",
+  "chatPage": "imagemodel.html"
+},
 
       // Text-to-Video
       "deepinfra-ttv": {

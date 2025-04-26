@@ -89,6 +89,8 @@
     left: 0;
     max-width: 100vw;
   }
+  #sidebar {display: none;}
+    
 }
 
     </style>
@@ -409,7 +411,7 @@ async function generateVideo() {
   const currentUrl = window.location.href;
   let apiPriority = ["FAL", "Replicate", "DeepInfra"]; // Default priority
 
-  if (currentUrl.includes("videomodel.html?id=deepinfra-ttv")) {
+  if (currentUrl.includes("id=black-forest-labs-flux-1-1-pro")) {
     apiPriority = ["DeepInfra", "FAL", "Replicate"];
   } else if (currentUrl.includes("videomodel.html?id=fal-ttv")) {
     apiPriority = ["FAL","DeepInfra", "Replicate"];
