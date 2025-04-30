@@ -16,6 +16,10 @@ import {
   falRecraftV3,
   segmindRecraftV3,
 } from "../services/recraftv3Service.js";
+import {
+  generateAudioWithFal,
+  generateWithRapidApiAudio,
+} from "../services/audioServices.js";
 dotenv.config();
 
 fal.config({
@@ -207,50 +211,43 @@ export const generateImage = async (req, res) => {
   res.status(500).json({ error: "All handlers failed to generate image." });
 };
 
+// Audio generation function
 export const generateAudio = async (req, res) => {
-  const { prompt, userId, duration = 20 } = req.body;
+  const { prompt, userId } = req.body;
 
   if (!prompt || !userId) {
     return res.status(400).json({ error: "Prompt and User ID are required" });
   }
 
   try {
-    // Define priority list of APIs
     const apiPriority = [
-      { name: "FAL", handler: generateAudioWithFal },
-      // You can add other providers like DeepInfra, Replicate here
+      { name: "RapidAPI", handler: generateWithRapidApiAudio },
     ];
 
-    // Credit costs per provider
     const creditsRequired = {
-      FAL: 8,
-      Replicate: 6,
-      DeepInfra: 4,
+      RapidAPI: 5,
     };
 
     for (const api of apiPriority) {
       try {
-        const audioUrl = await api.handler(prompt, duration); // Passing duration
+        const audioUrl = await api.handler(prompt);
 
         if (!audioUrl) {
           throw new Error(`${api.name} returned an empty audio URL`);
         }
 
-        // Deduct credits
         try {
           await decreaseCredits(userId, creditsRequired[api.name]);
         } catch (creditErr) {
           return res.status(402).json({ error: creditErr.message });
         }
 
-        // Success response
-        return res.status(200).json({ audioUrl }); // NOTE: renamed to `audioUrl` for consistency
+        return res.status(200).json({ audioUrl });
       } catch (error) {
         console.warn(`Error with ${api.name}:`, error.message || error);
       }
     }
 
-    // If all services failed
     return res
       .status(500)
       .json({ error: "All audio generation services failed." });

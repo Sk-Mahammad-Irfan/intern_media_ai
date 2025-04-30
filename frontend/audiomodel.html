@@ -141,30 +141,29 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const chatBox = document.getElementById("chatBox");
+      const chatContainer = document.getElementById("chat");
 
       function appendUserMessage(text) {
-        chatBox.innerHTML += `
-          <div class="message user-msg">
-            <div class="user-bubble">${text}</div>
-          </div>
-        `;
+        const msg = document.createElement("div");
+        msg.className = "user-message mb-2";
+        msg.textContent = text;
+        chatContainer.appendChild(msg);
       }
 
       function appendLoadingMessage() {
-        const loadingId = "loading-" + Date.now();
-        chatBox.innerHTML += `
-          <div class="message">
-            <div class="ai-bubble" id="${loadingId}">🔄 Generating audio...</div>
-          </div>
-        `;
-        return loadingId;
+        const id = "loading-" + Date.now();
+        const wrapper = document.createElement("div");
+        wrapper.className = "ai-message mb-2";
+        wrapper.id = id;
+        wrapper.innerHTML = "🔄 Generating audio...";
+        chatContainer.appendChild(wrapper);
+        return id;
       }
 
       function replaceWithAudio(id, audioUrl) {
         const elem = document.getElementById(id);
         elem.innerHTML = `
-          <audio controls>
+          <audio class="compact-audio" controls>
             <source src="${audioUrl}" type="audio/mpeg" />
             Your browser does not support the audio element.
           </audio>
@@ -187,7 +186,7 @@
 
         appendUserMessage(prompt);
         const loadingId = appendLoadingMessage();
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 
         try {
           const res = await fetch("http://localhost:5000/api/ai/generate-audio", {
