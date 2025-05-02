@@ -44,12 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (authOnlyMobile) authOnlyMobile.forEach(el => el.classList.add("d-none"));
   }
 
-  // --- TOOLTIP INIT ---
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  tooltipTriggerList.map(el => new bootstrap.Tooltip(el, {
-    placement: 'right',
-    trigger: 'hover'
-  }));
 
   // --- SIDEBAR ACTIVE LINK HIGHLIGHT ---
   const path = window.location.pathname.split("/").pop();
@@ -91,5 +85,16 @@ closeBtn.addEventListener("click", () => {
 document.addEventListener("click", (e) => {
   if (!sidebar.contains(e.target) && !searchBtn.contains(e.target)) {
     sidebar.style.transform = "translateX(-100%)";
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  // If "/" is pressed and not inside an input/textarea
+  if (event.key === "/" && !event.target.matches("input, textarea")) {
+    event.preventDefault(); // Prevent default "/" character
+    const searchInput = document.getElementById("navbarSearch");
+    if (searchInput) {
+      searchInput.focus();
+    }
   }
 });

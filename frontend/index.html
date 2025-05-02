@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OpenRouter Clone</title>
+    <title>MediaAi</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,6 +12,15 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/styles.css" />
     <style>
       @media (min-width: 992px) {
@@ -19,22 +28,83 @@
           width: 400px;
         }
       }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        color: #6467f2;
+        background-color: #6467f21a !important;
+  
+}
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 130px;
+  margin-bottom: 130px;
+}
+
+.stat-card {
+  
+  border-radius: 12px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),     /* Top inner shadow */
+    inset 0.3px 0 0.8px rgba(0, 0, 0, 0.03),    /* Left inner shadow (faint) */
+    inset -0.3px 0 0.8px rgba(0, 0, 0, 0.03);   /* Right inner shadow (faint) */
+  padding: 25px 30px;
+  text-align: center;
+  flex: 1 1 180px;
+  max-width: 220px;
+  transition: transform 0.3s ease;
+}
+
+  
+
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.stat-card p {
+  margin-top: 8px;
+  font-size: 0,7rem;
+  color: #555;
+}
+
+.stat-card .highlight {
+  color: #6366f1; /* soft indigo/violet */
+}
+
+  .steps-container{
+    margin-bottom: 130px !important;
+  }
+
+  
     </style>
   </head>
-  <body class="bg-light d-flex flex-column min-vh-100">
+  <body class=" d-flex flex-column min-vh-100">
     <div class="d-flex flex-grow-1">
       <!-- Main Content Area -->
       <div class="main-content d-flex flex-column w-100">
         <!-- Top Navbar -->
         <nav
-          class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm"
+          class="navbar navbar-expand-lg navbar-light sticky-top"
         >
           <div
             class="container-fluid d-flex align-items-center justify-content-between"
           >
             <!-- Brand -->
-            <a class="navbar-brand fw-bold text-primary" href="index.html"
-              >Media Ai</a
+            <a class="navbar-brand fw-bold" href="index.html"
+              >&nbsp;MediaAi&nbsp;</a
             >
 
             <!-- Mobile controls -->
@@ -83,7 +153,7 @@
                     class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                     style="width: 32px; height: 32px; font-size: 14px"
                   >
-                    U
+                    
                   </div>
                 </a>
                 <ul
@@ -160,14 +230,29 @@
             </div>
 
             <!-- Search (Desktop only) -->
+            
             <form class="d-none d-lg-block mx-3 flex-grow-1">
-              <input
-                class="form-control rounded-pill bg-light desktop-search"
-                type="search"
-                placeholder="Search models"
-              />
+              <div class="position-relative w-100">
+                <!-- Left search icon -->
+                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            
+                <!-- Input -->
+                <input
+                  class="form-control rounded-pill bg-light ps-5 pe-4"
+                  id="navbarSearch"
+                  type="search"
+                  placeholder="Search models"
+                />
+            
+                <!-- Right slash icon -->
+                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-family: monospace;">
+                  /
+                </span>
+              </div>
             </form>
-
+            
             <!-- Desktop Nav Items -->
             <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
               <li class="nav-item mx-1">
@@ -257,14 +342,251 @@
         </nav>
 
         <!-- Page Content -->
-        <div class="container py-4">
-          <h1>Welcome</h1>
+        <div class="container py-5 mt-5">
+          <div class="row">
+            <!-- Left Content -->
+            <div class="col-md-7 mb-4">
+              <h1 class="hero-title">Affordable Media AI Models</h1>
+              <p class="hero-subtext mt-3">
+                Generate <a href="#">images</a>, <a href="#">videos</a>, and <a href="#">audio</a> at the lowest prices – no subscriptions needed.
+              </p>
+              <div class="prompt-box mt-4 d-flex align-items-center">
+                <input type="text" class="form-control border-0" placeholder="Describe what you want to generate...">
+                <button id="submitPrompt" class="btn send-btn ms-2">
+                  &rarr;
+                </button>
+              </div>
+            </div>
+        
+            <!-- Right Panel -->
+            <div class="col-md-5">
+              <h6 class="text-muted mb-2">Featured Models</h6>
+        
+              <div class="model-card" data-model="deepinfra_i">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>DeepInfra</strong><br>
+                    <small class="text-muted">Image Generation</small>
+                  </div>
+                  <span class="badge-new">New</span>
+                </div>
+                <div class="mt-2 text-muted small">
+                  Latency: 1.2s &nbsp;•&nbsp; Price: $0.0008 / image
+                </div>
+              </div>
+
+              <div class="model-card" data-model="falai">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>Fal Ai</strong><br>
+                    <small class="text-muted">Text to Audio</small>
+                  </div>
+                </div>
+                <div class="mt-2 text-muted small">
+                  Latency: 2.5s &nbsp;•&nbsp; Price: $0.0012 / clip
+                </div>
+              </div>
+        
+              <div class="model-card"  data-model="deepinfra_v" >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>Deepinfra</strong><br>
+                    <small class="text-muted">Text to Video</small>
+                  </div>
+                </div>
+                <div class="mt-2 text-muted small">
+                  Latency: 5.0s &nbsp;•&nbsp; Price: $0.004 / 2s video
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Stats Row -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <h2>3M+</h2>
+              <p>Media Outputs</p>
+            </div>
+            <div class="stat-card">
+              <h2>1.2s</h2>
+              <p>Avg Latency</p>
+            </div>
+            <div class="stat-card">
+              <h2>90%</h2>
+              <p>Cost Saving</p>
+            </div>
+            <div class="stat-card">
+              <h2><span class="highlight">6+</span></h2>
+              <p>Supported Models</p>
+            </div>
+          </div>
+          
+
+        <!-- Onboarding Steps -->
+        <div class="container my-5 steps-container">
+          <div class="row text-center justify-content-center">
+            <!-- Step 1 -->
+            <div class="col-md-4">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <div class="step-number rounded-circle d-flex align-items-center justify-content-center me-2">
+                  1
+                </div>
+                <h5 class="mb-0 fw-semibold">Signup</h5>
+              </div>
+              <p class="text-muted small">Create an account to get started. <br>You can set up an org for your team later.</p>
+              <div class="d-flex justify-content-center gap-2 mt-2">
+                <i class="bi bi-google"></i>
+                <i class="bi bi-envelope"></i>
+              </div>
+            </div>
+        
+            <!-- Step 2 -->
+            <div class="col-md-4">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <div class="step-number rounded-circle d-flex align-items-center justify-content-center me-2">
+                  2
+                </div>
+                <h5 class="mb-0 fw-semibold">Buy credits</h5>
+              </div>
+              <p class="text-muted small">Credits can be used with any model or provider.</p>
+              <div class="bg-light p-3 rounded shadow-sm d-inline-block text-start small" style="min-width: 180px;">
+                <div class="d-flex justify-content-between"><span>Apr 1</span><strong>$99</strong></div>
+                <div class="d-flex justify-content-between"><span>Mar 30</span><strong>$10</strong></div>
+              </div>
+            </div>
+        
+            <!-- Step 3 -->
+            <div class="col-md-4">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <div class="step-number rounded-circle d-flex align-items-center justify-content-center me-2">
+                  3
+                </div>
+                <h5 class="mb-0 fw-semibold">Get your API key</h5>
+              </div>
+              <p class="text-muted small">Create an API key and start making requests. <a href="#" class="text-decoration-underline">Fully OpenAI compatible</a>.</p>
+              <div class="d-flex align-items-center justify-content-center gap-2 mt-2">
+                <input type="text" class="form-control text-center fw-semibold" style="max-width: 200px;" value="MEDIA_AI_API_KEY" readonly>
+                <input type="password" class="form-control text-center" style="max-width: 100px;" value="******" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+<!-- Features Section -->
+<div class="container my-5">
+  <div class="row text-center g-4">
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h6>One API for Any Model</h6>
+          <p class="small text-muted">Access all major models through a single interface. OpenAI SDK compatible.</p>
         </div>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h6>Higher Availability</h6>
+          <p class="small text-muted">Automatic routing across providers to avoid outages and ensure uptime.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h6>Price and Performance</h6>
+          <p class="small text-muted">Low-latency and cost-efficient with ~30ms edge routing.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h6>Custom Data Policies</h6>
+          <p class="small text-muted">Control which models receive your prompts. Fine-grained data governance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        
+      </div>
+    
+
+
+    <footer>
+      <div class="f-info mt-3" >
+          <div class="f-info-brand">
+            <div class="f-info-brand-name">
+              <p>&copy; 2023 - 2025 &nbsp;&nbsp;MediaAi, Inc </p>
+            </div>
+            <div class="f-info-socails">
+              <i class="fa-brands fa-discord"></i>
+              <i class="fa-brands fa-github"></i>
+              <i class="fa-brands fa-linkedin"></i>
+              <i class="fa-brands fa-x-twitter"></i>
+            </div> 
+          </div>
+        <div class="f-info-options">
+          <a href="#">Status</a>
+          <a href="#">Anouncment</a>
+          <a href="#">Partners</a>
+          <a href="#">Career</a>
+          <a href="#">Pricing</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+       </div>
+      </div>
+    </footer>
+  </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>  
+    <script>
+      let selectedModel = null;
+
+// Add click event listeners to all model cards
+document.querySelectorAll('.model-card').forEach(card => {
+  card.addEventListener('click', () => {
+    // Remove highlight from all cards
+    document.querySelectorAll('.model-card').forEach(c => c.classList.remove('border-primary'));
+    // Highlight the selected one
+    card.classList.add('border-primary');
+    // Store selected model
+    selectedModel = card.getAttribute('data-model');
+  });
+});
+
+document.getElementById('submitPrompt').addEventListener('click', function () {
+  const input = document.querySelector('.prompt-box input').value.trim();
+
+  if (!input) {
+    alert('Please enter a prompt.');
+    return;
+  }
+
+  if (!selectedModel) {
+    alert('Please select a model.');
+    return;
+  }
+
+  const routes = {
+    deepinfra_i: 'imagemodel.html',
+    falai: 'audiomodel.html',
+    deepinfra_v: 'videomodel.html'
+  };
+
+  const targetPage = routes[selectedModel];
+  if (!targetPage) {
+    alert('Model not recognized.');
+    return;
+  }
+
+  window.location.href = `${targetPage}?prompt=${encodeURIComponent(input)}`;
+});
+    </script>
   </body>
 </html>

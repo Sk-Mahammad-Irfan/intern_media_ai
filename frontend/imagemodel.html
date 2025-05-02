@@ -13,16 +13,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
    <link href="css/styles.css" rel="stylesheet"/>
     <style>
-      body, html {
-        height: 100%;
-        overflow: hidden;
-      }
+     
       #chat {
      height: calc(100vh - 300px);
     overflow-y: auto;
     padding: 1rem;
     padding-bottom: 130px; 
-    background-color: #f8f9fa;
+  
   }
       #promptInputSection {
     position: fixed;
@@ -35,6 +32,11 @@
     max-width: calc(100vw - 250px);
     overflow-x: hidden;
     z-index: 1000; 
+  }
+
+  .input-bar{
+    border: 0.6px solid #ddd;
+    margin-right: 10px;
   }
       #sidebar {
         width: 250px;
@@ -96,7 +98,7 @@
     <body>
       <div class="main-container">
         <!-- Top Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top">
           <div class="container-fluid d-flex align-items-center justify-content-between">
             <!-- Brand -->
             <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
@@ -202,13 +204,31 @@
   
             <!-- Search (Desktop only) -->
             <form class="d-none d-lg-block mx-3 flex-grow-1">
-              <input class="form-control rounded-pill bg-light desktop-search" type="search" placeholder="Search models" />
+              <div class="position-relative w-100">
+                <!-- Left search icon -->
+                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            
+                <!-- Input -->
+                <input
+                  class="form-control rounded-pill bg-light ps-5 pe-4"
+                  id="navbarSearch"
+                  type="search"
+                  placeholder="Search models"
+                />
+            
+                <!-- Right slash icon -->
+                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-family: monospace;">
+                  /
+                </span>
+              </div>
             </form>
   
             <!-- Desktop Nav Items -->
             <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
+              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="audiomodel.html">Chat</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
               <li class="nav-item mx-1" id="signInDesktop">
@@ -233,7 +253,7 @@
                   <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
                   <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="credits.html">Dashboard</a></li>
+                  <li><a class="dropdown-item" href="credits.html">Credits</a></li>
                   <li><a class="dropdown-item" href="settings.html">Settings</a></li>
                   <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
                   <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
@@ -288,7 +308,7 @@
                 
     <!-- Chat Input Bar -->
   <div id="promptInputSection" class="container my-3">
-    <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2" style="max-width: 100%;">
+    <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 input-bar" style="max-width: 100%;">
   
       <!-- Prompt Input -->
       <input 
