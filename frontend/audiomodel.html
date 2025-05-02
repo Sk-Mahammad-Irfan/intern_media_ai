@@ -470,6 +470,13 @@
       });
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const prompt = params.get('prompt');
+    if (prompt) {
+      document.getElementById('prompt').value = prompt; 
+    }
+  });
 
     </script>
     
