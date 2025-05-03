@@ -277,36 +277,46 @@
 },
 
       // Text-to-Video
-      "deepinfra-ttv": {
-        title: "DeepInfra: Text-to-Video - Wan-AI/Wan2.1-T2V-1.3B",
+      "wan-ai-wan21-t2v-13b": {
+        title: "Wan-AI: Wan2.1-T2V-1.3B",
         description:
-          "Collection of text-to-video models, powered by DeepInfra for fast video rendering from text prompts.",
-        link: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B",
+          "A lightweight and efficient text-to-video model that delivers high-quality 480P video generation despite its compact 1.3B parameter size.",
+        link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
         fullDetails:
-          "DeepInfra hosts multiple text-to-video models designed for performance and scalability. Ideal for marketing teams, AI video creators, and content automation solutions.",
+          "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
         chatPage: "videomodel.html",
       },
 
-      "fal-ttv": {
-        title: "FAL AI: Text-to-Video - fal-ai/wan/v2.1/1.3b/text-to-video",
-        description:
-          "Rich video generation suite from FAL AI with advanced rendering capabilities and models.",
-        link: "https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video",
-        fullDetails:
-          "FAL AI’s library features a growing collection of state-of-the-art text-to-video models, supporting variable length outputs, styles, and motion interpolation. Excellent for AI storytelling and media R&D.",
-        chatPage: "videomodel.html",
-      },
+      "lightricks-ltx-video": {
+      title: "Lightricks: LTX-Video",
+      description:
+        "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
+      link: "https://huggingface.co/lightricks/ltx-video",
+      fullDetails:
+        "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
+      chatPage: "videomodel.html",
+    },
+    "pixverse-v4-text-to-video": {
+      title: "PixVerse: Text-to-Video v4",
+      description:
+        "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
+      link: "https://huggingface.co/pixverse/v4/text-to-video",
+      fullDetails:
+        "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
+      chatPage: "videomodel.html",
+    },
 
       // Text-to-Audio
-      "fal-tta": {
-        title: "FAL AI: Text-to-Audio",
-        description:
-          "A range of audio synthesis models available through FAL AI, turning text into lifelike speech or sound.",
-        link: "https://fal.ai/models?keywords=audio&categories=text-to-audio",
-        fullDetails:
-          "FAL AI provides diverse models for speech synthesis, music generation, and sound design. These models support multiple languages and vocal tones, making them ideal for apps, podcasts, games, and accessibility tools.",
-        chatPage: "audiomodel.html",
-      },
+      "stackadoc-stable-audio": {
+      title: "Stable Audio Open 1.0",
+      description:
+        "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
+      link: "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
+      fullDetails:
+        "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
+      chatPage: "audiomodel.html",
+    },
+
 
     };
 

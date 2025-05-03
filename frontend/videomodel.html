@@ -407,21 +407,30 @@ async function generateVideo() {
   appendUserMessage(prompt);
   appendGeneratingVideoMessage();
 
-  // Determine the priority based on the URL
-  const currentUrl = window.location.href;
-  let apiPriority = ["FAL", "Replicate", "DeepInfra"]; // Default priority
+  // Get model id from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const modelId = urlParams.get("id");
 
-  if (currentUrl.includes("id=black-forest-labs-flux-1-1-pro")) {
-    apiPriority = ["DeepInfra", "FAL", "Replicate"];
-  } else if (currentUrl.includes("videomodel.html?id=fal-ttv")) {
-    apiPriority = ["FAL","DeepInfra", "Replicate"];
+  // Map to backendModelId
+  let backendModelId = null;
+  if (modelId === "wan-ai-wan21-t2v-13b") {
+    backendModelId = "wan21-t2v"; // ← Add your correct backend name here
+  } 
+  else if (modelId === "lightricks-ltx-video") {
+    backendModelId = "ltx-video";
+  } // ← Add your correct backend name here
+  else if (modelId === "pixverse-v4-text-to-video") {
+    backendModelId = "pixverse-v4"; // ← Add your correct backend name here
+  } else {
+    alert("Unsupported model ID in URL.");
+    return;
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/ai/generate-video", {
+    const response = await fetch(`http://localhost:5000/api/ai/generate-video/${backendModelId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, userId, apiPriority }),
+      body: JSON.stringify({ prompt, userId }),
     });
 
     console.log("[generateVideo] Response received from server");

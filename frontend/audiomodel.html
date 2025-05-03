@@ -180,16 +180,38 @@
         const duration = parseInt(document.getElementById("durationInput").value);
         const userId = localStorage.getItem("userId") || "test-user";
 
-        if (!prompt) return alert("Please enter a prompt.");
-        if (isNaN(duration) || duration < 1 || duration > 60)
-          return alert("Please enter a valid duration (1–60 seconds).");
+        if (!prompt) {
+          alert("Please enter a prompt.");
+          console.warn("[sendPrompt] Empty prompt — user must type something.");
+          return;
+        }
+
+        if (isNaN(duration) || duration < 1 || duration > 60) {
+          alert("Please enter a valid duration (1–60 seconds).");
+          return;
+        }
+
+        // Get model ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get("id");
+
+        // Map to backend audio model ID
+        let backendModelId = null;
+        if (modelId === "stackadoc-stable-audio") {
+          backendModelId = "stable-audio";
+        }  else {
+          alert("Unsupported audio model ID in URL.");
+          return;
+        }
+
+        console.log(`[sendPrompt] Sending prompt "${prompt}" to model "${backendModelId}" with duration: ${duration}`);
 
         appendUserMessage(prompt);
         const loadingId = appendLoadingMessage();
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
         try {
-          const res = await fetch("http://localhost:5000/api/ai/generate-audio", {
+          const res = await fetch(`http://localhost:5000/api/ai/generate-audio/${backendModelId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt, duration, userId }),
@@ -198,18 +220,20 @@
           const data = await res.json();
 
           if (res.ok && data.audioUrl) {
+            console.log("[sendPrompt] Audio generated:", data.audioUrl);
             replaceWithAudio(loadingId, data.audioUrl);
           } else {
-            console.error("Server error:", data.error);
+            console.error("[sendPrompt] Server error:", data.error);
             replaceWithError(loadingId, "❌ Failed to generate audio.");
           }
         } catch (err) {
-          console.error("Network error:", err);
+          console.error("[sendPrompt] Network error:", err);
           replaceWithError(loadingId, "❌ Error connecting to server.");
         }
 
         document.getElementById("promptInput").value = "";
       }
+
     </script>
 </body>
 

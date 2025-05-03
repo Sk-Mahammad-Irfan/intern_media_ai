@@ -1,15 +1,7 @@
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 import { decreaseCredits } from "./creditController.js";
-import {
-  generateWithDeepInfra,
-  generateWithFAL,
-  generateWithReplicate,
-} from "../services/videoServices.js";
-import {
-  generateWithDeepInfraImage,
-  generateWithFALImage,
-} from "../services/imageServices.js";
+import { videoGenerationHandlers } from "../handlers/videohandlers.js";
 import { deepFluxProV1_1, falFluxProV1_1 } from "../services/flux11Service.js";
 import { falFooocus } from "../services/fooocusService.js";
 import {
@@ -20,6 +12,7 @@ import {
   generateAudioWithFal,
   generateWithRapidApiAudio,
 } from "../services/audioServices.js";
+import { stableFal, stableReplicate } from "../services/stableService.js";
 dotenv.config();
 
 fal.config({
@@ -30,90 +23,67 @@ fal.config({
 });
 
 export const generateVideo = async (req, res) => {
-  const { prompt, userId, apiPriority: clientApiPriority } = req.body;
+  const { id } = req.params;
+  const { prompt, userId } = req.body;
 
   if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required" });
+    return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  // Handlers for the different APIs
-  const apiHandlers = {
-    DeepInfra: generateWithDeepInfra,
-    // FAL: generateWithFAL,
-    // Replicate: generateWithReplicate,
-  };
+  const matchingHandlers = videoGenerationHandlers
+    .filter((h) => h.model === id)
+    .sort((a, b) => a.credits - b.credits); // Try cheapest first
 
-  // Credit values per provider
-  const amt = {
-    // FAL: 8,
-    // Replicate: 6,
-    DeepInfra: 4,
-  };
-
-  // Validate and build the API priority array
-  const apiPriority = (
-    Array.isArray(clientApiPriority) ? clientApiPriority : []
-  )
-    .filter((name) => Object.keys(apiHandlers).includes(name))
-    .map((name) => ({
-      name,
-      handler: apiHandlers[name],
-    }));
-
-  if (apiPriority.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "Invalid or missing API priority list" });
+  if (matchingHandlers.length === 0) {
+    return res.status(400).json({ error: "Invalid model ID." });
   }
 
-  try {
-    // Try each provider in the given order
-    for (const api of apiPriority) {
-      try {
-        const rawData = await api.handler(prompt);
+  for (const { handler, credits } of matchingHandlers) {
+    try {
+      console.log("Trying handler:", handler.name);
+      const rawData = await handler(prompt);
+      let videoUrl = null;
 
-        if (!rawData) throw new Error(`${api.name} returned no data`);
-
-        // Extract the video URL based on the provider
-        let video_url = null;
-
-        switch (api.name) {
-          case "DeepInfra":
-            video_url = rawData.video_url || rawData.data?.video_url;
-            break;
-          case "FAL":
-            video_url = rawData.video?.url;
-            break;
-          case "Replicate":
-            video_url = Array.isArray(rawData)
-              ? rawData[0]
-              : rawData?.video_url || rawData?.url;
-            break;
-        }
-
-        if (!video_url) {
-          throw new Error(`${api.name} did not return a valid video URL`);
-        }
-
-        // Deduct credits
-        try {
-          await decreaseCredits(userId, amt[api.name]);
-        } catch (creditErr) {
-          return res.status(402).json({ error: creditErr.message });
-        }
-
-        return res.status(200).json({ video_url });
-      } catch (error) {
-        console.warn(`Error with ${api.name}:`, error.message || error);
+      switch (handler) {
+        case wanFAL:
+          videoUrl = rawData.video?.url;
+          break;
+        case wanReplicate:
+          videoUrl = Array.isArray(rawData)
+            ? rawData[0]
+            : rawData?.video_url || rawData?.url;
+          break;
+        case ltxReplicate:
+          videoUrl = Array.isArray(rawData)
+            ? rawData[0]
+            : rawData?.video_url || rawData?.url;
+          break;
+        case wanDeepinfra:
+          videoUrl = rawData.video_url || rawData.data?.video_url;
+          break;
       }
-    }
 
-    // If all services fail
-    res.status(500).json({ error: "All video generation services failed." });
-  } catch (err) {
-    console.error("Video Generation Error:", err.message || err);
-    res.status(500).json({ error: err.message || "Failed to generate video" });
+      if (!videoUrl) {
+        console.warn(
+          "Handler did not return a valid video, trying next one..."
+        );
+        continue;
+      }
+
+      try {
+        await decreaseCredits(userId, credits);
+      } catch (creditError) {
+        return res.status(402).json({ error: creditError.message });
+      }
+
+      return res.status(200).json({ videoUrl });
+    } catch (error) {
+      console.error("Handler failed, trying next one:", error.message || error);
+      continue;
+    }
   }
+
+  res.status(500).json({ error: "All handlers failed to generate video." });
 };
 
 export const generateImage = async (req, res) => {
@@ -214,47 +184,57 @@ export const generateImage = async (req, res) => {
 // Audio generation function
 export const generateAudio = async (req, res) => {
   const { prompt, userId } = req.body;
+  const { id } = req.params;
+
+  console.log("id", id);
 
   if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required" });
+    return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  try {
-    const apiPriority = [
-      { name: "RapidAPI", handler: generateWithRapidApiAudio },
-    ];
+  const audioGenerators = [
+    {
+      model: "stable-audio",
+      handler: stableReplicate,
+      credits: 3,
+    },
+    {
+      model: "stable-audio",
+      handler: stableFal,
+      credits: 6,
+    },
+  ];
 
-    const creditsRequired = {
-      RapidAPI: 5,
-    };
+  const matchingHandlers = audioGenerators
+    .filter((h) => h.model === id)
+    .sort((a, b) => a.credits - b.credits); // Sort by cheapest first
 
-    for (const api of apiPriority) {
-      try {
-        const audioUrl = await api.handler(prompt);
+  if (matchingHandlers.length === 0) {
+    return res.status(400).json({ error: "Invalid model ID." });
+  }
 
-        if (!audioUrl) {
-          throw new Error(`${api.name} returned an empty audio URL`);
-        }
+  for (const { handler, credits } of matchingHandlers) {
+    try {
+      const audioUrl = await handler(prompt);
 
-        try {
-          await decreaseCredits(userId, creditsRequired[api.name]);
-        } catch (creditErr) {
-          return res.status(402).json({ error: creditErr.message });
-        }
-
-        return res.status(200).json({ audioUrl });
-      } catch (error) {
-        console.warn(`Error with ${api.name}:`, error.message || error);
+      if (!audioUrl) {
+        console.warn("No audio returned, trying next handler...");
+        continue;
       }
-    }
 
-    return res
-      .status(500)
-      .json({ error: "All audio generation services failed." });
-  } catch (err) {
-    console.error("Audio Generation Error:", err.message || err);
-    return res
-      .status(500)
-      .json({ error: err.message || "Failed to generate audio" });
+      // Deduct credits after success
+      try {
+        await decreaseCredits(userId, credits);
+      } catch (creditError) {
+        return res.status(402).json({ error: creditError.message });
+      }
+
+      return res.status(200).json({ audioUrl });
+    } catch (error) {
+      console.error("Audio handler failed:", error.message || error);
+      continue;
+    }
   }
+
+  return res.status(500).json({ error: "All audio generators failed." });
 };
