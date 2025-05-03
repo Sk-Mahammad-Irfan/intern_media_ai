@@ -12,19 +12,21 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
-    crossorigin="anonymous" 
-    referrerpolicy="no-referrer" 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
     <style>
-   
       .main-content {
         flex-grow: 1;
       }
@@ -33,64 +35,89 @@
           width: 400px;
         }
       }
-      
-  .model-header {
-    margin-bottom: 2rem;
-  }
 
-  .model-meta {
-    color: #6c757d;
-    font-size: 0.9rem;
-  }
+      .model-header {
+        margin-bottom: 2rem;
+      }
 
-  .model-details-container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  }
+      .model-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
 
+      .model-details-container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
     </style>
   </head>
-  <body class=" d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100">
     <div class="d-flex flex-grow-1">
       <div class="main-content d-flex flex-column w-100">
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-          <div class="container-fluid d-flex align-items-center justify-content-between">
+          <div
+            class="container-fluid d-flex align-items-center justify-content-between"
+          >
             <!-- Brand -->
-            <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
-  
-            <!-- Mobile controls -->
-            <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
-              <button
-      id="mobileSearchBtn"
-      class="btn btn-light rounded-circle "
-      style="width: 36px; height: 36px"
-    >
-     <i class="bi bi-search"></i>
-    </button>
+            <a class="navbar-brand fw-bold text-primary" href="index.html"
+              >Media Ai</a
+            >
 
-   <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
-   <div
-     id="mobileSearchSidebar"
-     class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-     style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;"
-     >
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Search</h5>
-        <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
-      <input
-        type="text"
-        class="form-control rounded-pill"
-        placeholder="Search models..."
-      />
-    </div>
+            <!-- Mobile controls -->
+            <div
+              class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
+            >
+              <button
+                id="mobileSearchBtn"
+                class="btn btn-light rounded-circle"
+                style="width: 36px; height: 36px"
+              >
+                <i class="bi bi-search"></i>
+              </button>
+
+              <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+              <div
+                id="mobileSearchSidebar"
+                class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+                style="
+                  width: 100%;
+                  max-width: 300px;
+                  height: 100%;
+                  transform: translateX(-100%);
+                  transition: transform 0.3s ease;
+                  z-index: 1050;
+                "
+              >
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <h5 class="mb-0">Search</h5>
+                  <button
+                    id="closeSearchSidebar"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control rounded-pill mb-3"
+                  id="mobileSearchInput"
+                  placeholder="Search models..."
+                />
+                <div
+                  id="mobileSearchResults"
+                  class="mt-3"
+                  style="max-height: 60vh; overflow-y: auto"
+                >
+                  <!-- Results will be appended here -->
+                </div>
+              </div>
               <div class="dropdown">
                 <a
                   href="#"
@@ -101,18 +128,24 @@
                 >
                   <div
                     class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                    style="width: 32px; height: 32px; font-size: 14px;"
+                    style="width: 32px; height: 32px; font-size: 14px"
                   >
                     U
                   </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="mobileAvatarDropdown"
+                >
                   <div class="mobile-auth-only dnone">
                     <li>
                       <h6 class="dropdown-header" id="account-username-mobile">
                         Username
                       </h6>
-                      <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                      <p
+                        class="dropdown-item-text mb-1 small"
+                        id="account-email-mobile"
+                      >
                         email@example.com
                       </p>
                     </li>
@@ -124,7 +157,9 @@
                   <li><a class="dropdown-item" href="#">Docs</a></li>
                   <li><hr class="dropdown-divider" /></li>
                   <div class="mobile-auth-only dnone">
-                    <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+                    <li>
+                      <a class="dropdown-item" href="credits.html">Credits</a>
+                    </li>
                     <li>
                       <a class="dropdown-item" href="settings.html">Settings</a>
                     </li>
@@ -145,7 +180,7 @@
                       <a class="dropdown-item" href="privacy.html">Privacy</a>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
-                       
+
                     <li>
                       <a
                         class="dropdown-item text-danger"
@@ -154,22 +189,35 @@
                         >Logout</a
                       >
                     </li>
-                   </div>
-                  <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                    <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
-                  </a></li>
+                  </div>
+                  <li>
+                    <a
+                      class="mt-3 d-lg-none"
+                      href="auth.html"
+                      id="signInMobile"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary w-100"
+                      >
+                        Sign in
+                      </button>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
-  
+
             <!-- Search (Desktop only) -->
             <form class="d-none d-lg-block mx-3 flex-grow-1">
               <div class="position-relative w-100">
                 <!-- Left search icon -->
-                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+                <span
+                  class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"
+                >
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
-            
+
                 <!-- Input -->
                 <input
                   class="form-control rounded-pill bg-light ps-5 pe-4"
@@ -177,23 +225,36 @@
                   type="search"
                   placeholder="Search models"
                 />
-            
+
                 <!-- Right slash icon -->
-                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-family: monospace;">
+                <span
+                  class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+                  style="font-family: monospace"
+                >
                   /
                 </span>
               </div>
             </form>
-  
+
             <!-- Desktop Nav Items -->
             <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+              <li class="nav-item mx-1">
+                <a class="nav-link fw-medium" href="model.html">Models</a>
+              </li>
+              <li class="nav-item mx-1">
+                <a class="nav-link fw-medium" href="credits.html">Chat</a>
+              </li>
+              <li class="nav-item mx-1">
+                <a class="nav-link fw-medium" href="#">Rankings</a>
+              </li>
+              <li class="nav-item mx-1">
+                <a class="nav-link fw-medium" href="#">Docs</a>
+              </li>
               <li class="nav-item mx-1" id="signInDesktop">
                 <a class="nav-link fw-medium" href="auth.html">
-                  <button type="button" class="btn btn-outline-primary">Sign in</button>
+                  <button type="button" class="btn btn-outline-primary">
+                    Sign in
+                  </button>
                 </a>
               </li>
               <li class="nav-item dropdown d-none" id="userAvatarDropdown">
@@ -205,27 +266,64 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                  <div
+                    id="navbar-avatar"
+                    class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                    style="width: 32px; height: 32px; font-size: 14px"
+                  >
                     U
                   </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
-                  <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <li>
+                    <h6 class="dropdown-header" id="account-username">
+                      Username
+                    </h6>
+                  </li>
+                  <li>
+                    <p class="dropdown-item-text mb-1 small" id="account-email">
+                      email@example.com
+                    </p>
+                  </li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="credits.html">Dashboard</a></li>
-                  <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                  <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                  <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                  <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                  <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                  <li>
+                    <a class="dropdown-item" href="credits.html">Dashboard</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="provisioning.html"
+                      >Provisioning Keys</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="integrations.html"
+                      >Integrations</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="privacy.html">Privacy</a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item text-danger"
+                      href="#"
+                      onclick="logout()"
+                      >Logout</a
+                    >
+                  </li>
                 </ul>
               </li>
             </ul>
           </div>
         </nav>
-  
 
         <!-- Page Content -->
         <div class="container py-5">
@@ -255,151 +353,149 @@
                 </button>
               </div>
             </div>
-      
+
             <div>
               <p id="model-full-details" class="text-muted">Model loading...</p>
             </div>
           </div>
         </div>
+      </div>
     </div>
-    </div>
-    
-  <footer>
-    <div class="f-info mt-3" >
+
+    <footer>
+      <div class="f-info mt-3">
         <div class="f-info-brand">
           <div class="f-info-brand-name">
-            <p>&copy; 2023 - 2025 &nbsp;&nbsp;MediaAi, Inc </p>
+            <p>&copy; 2023 - 2025 &nbsp;&nbsp;MediaAi, Inc</p>
           </div>
           <div class="f-info-socails">
             <i class="fa-brands fa-discord"></i>
             <i class="fa-brands fa-github"></i>
             <i class="fa-brands fa-linkedin"></i>
             <i class="fa-brands fa-x-twitter"></i>
-          </div> 
+          </div>
         </div>
-      <div class="f-info-options">
-        <a href="#">Status</a>
-        <a href="#">Anouncment</a>
-        <a href="#">Partners</a>
-        <a href="#">Career</a>
-        <a href="#">Pricing</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-     </div>
-    </div>
-  </footer>
+        <div class="f-info-options">
+          <a href="#">Status</a>
+          <a href="#">Anouncment</a>
+          <a href="#">Partners</a>
+          <a href="#">Career</a>
+          <a href="#">Pricing</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/search.js"></script>
     <script src="js/script.js"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get("id");
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const modelId = urlParams.get("id");
+        const modelData = {
+          "black-forest-labs-flux-1-1-pro": {
+            title: "Black Forest Labs: FLUX-1.1 Pro",
+            description:
+              "Black Forest Labs' latest state-of-the-art proprietary model offering exceptional prompt following, visual quality, detail, and output diversity.",
+            link: "https://deepinfra.com/black-forest-labs/FLUX-1.1-pro",
+            fullDetails:
+              "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
+            chatPage: "imagemodel.html",
+          },
 
-    const modelData = {
-      "black-forest-labs-flux-1-1-pro": {
-          title: "Black Forest Labs: FLUX-1.1 Pro",
-          description:
-            "Black Forest Labs' latest state-of-the-art proprietary model offering exceptional prompt following, visual quality, detail, and output diversity.",
-          link: "https://deepinfra.com/black-forest-labs/FLUX-1.1-pro",
-          fullDetails:
-            "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
-          chatPage: "imagemodel.html",
-      },
+          "recraft-v3": {
+            title: "Recraft V3: Text-to-Image",
+            description:
+              "Recraft V3 is a state-of-the-art text-to-image model capable of generating long texts, vector art, images in brand styles, and much more. Proven by Hugging Face's leading Text-to-Image Benchmark by Artificial Analysis.",
+            link: "https://huggingface.co",
+            fullDetails:
+              "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
+            chatPage: "imagemodel.html",
+          },
+          fooocus: {
+            title: "Fooocus: Base Model",
+            description:
+              "Fooocus is a powerful text-to-image model offering base parameters with automated optimizations and quality improvements for rapid and high-quality image generation.",
+            link: "https://fal.ai",
+            fullDetails:
+              "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements. It serves as a flexible solution for a wide range of creative applications, from general design to professional content creation.",
+            chatPage: "imagemodel.html",
+          },
 
+          // Text-to-Video
+          "wan-ai-wan21-t2v-13b": {
+            title: "Wan-AI: Wan2.1-T2V-1.3B",
+            description:
+              "A lightweight and efficient text-to-video model that delivers high-quality 480P video generation despite its compact 1.3B parameter size.",
+            link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
+            fullDetails:
+              "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
+            chatPage: "videomodel.html",
+          },
 
-      "recraft-v3": {
-  "title": "Recraft V3: Text-to-Image",
-  "description": 
-    "Recraft V3 is a state-of-the-art text-to-image model capable of generating long texts, vector art, images in brand styles, and much more. Proven by Hugging Face's leading Text-to-Image Benchmark by Artificial Analysis.",
-  "link": "https://huggingface.co",
-  "fullDetails": 
-    "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
-  "chatPage": "imagemodel.html"
-},
-"fooocus": {
-  "title": "Fooocus: Base Model",
-  "description": 
-    "Fooocus is a powerful text-to-image model offering base parameters with automated optimizations and quality improvements for rapid and high-quality image generation.",
-  "link": "https://fal.ai",
-  "fullDetails": 
-    "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements. It serves as a flexible solution for a wide range of creative applications, from general design to professional content creation.",
-  "chatPage": "imagemodel.html"
-},
+          "lightricks-ltx-video": {
+            title: "Lightricks: LTX-Video",
+            description:
+              "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
+            link: "https://huggingface.co/lightricks/ltx-video",
+            fullDetails:
+              "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
+            chatPage: "videomodel.html",
+          },
+          "pixverse-v4-text-to-video": {
+            title: "PixVerse: Text-to-Video v4",
+            description:
+              "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
+            link: "https://huggingface.co/pixverse/v4/text-to-video",
+            fullDetails:
+              "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
+            chatPage: "videomodel.html",
+          },
 
-      // Text-to-Video
-      "wan-ai-wan21-t2v-13b": {
-        title: "Wan-AI: Wan2.1-T2V-1.3B",
-        description:
-          "A lightweight and efficient text-to-video model that delivers high-quality 480P video generation despite its compact 1.3B parameter size.",
-        link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
-        fullDetails:
-          "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
-        chatPage: "videomodel.html",
-      },
+          // Text-to-Audio
+          "stackadoc-stable-audio": {
+            title: "Stable Audio Open 1.0",
+            description:
+              "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
+            link: "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
+            fullDetails:
+              "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
+            chatPage: "audiomodel.html",
+          },
+        };
 
-      "lightricks-ltx-video": {
-      title: "Lightricks: LTX-Video",
-      description:
-        "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
-      link: "https://huggingface.co/lightricks/ltx-video",
-      fullDetails:
-        "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
-      chatPage: "videomodel.html",
-    },
-    "pixverse-v4-text-to-video": {
-      title: "PixVerse: Text-to-Video v4",
-      description:
-        "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
-      link: "https://huggingface.co/pixverse/v4/text-to-video",
-      fullDetails:
-        "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
-      chatPage: "videomodel.html",
-    },
+        const model = modelData[modelId];
 
-      // Text-to-Audio
-      "stackadoc-stable-audio": {
-      title: "Stable Audio Open 1.0",
-      description:
-        "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
-      link: "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
-      fullDetails:
-        "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
-      chatPage: "audiomodel.html",
-    },
+        if (model) {
+          document.getElementById("model-title").textContent = model.title;
+          document.getElementById("model-description").textContent =
+            model.description;
+          document.getElementById("model-link").textContent = model.link;
+          document.getElementById("model-link").href = model.link;
+          document.getElementById("model-full-details").textContent =
+            model.fullDetails;
 
-
-    };
-
-    const model = modelData[modelId];
-
-    if (model) {
-      document.getElementById("model-title").textContent = model.title;
-      document.getElementById("model-description").textContent = model.description;
-      document.getElementById("model-link").textContent = model.link;
-      document.getElementById("model-link").href = model.link;
-      document.getElementById("model-full-details").textContent = model.fullDetails;
-
-      // Optional: Set up chat button redirection
-      const chatButton = document.getElementById("chat-button");
-      if (chatButton) {
-        chatButton.addEventListener("click", function () {
-          if (model.chatPage) {
-            window.location.href = `${model.chatPage}?id=${modelId}`;
+          // Optional: Set up chat button redirection
+          const chatButton = document.getElementById("chat-button");
+          if (chatButton) {
+            chatButton.addEventListener("click", function () {
+              if (model.chatPage) {
+                window.location.href = `${model.chatPage}?id=${modelId}`;
+              }
+            });
           }
-        });
-      }
-    } else {
-      document.getElementById("model-title").textContent = "Model Not Found";
-      document.getElementById("model-full-details").textContent =
-        "The requested model ID is invalid or not available.";
-    }
-  });
-
-
+        } else {
+          document.getElementById("model-title").textContent =
+            "Model Not Found";
+          document.getElementById("model-full-details").textContent =
+            "The requested model ID is invalid or not available.";
+        }
+      });
     </script>
   </body>
 </html>
