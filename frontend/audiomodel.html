@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Audio Model</title>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio Model</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -15,6 +16,13 @@
    <style>
  
     #chat {
+      height: calc(100vh - 300px);
+      overflow-y: auto;
+      padding: 1rem;
+      padding-bottom: 130px;
+      background-color: #f8f9fa;
+    }
+
    height: calc(100vh - 300px);
   overflow-y: auto;
   padding: 1rem;
@@ -27,90 +35,70 @@
     margin-right: 10px;
   }
     #promptInputSection {
-  position: fixed;
-  bottom: 0;
-  left: 250px;
-  right: 0;
-  padding: 1rem;
-  
-  box-sizing: border-box;
-  max-width: calc(100vw - 250px);
-  overflow-x: hidden;
-  z-index: 1000; 
-}
+      position: fixed;
+      bottom: 0;
+      left: 250px;
+      right: 0;
+      padding: 1rem;
+      max-width: calc(100vw - 250px);
+      z-index: 1000;
+    }
+
     #sidebar {
       width: 250px;
       height: 100vh;
       border-right: 1px solid #dee2e6;
       overflow-y: auto;
     }
-    .model-card {
-      border: 1px solid #dee2e6;
-      border-radius: 12px;
-      padding: 1rem;
-      background-color: white;
-      height: 100px;
-    }
 
-    #duration {
-      width: 60px;
-      text-align: center;
-      border: 1px solid #ccc !important;
-      border-radius: 9999px !important;
-      background-color: white !important;
-      height: 40px;
-      box-shadow: none !important;
-      outline: none !important;
-    }
+    .ai-message,
     .user-message {
-  background-color: #0d6efd;
-  color: white;
-  border-radius: 20px;
-  max-width: 70%;
-  word-wrap: break-word;
-}
+      border-radius: 20px;
+      max-width: 70%;
+      word-wrap: break-word;
+      padding: 0.75rem 1rem;
+    }
 
-.ai-message {
-  background-color: #e9ecef;
-  border-radius: 20px;
-  max-width: 70%;
-  word-wrap: break-word;
-}
+    .ai-message {
+      background-color: #e9ecef;
+    }
 
-.compact-audio {
-  width: 200px;
-  outline: none;
-  border-radius: 10px;
-}
+    .user-message {
+      background-color: #0d6efd;
+      color: white;
+    }
 
+    .compact-audio {
+      width: 200px;
+      border-radius: 10px;
+    }
 
-  .modern-select {
-    border-radius: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    border: 1px solid #ced4da;
-    background-color: #f8f9fa;
-    font-size: 0.9rem;
-    width: auto;
-    min-width: 160px;
-  }
+    @media (max-width: 768px) {
+      #promptInputSection {
+        left: 0;
+        max-width: 100vw;
+      }
+    }
+  </style>
+</head>
 
-  .model-hr {
-  border-top: 1.5px solid #6c757d; 
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  #promptInputSection {
-    left: 0;
-    max-width: 100vw;
-  }
-}
-
-
-   </style>
-  </head>
-
+<body>
+  <div class="main-container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+      <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+        <form class="d-none d-lg-block mx-3 flex-grow-1">
+          <input class="form-control rounded-pill bg-light" type="search" placeholder="Search models" />
+        </form>
+        <ul class="navbar-nav ms-auto d-none d-lg-flex">
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="credits.html">Chat</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+        </ul>
+      </div>
+    </nav>
   <body>
     <div class="main-container">
       <!-- Top Navbar -->
@@ -282,37 +270,50 @@
         </div>
       </nav>
 
+    <!-- Page Layout -->
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div id="sidebar" class="p-3">
+        <button class="btn btn-outline-secondary w-100 mb-3">New Room</button>
+        <ul class="list-unstyled text-muted">
+          <li class="mb-2"><em>Untitled Chat</em></li>
+        </ul>
+      </div>
 
-      <!-- Main Content -->
-      <div class="d-flex">
-        <!-- Sidebar -->
-        <div id="sidebar" class="p-3">
-          <button class="btn btn-outline-secondary w-100 mb-3">New Room</button>
-          <ul class="list-unstyled text-muted">
-            <li class="mb-2"><em>Untitled Chat</em></li>
-     
-          </ul>
+      <!-- Main Area -->
+      <div class="flex-grow-1 d-flex flex-column">
+        <!-- Model Selector -->
+        <div class="px-4 pt-3">
+          <div class="d-flex align-items-center gap-2 mb-4">
+            <label class="fw-semibold mb-0">Model:</label>
+            <select id="modelSelector" class="form-select form-select-sm" onchange="handleModelChange()">
+              <option value="audio" selected>Text to Audio</option>
+              <option value="video">Text to Video</option>
+              <option value="image">Text to Image</option>
+            </select>
+          </div>
+          <hr class="model-hr" />
         </div>
-    
-        <!-- Main Area -->
-        <div class="flex-grow-1 d-flex flex-column">
 
-        <!-- Model Selector Header -->
-<!-- Model Selector Header -->
-<div class="px-4 pt-3">
-  <div class="d-flex align-items-center justify-content-between mb-4"> <!-- changed mb-3 to mb-4 for more bottom space -->
-    <div class="d-flex align-items-center gap-2">
-      <label class="fw-semibold mb-0">Model:</label>
-      <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-        <option value="audio" selected>Text to Audio</option>
-        <option value="video">Text to Video</option>
-        <option value="image">Text to Image</option>
-      </select>
-    </div>
-  </div>
-  <hr class="model-hr" />
-</div>
+        <!-- Chat Display -->
+        <div id="chat" class="container-fluid mt-4">
+          <!-- Audio responses appear here -->
+        </div>
 
+        <!-- Input Section -->
+        <div class="chat-container">
+          <h3 class="mb-4 text-center text-primary">🎧 Text to Audio Generator</h3>
+
+          <div id="chatBox" class="mb-4"></div>
+
+          <div class="input-group">
+            <input type="text" id="promptInput" class="form-control"
+              placeholder="Describe a sound (e.g., 'waves crashing at sunset')" />
+            <input type="number" id="durationInput" class="form-control" min="1" max="60" value="10"
+              style="max-width: 100px;" />
+            <button class="btn btn-primary" onclick="sendPrompt()">Send</button>
+          </div>
+        </div>
     
     
           <!-- Chat Section -->
@@ -360,101 +361,101 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/model-selector.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const chat = document.getElementById("chat");
-      function appendUserMessage(prompt) {
-  const userWrapper = document.createElement("div");
-  userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+      const chatContainer = document.getElementById("chat");
 
-  userWrapper.innerHTML = `
-    <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
-      ${prompt}
-    </div>
-    <i 
-      class="bi bi-clipboard-fill text-secondary mt-1" 
-      style="cursor: pointer; font-size: 14px;" 
-      onclick="copyToClipboard(this)"
-      title="Copy"
-    ></i>
-  `;
-  chat.appendChild(userWrapper);
-}
-    
-      function appendGeneratingMessage() {
-        const aiDiv = document.createElement("div");
-        aiDiv.className = "d-flex justify-content-start mb-3";
-        aiDiv.innerHTML = `
-          <div class="ai-message p-3" id="generating-audio-msg">
-            <i class="bi bi-soundwave me-2"></i>Generating audio...
-          </div>
+      function appendUserMessage(text) {
+        const msg = document.createElement("div");
+        msg.className = "user-message mb-2";
+        msg.textContent = text;
+        chatContainer.appendChild(msg);
+      }
+
+      function appendLoadingMessage() {
+        const id = "loading-" + Date.now();
+        const wrapper = document.createElement("div");
+        wrapper.className = "ai-message mb-2";
+        wrapper.id = id;
+        wrapper.innerHTML = "🔄 Generating audio...";
+        chatContainer.appendChild(wrapper);
+        return id;
+      }
+
+      function replaceWithAudio(id, audioUrl) {
+        const elem = document.getElementById(id);
+        elem.innerHTML = `
+          <audio class="compact-audio" controls>
+            <source src="${audioUrl}" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
         `;
-        chat.appendChild(aiDiv);
-        chat.scrollTop = chat.scrollHeight;
       }
-    
-      function replaceWithAudio(audioUrl) {
-        const genMsg = document.getElementById("generating-audio-msg");
-        if (genMsg) {
-          genMsg.innerHTML = `
-            <audio controls class="compact-audio">
-              <source src="${audioUrl}" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
-          `;
-        }
-        chat.scrollTop = chat.scrollHeight;
+
+      function replaceWithError(id, msg) {
+        const elem = document.getElementById(id);
+        elem.innerHTML = `<span class="text-danger">${msg}</span>`;
       }
-    
-      function replaceWithErrorMessage(msg) {
-        const genMsg = document.getElementById("generating-audio-msg");
-        if (genMsg) {
-          genMsg.innerHTML = `<span class="text-danger"> ${msg}</span>`;
-        }
-      }
-    
-      async function generate() {
-        const prompt = document.getElementById("prompt").value.trim();
-        const duration = parseInt(document.getElementById("duration").value);
+
+      async function sendPrompt() {
+        const prompt = document.getElementById("promptInput").value.trim();
+        const duration = parseInt(document.getElementById("durationInput").value);
         const userId = localStorage.getItem("userId") || "test-user";
-    
+
         if (!prompt) {
           alert("Please enter a prompt.");
+          console.warn("[sendPrompt] Empty prompt — user must type something.");
           return;
         }
+
         if (isNaN(duration) || duration < 1 || duration > 60) {
-          alert("Please enter a valid duration between 1 and 60 seconds.");
+          alert("Please enter a valid duration (1–60 seconds).");
           return;
         }
-    
-        console.debug("Generating audio with:", { prompt, duration, userId });
-    
+
+        // Get model ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get("id");
+
+        // Map to backend audio model ID
+        let backendModelId = null;
+        if (modelId === "stackadoc-stable-audio") {
+          backendModelId = "stable-audio";
+        }  else {
+          alert("Unsupported audio model ID in URL.");
+          return;
+        }
+
+        console.log(`[sendPrompt] Sending prompt "${prompt}" to model "${backendModelId}" with duration: ${duration}`);
+
         appendUserMessage(prompt);
-        appendGeneratingMessage();
-    
+        const loadingId = appendLoadingMessage();
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
         try {
-          const response = await fetch("http://localhost:5000/api/ai/generate-audio", {
+          const res = await fetch(`http://localhost:5000/api/ai/generate-audio/${backendModelId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt, duration, userId }),
           });
-    
-          const data = await response.json();
-          console.debug("Response received:", data);
-    
-          if (response.ok && data.audioUrl) {
-            replaceWithAudio(data.audioUrl);
+
+          const data = await res.json();
+
+          if (res.ok && data.audioUrl) {
+            console.log("[sendPrompt] Audio generated:", data.audioUrl);
+            replaceWithAudio(loadingId, data.audioUrl);
           } else {
-            console.warn("No audio URL returned or server error.");
-            replaceWithErrorMessage("Failed to generate audio.");
+            console.error("[sendPrompt] Server error:", data.error);
+            replaceWithError(loadingId, "❌ Failed to generate audio.");
           }
         } catch (err) {
-          console.error("Error while generating audio:", err);
-          replaceWithErrorMessage("Error occurred while generating audio.");
+          console.error("[sendPrompt] Network error:", err);
+          replaceWithError(loadingId, "❌ Error connecting to server.");
         }
+
+        document.getElementById("promptInput").value = "";
+      }
     
         document.getElementById("prompt").value = "";
       }
@@ -479,6 +480,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
     </script>
-    
-  </body>
+</body>
+
 </html>

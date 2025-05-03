@@ -300,57 +300,77 @@
     const modelId = urlParams.get("id");
 
     const modelData = {
-      "deepinfra-tti": {
-        title: "DeepInfra: Text-to-Image - stabilityai/sd3.5",
-        description:
-          "Image generation model available through DeepInfra, optimized for creativity and performance.",
-        link: "https://deepinfra.com/stabilityai/sd3.5",
-        fullDetails:
-          "DeepInfra provides a set of models that convert text prompts into high-quality images. These models are optimized for style control, fast inference, and use cases in design, marketing, and content creation.",
-        chatPage: "imagemodel.html",
+      "black-forest-labs-flux-1-1-pro": {
+          title: "Black Forest Labs: FLUX-1.1 Pro",
+          description:
+            "Black Forest Labs' latest state-of-the-art proprietary model offering exceptional prompt following, visual quality, detail, and output diversity.",
+          link: "https://deepinfra.com/black-forest-labs/FLUX-1.1-pro",
+          fullDetails:
+            "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
+          chatPage: "imagemodel.html",
       },
 
-      "fal-tti": {
-        title: "FAL AI: Text-to-Image",
-        description:
-          "A broad selection of text-to-image models hosted by FAL AI, customizable for various use cases.",
-        link: "https://fal.ai/models?keywords=audio&categories=text-to-image",
-        fullDetails:
-          "FAL AI's text-to-image offerings include a variety of diffusion and generative models, allowing fine-tuned control over image outputs from textual input. Great for creative apps and AI-assisted design tools.",
-        chatPage: "imagemodel.html",
-      },
+
+      "recraft-v3": {
+  "title": "Recraft V3: Text-to-Image",
+  "description": 
+    "Recraft V3 is a state-of-the-art text-to-image model capable of generating long texts, vector art, images in brand styles, and much more. Proven by Hugging Face's leading Text-to-Image Benchmark by Artificial Analysis.",
+  "link": "https://huggingface.co",
+  "fullDetails": 
+    "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
+  "chatPage": "imagemodel.html"
+},
+"fooocus": {
+  "title": "Fooocus: Base Model",
+  "description": 
+    "Fooocus is a powerful text-to-image model offering base parameters with automated optimizations and quality improvements for rapid and high-quality image generation.",
+  "link": "https://fal.ai",
+  "fullDetails": 
+    "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements. It serves as a flexible solution for a wide range of creative applications, from general design to professional content creation.",
+  "chatPage": "imagemodel.html"
+},
 
       // Text-to-Video
-      "deepinfra-ttv": {
-        title: "DeepInfra: Text-to-Video - Wan-AI/Wan2.1-T2V-1.3B",
+      "wan-ai-wan21-t2v-13b": {
+        title: "Wan-AI: Wan2.1-T2V-1.3B",
         description:
-          "Collection of text-to-video models, powered by DeepInfra for fast video rendering from text prompts.",
-        link: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B",
+          "A lightweight and efficient text-to-video model that delivers high-quality 480P video generation despite its compact 1.3B parameter size.",
+        link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
         fullDetails:
-          "DeepInfra hosts multiple text-to-video models designed for performance and scalability. Ideal for marketing teams, AI video creators, and content automation solutions.",
+          "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
         chatPage: "videomodel.html",
       },
 
-      "fal-ttv": {
-        title: "FAL AI: Text-to-Video - fal-ai/wan/v2.1/1.3b/text-to-video",
-        description:
-          "Rich video generation suite from FAL AI with advanced rendering capabilities and models.",
-        link: "https://fal.ai/models/fal-ai/wan/v2.1/1.3b/text-to-video",
-        fullDetails:
-          "FAL AI’s library features a growing collection of state-of-the-art text-to-video models, supporting variable length outputs, styles, and motion interpolation. Excellent for AI storytelling and media R&D.",
-        chatPage: "videomodel.html",
-      },
+      "lightricks-ltx-video": {
+      title: "Lightricks: LTX-Video",
+      description:
+        "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
+      link: "https://huggingface.co/lightricks/ltx-video",
+      fullDetails:
+        "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
+      chatPage: "videomodel.html",
+    },
+    "pixverse-v4-text-to-video": {
+      title: "PixVerse: Text-to-Video v4",
+      description:
+        "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
+      link: "https://huggingface.co/pixverse/v4/text-to-video",
+      fullDetails:
+        "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
+      chatPage: "videomodel.html",
+    },
 
       // Text-to-Audio
-      "fal-tta": {
-        title: "FAL AI: Text-to-Audio",
-        description:
-          "A range of audio synthesis models available through FAL AI, turning text into lifelike speech or sound.",
-        link: "https://fal.ai/models?keywords=audio&categories=text-to-audio",
-        fullDetails:
-          "FAL AI provides diverse models for speech synthesis, music generation, and sound design. These models support multiple languages and vocal tones, making them ideal for apps, podcasts, games, and accessibility tools.",
-        chatPage: "audiomodel.html",
-      },
+      "stackadoc-stable-audio": {
+      title: "Stable Audio Open 1.0",
+      description:
+        "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
+      link: "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
+      fullDetails:
+        "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
+      chatPage: "audiomodel.html",
+    },
+
 
     };
 
