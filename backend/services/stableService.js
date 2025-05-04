@@ -8,6 +8,27 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
+export const stableFal = async (prompt) => {
+  try {
+    const result = await fal.subscribe("fal-ai/stable-audio", {
+      input: { prompt },
+      logs: false,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          update.logs.map((log) => log.message).forEach(console.log);
+        }
+      },
+    });
+
+    const audioUrl = result?.data?.audio_url || result?.data?.audio?.url;
+    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+    return audioUrl;
+  } catch (error) {
+    console.error("FAL handler failed:", error.message || error);
+    return null;
+  }
+};
+
 export const stableReplicate = async (prompt, duration = 8) => {
   const replicateApiToken = process.env.REPLICATE_API_TOKEN;
 
@@ -52,26 +73,5 @@ export const stableReplicate = async (prompt, duration = 8) => {
       error.message || error
     );
     throw error;
-  }
-};
-
-export const stableFal = async (prompt) => {
-  try {
-    const result = await fal.subscribe("fal-ai/stable-audio", {
-      input: { prompt },
-      logs: false,
-      onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
-          update.logs.map((log) => log.message).forEach(console.log);
-        }
-      },
-    });
-
-    const audioUrl = result?.data?.audio_url || result?.data?.audio?.url;
-    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
-    return audioUrl;
-  } catch (error) {
-    console.error("FAL handler failed:", error.message || error);
-    return null;
   }
 };

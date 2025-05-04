@@ -13,6 +13,10 @@ import {
   generateWithRapidApiAudio,
 } from "../services/audioServices.js";
 import { stableFal, stableReplicate } from "../services/stableService.js";
+import { cassetteFAL } from "../services/cassetteServices.js";
+import { pikaFAL } from "../services/pikaServices.js";
+import { hidreamFAL } from "../services/hidreamServices.js";
+import { ideogramFAL } from "../services/ideogramServices.js";
 dotenv.config();
 
 fal.config({
@@ -121,6 +125,16 @@ export const generateImage = async (req, res) => {
       handler: falFooocus,
       credits: 4,
     },
+    {
+      model: "hidream-image",
+      handler: hidreamFAL,
+      credits: 4,
+    },
+    {
+      model: "ideogram-image",
+      handler: ideogramFAL,
+      credits: 4,
+    },
   ];
 
   // Find all handlers matching the requested model
@@ -201,6 +215,11 @@ export const generateAudio = async (req, res) => {
     {
       model: "stable-audio",
       handler: stableFal,
+      credits: 6,
+    },
+    {
+      model: "cassette-audio",
+      handler: cassetteFAL,
       credits: 6,
     },
   ];

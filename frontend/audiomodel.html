@@ -303,20 +303,18 @@
         <div class="flex-grow-1 d-flex flex-column">
 
         <!-- Model Selector Header -->
-<!-- Model Selector Header -->
-<div class="px-4 pt-3">
-  <div class="d-flex align-items-center justify-content-between mb-4"> <!-- changed mb-3 to mb-4 for more bottom space -->
-    <div class="d-flex align-items-center gap-2">
-      <label class="fw-semibold mb-0">Model:</label>
-      <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-        <option value="audio" selected>Text to Audio</option>
-        <option value="video">Text to Video</option>
-        <option value="image">Text to Image</option>
-      </select>
-    </div>
-  </div>
-  <hr class="model-hr" />
-</div>
+        <div class="px-4 pt-3">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <label class="fw-semibold mb-0">Model:</label>
+              <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+          <hr class="model-hr" />
+        </div>
+
 
     
     
@@ -426,7 +424,17 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const modelId = urlParams.get("id");
-        const backendModelId = modelId === "stackadoc-stable-audio" ? "stable-audio" : null;
+        let backendModelId = null;
+        if (modelId === "stackadoc-stable-audio") {
+          backendModelId = "stable-audio";
+        } else if (modelId === "cassetteai-sfx-generator") {
+          backendModelId = "cassette-audio";
+        }else if (modelId === "pika-text-to-video-v2-1") {
+          backendModelId = "pika-audio"; // ← Add your correct backend name here
+        }else {
+          alert("Unsupported audio model ID in URL.");
+          return;
+        }
 
         if (!backendModelId) {
           alert("Unsupported audio model ID in URL.");

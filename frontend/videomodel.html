@@ -289,18 +289,17 @@
         <!-- Model Selector Header -->
 <!-- Model Selector Header -->
 <div class="px-4 pt-3">
-  <div class="d-flex align-items-center justify-content-between mb-4"> <!-- changed mb-3 to mb-4 for more bottom space -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
     <div class="d-flex align-items-center gap-2">
       <label class="fw-semibold mb-0">Model:</label>
       <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-        <option value="audio">Text to Audio</option>
-        <option value="video" selected>Text to Video</option>
-        <option value="image">Text to Image</option>
+        <!-- Dynamically populated -->
       </select>
     </div>
   </div>
   <hr class="model-hr" />
 </div>
+
 
     
     
@@ -442,10 +441,17 @@ async function generateVideo() {
   } 
   else if (modelId === "lightricks-ltx-video") {
     backendModelId = "ltx-video";
-  } // ← Add your correct backend name here
-  else if (modelId === "pixverse-v4-text-to-video") {
+  }
+  else if (modelId === "pika-text-to-video-v2-1") {
+    backendModelId = "pika-video";
+  }
+   else if (modelId === "pixverse-v4-text-to-video") {
     backendModelId = "pixverse-v4"; // ← Add your correct backend name here
-  } else {
+  }
+  else if (modelId === "luma-ray2-flash") {
+    backendModelId = "luma-video";
+  }
+  else {
     alert("Unsupported model ID in URL.");
     return;
   }

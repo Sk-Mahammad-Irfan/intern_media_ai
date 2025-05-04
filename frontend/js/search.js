@@ -78,6 +78,56 @@ const models = {
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
   },
+  "cassetteai-sfx-generator": {
+    id: "cassetteai-sfx-generator",
+    title: "CassetteAI SFX Generator",
+    description:
+      "Create stunningly realistic sound effects in seconds with CassetteAI’s SFX model – high-quality, prompt-based audio up to 30 seconds long.",
+    link: "https://fal.ai/models/cassetteai/sound-effects-generator",
+    fullDetails:
+      "CassetteAI’s Sound Effects Generator allows for fast and natural creation of high-quality sound effects using only a text prompt. It supports up to 30 seconds of audio with near-instant generation time, perfect for games, films, and immersive experiences.",
+    chatPage: "audiomodel.html",
+  },
+  "pika-text-to-video-v2-1": {
+    id: "pika-text-to-video-v2-1",
+    title: "Pika Text to Video v2.1",
+    description:
+      "Generate high-quality, cinematic videos from text prompts with Pika’s advanced v2.1 model – ideal for storytelling and visual ideation.",
+    link: "https://fal.ai/models/fal-ai/pika/v2.1/text-to-video",
+    fullDetails:
+      "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
+    chatPage: "videomodel.html",
+  },
+  "luma-ray2-flash": {
+    id: "luma-ray2-flash",
+    title: "Luma Dream Machine: Ray 2 Flash",
+    description:
+      "Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.",
+    link: "https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash",
+    fullDetails:
+      "Luma’s Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
+    chatPage: "videomodel.html",
+  },
+  "hidream-i1-dev": {
+    id: "hidream-i1-dev",
+    title: "HiDream I1 (Dev)",
+    description:
+      "HiDream I1 generates high-quality, imaginative images from text prompts with speed and clarity – ideal for concept art and design prototyping.",
+    link: "https://fal.ai/models/fal-ai/hidream-i1-dev",
+    fullDetails:
+      "HiDream I1 (Dev) is a text-to-image model optimized for fast generation and visual fidelity. It excels at interpreting imaginative prompts and rendering detailed visuals, making it suitable for artists, creatives, and rapid prototyping scenarios.",
+    chatPage: "imagemodel.html",
+  },
+  "ideogram-v3": {
+    id: "ideogram-v3",
+    title: "Ideogram V3",
+    description:
+      "Turn complex, creative prompts into visually rich illustrations with Ideogram V3 – ideal for surreal, conceptual, and narrative-driven artwork.",
+    link: "https://fal.ai/models/fal-ai/ideogram/v3",
+    fullDetails:
+      "Ideogram V3 is a next-gen text-to-image model crafted for storytelling and imaginative concepts. It excels at rendering scenes with symbolic, surreal, or fantastical elements, making it perfect for writers, concept artists, and world-builders.",
+    chatPage: "imagemodel.html",
+  },
 };
 
 // ===================== DESKTOP SEARCH =====================

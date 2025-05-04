@@ -291,18 +291,17 @@
           <!-- Model Selector Header -->
   <!-- Model Selector Header -->
   <div class="px-4 pt-3">
-    <div class="d-flex align-items-center justify-content-between mb-4"> <!-- changed mb-3 to mb-4 for more bottom space -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
       <div class="d-flex align-items-center gap-2">
         <label class="fw-semibold mb-0">Model:</label>
         <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-          <option value="audio">Text to Audio</option>
-          <option value="video">Text to Video</option>
-          <option value="image"  selected>Text to Image</option>
+          <!-- Options will be added dynamically -->
         </select>
       </div>
     </div>
     <hr class="model-hr" />
   </div>
+
   
       
       
@@ -344,6 +343,8 @@
       <script src="js/script.js"></script>
       <script src="js/search.js"></script>
       <script src="js/model-selector.js"></script>
+      
+
 
     <script>
 const chat = document.getElementById("chat");
@@ -416,7 +417,12 @@ async function generateImage() {
     backendModelId = "fooocus";
   } else if (modelId === "recraft-v3") {
     backendModelId = "recraft-v3";
-  } else {
+  } else if (modelId === "hidream-i1-dev"){
+    backendModelId = "hidream-image";
+  } else if (modelId === "ideogram-v3"){
+    backendModelId = "ideogram-image";
+  }
+   else {
     // If no mapping found
     alert("Unsupported model ID in URL.");
     return;
