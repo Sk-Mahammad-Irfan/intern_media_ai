@@ -14,43 +14,69 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
+
       .card {
-        max-width: 500px;
+        max-width: 480px;
         width: 100%;
         padding: 2rem;
-        text-align: center;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.5s ease-in-out;
+        background-color: #ffffff;
       }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .navbar-brand {
+        color: #343a40;
+        font-weight: 700;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
       .spinner-border {
         width: 3rem;
         height: 3rem;
-        color: #212529; /* Dark color to match the color scheme */
+        color: #198754; /* Bootstrap success green */
       }
-      .navbar-brand {
-        color: #212529;
-        font-weight: bold;
-        margin-bottom: 2rem;
-        display: block;
+
+      #status-message {
+        font-size: 1rem;
+        margin-top: 1rem;
+      }
+
+      .text-success {
+        font-weight: 600;
       }
     </style>
   </head>
   <body>
-    <div class="card shadow">
-      <div class="card-body">
-        <span class="navbar-brand">AI Media Hub</span>
-        <h3 class="mb-4">Processing Authentication</h3>
-        <div class="spinner-border mb-4" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p id="status-message">
-          Please wait while we complete your authentication...
-        </p>
+    <div class="card text-center">
+      <span class="navbar-brand">AI Media Hub</span>
+      <h4 class="mb-3">Authenticating Your Account</h4>
+      <div class="spinner-border mb-3" role="status">
+        <span class="visually-hidden">Loading...</span>
       </div>
+      <p id="status-message" class="text-muted">
+        Please wait while we complete your authentication...
+      </p>
     </div>
 
     <script>
-      // Function to set cookie
       function setCookie(name, value, days) {
         const date = new Date();
         date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -58,7 +84,6 @@
         document.cookie = name + "=" + value + ";" + expires + ";path=/";
       }
 
-      // Function to get URL parameters
       function getUrlParameter(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
@@ -68,20 +93,16 @@
           : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
 
-      // Check if we have a success parameter
       window.addEventListener("DOMContentLoaded", async () => {
         const statusMessage = document.getElementById("status-message");
 
         try {
-          // Check if we have user data in the URL
           const userDataParam = getUrlParameter("user");
 
           if (userDataParam) {
-            // Parse the user data from the URL
             const userData = JSON.parse(decodeURIComponent(userDataParam));
             console.log("User data from URL:", userData);
 
-            // Store user data in localStorage
             const userDataToStore = {
               userId: userData._id,
               email: userData.email,
@@ -90,29 +111,25 @@
               loginTime: new Date().toISOString(),
             };
 
-            // Store token and user data
             localStorage.setItem("user_data", JSON.stringify(userDataToStore));
             localStorage.setItem("userId", userData._id);
             localStorage.setItem("auth_token", userData.token);
-
-            // Set cookie for token
             setCookie("auth_token", userData.token, 7);
 
             statusMessage.textContent =
               "Authentication successful! Redirecting...";
+            statusMessage.classList.remove("text-muted");
             statusMessage.classList.add("text-success");
 
-            // Redirect to the appropriate page
             setTimeout(() => {
               window.location.href = "index.html";
             }, 1500);
           } else {
-            // If no user data in URL, try to fetch from the success endpoint
             const response = await fetch(
               "http://localhost:5000/api/auth/success",
               {
                 method: "GET",
-                credentials: "include", // Important for cookies
+                credentials: "include",
               }
             );
 
@@ -122,12 +139,9 @@
             if (data.success) {
               statusMessage.textContent =
                 "Authentication successful! Redirecting...";
+              statusMessage.classList.remove("text-muted");
               statusMessage.classList.add("text-success");
 
-              // Log user data for debugging
-              console.log("User data:", data.user);
-
-              // Store user data in localStorage
               const userData = {
                 userId: data.user._id,
                 email: data.user.email,
@@ -136,21 +150,18 @@
                 loginTime: new Date().toISOString(),
               };
 
-              // Store token and user data
               localStorage.setItem("user_data", JSON.stringify(userData));
               localStorage.setItem("userId", data.user._id);
               localStorage.setItem("auth_token", data.user.token);
-
-              // Set cookie for token
               setCookie("auth_token", data.user.token, 7);
 
-              // Redirect to the appropriate page
               setTimeout(() => {
                 window.location.href = "index.html";
               }, 1500);
             } else {
               statusMessage.textContent =
                 "Authentication failed: " + (data.message || "Unknown error");
+              statusMessage.classList.remove("text-muted");
               statusMessage.classList.add("text-danger");
 
               setTimeout(() => {
@@ -162,6 +173,7 @@
           console.error("Error during authentication:", error);
           statusMessage.textContent =
             "An error occurred during authentication. Please try again.";
+          statusMessage.classList.remove("text-muted");
           statusMessage.classList.add("text-danger");
 
           setTimeout(() => {

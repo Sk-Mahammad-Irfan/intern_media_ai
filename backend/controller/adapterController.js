@@ -11,18 +11,14 @@ import {
   falRecraftV3,
   segmindRecraftV3,
 } from "../services/image/recraftv3Service.js";
-import {
-  generateAudioWithFal,
-  generateAudioWithFalAmericanAudio,
-  generateAudioWithFalDia,
-  generateAudioWithFalMultilingual,
-  generateWithRapidApiAudio,
-} from "../services/audioServices.js";
 import { stableFal, stableReplicate } from "../services/audio/stableService.js";
 import { cassetteFAL } from "../services/audio/cassetteServices.js";
 import { pikaFAL } from "../services/video/pikaServices.js";
 import { hidreamFAL } from "../services/image/hidreamServices.js";
 import { ideogramFAL } from "../services/image/ideogramServices.js";
+import { diaTtsFAL } from "../services/audio/diaTtsServices.js";
+import { multilingualTtsFAL } from "../services/audio/multilingualTtsServices.js";
+import { americanEnglishFAL } from "../services/audio/americanEnglishServices.js";
 dotenv.config();
 
 fal.config({
@@ -224,18 +220,18 @@ export const generateAudio = async (req, res) => {
       credits: 6,
     },
     {
-      model: "FalDia-audio",
-      handler: generateAudioWithFalDia,
+      model: "dia-audio",
+      handler: diaTtsFAL,
       credits: 9,
     },
     {
-      model: "FalMultilingual-audio",
-      handler: generateAudioWithFalMultilingual,
+      model: "multilingual-audio",
+      handler: multilingualTtsFAL,
       credits: 12,
     },
     {
-      model: "FalAmerican-audio",
-      handler: generateAudioWithFalAmericanAudio,
+      model: "american-audio",
+      handler: americanEnglishFAL,
       credits: 15,
     },
     {

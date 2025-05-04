@@ -108,6 +108,7 @@
                 aria-expanded="false"
               >
                 <div
+                  id="navbar-avatar"
                   class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                   style="width: 32px; height: 32px; font-size: 14px"
                 >
@@ -470,20 +471,70 @@
             <a href="https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0" target="_blank">Hugging Face</a>
           </small>
         </div>
-        <div class="model-card" onclick="window.location.href='model-details.html?id=cassetteai-sfx-generator'">
+        <!-- Dia TTS -->
+        <div class="model-card" onclick="window.location.href='model-details.html?id=dia-audio'">
           <h5 class="fw-semibold">
-            CassetteAI SFX Generator
+            Dia TTS
             <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
+            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
           </h5>
           <p class="text-muted mb-1">
-            Create stunningly realistic sound effects in seconds with CassetteAI’s SFX model – high-quality, prompt-based audio up to 30 seconds long.
+            A text-to-speech model that turns written prompts into realistic human voices using Dia's expressive speech synthesis.
+          </p>
+          <small class="text-muted">
+            Source:
+            <a href="https://fal.ai/models/fal-ai/dia-tts" target="_blank">FAL AI</a>
+          </small>
+        </div>
+
+        <!-- Multilingual TTS -->
+        <div class="model-card" onclick="window.location.href='model-details.html?id=multilingual-audio'">
+          <h5 class="fw-semibold">
+            Multilingual TTS
+            <i class="bi bi-soundwave text-success model-icon"></i>
+            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+          </h5>
+          <p class="text-muted mb-1">
+            Generate speech in multiple languages with ElevenLabs multilingual TTS powered by FAL – clear, natural, and diverse voices.
+          </p>
+          <small class="text-muted">
+            Source:
+            <a href="https://fal.ai/models/fal-ai/elevenlabs/tts/multilingual-v2" target="_blank">FAL AI</a>
+          </small>
+        </div>
+
+        <!-- American English TTS -->
+        <div class="model-card" onclick="window.location.href='model-details.html?id=american-audio'">
+          <h5 class="fw-semibold">
+            American English TTS
+            <i class="bi bi-soundwave text-success model-icon"></i>
+            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+          </h5>
+          <p class="text-muted mb-1">
+            A high-quality American English TTS model for creating clear, friendly, and professional-sounding voices from text.
+          </p>
+          <small class="text-muted">
+            Source:
+            <a href="https://fal.ai/models/fal-ai/kokoro/american-english" target="_blank">FAL AI</a>
+          </small>
+        </div>
+
+        <!-- Cassette AI (Sound Effects Generator) -->
+        <div class="model-card" onclick="window.location.href='model-details.html?id=cassetteai-sfx-generator'">
+          <h5 class="fw-semibold">
+            Cassette Sound Effects Generator
+            <i class="bi bi-soundwave text-success model-icon"></i>
+            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
+          </h5>
+          <p class="text-muted mb-1">
+            Generate creative sound effects and ambient audio using Cassette AI’s open-source sound design model.
           </p>
           <small class="text-muted">
             Source:
             <a href="https://fal.ai/models/cassetteai/sound-effects-generator" target="_blank">FAL AI</a>
           </small>
         </div>
+
         
         </div>
       </div>

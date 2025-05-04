@@ -78,6 +78,38 @@ const models = {
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
   },
+  "dia-audio": {
+    id: "dia-audio",
+    title: "Dia TTS",
+    description:
+      "Realistic text-to-speech generation using Dia's expressive voice synthesis engine.",
+    link: "https://fal.ai/models/fal-ai/dia-tts",
+    fullDetails:
+      "Dia TTS generates expressive human-like speech from text prompts. It’s ideal for narrations, AI voices, and conversational interfaces that need a lifelike voice model.",
+    chatPage: "audiomodel.html",
+  },
+
+  "multilingual-audio": {
+    id: "multilingual-audio",
+    title: "Multilingual TTS",
+    description:
+      "Text-to-speech generation in multiple languages with high clarity and diverse voices.",
+    link: "https://fal.ai/models/fal-ai/elevenlabs/tts/multilingual-v2",
+    fullDetails:
+      "Multilingual TTS by ElevenLabs supports a wide range of languages and accents, enabling natural voice generation across global content. It's a great fit for multilingual applications and localization.",
+    chatPage: "audiomodel.html",
+  },
+
+  "american-audio": {
+    id: "american-audio",
+    title: "American English TTS",
+    description:
+      "Generate natural American English voices for narration, characters, and content creation.",
+    link: "https://fal.ai/models/fal-ai/kokoro/american-english",
+    fullDetails:
+      "This American English TTS model offers high-quality, fluent, and natural-sounding speech, making it suitable for virtual assistants, video dubbing, and storytelling use cases.",
+    chatPage: "audiomodel.html",
+  },
   "cassetteai-sfx-generator": {
     id: "cassetteai-sfx-generator",
     title: "CassetteAI SFX Generator",

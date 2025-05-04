@@ -127,6 +127,7 @@
                   aria-expanded="false"
                 >
                   <div
+                    id="navbar-avatar"
                     class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                     style="width: 32px; height: 32px; font-size: 14px"
                   >
@@ -152,7 +153,9 @@
                     <li><hr class="dropdown-divider" /></li>
                   </div>
                   <li><a class="dropdown-item" href="model.html">Models</a></li>
-                  <li><a class="dropdown-item" href="audiomodel.html">Chat</a></li>
+                  <li>
+                    <a class="dropdown-item" href="audiomodel.html">Chat</a>
+                  </li>
                   <li><a class="dropdown-item" href="#">Rankings</a></li>
                   <li><a class="dropdown-item" href="#">Docs</a></li>
                   <li><hr class="dropdown-divider" /></li>
@@ -474,6 +477,34 @@
             link: "https://fal.ai/models/cassetteai/sound-effects-generator",
             fullDetails:
               "CassetteAI’s Sound Effects Generator allows for fast and natural creation of high-quality sound effects using only a text prompt. It supports up to 30 seconds of audio with near-instant generation time, perfect for games, films, and immersive experiences.",
+            chatPage: "audiomodel.html",
+          },
+          "dia-audio": {
+            title: "Dia TTS",
+            description:
+              "Realistic text-to-speech generation using Dia's expressive voice synthesis engine.",
+            link: "https://fal.ai/models/fal-ai/dia-tts",
+            fullDetails:
+              "Dia TTS generates expressive human-like speech from text prompts. It’s ideal for narrations, AI voices, and conversational interfaces that need a lifelike voice model.",
+            chatPage: "audiomodel.html",
+          },
+          "multilingual-audio": {
+            title: "Multilingual TTS",
+            description:
+              "Text-to-speech generation in multiple languages with high clarity and diverse voices.",
+            link: "https://fal.ai/models/fal-ai/elevenlabs/tts/multilingual-v2",
+            fullDetails:
+              "Multilingual TTS by ElevenLabs supports a wide range of languages and accents, enabling natural voice generation across global content. It's a great fit for multilingual applications and localization.",
+            chatPage: "audiomodel.html",
+          },
+
+          "american-audio": {
+            title: "American English TTS",
+            description:
+              "Generate natural American English voices for narration, characters, and content creation.",
+            link: "https://fal.ai/models/fal-ai/kokoro/american-english",
+            fullDetails:
+              "This American English TTS model offers high-quality, fluent, and natural-sounding speech, making it suitable for virtual assistants, video dubbing, and storytelling use cases.",
             chatPage: "audiomodel.html",
           },
           "pika-text-to-video-v2-1": {
