@@ -166,7 +166,7 @@
                     <li><hr class="dropdown-divider" /></li>
                   </div>
                   <li><a class="dropdown-item" href="model.html">Models</a></li>
-                  <li><a class="dropdown-item" href="#">Chat</a></li>
+                  <li><a class="dropdown-item" href="imagemodel.html">Chat</a></li>
                   <li><a class="dropdown-item" href="#">Rankings</a></li>
                   <li><a class="dropdown-item" href="#">Docs</a></li>
                   <li><hr class="dropdown-divider" /></li>
@@ -235,7 +235,7 @@
             <!-- Desktop Nav Items -->
             <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="audiomodel.html">Chat</a></li>
+              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="imagemodel.html">Chat</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
               <li class="nav-item mx-1" id="signInDesktop">
@@ -295,9 +295,14 @@
       <div class="d-flex align-items-center gap-2">
         <label class="fw-semibold mb-0">Model:</label>
         <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-          <option value="audio">Text to Audio</option>
-          <option value="video">Text to Video</option>
-          <option value="image"  selected>Text to Image</option>
+          <option value="audio">Stable Audio Open 1.0: Text-to-Audio</option>
+          <option value="video">Wan2.1-T2V-1.3B: Text-to-Video</option>
+          <option value="video" >PixVerse: Text-to-Video</option>
+          <option value="video" >LTX-Video: Text-to-Video</option>
+          <option value="image"  selected> FLUX-1.1 Pro: Text-to-Image</option>
+          <option value="image">Recraft V3: Text-to-Image</option>
+          <option value="image">Fooocus: Text-to-Image</option>
+  
         </select>
       </div>
     </div>
