@@ -29,6 +29,69 @@ export const generateAudioWithFal = async (prompt, duration = 20) => {
   }
 };
 
+export const generateAudioWithFalDia = async (prompt) => {
+  try {
+    const result = await fal.subscribe("fal-ai/dia-tts", {
+      input: { prompt },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          console.log(update.logs.map((log) => log.message).join("\n"));
+        }
+      },
+    });
+    console.log("Generating audio...");
+    // return result.data;
+    // console.log(result.data.audio_file.url);
+    return result.data.audio_file.url;
+  } catch (error) {
+    console.error("Error generating audio with FAL:", error);
+    throw error;
+  }
+};
+
+export const generateAudioWithFalMultilingual = async (prompt) => {
+  try {
+    const result = await fal.subscribe("fal-ai/elevenlabs/tts/multilingual-v2", {
+      input: { prompt },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          console.log(update.logs.map((log) => log.message).join("\n"));
+        }
+      },
+    });
+    console.log("Generating audio...");
+    // return result.data;
+    // console.log(result.data.audio_file.url);
+    return result.data.audio_file.url;
+  } catch (error) {
+    console.error("Error generating audio with FAL:", error);
+    throw error;
+  }
+};
+
+export const generateAudioWithFalAmericanAudio = async (prompt) => {
+  try {
+    const result = await fal.subscribe("fal-ai/kokoro/american-english", {
+      input: { prompt },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          console.log(update.logs.map((log) => log.message).join("\n"));
+        }
+      },
+    });
+    console.log("Generating audio...");
+    // return result.data;
+    // console.log(result.data.audio_file.url);
+    return result.data.audio_file.url;
+  } catch (error) {
+    console.error("Error generating audio with FAL:", error);
+    throw error;
+  }
+};
+
 export const generateWithRapidApiAudio = async (prompt) => {
   console.log("Hello from RapidAPI");
 
@@ -50,7 +113,7 @@ export const generateWithRapidApiAudio = async (prompt) => {
   try {
     // Make the API request
     const response = await axios(options);
-    console.log(response)
+    console.log(response);
 
     // Check if the response contains a valid audio URL
     const audioUrl = response?.data?.audioUrl || null;

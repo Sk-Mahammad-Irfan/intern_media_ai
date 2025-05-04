@@ -13,6 +13,9 @@ import {
 } from "../services/image/recraftv3Service.js";
 import {
   generateAudioWithFal,
+  generateAudioWithFalAmericanAudio,
+  generateAudioWithFalDia,
+  generateAudioWithFalMultilingual,
   generateWithRapidApiAudio,
 } from "../services/audioServices.js";
 import { stableFal, stableReplicate } from "../services/audio/stableService.js";
@@ -219,6 +222,21 @@ export const generateAudio = async (req, res) => {
       model: "stable-audio",
       handler: stableFal,
       credits: 6,
+    },
+    {
+      model: "FalDia-audio",
+      handler: generateAudioWithFalDia,
+      credits: 9,
+    },
+    {
+      model: "FalMultilingual-audio",
+      handler: generateAudioWithFalMultilingual,
+      credits: 12,
+    },
+    {
+      model: "FalAmerican-audio",
+      handler: generateAudioWithFalAmericanAudio,
+      credits: 15,
     },
     {
       model: "cassette-audio",

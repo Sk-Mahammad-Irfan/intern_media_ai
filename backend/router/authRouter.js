@@ -53,7 +53,7 @@ router.get("/redirect-with-user", (req, res) => {
   // Redirect to the frontend with user data
   const userDataParam = encodeURIComponent(JSON.stringify(userWithToken));
   res.redirect(
-    `http://127.0.0.1:5502/frontend/auth-success.html?user=${userDataParam}`
+    `http://127.0.0.1:5500/intern_media_ai/frontend/auth-success.html?user=${userDataParam}`
   );
 });
 
