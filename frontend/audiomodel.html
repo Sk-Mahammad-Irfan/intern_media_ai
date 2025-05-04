@@ -370,129 +370,154 @@
     <script src="js/search.js"></script>
     <script src="js/model-selector.js"></script>
     <script>
-      const chatContainer = document.getElementById("chat");
-
-      function appendUserMessage(text) {
-        const msg = document.createElement("div");
-        msg.className = "user-message mb-2";
-        msg.textContent = text;
-        chatContainer.appendChild(msg);
-      }
-
-      function appendLoadingMessage() {
-        const id = "loading-" + Date.now();
-        const wrapper = document.createElement("div");
-        wrapper.className = "ai-message mb-2";
-        wrapper.id = id;
-        wrapper.innerHTML = "🔄 Generating audio...";
-        chatContainer.appendChild(wrapper);
-        return id;
-      }
-
-      function replaceWithAudio(id, audioUrl) {
-        const elem = document.getElementById(id);
-        elem.innerHTML = `
-          <audio class="compact-audio" controls>
-            <source src="${audioUrl}" type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        `;
-      }
-
-      function replaceWithError(id, msg) {
-        const elem = document.getElementById(id);
-        elem.innerHTML = `<span class="text-danger p-4">${msg}</span>`;
-      }
-
-      async function generateAudio() {
-        const promptInput = document.getElementById("prompt");
-        const durationInput = document.getElementById("duration");
-        const prompt = promptInput?.value.trim();
-        const duration = parseInt(durationInput?.value);
-        const userId = localStorage.getItem("userId") || "test-user";
-
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          console.warn("[sendPrompt] Empty prompt — user must type something.");
-          return;
+      window.addEventListener('DOMContentLoaded', () => {
+        const chat = document.getElementById("chat");
+    
+        function appendUserMessage(prompt) {
+          const userWrapper = document.createElement("div");
+          userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+    
+          userWrapper.innerHTML = `
+            <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
+              ${prompt}
+            </div>
+            <i 
+              class="bi bi-clipboard-fill text-secondary mt-1" 
+              style="cursor: pointer; font-size: 14px;" 
+              onclick="copyToClipboard(this)"
+              title="Copy"
+            ></i>
+          `;
+          chat.appendChild(userWrapper);
         }
-
-        if (isNaN(duration) || duration < 1 || duration > 60) {
-          alert("Please enter a valid duration (1–60 seconds).");
-          return;
+    
+        function appendGeneratingMessage() {
+          const aiDiv = document.createElement("div");
+          aiDiv.className = "d-flex justify-content-start mb-3";
+          aiDiv.innerHTML = `
+            <div class="ai-message p-3" id="generating-audio-msg">
+              <i class="bi bi-music-note-beamed me-2"></i>Generating audio...
+            </div>
+          `;
+          chat.appendChild(aiDiv);
+          chat.scrollTop = chat.scrollHeight;
         }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const modelId = urlParams.get("id");
-        let backendModelId = null;
-        if (modelId === "stackadoc-stable-audio") {
-          backendModelId = "stable-audio";
-        } else if (modelId === "cassetteai-sfx-generator") {
-          backendModelId = "cassette-audio";
-        }else if (modelId === "pika-text-to-video-v2-1") {
-          backendModelId = "pika-audio"; // ← Add your correct backend name here
-        }else {
-          alert("Unsupported audio model ID in URL.");
-          return;
-        }
-
-        if (!backendModelId) {
-          alert("Unsupported audio model ID in URL.");
-          return;
-        }
-
-        console.log(`[sendPrompt] Sending prompt "${prompt}" to model "${backendModelId}" with duration: ${duration}`);
-
-        appendUserMessage(prompt);
-        const loadingId = appendLoadingMessage();
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-
-        try {
-          const res = await fetch(`http://localhost:5000/api/ai/generate-audio/${backendModelId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt, duration, userId }),
-          });
-
-          const data = await res.json();
-
-          if (res.ok && data.audioUrl) {
-            console.log("[sendPrompt] Audio generated:", data.audioUrl);
-            replaceWithAudio(loadingId, data.audioUrl);
-          } else {
-            console.error("[sendPrompt] Server error:", data.error);
-            replaceWithError(loadingId, "❌ Failed to generate audio.");
+    
+        function replaceWithErrorMessage(msg) {
+          const genMsg = document.getElementById("generating-audio-msg");
+          if (genMsg) {
+            genMsg.innerHTML = `<span class="text-danger">${msg}</span>`;
           }
-        } catch (err) {
-          console.error("[sendPrompt] Network error:", err);
-          replaceWithError(loadingId, "❌ Error connecting to server.");
         }
-
-        promptInput.value = "";
-      }
+    
+        function replaceWithAudioMessage(audioUrl) {
+          const genMsg = document.getElementById("generating-audio-msg");
+          if (genMsg) {
+            genMsg.innerHTML = `
+              <div class="d-flex flex-column align-items-start">
+                <div class="mb-2 text-muted small">
+                  <i class="bi bi-music-note-beamed me-2"></i>Generated Audio
+                </div>
+                <audio controls class="w-100">
+                  <source src="${audioUrl}" type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            `;
+          }
+        }
+    
+        async function generateAudio() {
+          const promptInput = document.getElementById("prompt");
+          const durationInput = document.getElementById("duration");
+          const prompt = promptInput?.value.trim();
+          const duration = parseInt(durationInput?.value);
+          const userId = localStorage.getItem("userId") || "test-user";
+    
+          if (!prompt) {
+            alert("Please enter a prompt.");
+            return;
+          }
+    
+          if (isNaN(duration) || duration < 1 || duration > 60) {
+            alert("Please enter a valid duration (1–60 seconds).");
+            return;
+          }
+    
+          // Add user prompt
+          appendUserMessage(prompt);
+          promptInput.value = "";
+    
+          // Show loading
+          appendGeneratingMessage();
+    
+          // Get model
+          const urlParams = new URLSearchParams(window.location.search);
+          const modelId = urlParams.get("id");
+    
+          let backendModelId = null;
+          switch (modelId) {
+            case "stackadoc-stable-audio":
+              backendModelId = "stable-audio";
+              break;
+            case "cassetteai-sfx-generator":
+              backendModelId = "cassette-audio";
+              break;
+            case "pika-text-to-video-v2-1":
+              backendModelId = "pika-audio";
+              break;
+            default:
+              alert("Unsupported model ID in URL.");
+              return;
+          }
+    
+          try {
+            const res = await fetch(`http://localhost:5000/api/ai/generate-audio/${backendModelId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt, duration, userId }),
+            });
+    
+            const data = await res.json();
+    
+            if (res.ok && data.audioUrl) {
+              replaceWithAudioMessage(data.audioUrl);
+            } else {
+              replaceWithErrorMessage("❌ Failed to generate audio.");
+            }
+          } catch (err) {
+            console.error(err);
+            replaceWithErrorMessage("❌ Error connecting to server.");
+          }
+        }
+    
+    
+    
+        // Autofill prompt from URL if present
+        const params = new URLSearchParams(window.location.search);
+        const prompt = params.get('prompt');
+        if (prompt) {
+          document.getElementById('prompt').value = prompt;
+        }
+    
+        // Expose for button click
+        window.generateAudio = generateAudio;
+      });
 
       function copyToClipboard(icon) {
-        const messageText = icon.previousElementSibling.innerText.trim();
-        navigator.clipboard.writeText(messageText).then(() => {
-          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-          setTimeout(() => {
-            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-          }, 1500);
-        }).catch(err => {
-          console.error("Copy failed:", err);
-        });
-      }
-
-
-window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const prompt = params.get('prompt');
-    if (prompt) {
-      document.getElementById('prompt').value = prompt; 
-    }
-  });
-
+          const messageText = icon.previousElementSibling.innerText.trim();
+          navigator.clipboard.writeText(messageText).then(() => {
+            icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+            setTimeout(() => {
+              icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+            }, 1500);
+          }).catch(err => {
+            console.error("Copy failed:", err);
+          });
+        }
     </script>
+    
+    
 </body>
 
 </html>

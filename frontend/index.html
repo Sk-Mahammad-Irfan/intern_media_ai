@@ -96,6 +96,12 @@
     margin-bottom: 130px !important;
   }
 
+  .model-card.selected {
+  border: 2px solid #007bff;
+  background-color: #eef6ff;
+  cursor: pointer;
+}
+
   
     </style>
   </head>
@@ -575,47 +581,43 @@
     <script src="js/script.js"></script>  
     <script src="js/search.js"></script>
     <script>
-      let selectedModel = null;
-
-// Add click event listeners to all model cards
-document.querySelectorAll('.model-card').forEach(card => {
-  card.addEventListener('click', () => {
-    // Remove highlight from all cards
-    document.querySelectorAll('.model-card').forEach(c => c.classList.remove('border-primary'));
-    // Highlight the selected one
-    card.classList.add('border-primary');
-    // Store selected model
-    selectedModel = card.getAttribute('data-model');
-  });
-});
-
-document.getElementById('submitPrompt').addEventListener('click', function () {
-  const input = document.querySelector('.prompt-box input').value.trim();
-
-  if (!input) {
-    alert('Please enter a prompt.');
-    return;
-  }
-
-  if (!selectedModel) {
-    alert('Please select a model.');
-    return;
-  }
-
-  const routes = {
-    deepinfra_i: 'imagemodel.html',
-    falai: 'audiomodel.html',
-    deepinfra_v: 'videomodel.html'
-  };
-
-  const targetPage = routes[selectedModel];
-  if (!targetPage) {
-    alert('Model not recognized.');
-    return;
-  }
-
-  window.location.href = `${targetPage}?prompt=${encodeURIComponent(input)}`;
-});
+      document.addEventListener("DOMContentLoaded", function () {
+        let selectedModel = null;
+    
+        
+        document.querySelectorAll(".model-card").forEach(card => {
+          card.addEventListener("click", () => {
+            selectedModel = card.getAttribute("data-model");
+    
+            
+          document.querySelectorAll(".model-card").forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+          });
+        });
+  
+        document.getElementById("submitPrompt").addEventListener("click", function () {
+          const prompt = document.querySelector(".prompt-box input").value.trim();
+    
+          if (!selectedModel) {
+            alert("Please select a model first.");
+            return;
+          }
+    
+          if (!prompt) {
+            alert("Please enter a prompt.");
+            return;
+          }
+   
+          let page = "imagemodel.html";
+          if (selectedModel.includes("video")) {
+            page = "videomodel.html";
+          } else if (selectedModel.includes("audio")) {
+            page = "audiomodel.html";
+          }
+          window.location.href = `${page}?id=${selectedModel}&prompt=${encodeURIComponent(prompt)}`;
+        });
+      });
     </script>
+    
   </body>
 </html>
