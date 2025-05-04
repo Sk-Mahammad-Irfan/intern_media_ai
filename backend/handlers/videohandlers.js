@@ -1,8 +1,12 @@
-import { ltxReplicate } from "../services/ltxServices.js";
-import { lumaFAL } from "../services/lumaServices.js";
-import { pikaFAL } from "../services/pikaServices.js";
-import { pixverseFAL } from "../services/pixverseService.js";
-import { wanDeepinfra, wanFAL, wanReplicate } from "../services/wanServices.js"; // Adjust path as needed
+import { ltxReplicate } from "../services/video/ltxServices.js";
+import { lumaFAL } from "../services/video/lumaServices.js";
+import { pikaFAL } from "../services/video/pikaServices.js";
+import { pixverseFAL } from "../services/video/pixverseService.js";
+import {
+  wanDeepinfra,
+  wanFAL,
+  wanReplicate,
+} from "../services/video/wanServices.js"; // Adjust path as needed
 
 export const videoGenerationHandlers = [
   {

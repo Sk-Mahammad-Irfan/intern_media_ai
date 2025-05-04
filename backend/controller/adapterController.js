@@ -2,21 +2,24 @@ import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 import { decreaseCredits } from "./creditController.js";
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
-import { deepFluxProV1_1, falFluxProV1_1 } from "../services/flux11Service.js";
-import { falFooocus } from "../services/fooocusService.js";
+import {
+  deepFluxProV1_1,
+  falFluxProV1_1,
+} from "../services/image/flux11Service.js";
+import { falFooocus } from "../services/image/fooocusService.js";
 import {
   falRecraftV3,
   segmindRecraftV3,
-} from "../services/recraftv3Service.js";
+} from "../services/image/recraftv3Service.js";
 import {
   generateAudioWithFal,
   generateWithRapidApiAudio,
 } from "../services/audioServices.js";
-import { stableFal, stableReplicate } from "../services/stableService.js";
-import { cassetteFAL } from "../services/cassetteServices.js";
-import { pikaFAL } from "../services/pikaServices.js";
-import { hidreamFAL } from "../services/hidreamServices.js";
-import { ideogramFAL } from "../services/ideogramServices.js";
+import { stableFal, stableReplicate } from "../services/audio/stableService.js";
+import { cassetteFAL } from "../services/audio/cassetteServices.js";
+import { pikaFAL } from "../services/video/pikaServices.js";
+import { hidreamFAL } from "../services/image/hidreamServices.js";
+import { ideogramFAL } from "../services/image/ideogramServices.js";
 dotenv.config();
 
 fal.config({
