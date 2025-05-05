@@ -117,7 +117,7 @@
           >
             <!-- Brand -->
             <a class="navbar-brand fw-bold" href="index.html"
-              >&nbsp;MediaAi&nbsp;</a
+              >&nbsp;Media Ai&nbsp;</a
             >
 
             <!-- Mobile controls -->
@@ -171,7 +171,7 @@
                     class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                     style="width: 32px; height: 32px; font-size: 14px"
                   >
-                    U
+                  U
                   </div>
                 </a>
                 <ul
@@ -583,30 +583,46 @@
     <script src="js/auth.js"></script>
     <script>
       function setAvatarInitials() {
-          // Get the stored user data
-          const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-          
-          // Get username or fallback to "User"
-          const username = userData.username || "User";
-          const firstInitial = username.trim()[0].toUpperCase();
+  // Get the stored user data
+  const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
-          // Update all avatar elements
-          const avatars = document.querySelectorAll("#navbar-avatar");
-          avatars.forEach(avatar => {
-            avatar.textContent = firstInitial;
-          });
+  // Elements
+  const avatars = document.querySelectorAll("#navbar-avatar");
+  const usernameElem = document.getElementById("account-username");
+  const emailElem = document.getElementById("account-email");
+  const mobileUsernameElem = document.getElementById("account-username-mobile");
+  const mobileEmailElem = document.getElementById("account-email-mobile");
 
-          // Update dropdown username and email if they exist
-          const usernameElem = document.getElementById("account-username");
-          const emailElem = document.getElementById("account-email");
-          const mobileUsernameElem = document.getElementById("account-username-mobile");
-          const mobileEmailElem = document.getElementById("account-email-mobile");
+  // Check if user is signed in (assumes 'username' means signed in)
+  if (userData.username) {
+    const username = userData.username;
+    const firstInitial = username.trim()[0].toUpperCase();
 
-          if (usernameElem) usernameElem.textContent = username;
-          if (emailElem) emailElem.textContent = userData.email || "No email";
-          if (mobileUsernameElem) mobileUsernameElem.textContent = username;
-          if (mobileEmailElem) mobileEmailElem.textContent = userData.email || "No email";
-        }
+    // Show initials in avatars
+    avatars.forEach(avatar => {
+      avatar.textContent = firstInitial;
+    });
+
+    // Show user info
+    if (usernameElem) usernameElem.textContent = username;
+    if (emailElem) emailElem.textContent = userData.email || "No email";
+    if (mobileUsernameElem) mobileUsernameElem.textContent = username;
+    if (mobileEmailElem) mobileEmailElem.textContent = userData.email || "No email";
+
+  } else {
+    // Not signed in: show user icon instead of initials
+    avatars.forEach(avatar => {
+      avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+    });
+
+    // Hide or set default values for user info
+    if (usernameElem) usernameElem.textContent = "Guest";
+    if (emailElem) emailElem.textContent = "";
+    if (mobileUsernameElem) mobileUsernameElem.textContent = "Guest";
+    if (mobileEmailElem) mobileEmailElem.textContent = "";
+  }
+}
+
 
         
       document.addEventListener("DOMContentLoaded", function () {
