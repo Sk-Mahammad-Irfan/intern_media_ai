@@ -20,14 +20,16 @@
 
       .card {
         max-width: 480px;
-        width: 100%;
-        padding: 2rem;
+        width: 90%;
+        padding: 2rem 1.5rem;
+        margin: 1rem;
         border: none;
         border-radius: 16px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         animation: fadeIn 0.5s ease-in-out;
         background-color: #ffffff;
       }
+
 
       @keyframes fadeIn {
         from {
@@ -68,8 +70,10 @@
     <div class="card text-center">
       <span class="navbar-brand">AI Media Hub</span>
       <h4 class="mb-3">Authenticating Your Account</h4>
-      <div class="spinner-border mb-3" role="status">
-        <span class="visually-hidden">Loading...</span>
+      <div class="d-flex justify-content-center mb-3">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
       <p id="status-message" class="text-muted">
         Please wait while we complete your authentication...
