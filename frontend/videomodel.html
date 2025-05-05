@@ -145,6 +145,7 @@
                 aria-expanded="false"
               >
                 <div
+                id = "navbar-avatar"
                   class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                   style="width: 32px; height: 32px; font-size: 14px;"
                 >
@@ -378,6 +379,23 @@
     chat.appendChild(aiDiv);
     chat.scrollTop = chat.scrollHeight;
   }
+
+  function appendErrorMessage(message) {
+    const chatMessages = document.getElementById("chat");
+
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "d-flex justify-content-start mb-3";
+
+    errorDiv.innerHTML = `
+      <div class="ai-message p-3 text-danger border border-danger">
+        <i class="bi bi-exclamation-triangle me-2"></i>${message}
+      </div>
+    `;
+
+    chatMessages.appendChild(errorDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
   function appendGeneratedVideo(videoUrl) {
   const chatMessages = document.getElementById("chat");
 
@@ -420,7 +438,7 @@ async function generateVideo() {
   const userId = localStorage.getItem("userId");
 
   if (!prompt) {
-    alert("Please enter a prompt.");
+    appendErrorMessage("Please enter a prompt.");
     console.warn("[generateVideo] Empty prompt — user must type something.");
     return;
   }
@@ -452,7 +470,7 @@ async function generateVideo() {
     backendModelId = "luma-video";
   }
   else {
-    alert("Unsupported model ID in URL.");
+    appendErrorMessage("Unsupported model ID in URL. Cannot generate video.");
     return;
   }
 
@@ -467,7 +485,7 @@ async function generateVideo() {
 
     if (!response.ok) {
       console.error(`[generateVideo] Server responded with status: ${response.status}`);
-      alert("Server error while generating video.");
+      appendErrorMessage("Server error while generating video. Please try again later.");
       return;
     }
 
@@ -479,11 +497,11 @@ async function generateVideo() {
       appendGeneratedVideo(data.video_url);
     } else {
       console.warn("[generateVideo] No video_url in response:", data);
-      alert("Video generation failed. Check server logs.");
+      appendErrorMessage("Video generation failed. No video URL returned.");
     }
   } catch (error) {
     console.error("[generateVideo] Fetch error:", error);
-    alert("Error connecting to server.");
+    appendErrorMessage("Error connecting to server. Please check your connection.");
   }
 }
 

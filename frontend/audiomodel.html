@@ -161,6 +161,7 @@
                 aria-expanded="false"
               >
                 <div
+                  id="navbar-avatar"
                   class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
                   style="width: 32px; height: 32px; font-size: 14px;"
                 >
@@ -368,10 +369,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
     <script src="js/search.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/model-selector.js"></script>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
         const chat = document.getElementById("chat");
+
+        function setAvatarInitials() {
+          // Get the stored user data
+          const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+          
+          // Get username or fallback to "User"
+          const username = userData.username || "User";
+          const firstInitial = username.trim()[0].toUpperCase();
+
+          // Update all avatar elements
+          const avatars = document.querySelectorAll("#navbar-avatar");
+          avatars.forEach(avatar => {
+            avatar.textContent = firstInitial;
+          });
+
+          // Update dropdown username and email if they exist
+          const usernameElem = document.getElementById("account-username");
+          const emailElem = document.getElementById("account-email");
+          const mobileUsernameElem = document.getElementById("account-username-mobile");
+          const mobileEmailElem = document.getElementById("account-email-mobile");
+
+          if (usernameElem) usernameElem.textContent = username;
+          if (emailElem) emailElem.textContent = userData.email || "No email";
+          if (mobileUsernameElem) mobileUsernameElem.textContent = username;
+          if (mobileEmailElem) mobileEmailElem.textContent = userData.email || "No email";
+        }
+
+        setAvatarInitials();
     
         function appendUserMessage(prompt) {
           const userWrapper = document.createElement("div");
@@ -522,6 +552,8 @@
             console.error("Copy failed:", err);
           });
         }
+
+      
     </script>
     
     

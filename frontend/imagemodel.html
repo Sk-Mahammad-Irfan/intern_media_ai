@@ -246,14 +246,17 @@
               </li>
               <li class="nav-item dropdown d-none" id="userAvatarDropdown">
                 <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
                   href="#"
+                  class="d-flex align-items-center text-decoration-none dropdown-toggle"
                   id="navbarDropdown"
-                  role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                  <div
+                    id ="navbar-avatar"
+                    class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                    style="width: 32px; height: 32px; font-size: 14px;"
+                  >
                     U
                   </div>
                 </a>
@@ -344,7 +347,7 @@
       <script src="js/script.js"></script>
       <script src="js/search.js"></script>
       <script src="js/model-selector.js"></script>
-      
+      <script src="js/auth.js"></script>
 
 
     <script>
@@ -380,11 +383,25 @@ function appendGeneratingMessage() {
 }
 
       function replaceWithErrorMessage(msg) {
-        const genMsg = document.getElementById("generating-audio-msg");
+        const genMsg = document.getElementById("generating-msg");
         if (genMsg) {
-          genMsg.innerHTML = `<span class="text-danger"> ${msg}</span>`;
+          genMsg.innerHTML = `
+            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+            <span class="text-danger fw-semibold">${msg}</span>
+          `;
+        } else {
+          // Fallback if no generating message is available
+          const fallbackError = document.createElement("div");
+          fallbackError.className = "text-danger my-3";
+          fallbackError.innerHTML = `
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>${msg}
+          `;
+          chat.appendChild(fallbackError);
+          chat.scrollTop = chat.scrollHeight;
         }
       }
+
+
 
 async function generateImage() {
   const promptInput = document.getElementById("prompt");
@@ -396,57 +413,51 @@ async function generateImage() {
     return;
   }
 
-  // Append user prompt to chat
   appendUserMessage(prompt);
-
-  // Clear input
   promptInput.value = "";
+  appendGeneratingMessage();
 
-  // Show generating message
-  appendGeneratingMessage("image");
-
-  // Get model id from URL
   const urlParams = new URLSearchParams(window.location.search);
   const modelId = urlParams.get("id");
 
-  // Default backend route
   let backendModelId = null;
-
-  if (modelId === "black-forest-labs-flux-1-1-pro") {
-    backendModelId = "flux-pro";
-  } else if (modelId === "black-forest-labs-fooocus") {
-    backendModelId = "fooocus";
-  } else if (modelId === "recraft-v3") {
-    backendModelId = "recraft-v3";
-  } else if (modelId === "hidream-i1-dev"){
-    backendModelId = "hidream-image";
-  } else if (modelId === "ideogram-v3"){
-    backendModelId = "ideogram-image";
-  }
-   else {
-    // If no mapping found
-    alert("Unsupported model ID in URL.");
-    return;
+  switch (modelId) {
+    case "black-forest-labs-flux-1-1-pro":
+      backendModelId = "flux-pro";
+      break;
+    case "black-forest-labs-fooocus":
+      backendModelId = "fooocus";
+      break;
+    case "recraft-v3":
+      backendModelId = "recraft-v3";
+      break;
+    case "hidream-i1-dev":
+      backendModelId = "hidream-image";
+      break;
+    case "ideogram-v3":
+      backendModelId = "ideogram-image";
+      break;
+    default:
+      replaceWithErrorMessage("Unsupported model ID in URL.");
+      return;
   }
 
   try {
-    const requestBody = {
-      prompt: prompt,
-      userId: userId,
-    };
-
     const res = await fetch(`http://localhost:5000/api/ai/generate-image/${backendModelId}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, userId }),
     });
 
-    const data = await res.json();
-
-    // Remove placeholder
     const genMsg = document.getElementById("generating-msg");
+
+    if (!res.ok) {
+      const errMsg = `Server returned status ${res.status} (${res.statusText})`;
+      replaceWithErrorMessage(errMsg);
+      return;
+    }
+
+    const data = await res.json();
     if (genMsg) genMsg.remove();
 
     if (data.imageUrl) {
@@ -470,11 +481,11 @@ async function generateImage() {
       chat.appendChild(aiDiv);
       chat.scrollTop = chat.scrollHeight;
     } else {
-      replaceWithErrorMessage("Image generation failed.");
+      replaceWithErrorMessage("Image generation failed: no image URL returned.");
     }
   } catch (err) {
-    console.error(err);
-    replaceWithErrorMessage("An error occurred while generating the image.");
+    console.error("Network or server error:", err);
+    replaceWithErrorMessage("A network or server error occurred.");
   }
 }
 
@@ -489,6 +500,19 @@ async function generateImage() {
        console.error("Copy failed:", err);
       });
 }
+function setAvatarInitials() {
+  // Get the stored user data
+  const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+  
+  // Get username or fallback to "User"
+  const username = userData.username || "User";
+  const firstInitial = username.trim()[0].toUpperCase();
+
+  const avatars = document.querySelectorAll("#navbar-avatar");
+  avatars.forEach(avatar => {
+    avatar.textContent = firstInitial;
+  });
+}
 
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -496,6 +520,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (prompt) {
       document.getElementById('prompt').value = prompt;
     }
+
+    setAvatarInitials();
   });
     </script>
   </body>
