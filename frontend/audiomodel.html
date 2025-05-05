@@ -302,7 +302,7 @@
       <div class="d-flex">
         <!-- Sidebar -->
       <div id="sidebar" class="p-3">
-        <button id="newRoomBtn" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
+        <button id="newRoomBtnSidebar" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
     
         <!-- Room name & timestamp -->
         <div id="roomInfo" class="mb-3">
@@ -536,7 +536,13 @@
             if (res.ok && data.audioUrl) {
               replaceWithAudioMessage(data.audioUrl);
             } else {
-              replaceWithErrorMessage("❌ Failed to generate audio.");
+              if (res.status === 402) {
+                replaceWithErrorMessage("Insufficient credits.");
+                return;
+              }
+              else {
+                replaceWithErrorMessage("❌ Error generating audio.");
+              }
             }
           } catch (err) {
             console.error(err);

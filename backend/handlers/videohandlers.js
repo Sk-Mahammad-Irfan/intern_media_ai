@@ -6,42 +6,42 @@ import {
   wanDeepinfra,
   wanFAL,
   wanReplicate,
-} from "../services/video/wanServices.js"; // Adjust path as needed
+} from "../services/video/wanServices.js";
 
 export const videoGenerationHandlers = [
   {
-    model: "wan21-t2v",
+    model: "wan-ai-wan21-t2v-13b",
     handler: wanFAL,
-    credits: 4,
+    credits: 8,
   },
   {
-    model: "wan21-t2v",
+    model: "wan-ai-wan21-t2v-13b",
     handler: wanReplicate,
-    credits: 6,
+    credits: 10,
   },
   {
-    model: "wan21-t2v",
+    model: "wan-ai-wan21-t2v-13b",
     handler: wanDeepinfra,
-    credits: 3,
+    credits: 12,
   },
   {
-    model: "ltx-video",
+    model: "lightricks-ltx-video",
     handler: ltxReplicate,
-    credits: 3,
+    credits: 15,
   },
   {
-    model: "pixverse-v4",
+    model: "pixverse-v4-text-to-video",
     handler: pixverseFAL,
-    credits: 3,
+    credits: 12,
   },
   {
-    model: "pika-video",
+    model: "pika-text-to-video-v2-1",
     handler: pikaFAL,
-    credits: 6,
+    credits: 18,
   },
   {
-    model: "luma-video",
+    model: "luma-ray2-flash",
     handler: lumaFAL,
-    credits: 6,
+    credits: 20,
   },
 ];

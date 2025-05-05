@@ -1,24 +1,12 @@
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 import { decreaseCredits } from "./creditController.js";
+
+// Handler imports
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
-import {
-  deepFluxProV1_1,
-  falFluxProV1_1,
-} from "../services/image/flux11Service.js";
-import { falFooocus } from "../services/image/fooocusService.js";
-import {
-  falRecraftV3,
-  segmindRecraftV3,
-} from "../services/image/recraftv3Service.js";
-import { stableFal, stableReplicate } from "../services/audio/stableService.js";
-import { cassetteFAL } from "../services/audio/cassetteServices.js";
-import { pikaFAL } from "../services/video/pikaServices.js";
-import { hidreamFAL } from "../services/image/hidreamServices.js";
-import { ideogramFAL } from "../services/image/ideogramServices.js";
-import { diaTtsFAL } from "../services/audio/diaTtsServices.js";
-import { multilingualTtsFAL } from "../services/audio/multilingualTtsServices.js";
-import { americanEnglishFAL } from "../services/audio/americanEnglishServices.js";
+import { imageGenerationHandlers } from "../handlers/imagehandlers.js";
+import { audioGenerationHandlers } from "../handlers/audiohandlers.js";
+
 dotenv.config();
 
 fal.config({
@@ -28,6 +16,7 @@ fal.config({
   credentials: process.env.FAL_AI_AUDIO_API,
 });
 
+// -------- VIDEO GENERATION --------
 export const generateVideo = async (req, res) => {
   const { id } = req.params;
   const { prompt, userId } = req.body;
@@ -38,7 +27,7 @@ export const generateVideo = async (req, res) => {
 
   const matchingHandlers = videoGenerationHandlers
     .filter((h) => h.model === id)
-    .sort((a, b) => a.credits - b.credits); // Try cheapest first
+    .sort((a, b) => a.credits - b.credits);
 
   if (matchingHandlers.length === 0) {
     return res.status(400).json({ error: "Invalid model ID." });
@@ -55,10 +44,6 @@ export const generateVideo = async (req, res) => {
           videoUrl = rawData.video?.url;
           break;
         case wanReplicate:
-          videoUrl = Array.isArray(rawData)
-            ? rawData[0]
-            : rawData?.video_url || rawData?.url;
-          break;
         case ltxReplicate:
           videoUrl = Array.isArray(rawData)
             ? rawData[0]
@@ -85,13 +70,13 @@ export const generateVideo = async (req, res) => {
       return res.status(200).json({ videoUrl });
     } catch (error) {
       console.error("Handler failed, trying next one:", error.message || error);
-      continue;
     }
   }
 
   res.status(500).json({ error: "All handlers failed to generate video." });
 };
 
+// -------- IMAGE GENERATION --------
 export const generateImage = async (req, res) => {
   const { id } = req.params;
   const { prompt, userId } = req.body;
@@ -100,60 +85,17 @@ export const generateImage = async (req, res) => {
     return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  // All generation handlers and their metadata
-  const generationHandlers = [
-    {
-      model: "flux-pro",
-      handler: falFluxProV1_1,
-      credits: 3,
-    },
-    {
-      model: "flux-pro",
-      handler: deepFluxProV1_1,
-      credits: 6,
-    },
-    {
-      model: "recraft-v3",
-      handler: falRecraftV3,
-      credits: 4,
-    },
-    {
-      model: "recraft-v3",
-      handler: segmindRecraftV3,
-      credits: 2,
-    },
-    {
-      model: "fooocus",
-      handler: falFooocus,
-      credits: 4,
-    },
-    {
-      model: "hidream-image",
-      handler: hidreamFAL,
-      credits: 4,
-    },
-    {
-      model: "ideogram-image",
-      handler: ideogramFAL,
-      credits: 4,
-    },
-  ];
-
-  // Find all handlers matching the requested model
-  const matchingHandlers = generationHandlers
+  const matchingHandlers = imageGenerationHandlers
     .filter((h) => h.model === id)
-    .sort((a, b) => a.credits - b.credits); // Sort by cheapest first
+    .sort((a, b) => a.credits - b.credits);
 
   if (matchingHandlers.length === 0) {
     return res.status(400).json({ error: "Invalid model ID." });
   }
 
-  // Try each handler until one succeeds
   for (const { handler, credits } of matchingHandlers) {
     try {
-      console.log("handler", handler);
       const rawData = await handler(prompt);
-
       let imageUrl = null;
 
       switch (handler) {
@@ -162,12 +104,10 @@ export const generateImage = async (req, res) => {
         case falFooocus:
           imageUrl = rawData?.images?.[0]?.url;
           break;
-
         case deepFluxProV1_1:
           const base64 = rawData?.data?.[0]?.b64_json;
           imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
           break;
-
         case segmindRecraftV3:
           imageUrl = rawData?.output?.[0];
           break;
@@ -177,10 +117,9 @@ export const generateImage = async (req, res) => {
         console.warn(
           "Handler did not return a valid image, trying next one..."
         );
-        continue; // Try next cheaper handler
+        continue;
       }
 
-      // Decrease credits after successful generation
       try {
         await decreaseCredits(userId, credits);
       } catch (creditError) {
@@ -190,60 +129,24 @@ export const generateImage = async (req, res) => {
       return res.status(200).json({ imageUrl });
     } catch (error) {
       console.error("Handler error, trying next one:", error.message || error);
-      continue; // Try next cheaper handler
     }
   }
 
   res.status(500).json({ error: "All handlers failed to generate image." });
 };
 
-// Audio generation function
+// -------- AUDIO GENERATION --------
 export const generateAudio = async (req, res) => {
-  const { prompt, userId } = req.body;
+  const { prompt, userId, duration } = req.body;
   const { id } = req.params;
-
-  console.log("id", id);
 
   if (!prompt || !userId) {
     return res.status(400).json({ error: "Prompt and User ID are required." });
   }
 
-  const audioGenerators = [
-    {
-      model: "stable-audio",
-      handler: stableReplicate,
-      credits: 3,
-    },
-    {
-      model: "stable-audio",
-      handler: stableFal,
-      credits: 6,
-    },
-    {
-      model: "dia-audio",
-      handler: diaTtsFAL,
-      credits: 9,
-    },
-    {
-      model: "multilingual-audio",
-      handler: multilingualTtsFAL,
-      credits: 12,
-    },
-    {
-      model: "american-audio",
-      handler: americanEnglishFAL,
-      credits: 15,
-    },
-    {
-      model: "cassette-audio",
-      handler: cassetteFAL,
-      credits: 6,
-    },
-  ];
-
-  const matchingHandlers = audioGenerators
+  const matchingHandlers = audioGenerationHandlers
     .filter((h) => h.model === id)
-    .sort((a, b) => a.credits - b.credits); // Sort by cheapest first
+    .sort((a, b) => a.credits - b.credits);
 
   if (matchingHandlers.length === 0) {
     return res.status(400).json({ error: "Invalid model ID." });
@@ -251,14 +154,13 @@ export const generateAudio = async (req, res) => {
 
   for (const { handler, credits } of matchingHandlers) {
     try {
-      const audioUrl = await handler(prompt);
+      const audioUrl = await handler(prompt, duration);
 
       if (!audioUrl) {
         console.warn("No audio returned, trying next handler...");
         continue;
       }
 
-      // Deduct credits after success
       try {
         await decreaseCredits(userId, credits);
       } catch (creditError) {
@@ -268,7 +170,6 @@ export const generateAudio = async (req, res) => {
       return res.status(200).json({ audioUrl });
     } catch (error) {
       console.error("Audio handler failed:", error.message || error);
-      continue;
     }
   }
 

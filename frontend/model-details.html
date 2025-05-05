@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -52,6 +53,22 @@
         background-color: #fff;
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .credit-price {
+        background-color: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        color: #0d6efd;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .credit-price i {
+        font-size: 0.9rem;
       }
     </style>
   </head>
@@ -337,15 +354,21 @@
               <div>
                 <h2 id="model-title" class="fw-bold mb-1">Loading...</h2>
                 <p id="model-description" class="model-meta mb-1"></p>
-                <p class="model-meta mb-0">
-                  Source:
-                  <a
-                    id="model-link"
-                    href="#"
-                    target="_blank"
-                    class="text-decoration-none"
-                  ></a>
-                </p>
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                  <p class="model-meta mb-0">
+                    Source:
+                    <a
+                      id="model-link"
+                      href="#"
+                      target="_blank"
+                      class="text-decoration-none"
+                    ></a>
+                  </p>
+                  <div id="credit-price-container" class="credit-price">
+                    <i class="bi bi-coin"></i>
+                    <span id="credit-price">Loading...</span>
+                  </div>
+                </div>
               </div>
               <div class="d-flex gap-2">
                 <a id="chat-button" class="btn btn-primary">
@@ -409,6 +432,7 @@
             fullDetails:
               "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
             chatPage: "imagemodel.html",
+            creditPrice: "5 credits/image",
           },
 
           "recraft-v3": {
@@ -419,6 +443,7 @@
             fullDetails:
               "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
             chatPage: "imagemodel.html",
+            creditPrice: "4 credits/image",
           },
           fooocus: {
             title: "Fooocus: Base Model",
@@ -428,6 +453,7 @@
             fullDetails:
               "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements. It serves as a flexible solution for a wide range of creative applications, from general design to professional content creation.",
             chatPage: "imagemodel.html",
+            creditPrice: "3 credits/image",
           },
 
           // Text-to-Video
@@ -439,6 +465,7 @@
             fullDetails:
               "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
             chatPage: "videomodel.html",
+            creditPrice: "10 credits/second",
           },
 
           "lightricks-ltx-video": {
@@ -449,6 +476,7 @@
             fullDetails:
               "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
             chatPage: "videomodel.html",
+            creditPrice: "15 credits/second",
           },
           "pixverse-v4-text-to-video": {
             title: "PixVerse: Text-to-Video v4",
@@ -458,6 +486,7 @@
             fullDetails:
               "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
             chatPage: "videomodel.html",
+            creditPrice: "12 credits/second",
           },
 
           // Text-to-Audio
@@ -469,15 +498,17 @@
             fullDetails:
               "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
             chatPage: "audiomodel.html",
+            creditPrice: "8 credits/second",
           },
           "cassetteai-sfx-generator": {
             title: "CassetteAI SFX Generator",
             description:
-              "Create stunningly realistic sound effects in seconds with CassetteAI’s SFX model – high-quality, prompt-based audio up to 30 seconds long.",
+              "Create stunningly realistic sound effects in seconds with CassetteAI's SFX model – high-quality, prompt-based audio up to 30 seconds long.",
             link: "https://fal.ai/models/cassetteai/sound-effects-generator",
             fullDetails:
-              "CassetteAI’s Sound Effects Generator allows for fast and natural creation of high-quality sound effects using only a text prompt. It supports up to 30 seconds of audio with near-instant generation time, perfect for games, films, and immersive experiences.",
+              "CassetteAI's Sound Effects Generator allows for fast and natural creation of high-quality sound effects using only a text prompt. It supports up to 30 seconds of audio with near-instant generation time, perfect for games, films, and immersive experiences.",
             chatPage: "audiomodel.html",
+            creditPrice: "6 credits/second",
           },
           "dia-audio": {
             title: "Dia TTS",
@@ -485,8 +516,9 @@
               "Realistic text-to-speech generation using Dia's expressive voice synthesis engine.",
             link: "https://fal.ai/models/fal-ai/dia-tts",
             fullDetails:
-              "Dia TTS generates expressive human-like speech from text prompts. It’s ideal for narrations, AI voices, and conversational interfaces that need a lifelike voice model.",
+              "Dia TTS generates expressive human-like speech from text prompts. It's ideal for narrations, AI voices, and conversational interfaces that need a lifelike voice model.",
             chatPage: "audiomodel.html",
+            creditPrice: "3 credits/100 characters",
           },
           "multilingual-audio": {
             title: "Multilingual TTS",
@@ -496,6 +528,7 @@
             fullDetails:
               "Multilingual TTS by ElevenLabs supports a wide range of languages and accents, enabling natural voice generation across global content. It's a great fit for multilingual applications and localization.",
             chatPage: "audiomodel.html",
+            creditPrice: "5 credits/100 characters",
           },
 
           "american-audio": {
@@ -506,15 +539,17 @@
             fullDetails:
               "This American English TTS model offers high-quality, fluent, and natural-sounding speech, making it suitable for virtual assistants, video dubbing, and storytelling use cases.",
             chatPage: "audiomodel.html",
+            creditPrice: "4 credits/100 characters",
           },
           "pika-text-to-video-v2-1": {
             title: "Pika Text to Video v2.1",
             description:
-              "Generate high-quality, cinematic videos from text prompts with Pika’s advanced v2.1 model – ideal for storytelling and visual ideation.",
+              "Generate high-quality, cinematic videos from text prompts with Pika's advanced v2.1 model – ideal for storytelling and visual ideation.",
             link: "https://fal.ai/models/fal-ai/pika/v2.1/text-to-video",
             fullDetails:
               "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
             chatPage: "videomodel.html",
+            creditPrice: "18 credits/second",
           },
           "luma-ray2-flash": {
             title: "Luma Dream Machine: Ray 2 Flash",
@@ -522,8 +557,9 @@
               "Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.",
             link: "https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash",
             fullDetails:
-              "Luma’s Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
+              "Luma's Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
             chatPage: "videomodel.html",
+            creditPrice: "20 credits/second",
           },
           "hidream-i1-dev": {
             title: "HiDream I1 (Dev)",
@@ -533,6 +569,7 @@
             fullDetails:
               "HiDream I1 (Dev) is a text-to-image model optimized for fast generation and visual fidelity. It excels at interpreting imaginative prompts and rendering detailed visuals, making it suitable for artists, creatives, and rapid prototyping scenarios.",
             chatPage: "imagemodel.html",
+            creditPrice: "6 credits/image",
           },
           "ideogram-v3": {
             title: "Ideogram V3",
@@ -542,6 +579,7 @@
             fullDetails:
               "Ideogram V3 is a next-gen text-to-image model crafted for storytelling and imaginative concepts. It excels at rendering scenes with symbolic, surreal, or fantastical elements, making it perfect for writers, concept artists, and world-builders.",
             chatPage: "imagemodel.html",
+            creditPrice: "7 credits/image",
           },
         };
 
@@ -555,6 +593,15 @@
           document.getElementById("model-link").href = model.link;
           document.getElementById("model-full-details").textContent =
             model.fullDetails;
+
+          // Display credit price
+          if (model.creditPrice) {
+            document.getElementById("credit-price").textContent =
+              model.creditPrice;
+          } else {
+            document.getElementById("credit-price-container").style.display =
+              "none";
+          }
 
           // Optional: Set up chat button redirection
           const chatButton = document.getElementById("chat-button");
@@ -570,6 +617,8 @@
             "Model Not Found";
           document.getElementById("model-full-details").textContent =
             "The requested model ID is invalid or not available.";
+          document.getElementById("credit-price-container").style.display =
+            "none";
         }
         function setAvatarInitials() {
           // Get the stored user data

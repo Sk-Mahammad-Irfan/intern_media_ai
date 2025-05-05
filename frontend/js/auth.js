@@ -176,6 +176,10 @@ function setAvatarInitials() {
     mobileEmailElem.textContent = userData.email || "No email";
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+  setAvatarInitials();
+});
+
 // Update sidebar active state based on current page
 function updateSidebarActiveState() {
   const currentPath =
