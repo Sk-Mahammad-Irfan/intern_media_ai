@@ -11,6 +11,15 @@
       rel="stylesheet"
     />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" />
    <link href="css/styles.css" rel="stylesheet"/>
    <style>
  
@@ -127,7 +136,7 @@
     class="btn btn-light rounded-circle "
     style="width: 36px; height: 36px"
   >
-   <i class="bi bi-search"></i>
+   <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 
  <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
@@ -292,16 +301,23 @@
       <!-- Main Content -->
       <div class="d-flex">
         <!-- Sidebar -->
-        <div id="sidebar" class="p-3">
-          <button class="btn btn-outline-secondary w-100 mb-3">New Room</button>
-          <ul class="list-unstyled text-muted">
-            <li class="mb-2"><em>Untitled Chat</em></li>
-     
-          </ul>
+      <div id="sidebar" class="p-3">
+        <button id="newRoomBtn" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
+    
+        <!-- Room name & timestamp -->
+        <div id="roomInfo" class="mb-3">
+          <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
+          <div id="roomTimestamp" class="text-muted text-sm"></div>
         </div>
+      </div>
     
         <!-- Main Area -->
         <div class="flex-grow-1 d-flex flex-column">
+
+          <!-- New Room button visible only on mobile -->
+        <div class="px-4 pt-3 d-md-none">
+          <button id="newRoomBtnMobile" class="btn btn-outline-secondary mb-3 w-100">New Room</button>
+        </div>
 
         <!-- Model Selector Header -->
         <div class="px-4 pt-3">
@@ -552,6 +568,39 @@
             console.error("Copy failed:", err);
           });
         }
+
+      
+// Create new room on click for both sidebar and mobile buttons
+["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
+  const btn = document.getElementById(id);
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const createdAt = new Date().toISOString();
+      const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+      window.open(url, "_blank");
+    });
+  }
+});
+
+// Parse URL params
+const params = new URLSearchParams(window.location.search);
+const roomCreatedAt = params.get("room");
+
+if (roomCreatedAt) {
+  const date = new Date(roomCreatedAt);
+
+  const formatted = date.toLocaleString(undefined, {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  document.getElementById("roomTitle").textContent = "Room created";
+  document.getElementById("roomTimestamp").textContent = formatted;
+}
 
       
     </script>
