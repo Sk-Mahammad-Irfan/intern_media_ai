@@ -32,6 +32,7 @@ function getCookie(name) {
   return "";
 }
 
+// Toggle between login and register forms
 toggleLink.addEventListener("click", (e) => {
   e.preventDefault();
   isLogin = !isLogin;
@@ -45,6 +46,7 @@ toggleLink.addEventListener("click", (e) => {
   usernameField.querySelector("input").required = !isLogin;
 });
 
+// Form submission handler
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   msg.textContent = "";
@@ -64,7 +66,6 @@ form.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-    console.log(data);
 
     if (data.success) {
       msg.classList.remove("text-danger");
@@ -87,7 +88,8 @@ form.addEventListener("submit", async (e) => {
         localStorage.setItem("userId", data.user.userId);
         document.cookie = `token=${data.token}; HttpOnly; Path=/;`;
 
-        // Redirect to dashboard or home page after successful login
+        // Update UI and redirect
+        setAvatarInitials();
         window.location.href = "index.html";
       }
     } else {
@@ -100,6 +102,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+// Google login handler
 document.getElementById("google-login").addEventListener("click", () => {
   window.location.href = "http://localhost:5000/api/auth/google";
 });
@@ -115,14 +118,12 @@ window.addEventListener("load", () => {
   }
 });
 
-/**
- * Authentication utility functions
- */
+// Authentication utility functions
 
 // Check if user is authenticated
 function isAuthenticated() {
   const userData = localStorage.getItem("user_data");
-  const authToken = localStorage.getItem("Auth_token");
+  const authToken = getCookie("auth_token");
 
   return !!(userData || authToken);
 }
@@ -130,35 +131,39 @@ function isAuthenticated() {
 // Update UI based on authentication state
 function updateAuthUI() {
   const signInButtons = document.querySelectorAll(".auth-sign-in-button");
+  const userDropdown = document.getElementById("userAvatarDropdown");
+  const mobileAuthSection = document.querySelector(".mobile-auth-only");
 
   if (isAuthenticated()) {
-    // User is authenticated, hide sign in buttons
+    // User is authenticated
     signInButtons.forEach((button) => {
       button.style.display = "none";
     });
+    if (userDropdown) userDropdown.classList.remove("d-none");
+    if (mobileAuthSection) mobileAuthSection.classList.remove("dnone");
   } else {
-    // User is not authenticated, show sign in buttons
+    // User is not authenticated
     signInButtons.forEach((button) => {
       button.style.display = "block";
     });
+    if (userDropdown) userDropdown.classList.add("d-none");
+    if (mobileAuthSection) mobileAuthSection.classList.add("dnone");
   }
 }
 
+// Set avatar initials from user data
 function setAvatarInitials() {
-  // Get the stored user data
   const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-  // Get username or fallback to "User"
   const username = userData.username || "User";
   const firstInitial = username.trim()[0].toUpperCase();
 
-  // Update all avatar elements
+  // Update all avatars
   const avatars = document.querySelectorAll("#navbar-avatar");
   avatars.forEach((avatar) => {
     avatar.textContent = firstInitial;
   });
 
-  // Update dropdown username and email if they exist
+  // Update dropdown info
   const usernameElem = document.getElementById("account-username");
   const emailElem = document.getElementById("account-email");
   const mobileUsernameElem = document.getElementById("account-username-mobile");
@@ -173,11 +178,10 @@ function setAvatarInitials() {
 
 // Update sidebar active state based on current page
 function updateSidebarActiveState() {
-  // Get current page path
   const currentPath =
     window.location.pathname.split("/").pop() || "dashboard.html";
 
-  // Remove active class from all nav links
+  // Update desktop sidebar
   document.querySelectorAll(".sidebar .nav-link").forEach((link) => {
     link.classList.remove(
       "active",
@@ -188,7 +192,6 @@ function updateSidebarActiveState() {
     link.classList.add("text-secondary");
   });
 
-  // Add active class to current page link
   const currentLink = document.querySelector(
     `.sidebar .nav-link[href="${currentPath}"]`
   );
@@ -202,7 +205,7 @@ function updateSidebarActiveState() {
     );
   }
 
-  // Also update mobile menu active state
+  // Update mobile menu
   document.querySelectorAll(".offcanvas-body .nav-link").forEach((link) => {
     const linkPath = link.getAttribute("href");
     if (linkPath === currentPath) {
@@ -225,34 +228,27 @@ function updateSidebarActiveState() {
   });
 }
 
+// Logout function
+function logout() {
+  document.cookie =
+    "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  localStorage.removeItem("user_data");
+  localStorage.removeItem("userId");
+  window.location.href = "index.html";
+}
+
 // Initialize authentication UI when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   updateAuthUI();
   updateSidebarActiveState();
-  setAvatarInitials();
 
   const token = getCookie("auth_token");
   const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
-  if (token && userData) {
-    // Show avatar dropdown
-    const userDropdown = document.getElementById("userAvatarDropdown");
-    if (userDropdown) {
-      userDropdown.classList.remove("d-none");
-    }
-
-    // Set initials
-    const avatar = document.getElementById("navbar-avatar");
-    if (avatar && userData.username) {
-      avatar.textContent = userData.username.charAt(0).toUpperCase();
-    }
-
-    // Set user info in dropdown
-    const nameElem = document.getElementById("account-username");
-    const emailElem = document.getElementById("account-email");
-    if (nameElem && emailElem) {
-      nameElem.textContent = userData.username || "User";
-      emailElem.textContent = userData.email || "No email";
-    }
+  if (token && userData.username) {
+    setAvatarInitials();
   }
 });
+
+// Expose logout function to global scope
+window.logout = logout;
