@@ -1,59 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Video Model</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
-    crossorigin="anonymous" 
-    referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/styles.css"/>
-    <style>
 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Model</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
     #chat {
-   height: calc(100vh - 300px);
-  overflow-y: auto;
-  padding: 1rem;
-  padding-bottom: 130px; 
- 
-}
-    #promptInputSection {
-  position: fixed;
-  bottom: 0;
-  left: 250px;
-  right: 0;
-  padding: 1rem;
-  
-  box-sizing: border-box;
-  max-width: calc(100vw - 250px);
-  overflow-x: hidden;
-  z-index: 1000; 
-}
+      height: calc(100vh - 300px);
+      overflow-y: auto;
+      padding: 1rem;
+      padding-bottom: 130px;
 
-  .input-bar{
-    border: 0.6px solid #ddd;
-    margin-right: 10px;
-  }
+    }
+
+    #promptInputSection {
+      position: fixed;
+      bottom: 0;
+      left: 250px;
+      right: 0;
+      padding: 1rem;
+
+      box-sizing: border-box;
+      max-width: calc(100vw - 250px);
+      overflow-x: hidden;
+      z-index: 1000;
+    }
+
+    .input-bar {
+      border: 0.6px solid #ddd;
+      margin-right: 10px;
+    }
+
     #sidebar {
       width: 250px;
       height: 100vh;
       border-right: 1px solid #dee2e6;
       overflow-y: auto;
     }
+
     .model-card {
       border: 1px solid #dee2e6;
       border-radius: 12px;
@@ -63,297 +59,272 @@
     }
 
     .user-message {
-  background-color: #0d6efd;
-  color: white;
-  border-radius: 20px;
-  max-width: 70%;
-  word-wrap: break-word;
-}
+      background-color: #0d6efd;
+      color: white;
+      border-radius: 20px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
 
-.ai-message {
-  background-color: #e9ecef;
-  border-radius: 20px;
-  max-width: 70%;
-  word-wrap: break-word;
-}
+    .ai-message {
+      background-color: #e9ecef;
+      border-radius: 20px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
 
 
-  .modern-select {
-    border-radius: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    border: 1px solid #ced4da;
-    background-color: #f8f9fa;
-    font-size: 0.9rem;
-    width: auto;
-    min-width: 160px;
-  }
+    .modern-select {
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid #ced4da;
+      background-color: #f8f9fa;
+      font-size: 0.9rem;
+      width: auto;
+      min-width: 160px;
+    }
 
-  .model-hr {
-  border-top: 1.5px solid #6c757d; 
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
+    .model-hr {
+      border-top: 1.5px solid #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
 
-@media (max-width: 768px) {
-  #promptInputSection {
-    left: 0;
-    max-width: 100vw;
-  }
-  #sidebar {display: none;}
-    
-}
+    @media (max-width: 768px) {
+      #promptInputSection {
+        left: 0;
+        max-width: 100vw;
+      }
 
-    </style>
-  </head>
-  <body>
-    <div class="main-container">
-      <!-- Top Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-          <!-- Brand -->
-          <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+      #sidebar {
+        display: none;
+      }
 
-          <!-- Mobile controls -->
-          <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
-            <button
-    id="mobileSearchBtn"
-    class="btn btn-light rounded-circle "
-    style="width: 36px; height: 36px"
-  >
-   <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
+    }
+  </style>
+</head>
 
- <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
- <div
-   id="mobileSearchSidebar"
-   class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-   style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;"
-   >
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="mb-0">Search</h5>
-      <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-    <input
-      type="text"
-      class="form-control rounded-pill mb-3"
-      id="mobileSearchInput"
-      placeholder="Search models..."
-    />
-    <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto;">
-      <!-- Results will be appended here -->
-    </div>
-  </div>
-            <div class="dropdown">
-              <a
-                href="#"
-                class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                id="navbarDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <div
-                id = "navbar-avatar"
-                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                  style="width: 32px; height: 32px; font-size: 14px;"
-                >
-                  U
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
-                <div class="mobile-auth-only dnone">
-                  <li>
-                    <h6 class="dropdown-header" id="account-username-mobile">
-                      Username
-                    </h6>
-                    <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
-                      email@example.com
-                    </p>
-                  </li>
-                  <li><hr class="dropdown-divider" /></li>
-                </div>
-                <li><a class="dropdown-item" href="model.html">Models</a></li>
-                <li><a class="dropdown-item" href="videomodel.html">Chat</a></li>
-                <li><a class="dropdown-item" href="#">Rankings</a></li>
-                <li><a class="dropdown-item" href="#">Docs</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <div class="mobile-auth-only dnone">
-                  <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-                  <li>
-                    <a class="dropdown-item" href="settings.html">Settings</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="provisioning.html"
-                      >Provisioning Keys</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="integrations.html"
-                      >Integrations</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="privacy.html">Privacy</a>
-                  </li>
-                  <li><hr class="dropdown-divider" /></li>
-                     
-                  <li>
-                    <a
-                      class="dropdown-item text-danger"
-                      href="index.html"
-                      onclick="logout()"
-                      >Logout</a
-                    >
-                  </li>
-                 </div>
-                <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
-                </a></li>
-              </ul>
+<body>
+  <div class="main-container">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+
+        <!-- Mobile controls -->
+        <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+          <button id="mobileSearchBtn" class="btn btn-light rounded-circle " style="width: 36px; height: 36px">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+
+          <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+          <div id="mobileSearchSidebar" class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+            style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">Search</h5>
+              <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <input type="text" class="form-control rounded-pill mb-3" id="mobileSearchInput"
+              placeholder="Search models..." />
+            <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto;">
+              <!-- Results will be appended here -->
             </div>
           </div>
-
-          <!-- Search (Desktop only) -->
-          <form class="d-none d-lg-block mx-3 flex-grow-1">
-              <div class="position-relative w-100">
-                <!-- Left search icon -->
-                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-            
-                <!-- Input -->
-                <input
-                  class="form-control rounded-pill bg-light ps-5 pe-4"
-                  id="navbarSearch"
-                  type="search"
-                  placeholder="Search models"
-                />
-            
-                <!-- Right slash icon -->
-                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-family: monospace;">
-                  /
-                </span>
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <div id="navbar-avatar"
+                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                style="width: 32px; height: 32px; font-size: 14px;">
+                U
               </div>
-            </form>
-
-          <!-- Desktop Nav Items -->
-          <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="videomodel.html">Chat</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
-            <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
-            <li class="nav-item mx-1" id="signInDesktop">
-              <a class="nav-link fw-medium" href="auth.html">
-                <button type="button" class="btn btn-outline-primary">Sign in</button>
-              </a>
-            </li>
-            <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-              <a
-                class="nav-link dropdown-toggle d-flex align-items-center"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <div id="navbar-avatar" class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
-                  U
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><h6 class="dropdown-header" id="account-username">Username</h6></li>
-                <li><p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p></li>
-                <li><hr class="dropdown-divider" /></li>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+              <div class="mobile-auth-only dnone">
+                <li>
+                  <h6 class="dropdown-header" id="account-username-mobile">
+                    Username
+                  </h6>
+                  <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                    email@example.com
+                  </p>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+              </div>
+              <li><a class="dropdown-item" href="model.html">Models</a></li>
+              <li><a class="dropdown-item" href="videomodel.html">Chat</a></li>
+              <li><a class="dropdown-item" href="#">Rankings</a></li>
+              <li><a class="dropdown-item" href="#">Docs</a></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <div class="mobile-auth-only dnone">
                 <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-                <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-                <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-                <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </nav>
+                <li>
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="integrations.html">Integrations</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="privacy.html">Privacy</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
 
-
-      <!-- Main Content -->
-      <div class="d-flex">
-        
-      <!-- Sidebar -->
-          <div id="sidebar" class="p-3">
-          <button id="newRoomBtnSidebar" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
-
-          <!-- Room name & timestamp -->
-          <div id="roomInfo" class="mb-3">
-            <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
-            <div id="roomTimestamp" class="text-muted text-sm"></div>
+                <li>
+                  <a class="dropdown-item text-danger" href="index.html" onclick="logout()">Logout</a>
+                </li>
+              </div>
+              <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                  <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
+                </a></li>
+            </ul>
           </div>
         </div>
 
-        
+        <!-- Search (Desktop only) -->
+        <form class="d-none d-lg-block mx-3 flex-grow-1">
+          <div class="position-relative w-100">
+            <!-- Left search icon -->
+            <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
 
-        <!-- Main Area -->
-        <div class="flex-grow-1 d-flex flex-column">
+            <!-- Input -->
+            <input class="form-control rounded-pill bg-light ps-5 pe-4" id="navbarSearch" type="search"
+              placeholder="Search models" />
+
+            <!-- Right slash icon -->
+            <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+              style="font-family: monospace;">
+              /
+            </span>
+          </div>
+        </form>
+
+        <!-- Desktop Nav Items -->
+        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="videomodel.html">Chat</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
+          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+          <li class="nav-item mx-1" id="signInDesktop">
+            <a class="nav-link fw-medium" href="auth.html">
+              <button type="button" class="btn btn-outline-primary">Sign in</button>
+            </a>
+          </li>
+          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <div id="navbar-avatar"
+                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                style="width: 32px; height: 32px; font-size: 14px;">
+                U
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <h6 class="dropdown-header" id="account-username">Username</h6>
+              </li>
+              <li>
+                <p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+              <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
+              <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
+              <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
+              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+              <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <div class="d-flex">
+
+      <!-- Sidebar -->
+      <div id="sidebar" class="p-3">
+        <button id="newRoomBtnSidebar" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
+
+        <!-- Room name & timestamp -->
+        <div id="roomInfo" class="mb-3">
+          <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
+          <div id="roomTimestamp" class="text-muted text-sm"></div>
+        </div>
+      </div>
+
+
+
+      <!-- Main Area -->
+      <div class="flex-grow-1 d-flex flex-column">
 
         <!-- New Room button visible only on mobile -->
         <div class="px-4 pt-3 d-md-none">
           <button id="newRoomBtnMobile" class="btn btn-outline-secondary mb-3 w-100">New Room</button>
         </div>
 
-<!-- Model Selector Header -->
-    <div class="px-4 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4">
-        <div class="d-flex align-items-center gap-2">
-          <label class="fw-semibold mb-0">Model:</label>
-          <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-            <!-- Dynamically populated -->
-          </select>
-        </div>
-      </div>
-      <hr class="model-hr" />
-    </div>
-
-
-    
-    
-          <!-- Chat Section -->
-          <div id="chat" class="container-fluid mt-4">
-            <!-- Chat messages with audio will appear here -->
+        <!-- Model Selector Header -->
+        <div class="px-4 pt-3">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <label class="fw-semibold mb-0">Model:</label>
+              <select id="modelSelector" class="form-select form-select-sm modern-select"
+                onchange="handleModelChange()">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
           </div>
-    
-          
-              
-  <!-- Chat Input Bar -->
-<div id="promptInputSection" class="container my-3">
-  <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 input-bar" style="max-width: 100%;">
+          <hr class="model-hr" />
+        </div>
 
-    <!-- Prompt Input -->
-    <input 
-    type="text" 
-    id="promptInput"  
-    class="form-control border-0 bg-transparent text-dark"
-    placeholder="Start a message..." 
-    style="box-shadow: none; outline: none;"
-  >
 
-    <!-- Send Button -->
-    <button 
-    class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" 
-    style="width: 40px; height: 40px;" 
-    onclick="generateVideo()"  
-  >
-    <i class="bi bi-send-fill"></i>
-  </button>
-  
 
-  </div>
-</div>
+
+        <!-- Chat Section -->
+        <div id="chat" class="container-fluid mt-4">
+          <!-- Chat messages with audio will appear here -->
+        </div>
+
+
+
+        <!-- Chat Input Bar -->
+        <div id="promptInputSection" class="container my-3">
+          <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 input-bar"
+            style="max-width: 100%;">
+
+            <!-- Prompt Input -->
+            <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
+              placeholder="Start a message..." style="box-shadow: none; outline: none;">
+
+            <!-- Send Button -->
+            <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 40px;" onclick="generateVideo()">
+              <i class="bi bi-send-fill"></i>
+            </button>
+
+
+          </div>
+        </div>
       </div>
     </div>
     <!-- Scripts -->
@@ -363,16 +334,17 @@
     <script src="js/search.js"></script>
     <script src="js/model-selector.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/config.js"></script>
     <script>
-      
-  const chat = document.getElementById("chat");
+
+      const chat = document.getElementById("chat");
 
 
-  function appendUserMessage(prompt) {
-    const userWrapper = document.createElement("div");
-    userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+      function appendUserMessage(prompt) {
+        const userWrapper = document.createElement("div");
+        userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
 
-    userWrapper.innerHTML = `
+        userWrapper.innerHTML = `
       <div class="user-message p-3">
         ${prompt}
       </div>
@@ -383,247 +355,248 @@
         title="Copy"
       ></i>
     `;
-    chat.appendChild(userWrapper);
-    chat.scrollTop = chat.scrollHeight;
-  }
+        chat.appendChild(userWrapper);
+        chat.scrollTop = chat.scrollHeight;
+      }
 
-  function appendGeneratingVideoMessage() {
-    const aiDiv = document.createElement("div");
-    aiDiv.className = "d-flex justify-content-start mb-3";
-    aiDiv.innerHTML = `
+      function appendGeneratingVideoMessage() {
+        const aiDiv = document.createElement("div");
+        aiDiv.className = "d-flex justify-content-start mb-3";
+        aiDiv.innerHTML = `
       <div class="ai-message p-3">
         <i class="bi bi-camera-reels me-2"></i>Generating video...
       </div>
     `;
-    chat.appendChild(aiDiv);
-    chat.scrollTop = chat.scrollHeight;
-  }
+        chat.appendChild(aiDiv);
+        chat.scrollTop = chat.scrollHeight;
+      }
 
-  function appendErrorMessage(message) {
-    const chatMessages = document.getElementById("chat");
+      function appendErrorMessage(message) {
+        const chatMessages = document.getElementById("chat");
 
-    const errorDiv = document.createElement("div");
-    errorDiv.className = "d-flex justify-content-start mb-3";
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "d-flex justify-content-start mb-3";
 
-    errorDiv.innerHTML = `
+        errorDiv.innerHTML = `
       <div class="ai-message p-3 text-danger border border-danger">
         <i class="bi bi-exclamation-triangle me-2"></i>${message}
       </div>
     `;
 
-    chatMessages.appendChild(errorDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  function appendGeneratedVideo(videoUrl) {
-  const chatMessages = document.getElementById("chat");
-
-  // Remove the "Generating video..." message
-  const loadingMessage = document.querySelector(".generating-video");
-  if (loadingMessage) {
-    loadingMessage.remove();
-  }
-
-  // Create a message container for the AI
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
-
-  // Create the message bubble
-  const bubble = document.createElement("div");
-  bubble.className = "ai-message p-3";
-
-  // Caption
-  const caption = document.createElement("div");
-  caption.textContent = "Generated Video:";
-  caption.classList.add("mb-2");
-
-  // Video
-  const videoElement = document.createElement("video");
-  videoElement.controls = true;
-  videoElement.src = videoUrl;
-  videoElement.classList.add("rounded", "w-100", "shadow");
-  videoElement.style.maxWidth = "500px";
-
-  // Append
-  bubble.appendChild(caption);
-  bubble.appendChild(videoElement);
-  messageElement.appendChild(bubble);
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-async function generateVideo() {
-  const prompt = document.getElementById("promptInput").value.trim();
-  const userId = localStorage.getItem("userId");
-
-  if (!prompt) {
-    appendErrorMessage("Please enter a prompt.");
-    console.warn("[generateVideo] Empty prompt — user must type something.");
-    return;
-  }
-
-  console.log(`[generateVideo] Sending prompt: "${prompt}" with userId: ${userId}`);
-
-  appendUserMessage(prompt);
-  appendGeneratingVideoMessage();
-
-  // Get model id from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const modelId = urlParams.get("id");
-
-  // Map to backendModelId
-  let backendModelId = null;
-  if (modelId === "wan-ai-wan21-t2v-13b") {
-    backendModelId = "wan21-t2v"; // ← Add your correct backend name here
-  } 
-  else if (modelId === "lightricks-ltx-video") {
-    backendModelId = "ltx-video";
-  }
-  else if (modelId === "pika-text-to-video-v2-1") {
-    backendModelId = "pika-video";
-  }
-   else if (modelId === "pixverse-v4-text-to-video") {
-    backendModelId = "pixverse-v4"; // ← Add your correct backend name here
-  }
-  else if (modelId === "luma-ray2-flash") {
-    backendModelId = "luma-video";
-  }
-  else {
-    appendErrorMessage("Unsupported model ID in URL. Cannot generate video.");
-    return;
-  }
-
-  try {
-    const response = await fetch(`http://localhost:5000/api/ai/generate-video/${backendModelId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, userId }),
-    });
-
-    console.log("[generateVideo] Response received from server");
-
-    if (!response.ok) {
-      if (response.status === 402) {
-        appendErrorMessage("Insufficient credits to generate video. Please purchase more credits.");
-      } else {
-        console.error(`[generateVideo] Server responded with status: ${response.status}`);
-        appendErrorMessage("Server error while generating video. Please try again later.");
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       }
-      return;
-    }
 
-    const data = await response.json();
-    console.log("[generateVideo] JSON parsed:", data);
+      function appendGeneratedVideo(videoUrl) {
+        const chatMessages = document.getElementById("chat");
 
-    if (data.video_url) {
-      console.log(`[generateVideo] Video generated successfully: ${data.video_url}`);
-      appendGeneratedVideo(data.video_url);
-    } else {
-      console.warn("[generateVideo] No video_url in response:", data);
-      appendErrorMessage("Video generation failed. No video URL returned.");
-    }
-  } catch (error) {
-    console.error("[generateVideo] Fetch error:", error);
-    appendErrorMessage("Error connecting to server. Please check your connection.");
-  }
-}
-
-
-  function copyToClipboard(icon) {
-    const messageText = icon.previousElementSibling.innerText.trim();
-    navigator.clipboard.writeText(messageText).then(() => {
-      icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-      setTimeout(() => {
-        icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-      }, 1500);
-    }).catch(err => {
-      console.error("Copy failed:", err);
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const prompt = params.get('prompt');
-    if (prompt) {
-      document.getElementById('promptInput').value = prompt; // assuming you have an input with id 'chatInput'
-    }
-  });
-
-// Create new room on click for both sidebar and mobile buttons
-["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const createdAt = new Date().toISOString();
-      const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-      window.open(url, "_blank");
-    });
-  }
-});
-
-// Parse URL params
-const params = new URLSearchParams(window.location.search);
-const roomCreatedAt = params.get("room");
-
-if (roomCreatedAt) {
-  const date = new Date(roomCreatedAt);
-
-  const formatted = date.toLocaleString(undefined, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  document.getElementById("roomTitle").textContent = "Room created";
-  document.getElementById("roomTimestamp").textContent = formatted;
-}
-
-    function setAvatarInitials() {
-      const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-      const avatars = document.querySelectorAll("#navbar-avatar");
-      const userElements = {
-        desktop: {
-          username: document.getElementById("account-username"),
-          email: document.getElementById("account-email"),
-        },
-        mobile: {
-          username: document.getElementById("account-username-mobile"),
-          email: document.getElementById("account-email-mobile"),
+        // Remove the "Generating video..." message
+        const loadingMessage = document.querySelector(".generating-video");
+        if (loadingMessage) {
+          loadingMessage.remove();
         }
-      };
 
-      const isLoggedIn = !!userData.username;
+        // Create a message container for the AI
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
 
-      if (isLoggedIn) {
-        const username = userData.username;
-        const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+        // Create the message bubble
+        const bubble = document.createElement("div");
+        bubble.className = "ai-message p-3";
 
-        avatars.forEach(avatar => avatar.textContent = firstInitial);
+        // Caption
+        const caption = document.createElement("div");
+        caption.textContent = "Generated Video:";
+        caption.classList.add("mb-2");
 
-        userElements.desktop.username && (userElements.desktop.username.textContent = username);
-        userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
+        // Video
+        const videoElement = document.createElement("video");
+        videoElement.controls = true;
+        videoElement.src = videoUrl;
+        videoElement.classList.add("rounded", "w-100", "shadow");
+        videoElement.style.maxWidth = "500px";
 
-        userElements.mobile.username && (userElements.mobile.username.textContent = username);
-        userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-      } else {
-        avatars.forEach(avatar => {
-          avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-        });
+        // Append
+        bubble.appendChild(caption);
+        bubble.appendChild(videoElement);
+        messageElement.appendChild(bubble);
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
 
-        ["desktop", "mobile"].forEach(view => {
-          userElements[view].username && (userElements[view].username.textContent = "Guest");
-          userElements[view].email && (userElements[view].email.textContent = "");
+      async function generateVideo() {
+        const prompt = document.getElementById("promptInput").value.trim();
+        const userId = localStorage.getItem("userId");
+
+        if (!prompt) {
+          appendErrorMessage("Please enter a prompt.");
+          console.warn("[generateVideo] Empty prompt — user must type something.");
+          return;
+        }
+
+        console.log(`[generateVideo] Sending prompt: "${prompt}" with userId: ${userId}`);
+
+        appendUserMessage(prompt);
+        appendGeneratingVideoMessage();
+
+        // Get model id from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get("id");
+
+        // Map to backendModelId
+        let backendModelId = null;
+        if (modelId === "wan-ai-wan21-t2v-13b") {
+          backendModelId = "wan21-t2v"; // ← Add your correct backend name here
+        }
+        else if (modelId === "lightricks-ltx-video") {
+          backendModelId = "ltx-video";
+        }
+        else if (modelId === "pika-text-to-video-v2-1") {
+          backendModelId = "pika-video";
+        }
+        else if (modelId === "pixverse-v4-text-to-video") {
+          backendModelId = "pixverse-v4"; // ← Add your correct backend name here
+        }
+        else if (modelId === "luma-ray2-flash") {
+          backendModelId = "luma-video";
+        }
+        else {
+          appendErrorMessage("Unsupported model ID in URL. Cannot generate video.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${backendModelId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt, userId }),
+          });
+
+          console.log("[generateVideo] Response received from server");
+
+          if (!response.ok) {
+            if (response.status === 402) {
+              appendErrorMessage("Insufficient credits to generate video. Please purchase more credits.");
+            } else {
+              console.error(`[generateVideo] Server responded with status: ${response.status}`);
+              appendErrorMessage("Server error while generating video. Please try again later.");
+            }
+            return;
+          }
+
+          const data = await response.json();
+          console.log("[generateVideo] JSON parsed:", data);
+
+          if (data.video_url) {
+            console.log(`[generateVideo] Video generated successfully: ${data.video_url}`);
+            appendGeneratedVideo(data.video_url);
+          } else {
+            console.warn("[generateVideo] No video_url in response:", data);
+            appendErrorMessage("Video generation failed. No video URL returned.");
+          }
+        } catch (error) {
+          console.error("[generateVideo] Fetch error:", error);
+          appendErrorMessage("Error connecting to server. Please check your connection.");
+        }
+      }
+
+
+      function copyToClipboard(icon) {
+        const messageText = icon.previousElementSibling.innerText.trim();
+        navigator.clipboard.writeText(messageText).then(() => {
+          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+          setTimeout(() => {
+            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+          }, 1500);
+        }).catch(err => {
+          console.error("Copy failed:", err);
         });
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", setAvatarInitials);
+      window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const prompt = params.get('prompt');
+        if (prompt) {
+          document.getElementById('promptInput').value = prompt; // assuming you have an input with id 'chatInput'
+        }
+      });
+
+      // Create new room on click for both sidebar and mobile buttons
+      ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            const createdAt = new Date().toISOString();
+            const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+            window.open(url, "_blank");
+          });
+        }
+      });
+
+      // Parse URL params
+      const params = new URLSearchParams(window.location.search);
+      const roomCreatedAt = params.get("room");
+
+      if (roomCreatedAt) {
+        const date = new Date(roomCreatedAt);
+
+        const formatted = date.toLocaleString(undefined, {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        document.getElementById("roomTitle").textContent = "Room created";
+        document.getElementById("roomTimestamp").textContent = formatted;
+      }
+
+      function setAvatarInitials() {
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+
+        const avatars = document.querySelectorAll("#navbar-avatar");
+        const userElements = {
+          desktop: {
+            username: document.getElementById("account-username"),
+            email: document.getElementById("account-email"),
+          },
+          mobile: {
+            username: document.getElementById("account-username-mobile"),
+            email: document.getElementById("account-email-mobile"),
+          }
+        };
+
+        const isLoggedIn = !!userData.username;
+
+        if (isLoggedIn) {
+          const username = userData.username;
+          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+
+          avatars.forEach(avatar => avatar.textContent = firstInitial);
+
+          userElements.desktop.username && (userElements.desktop.username.textContent = username);
+          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
+
+          userElements.mobile.username && (userElements.mobile.username.textContent = username);
+          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
+        } else {
+          avatars.forEach(avatar => {
+            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+          });
+
+          ["desktop", "mobile"].forEach(view => {
+            userElements[view].username && (userElements[view].username.textContent = "Guest");
+            userElements[view].email && (userElements[view].email.textContent = "");
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", setAvatarInitials);
 
 
-</script>
-  </body>
+    </script>
+</body>
+
 </html>

@@ -10,7 +10,7 @@ async function getUserCredits(userId) {
     }
 
     const response = await fetch(
-      `http://localhost:5000/api/credits/credits/${userId}`,
+      `${BACKEND_URL}/api/credits/credits/${userId}`,
       {
         method: "GET",
         headers: {
@@ -46,7 +46,7 @@ async function updateUserCredits(userId, amount) {
     }
 
     const response = await fetch(
-      "http://localhost:5000/api/credits/updatecredits",
+      `${BACKEND_URL}/api/credits/updatecredits`,
       {
         method: "PATCH",
         headers: {
