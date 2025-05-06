@@ -9,6 +9,8 @@ import {
 import passport from "passport";
 import { requireSignIn } from "../middlewares/authMiddleware.js";
 import JWT from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
 
