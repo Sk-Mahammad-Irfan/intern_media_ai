@@ -130,7 +130,7 @@
             }, 1500);
           } else {
             const response = await fetch(
-              "http://localhost:5000/api/auth/success",
+              `${BACKEND_URL}/api/auth/success`,
               {
                 method: "GET",
                 credentials: "include",
@@ -186,5 +186,6 @@
         }
       });
     </script>
+    <script src="js/config.js"></script>
   </body>
 </html>
