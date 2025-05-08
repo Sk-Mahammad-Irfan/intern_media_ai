@@ -513,7 +513,7 @@
                 return;
               }
               else {
-                replaceWithErrorMessage("❌ Error generating audio.");
+                replaceWithErrorMessage(`❌ Error generating audio. ${data.error}`);
               }
             }
           } catch (err) {

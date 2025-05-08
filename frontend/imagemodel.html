@@ -468,18 +468,20 @@ async function generateImage() {
 
     const genMsg = document.getElementById("generating-msg");
 
+    const data = await res.json();
+
     if (res.status === 402) {
       replaceWithErrorMessage("Insufficient credits.");
       return;
     }
 
     if (!res.ok) {
-      const errMsg = `Server returned status ${res.status} (${res.statusText})`;
+      const errMsg = `Server returned status ${res.status} (${data.error})`;
       replaceWithErrorMessage(errMsg);
       return;
     }
 
-    const data = await res.json();
+    
     if (genMsg) genMsg.remove();
 
     if (data.imageUrl) {

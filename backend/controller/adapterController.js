@@ -21,8 +21,11 @@ export const generateVideo = async (req, res) => {
   const { id } = req.params;
   const { prompt, userId } = req.body;
 
-  if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required." });
+  if (!userId) {
+    return res.status(401).json({ error: "Please login to generate videos." });
+  }
+  if (!prompt) {
+    return res.status(400).json({ error: "Please enter a prompt." });
   }
 
   const matchingHandlers = videoGenerationHandlers
@@ -81,8 +84,11 @@ export const generateImage = async (req, res) => {
   const { id } = req.params;
   const { prompt, userId } = req.body;
 
-  if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required." });
+  if (!userId) {
+    return res.status(401).json({ error: "Please login to generate videos." });
+  }
+  if (!prompt) {
+    return res.status(400).json({ error: "Please enter a prompt." });
   }
 
   const matchingHandlers = imageGenerationHandlers
@@ -140,8 +146,11 @@ export const generateAudio = async (req, res) => {
   const { prompt, userId, duration } = req.body;
   const { id } = req.params;
 
-  if (!prompt || !userId) {
-    return res.status(400).json({ error: "Prompt and User ID are required." });
+  if (!userId) {
+    return res.status(401).json({ error: "Please login to generate videos." });
+  }
+  if (!prompt) {
+    return res.status(400).json({ error: "Please enter a prompt." });
   }
 
   const matchingHandlers = audioGenerationHandlers

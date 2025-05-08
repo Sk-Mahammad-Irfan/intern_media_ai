@@ -446,19 +446,19 @@
         // Map to backendModelId
         let backendModelId = null;
         if (modelId === "wan-ai-wan21-t2v-13b") {
-          backendModelId = "wan21-t2v"; // ← Add your correct backend name here
+          backendModelId = "wan-ai-wan21-t2v-13b"; // ← Add your correct backend name here
         }
         else if (modelId === "lightricks-ltx-video") {
-          backendModelId = "ltx-video";
+          backendModelId = "lightricks-ltx-video";
         }
         else if (modelId === "pika-text-to-video-v2-1") {
-          backendModelId = "pika-video";
+          backendModelId = "pika-text-to-video-v2-1";
         }
         else if (modelId === "pixverse-v4-text-to-video") {
-          backendModelId = "pixverse-v4"; // ← Add your correct backend name here
+          backendModelId = "pixverse-v4-text-to-video"; // ← Add your correct backend name here
         }
         else if (modelId === "luma-ray2-flash") {
-          backendModelId = "luma-video";
+          backendModelId = "luma-ray2-flash";
         }
         else {
           appendErrorMessage("Unsupported model ID in URL. Cannot generate video.");
@@ -472,12 +472,16 @@
             body: JSON.stringify({ prompt, userId }),
           });
 
-          console.log("[generateVideo] Response received from server");
+          let res = await response.json();
+
 
           if (!response.ok) {
             if (response.status === 402) {
               appendErrorMessage("Insufficient credits to generate video. Please purchase more credits.");
-            } else {
+            } 
+            else if (response.status === 401) {
+              appendErrorMessage(res.error);
+            }else {
               console.error(`[generateVideo] Server responded with status: ${response.status}`);
               appendErrorMessage("Server error while generating video. Please try again later.");
             }
