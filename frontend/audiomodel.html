@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Audio Model</title>
+    <title>Audio Chatroom | OpenMediaFlow</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -126,8 +126,11 @@
       <!-- Top Navbar -->
       <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container-fluid d-flex align-items-center justify-content-between">
-          <!-- Brand -->
-          <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+          
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold" href="index.html"
+              >&nbsp;<span style="font-weight: 500;">Open</span><span class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a
+            >
 
           <!-- Mobile controls -->
           <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
@@ -349,7 +352,7 @@
     <!-- Prompt Input -->
     <input 
       type="text" 
-      id="prompt" 
+      id="promptInput" 
       class="form-control border-0 bg-transparent text-dark"
       placeholder="Start a message..." 
       style="box-shadow: none; outline: none;"
@@ -388,7 +391,68 @@
     <script src="js/auth.js"></script>
     <script src="js/model-selector.js"></script>
     <script>
+      // Global functions first
+    
+      function setAvatarInitials() {
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+    
+        const avatars = document.querySelectorAll("#navbar-avatar");
+        const userElements = {
+          desktop: {
+            username: document.getElementById("account-username"),
+            email: document.getElementById("account-email"),
+          },
+          mobile: {
+            username: document.getElementById("account-username-mobile"),
+            email: document.getElementById("account-email-mobile"),
+          }
+        };
+    
+        const isLoggedIn = !!userData.username;
+    
+        if (isLoggedIn) {
+          const username = userData.username;
+          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+    
+          avatars.forEach(avatar => avatar.textContent = firstInitial);
+    
+          userElements.desktop.username && (userElements.desktop.username.textContent = username);
+          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
+    
+          userElements.mobile.username && (userElements.mobile.username.textContent = username);
+          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
+        } else {
+          avatars.forEach(avatar => {
+            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+          });
+    
+          ["desktop", "mobile"].forEach(view => {
+            userElements[view].username && (userElements[view].username.textContent = "Guest");
+            userElements[view].email && (userElements[view].email.textContent = "");
+          });
+        }
+      }
+    
+      function copyToClipboard(icon) {
+        const messageText = icon.previousElementSibling.innerText.trim();
+        navigator.clipboard.writeText(messageText).then(() => {
+          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+          setTimeout(() => {
+            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+          }, 1500);
+        }).catch(err => {
+          console.error("Copy failed:", err);
+        });
+      }
+    
+      // Main DOMContentLoaded block
       window.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed');
+    
+        // Avatar setup
+        setAvatarInitials();
+    
+        // Chat helpers
         const chat = document.getElementById("chat");
     
         function appendUserMessage(prompt) {
@@ -399,12 +463,7 @@
             <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
               ${prompt}
             </div>
-            <i 
-              class="bi bi-clipboard-fill text-secondary mt-1" 
-              style="cursor: pointer; font-size: 14px;" 
-              onclick="copyToClipboard(this)"
-              title="Copy"
-            ></i>
+            <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
           `;
           chat.appendChild(userWrapper);
         }
@@ -445,8 +504,8 @@
           }
         }
     
-        async function generateAudio() {
-          const promptInput = document.getElementById("prompt");
+        window.generateAudio = async function generateAudio() {
+          const promptInput = document.getElementById("promptInput");
           const durationInput = document.getElementById("duration");
           const prompt = promptInput?.value.trim();
           const duration = parseInt(durationInput?.value);
@@ -462,38 +521,26 @@
             return;
           }
     
-          // Add user prompt
           appendUserMessage(prompt);
           promptInput.value = "";
-    
-          // Show loading
           appendGeneratingMessage();
     
-          // Get model
           const urlParams = new URLSearchParams(window.location.search);
           const modelId = urlParams.get("id");
     
-          let backendModelId = null;
-          switch (modelId) {
-            case "stackadoc-stable-audio":
-              backendModelId = "stable-audio";
-              break;
-            case "cassetteai-sfx-generator":
-              backendModelId = "cassette-audio";
-              break;
-            case "dia-audio":
-              backendModelId = "dia-audio";
-              break;
-            case "multilingual-audio":
-              backendModelId = "multilingual-audio";
-              break;
-            case "american-audio":
-              backendModelId = "american-audio";
-              break;
-            
-            default:
-              alert("Unsupported model ID in URL.");
-              return;
+          const modelMap = {
+            "stackadoc-stable-audio": "stable-audio",
+            "cassetteai-sfx-generator": "cassette-audio",
+            "dia-audio": "dia-audio",
+            "multilingual-audio": "multilingual-audio",
+            "american-audio": "american-audio"
+          };
+    
+          const backendModelId = modelMap[modelId];
+    
+          if (!backendModelId) {
+            alert("Unsupported model ID in URL.");
+            return;
           }
     
           try {
@@ -510,9 +557,7 @@
             } else {
               if (res.status === 402) {
                 replaceWithErrorMessage("Insufficient credits.");
-                return;
-              }
-              else {
+              } else {
                 replaceWithErrorMessage(`❌ Error generating audio. ${data.error}`);
               }
             }
@@ -520,111 +565,50 @@
             console.error(err);
             replaceWithErrorMessage("❌ Error connecting to server.");
           }
-        }
+        };
     
-    
-    
-        // Autofill prompt from URL if present
+        // Room info parsing
         const params = new URLSearchParams(window.location.search);
-        const prompt = params.get('prompt');
-        if (prompt) {
-          document.getElementById('prompt').value = prompt;
+        const roomCreatedAt = params.get("room");
+    
+        if (roomCreatedAt) {
+          const date = new Date(roomCreatedAt);
+          const formatted = date.toLocaleString(undefined, {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+    
+          document.getElementById("roomTitle").textContent = "Room created";
+          document.getElementById("roomTimestamp").textContent = formatted;
         }
     
-        // Expose for button click
-        window.generateAudio = generateAudio;
-      });
-
-      function copyToClipboard(icon) {
-          const messageText = icon.previousElementSibling.innerText.trim();
-          navigator.clipboard.writeText(messageText).then(() => {
-            icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-            setTimeout(() => {
-              icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-            }, 1500);
-          }).catch(err => {
-            console.error("Copy failed:", err);
-          });
+        // New room buttons
+        ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
+          const btn = document.getElementById(id);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              const createdAt = new Date().toISOString();
+              const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+              window.open(url, "_blank");
+            });
+          }
+        });
+    
+        // Handle prompt from URL
+        const promptFromURL = params.get('prompt');
+        const input = document.getElementById("promptInput");
+    
+        if (promptFromURL && input) {
+          input.value = decodeURIComponent(promptFromURL);
+          generateAudio();
         }
-
-      
-// Create new room on click for both sidebar and mobile buttons
-["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const createdAt = new Date().toISOString();
-      const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-      window.open(url, "_blank");
-    });
-  }
-});
-
-// Parse URL params
-const params = new URLSearchParams(window.location.search);
-const roomCreatedAt = params.get("room");
-
-if (roomCreatedAt) {
-  const date = new Date(roomCreatedAt);
-
-  const formatted = date.toLocaleString(undefined, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  document.getElementById("roomTitle").textContent = "Room created";
-  document.getElementById("roomTimestamp").textContent = formatted;
-}
-
-function setAvatarInitials() {
-  const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-  const avatars = document.querySelectorAll("#navbar-avatar");
-  const userElements = {
-    desktop: {
-      username: document.getElementById("account-username"),
-      email: document.getElementById("account-email"),
-    },
-    mobile: {
-      username: document.getElementById("account-username-mobile"),
-      email: document.getElementById("account-email-mobile"),
-    }
-  };
-
-  const isLoggedIn = !!userData.username;
-
-  if (isLoggedIn) {
-    const username = userData.username;
-    const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-    avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-    userElements.desktop.username && (userElements.desktop.username.textContent = username);
-    userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-    userElements.mobile.username && (userElements.mobile.username.textContent = username);
-    userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-  } else {
-    avatars.forEach(avatar => {
-      avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-    });
-
-    ["desktop", "mobile"].forEach(view => {
-      userElements[view].username && (userElements[view].username.textContent = "Guest");
-      userElements[view].email && (userElements[view].email.textContent = "");
-    });
-  }
-}
-
-document.addEventListener("DOMContentLoaded", setAvatarInitials);
-
-
-      
+      });
     </script>
+    
     
     
 </body>

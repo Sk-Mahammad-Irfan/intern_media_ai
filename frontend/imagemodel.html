@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ImageModel</title>
+    <title>Image Chatroom | OpenMediaFlow</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -112,8 +112,11 @@
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
           <div class="container-fluid d-flex align-items-center justify-content-between">
-            <!-- Brand -->
-            <a class="navbar-brand fw-bold text-primary" href="index.html">Media Ai</a>
+            
+              <!-- Brand -->
+              <a class="navbar-brand fw-bold" href="index.html"
+              >&nbsp;<span style="font-weight: 500;">Open</span><span class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a
+            >
   
             <!-- Mobile controls -->
             <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
@@ -339,7 +342,7 @@
       <!-- Prompt Input -->
       <input 
         type="text" 
-        id="prompt" 
+        id="promptInput" 
         class="form-control border-0 bg-transparent text-dark"
         placeholder="Start a message..." 
         style="box-shadow: none; outline: none;"
@@ -365,243 +368,220 @@
       <script src="js/model-selector.js"></script>
       <script src="js/auth.js"></script>
       <script src="js/config.js"></script>
+      <!-- <script src="js/dashboard-input.js"></script> -->
 
 
-    <script>
-const chat = document.getElementById("chat");
-      function appendUserMessage(prompt) {
-  const userWrapper = document.createElement("div");
-  userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
-
-  userWrapper.innerHTML = `
-    <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
-      ${prompt}
-    </div>
-    <i 
-      class="bi bi-clipboard-fill text-secondary mt-1" 
-      style="cursor: pointer; font-size: 14px;" 
-      onclick="copyToClipboard(this)"
-      title="Copy"
-    ></i>
-  `;
-  chat.appendChild(userWrapper);
-}
-function appendGeneratingMessage() {
-  const aiDiv = document.createElement("div");
-  aiDiv.className = "d-flex justify-content-start mb-3";
-  aiDiv.innerHTML = `
-   <div class="ai-message p-3" id="generating-msg">
-
-      <i class="bi bi-image-fill me-2"></i>Generating image...
-    </div>
-  `;
-  chat.appendChild(aiDiv);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-      function replaceWithErrorMessage(msg) {
-        const genMsg = document.getElementById("generating-msg");
-        if (genMsg) {
-          genMsg.innerHTML = `
-            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-            <span class="text-danger fw-semibold">${msg}</span>
+      <script>
+        const chat = document.getElementById("chat");
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          console.log('DOM fully loaded and parsed');
+      
+          // Set avatar initials
+          setAvatarInitials();
+      
+          // Parse URL parameters
+          const params = new URLSearchParams(window.location.search);
+          const prompt = params.get('prompt');
+          const input = document.getElementById('promptInput'); // Consistent ID for prompt input
+      
+          console.log('Prompt from URL:', prompt);
+          console.log('Input element:', input);
+      
+          if (prompt && input) {
+            input.value = decodeURIComponent(prompt);
+            console.log('Calling generateImage function');
+            generateImage(); // Updated to call correct function
+          }
+      
+          // Room creation timestamp
+          const roomCreatedAt = params.get("room");
+          if (roomCreatedAt) {
+            const date = new Date(roomCreatedAt);
+            const formatted = date.toLocaleString(undefined, {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            document.getElementById("roomTitle").textContent = "Room created";
+            document.getElementById("roomTimestamp").textContent = formatted;
+          }
+      
+          // Add click listeners for "new room" buttons
+          ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) {
+              btn.addEventListener("click", () => {
+                const createdAt = new Date().toISOString();
+                const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+                window.open(url, "_blank");
+              });
+            }
+          });
+        });
+      
+        function setAvatarInitials() {
+          const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+          const avatars = document.querySelectorAll("#navbar-avatar");
+          const userElements = {
+            desktop: {
+              username: document.getElementById("account-username"),
+              email: document.getElementById("account-email"),
+            },
+            mobile: {
+              username: document.getElementById("account-username-mobile"),
+              email: document.getElementById("account-email-mobile"),
+            }
+          };
+      
+          if (userData.username) {
+            const firstInitial = userData.username.trim()[0]?.toUpperCase() || "U";
+            avatars.forEach(avatar => avatar.textContent = firstInitial);
+            userElements.desktop.username.textContent = userData.username;
+            userElements.desktop.email.textContent = userData.email || "No email";
+            userElements.mobile.username.textContent = userData.username;
+            userElements.mobile.email.textContent = userData.email || "No email";
+          } else {
+            avatars.forEach(avatar => avatar.innerHTML = `<i class="fa-solid fa-user"></i>`);
+            ["desktop", "mobile"].forEach(view => {
+              userElements[view].username.textContent = "Guest";
+              userElements[view].email.textContent = "";
+            });
+          }
+        }
+      
+        function appendUserMessage(prompt) {
+          const userWrapper = document.createElement("div");
+          userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+          userWrapper.innerHTML = `
+            <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
+              ${prompt}
+            </div>
+            <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
           `;
-        } else {
-          // Fallback if no generating message is available
-          const fallbackError = document.createElement("div");
-          fallbackError.className = "text-danger my-3";
-          fallbackError.innerHTML = `
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>${msg}
-          `;
-          chat.appendChild(fallbackError);
+          chat.appendChild(userWrapper);
+        }
+      
+        function appendGeneratingMessage() {
+          const aiDiv = document.createElement("div");
+          aiDiv.className = "d-flex justify-content-start mb-3";
+          aiDiv.innerHTML = `<div class="ai-message p-3" id="generating-msg">
+            <i class="bi bi-image-fill me-2"></i>Generating image...
+          </div>`;
+          chat.appendChild(aiDiv);
           chat.scrollTop = chat.scrollHeight;
         }
-      }
-
-
-
-async function generateImage() {
-  const promptInput = document.getElementById("prompt");
-  const prompt = promptInput.value.trim();
-  const userId = localStorage.getItem("userId");
-
-  if (!prompt) {
-    alert("Please enter a prompt.");
-    return;
-  }
-
-  appendUserMessage(prompt);
-  promptInput.value = "";
-  appendGeneratingMessage();
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const modelId = urlParams.get("id");
-
-  let backendModelId = null;
-  switch (modelId) {
-    case "black-forest-labs-flux-1-1-pro":
-      backendModelId = "flux-pro";
-      break;
-    case "black-forest-labs-fooocus":
-      backendModelId = "fooocus";
-      break;
-    case "recraft-v3":
-      backendModelId = "recraft-v3";
-      break;
-    case "hidream-i1-dev":
-      backendModelId = "hidream-image";
-      break;
-    case "ideogram-v3":
-      backendModelId = "ideogram-image";
-      break;
-    default:
-      replaceWithErrorMessage("Unsupported model ID in URL.");
-      return;
-  }
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/ai/generate-image/${backendModelId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, userId }),
-    });
-
-    const genMsg = document.getElementById("generating-msg");
-
-    const data = await res.json();
-
-    if (res.status === 402) {
-      replaceWithErrorMessage("Insufficient credits.");
-      return;
-    }
-
-    if (!res.ok) {
-      const errMsg = `Server returned status ${res.status} (${data.error})`;
-      replaceWithErrorMessage(errMsg);
-      return;
-    }
-
-    
-    if (genMsg) genMsg.remove();
-
-    if (data.imageUrl) {
-      const aiDiv = document.createElement("div");
-      aiDiv.className = "d-flex justify-content-start mb-3";
-      aiDiv.innerHTML = `
-        <div class="ai-message p-2">
-          <div class="d-flex flex-column align-items-start">
-            <div class="mb-2 text-muted small">
-              <i class="bi bi-image-fill me-2"></i>Generated Image
-            </div>
-            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-              <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-              <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-                <i class="bi bi-box-arrow-up-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      `;
-      chat.appendChild(aiDiv);
-      chat.scrollTop = chat.scrollHeight;
-    } else {
-      replaceWithErrorMessage("Image generation failed: no image URL returned.");
-    }
-  } catch (err) {
-    console.error("Network or server error:", err);
-    replaceWithErrorMessage("A network or server error occurred.");
-  }
-}
-
-      function copyToClipboard(icon) {
-      const messageText = icon.previousElementSibling.innerText.trim(); // Get text from the bubble above
-      navigator.clipboard.writeText(messageText).then(() => {
-      icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-      setTimeout(() => {
-      icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-      }, 1500);
-      }).catch(err => {
-       console.error("Copy failed:", err);
-      });
-}
-      function setAvatarInitials() {
-        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-        const avatars = document.querySelectorAll("#navbar-avatar");
-        const userElements = {
-          desktop: {
-            username: document.getElementById("account-username"),
-            email: document.getElementById("account-email"),
-          },
-          mobile: {
-            username: document.getElementById("account-username-mobile"),
-            email: document.getElementById("account-email-mobile"),
+      
+        function replaceWithErrorMessage(msg) {
+          const genMsg = document.getElementById("generating-msg");
+          const html = `<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i><span class="text-danger fw-semibold">${msg}</span>`;
+          if (genMsg) {
+            genMsg.innerHTML = html;
+          } else {
+            const fallbackError = document.createElement("div");
+            fallbackError.className = "text-danger my-3";
+            fallbackError.innerHTML = html;
+            chat.appendChild(fallbackError);
+            chat.scrollTop = chat.scrollHeight;
           }
-        };
-
-        const isLoggedIn = !!userData.username;
-
-        if (isLoggedIn) {
-          const username = userData.username;
-          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-          avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-          userElements.desktop.username && (userElements.desktop.username.textContent = username);
-          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-          userElements.mobile.username && (userElements.mobile.username.textContent = username);
-          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-        } else {
-          avatars.forEach(avatar => {
-            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-          });
-
-          ["desktop", "mobile"].forEach(view => {
-            userElements[view].username && (userElements[view].username.textContent = "Guest");
-            userElements[view].email && (userElements[view].email.textContent = "");
+        }
+      
+        async function generateImage() {
+          const promptInput = document.getElementById("promptInput");
+          const prompt = promptInput.value.trim();
+          const userId = localStorage.getItem("userId");
+          const BACKEND_URL = "https://your-backend-url.com"; // <-- Set this properly
+      
+          if (!prompt) {
+            alert("Please enter a prompt.");
+            return;
+          }
+      
+          appendUserMessage(prompt);
+          promptInput.value = "";
+          appendGeneratingMessage();
+      
+          const modelId = new URLSearchParams(window.location.search).get("id");
+          const modelMap = {
+            "black-forest-labs-flux-1-1-pro": "flux-pro",
+            "black-forest-labs-fooocus": "fooocus",
+            "recraft-v3": "recraft-v3",
+            "hidream-i1-dev": "hidream-image",
+            "ideogram-v3": "ideogram-image",
+          };
+      
+          const backendModelId = modelMap[modelId];
+          if (!backendModelId) {
+            replaceWithErrorMessage("Unsupported model ID in URL.");
+            return;
+          }
+      
+          try {
+            const res = await fetch(`${BACKEND_URL}/api/ai/generate-image/${backendModelId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt, userId }),
+            });
+      
+            const data = await res.json();
+            const genMsg = document.getElementById("generating-msg");
+      
+            if (res.status === 402) {
+              replaceWithErrorMessage("Insufficient credits.");
+              return;
+            }
+      
+            if (!res.ok) {
+              replaceWithErrorMessage(`Server returned status ${res.status} (${data.error})`);
+              return;
+            }
+      
+            if (genMsg) genMsg.remove();
+      
+            if (data.imageUrl) {
+              const aiDiv = document.createElement("div");
+              aiDiv.className = "d-flex justify-content-start mb-3";
+              aiDiv.innerHTML = `
+                <div class="ai-message p-2">
+                  <div class="d-flex flex-column align-items-start">
+                    <div class="mb-2 text-muted small">
+                      <i class="bi bi-image-fill me-2"></i>Generated Image
+                    </div>
+                    <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
+                      <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+                      <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>`;
+              chat.appendChild(aiDiv);
+              chat.scrollTop = chat.scrollHeight;
+            } else {
+              replaceWithErrorMessage("Image generation failed: no image URL returned.");
+            }
+          } catch (err) {
+            console.error("Network or server error:", err);
+            replaceWithErrorMessage("A network or server error occurred.");
+          }
+        }
+      
+        function copyToClipboard(icon) {
+          const messageText = icon.previousElementSibling.innerText.trim();
+          navigator.clipboard.writeText(messageText).then(() => {
+            icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+            setTimeout(() => {
+              icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+            }, 1500);
+          }).catch(err => {
+            console.error("Copy failed:", err);
           });
         }
-      }
-
-      document.addEventListener("DOMContentLoaded", setAvatarInitials);
-
-
-
-  
-// Create new room on click for both sidebar and mobile buttons
-["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const createdAt = new Date().toISOString();
-      const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-      window.open(url, "_blank");
-    });
-  }
-});
-
-// Parse URL params
-const params = new URLSearchParams(window.location.search);
-const roomCreatedAt = params.get("room");
-
-if (roomCreatedAt) {
-  const date = new Date(roomCreatedAt);
-
-  const formatted = date.toLocaleString(undefined, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  document.getElementById("roomTitle").textContent = "Room created";
-  document.getElementById("roomTimestamp").textContent = formatted;
-}
-
-
-    </script>
+      </script>
+      
+      
   </body>
 </html>
