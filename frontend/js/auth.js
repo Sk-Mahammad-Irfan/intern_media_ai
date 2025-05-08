@@ -97,6 +97,14 @@ form.addEventListener("submit", async (e) => {
       msg.classList.add("text-danger");
     }
   } catch (err) {
+    if(err.response && err.response.status===401){
+      msg.textContent = "User already exists. Please login.";
+      msg.classList.add("text-danger");
+    } else {
+      msg.textContent = "An error occurred.";
+      msg.classList.add("text-danger");
+    }
+
     console.error(err);
     msg.textContent = "An error occurred.";
   }
