@@ -1,8 +1,9 @@
 import { stableFal, stableReplicate } from "../services/audio/stableService.js";
 import { cassetteFAL } from "../services/audio/cassetteServices.js";
-import { diaTtsFAL } from "../services/audio/diaTtsServices.js";
+import { cassatteMusic } from "../services/audio/cassettemusic.js";
 import { multilingualTtsFAL } from "../services/audio/multilingualTtsServices.js";
 import { americanEnglishFAL } from "../services/audio/americanEnglishServices.js";
+import { soundEffectsGeneratorFAL } from "../services/audio/soundEffectsGeneratorServices.js";
 
 export const audioGenerationHandlers = [
   {
@@ -13,7 +14,7 @@ export const audioGenerationHandlers = [
   {
     model: "stackadoc-stable-audio",
     handler: stableFal,
-    credits: 8,
+    credits: 4,
   },
   {
     model: "cassetteai-sfx-generator",
@@ -21,8 +22,8 @@ export const audioGenerationHandlers = [
     credits: 6,
   },
   {
-    model: "dia-audio",
-    handler: diaTtsFAL,
+    model: "cassattemusic-audio",
+    handler: cassatteMusic,
     credits: 3,
   },
   {

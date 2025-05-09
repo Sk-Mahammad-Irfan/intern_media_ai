@@ -7,9 +7,9 @@ fal.config({
   credentials: process.env.FAL_AI_AUDIO_API,
 });
 
-export const soundEffectsGeneratorFAL = async (prompt, duration = 20) => {
+export const cassatteMusic = async (prompt, duration) => {
   try {
-    const result = await fal.subscribe("cassetteai/sound-effects-generator", {
+    const result = await fal.subscribe("CassetteAI/music-generator", {
       input: { prompt, duration },
       logs: false,
       onQueueUpdate: (update) => {

@@ -78,14 +78,14 @@ const models = {
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
   },
-  "dia-audio": {
-    id: "dia-audio",
-    title: "Dia TTS",
+  "cassattemusic-audio": {
+    id: "cassattemusic-audio",
+    title: "CassetteAI Music Generator",
     description:
-      "Realistic text-to-speech generation using Dia's expressive voice synthesis engine.",
-    link: "https://fal.ai/models/fal-ai/dia-tts",
+      "Fast, high-quality AI music generation producing studio-ready tracks in seconds.",
+    link: "https://fal.ai/models/cassetteai/music-generator",
     fullDetails:
-      "Dia TTS generates expressive human-like speech from text prompts. It’s ideal for narrations, AI voices, and conversational interfaces that need a lifelike voice model.",
+      "CassetteAI’s music generator creates a 30-second music sample in under 2 seconds and a full 3-minute track in under 10 seconds. Operating at 44.1 kHz stereo, it ensures professional-grade consistency with no breaks, squeaks, or glitches. Ideal for producers, game developers, and content creators.",
     chatPage: "audiomodel.html",
   },
 

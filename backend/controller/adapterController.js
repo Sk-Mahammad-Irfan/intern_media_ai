@@ -99,23 +99,24 @@ export const generateImage = async (req, res) => {
     return res.status(400).json({ error: "Invalid model ID." });
   }
 
-  for (const { handler, credits } of matchingHandlers) {
+  for (const { handler, credits, type } of matchingHandlers) {
     try {
       const rawData = await handler(prompt);
       let imageUrl = null;
 
-      switch (handler) {
-        case falFluxProV1_1:
-        case falRecraftV3:
-        case falFooocus:
+      switch (type) {
+        case "fal":
           imageUrl = rawData?.images?.[0]?.url;
           break;
-        case deepFluxProV1_1:
+        case "base64":
           const base64 = rawData?.data?.[0]?.b64_json;
           imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
           break;
-        case segmindRecraftV3:
+        case "segmind":
           imageUrl = rawData?.output?.[0];
+          break;
+        default:
+          console.warn(`Unknown handler type: ${type}`);
           break;
       }
 
@@ -163,7 +164,12 @@ export const generateAudio = async (req, res) => {
 
   for (const { handler, credits } of matchingHandlers) {
     try {
-      const audioUrl = await handler(prompt, duration);
+      let audioUrl = null;
+      if (id === "multilingual-audio") {
+        audioUrl = await handler(prompt);
+      } else {
+        audioUrl = await handler(prompt, duration);
+      }
 
       if (!audioUrl) {
         console.warn("No audio returned, trying next handler...");

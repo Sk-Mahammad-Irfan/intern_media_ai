@@ -14,36 +14,37 @@ export const imageGenerationHandlers = [
   {
     model: "black-forest-labs-flux-1-1-pro",
     handler: falFluxProV1_1,
+    type: "fal",
     credits: 5,
   },
   {
     model: "black-forest-labs-flux-1-1-pro",
     handler: deepFluxProV1_1,
+    type: "base64",
     credits: 7,
   },
   {
     model: "recraft-v3",
     handler: falRecraftV3,
+    type: "fal",
     credits: 4,
-  },
-  {
-    model: "recraft-v3",
-    handler: segmindRecraftV3,
-    credits: 6,
   },
   {
     model: "fooocus",
     handler: falFooocus,
+    type: "fal",
     credits: 3,
   },
   {
     model: "hidream-i1-dev",
     handler: hidreamFAL,
+    type: "fal",
     credits: 6,
   },
   {
     model: "ideogram-v3",
     handler: ideogramFAL,
+    type: "fal",
     credits: 7,
   },
 ];

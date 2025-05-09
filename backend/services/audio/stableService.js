@@ -15,12 +15,13 @@ export const stableFal = async (prompt) => {
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
-          update.logs.map((log) => log.message).forEach(console.log);
+          if (Array.isArray(update.logs)) {
+            update.logs.map((log) => log.message).forEach(console.log);
+          }
         }
       },
     });
-
-    const audioUrl = result?.data?.audio_url || result?.data?.audio?.url;
+    const audioUrl = result.data.audio_file.url || result?.data?.audio?.url;
     if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
     return audioUrl;
   } catch (error) {
@@ -51,22 +52,46 @@ export const stableReplicate = async (prompt, duration = 8) => {
   };
 
   try {
-    const response = await axios.post(
+    const postResponse = await axios.post(
       "https://api.replicate.com/v1/predictions",
       payload,
       {
         headers: {
           Authorization: `Bearer ${replicateApiToken}`,
           "Content-Type": "application/json",
-          Prefer: "wait",
         },
       }
     );
 
-    const audioUrl = response?.data?.output; // Adjust based on Replicate's actual response
-    if (!audioUrl) throw new Error("No audio URL in response");
+    const getUrl = postResponse.data?.urls?.get;
+    if (!getUrl) throw new Error("Missing get URL from Replicate");
 
-    return audioUrl;
+    // Poll until prediction finishes
+    let status = postResponse.data.status;
+    let output = null;
+
+    while (
+      status !== "succeeded" &&
+      status !== "failed" &&
+      status !== "canceled"
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const getResponse = await axios.get(getUrl, {
+        headers: {
+          Authorization: `Bearer ${replicateApiToken}`,
+        },
+      });
+      status = getResponse.data.status;
+      output = getResponse.data.output;
+    }
+
+    if (status !== "succeeded" || !output) {
+      throw new Error(
+        "Replicate audio generation failed or returned no output"
+      );
+    }
+
+    return output;
   } catch (error) {
     console.error(
       "Error generating audio with Replicate:",

@@ -14,12 +14,16 @@ export const americanEnglishFAL = async (prompt) => {
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
-          console.log(update.logs.map((log) => log.message).join("\n"));
+          if (Array.isArray(update.logs)) {
+            update.logs.map((log) => log.message).forEach(console.log);
+          }
         }
       },
     });
-    console.log("Generating audio...");
-    return result.data.audio_file.url;
+
+    const audioUrl = result.data.audio_file.url || result?.data?.audio?.url;
+    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+    return audioUrl;
   } catch (error) {
     console.error("Error generating audio with FAL:", error);
     throw error;
