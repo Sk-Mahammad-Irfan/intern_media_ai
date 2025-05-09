@@ -20,9 +20,6 @@ export const ideogramFAL = async (prompt) => {
         }
       },
     });
-    console.log("ideogram");
-    console.log(result.data);
-    console.log(result.requestId);
     return result.data;
   } catch (error) {
     console.error("Error generating image with Ideogram V3:", error);

@@ -36,24 +36,24 @@ export const generateVideo = async (req, res) => {
     return res.status(400).json({ error: "Invalid model ID." });
   }
 
-  for (const { handler, credits } of matchingHandlers) {
+  for (const { handler, credits, type } of matchingHandlers) {
     try {
       console.log("Trying handler:", handler.name);
       const rawData = await handler(prompt);
       let videoUrl = null;
 
-      switch (handler) {
-        case wanFAL:
-          videoUrl = rawData.video?.url;
+      switch (type) {
+        case "fal":
+          videoUrl = rawData?.video?.url;
           break;
-        case wanReplicate:
-        case ltxReplicate:
-          videoUrl = Array.isArray(rawData)
-            ? rawData[0]
-            : rawData?.video_url || rawData?.url;
+        case "replicate":
+          videoUrl = rawData?.video?.url || rawData?.url || rawData;
           break;
-        case wanDeepinfra:
-          videoUrl = rawData.video_url || rawData.data?.video_url;
+        case "deepinfra":
+          videoUrl = rawData?.video_url || rawData?.data?.video_url;
+          break;
+        default:
+          console.warn(`Unknown handler type: ${type}`);
           break;
       }
 

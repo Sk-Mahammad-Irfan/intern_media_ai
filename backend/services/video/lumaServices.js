@@ -14,17 +14,15 @@ export const lumaFAL = async (prompt) => {
       "fal-ai/luma-dream-machine/ray-2-flash",
       {
         input: { prompt },
-        logs: true,
+        logs: false,
         onQueueUpdate: (update) => {
-          if (update.status === "IN_PROGRESS") {
-            update.logs.map((log) => log.message).forEach(console.log);
+          if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
+            console.log(update.logs.map((log) => log.message).join("\n"));
           }
         },
       }
     );
-    console.log("luma");
-    console.log(result?.data?.video?.url);
-    return result?.data?.video?.url;
+    return result?.data;
   } catch (error) {
     console.error("Error generating video with Luma Ray 2 Flash:", error);
   }

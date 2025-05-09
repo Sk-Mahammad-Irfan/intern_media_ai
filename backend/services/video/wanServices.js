@@ -27,7 +27,6 @@ export const wanDeepinfra = async (prompt) => {
         },
       }
     );
-    console.log("deep");
     return response.data;
   } catch (error) {
     console.error("Error generating video with DeepInfra:", error);
@@ -45,11 +44,16 @@ export const wanReplicate = async (prompt) => {
       sample_steps: 30,
       sample_guide_scale: 6,
     };
-    console.log("helooo");
+
     const output = await replicate.run("wan-video/wan-2.1-1.3b", { input });
-    return output;
+
+    const videoUrl =
+      typeof output?.url === "function" ? await output.url() : output;
+
+    return videoUrl;
   } catch (error) {
     console.error("Error generating video with Replicate:", error);
+    throw error;
   }
 };
 
@@ -57,16 +61,14 @@ export const wanFAL = async (prompt) => {
   try {
     const result = await fal.subscribe("fal-ai/wan/v2.1/1.3b/text-to-video", {
       input: { prompt },
-      logs: true,
+      logs: false,
       onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
+        if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
           console.log(update.logs.map((log) => log.message).join("\n"));
         }
       },
     });
-    console.log("fall");
-    console.log(result?.data?.video?.url);
-    return result?.data?.video?.url;
+    return result?.data;
   } catch (error) {
     console.error("Error generating video with FAL:", error);
   }

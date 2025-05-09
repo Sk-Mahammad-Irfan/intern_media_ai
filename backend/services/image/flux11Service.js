@@ -21,9 +21,6 @@ export const falFluxProV1_1 = async (prompt) => {
       },
     });
 
-    console.log(result.data);
-    console.log(result.requestId);
-
     return result?.data;
   } catch (error) {
     console.error(

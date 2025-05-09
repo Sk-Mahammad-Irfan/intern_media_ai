@@ -9,7 +9,6 @@ fal.config({
 
 export const multilingualTtsFAL = async (prompt) => {
   try {
-    console.log(prompt);
     const result = await fal.subscribe(
       "fal-ai/elevenlabs/tts/multilingual-v2",
       {

@@ -20,9 +20,6 @@ export const falFooocus = async () => {
       },
     });
 
-    console.log(result.data);
-    console.log(result.requestId);
-
     return result?.data;
   } catch (error) {
     console.error(

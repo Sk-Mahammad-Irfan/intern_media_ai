@@ -492,11 +492,11 @@
           const data = await response.json();
           console.log("[generateVideo] JSON parsed:", data);
     
-          if (data.video_url) {
-            console.log(`[generateVideo] Video generated successfully: ${data.video_url}`);
-            appendGeneratedVideo(data.video_url);
+          if (data.videoUrl) {
+            console.log(`[generateVideo] Video generated successfully: ${data.videoUrl}`);
+            appendGeneratedVideo(data.videoUrl);
           } else {
-            console.warn("[generateVideo] No video_url in response:", data);
+            console.warn("[generateVideo] No videoUrl in response:", data);
             appendErrorMessage("Video generation failed. No video URL returned.");
           }
         } catch (error) {

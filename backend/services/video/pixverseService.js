@@ -11,18 +11,14 @@ export const pixverseFAL = async (prompt) => {
   try {
     const result = await fal.subscribe("fal-ai/pixverse/v4/text-to-video", {
       input: { prompt },
-      logs: true,
+      logs: false,
       onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS" && update.logs) {
-          update.logs.map((log) => log.message).forEach(console.log);
+        if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
+          console.log(update.logs.map((log) => log.message).join("\n"));
         }
       },
     });
-
-    console.log("Pixverse FAL video generated");
-    console.log("Request ID:", result.requestId);
-    console.log(result?.data?.video?.url);
-    return result?.data?.video?.url;
+    return result?.data;
   } catch (error) {
     console.error("Error generating video with Pixverse (FAL):", error);
   }

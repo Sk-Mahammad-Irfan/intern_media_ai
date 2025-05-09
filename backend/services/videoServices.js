@@ -27,7 +27,6 @@ export const generateWithDeepInfra = async (prompt) => {
         },
       }
     );
-    console.log("deep");
     return response.data;
   } catch (error) {
     console.error("Error generating video with DeepInfra:", error);

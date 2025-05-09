@@ -20,9 +20,6 @@ export const hidreamFAL = async (prompt) => {
         }
       },
     });
-    console.log("hidream");
-    console.log(result.data);
-    console.log(result.requestId);
     return result.data;
   } catch (error) {
     console.error("Error generating image with HiDream I1:", error);
