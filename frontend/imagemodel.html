@@ -368,7 +368,6 @@
       <script src="js/model-selector.js"></script>
       <script src="js/auth.js"></script>
       <script src="js/config.js"></script>
-      <!-- <script src="js/dashboard-input.js"></script> -->
 
 
       <script>
@@ -493,7 +492,6 @@
           const promptInput = document.getElementById("promptInput");
           const prompt = promptInput.value.trim();
           const userId = localStorage.getItem("userId");
-          const BACKEND_URL = "https://your-backend-url.com"; // <-- Set this properly
       
           if (!prompt) {
             alert("Please enter a prompt.");
@@ -507,7 +505,7 @@
           const modelId = new URLSearchParams(window.location.search).get("id");
           const modelMap = {
             "black-forest-labs-flux-1-1-pro": "flux-pro",
-            "black-forest-labs-fooocus": "fooocus",
+            "fooocus": "fooocus",
             "recraft-v3": "recraft-v3",
             "hidream-i1-dev": "hidream-image",
             "ideogram-v3": "ideogram-image",

@@ -390,6 +390,7 @@
     <script src="js/search.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/model-selector.js"></script>
+    <script src="js/config.js"></script>
     <script>
       // Global functions first
     
@@ -509,7 +510,7 @@
           const durationInput = document.getElementById("duration");
           const prompt = promptInput?.value.trim();
           const duration = parseInt(durationInput?.value);
-          const userId = localStorage.getItem("userId") || "test-user";
+          const userId = localStorage.getItem("userId");
     
           if (!prompt) {
             alert("Please enter a prompt.");
@@ -529,8 +530,8 @@
           const modelId = urlParams.get("id");
     
           const modelMap = {
-            "stackadoc-stable-audio": "stable-audio",
-            "cassetteai-sfx-generator": "cassette-audio",
+            "stackadoc-stable-audio": "stackadoc-stable-audio",
+            "cassetteai-sfx-generator": "cassetteai-sfx-generator",
             "dia-audio": "dia-audio",
             "multilingual-audio": "multilingual-audio",
             "american-audio": "american-audio"
@@ -544,7 +545,7 @@
           }
     
           try {
-            const res = await fetch(`http://localhost:5000/api/ai/generate-audio/${backendModelId}`, {
+            const res = await fetch(`${BACKEND_URL}/api/ai/generate-audio/${backendModelId}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ prompt, duration, userId }),

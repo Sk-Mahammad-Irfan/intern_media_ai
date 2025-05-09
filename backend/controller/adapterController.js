@@ -181,6 +181,5 @@ export const generateAudio = async (req, res) => {
       console.error("Audio handler failed:", error.message || error);
     }
   }
-
   return res.status(500).json({ error: "All audio generators failed." });
 };
