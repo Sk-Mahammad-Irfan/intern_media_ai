@@ -23,9 +23,8 @@ export const lumaFAL = async (prompt) => {
       }
     );
     console.log("luma");
-    console.log(result.data);
-    console.log(result.requestId);
-    return result.data;
+    console.log(result?.data?.video?.url);
+    return result?.data?.video?.url;
   } catch (error) {
     console.error("Error generating video with Luma Ray 2 Flash:", error);
   }

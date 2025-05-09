@@ -21,8 +21,8 @@ export const pixverseFAL = async (prompt) => {
 
     console.log("Pixverse FAL video generated");
     console.log("Request ID:", result.requestId);
-
-    return result.data;
+    console.log(result?.data?.video?.url);
+    return result?.data?.video?.url;
   } catch (error) {
     console.error("Error generating video with Pixverse (FAL):", error);
   }

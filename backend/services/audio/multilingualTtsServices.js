@@ -25,8 +25,6 @@ export const multilingualTtsFAL = async (prompt) => {
       }
     );
 
-    console.log(result.data);
-
     const audioUrl = result?.data?.audio?.url;
     if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
     return audioUrl;

@@ -65,7 +65,8 @@ export const wanFAL = async (prompt) => {
       },
     });
     console.log("fall");
-    return result.data;
+    console.log(result?.data?.video?.url);
+    return result?.data?.video?.url;
   } catch (error) {
     console.error("Error generating video with FAL:", error);
   }

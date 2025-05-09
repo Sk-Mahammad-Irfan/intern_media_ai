@@ -12,9 +12,8 @@ export const pikaFAL = async (prompt) => {
       },
     });
     console.log("pika");
-    console.log(result.data);
-    console.log(result.requestId);
-    return result.data;
+    console.log(result?.data?.video?.url);
+    return result?.data?.video?.url;
   } catch (error) {
     console.error("Error generating video with Pika:", error);
   }

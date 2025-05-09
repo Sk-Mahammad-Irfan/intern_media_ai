@@ -20,8 +20,7 @@ export const americanEnglishFAL = async (prompt) => {
         }
       },
     });
-
-    const audioUrl = result.data.audio_file.url || result?.data?.audio?.url;
+    const audioUrl = result?.data?.audio?.url;
     if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
     return audioUrl;
   } catch (error) {
