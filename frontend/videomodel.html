@@ -469,29 +469,25 @@
     
         try {
           const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${backendModelId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt, userId }),
-          });
-    
-          let res = await response.json();
-    
-          if (!response.ok) {
-            if (response.status === 402) {
-              appendErrorMessage("Insufficient credits to generate video. Please purchase more credits.");
-            } 
-            else if (response.status === 401) {
-              appendErrorMessage(res.error);
-            }else {
-              console.error(`[generateVideo] Server responded with status: ${response.status}`);
-              appendErrorMessage("Server error while generating video. Please try again later.");
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt, userId }),
+            });
+
+            const data = await response.json(); // Only read once
+
+            if (!response.ok) {
+              if (response.status === 402) {
+                appendErrorMessage("Insufficient credits to generate video. Please purchase more credits.");
+              } else if (response.status === 401) {
+                appendErrorMessage(data.error);
+              } else {
+                console.error(`[generateVideo] Server responded with status: ${response.status}`);
+                appendErrorMessage("Server error while generating video. Please try again later.");
+              }
+              return;
             }
-            return;
-          }
-    
-          const data = await response.json();
-          console.log("[generateVideo] JSON parsed:", data);
-    
+
           if (data.videoUrl) {
             console.log(`[generateVideo] Video generated successfully: ${data.videoUrl}`);
             appendGeneratedVideo(data.videoUrl);
