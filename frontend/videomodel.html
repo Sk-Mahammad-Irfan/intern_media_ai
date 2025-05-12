@@ -101,6 +101,10 @@
       }
 
     }
+    #resolutionSelect{
+      width: 100px;
+      background-color: #f8f9fa;
+    }
   </style>
 </head>
 
@@ -319,12 +323,15 @@
               placeholder="Start a message..." style="box-shadow: none; outline: none;">
 
             <!-- Resolution Select -->
-            <select id="resolutionSelect" class="form-select me-2" style="width: 150px;">
+            <div class="d-flex align-items-center me-2" style="gap: 8px;">
+            <select id="resolutionSelect" class="form-select rounded-pill">
               <option value="360p">360p</option>
               <option value="540p">540p</option>
               <option value="720p" selected>720p</option>
               <option value="1080p">1080p</option>
             </select>
+            </div>
+           
             <!-- Send Button -->
             <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
               style="width: 40px; height: 40px;" onclick="generateVideo()">
@@ -346,248 +353,228 @@
     <script src="js/auth.js"></script>
     <script src="js/config.js"></script>
 
-    <script>
-      const chat = document.getElementById("chat");
+   <script>
+  const chat = document.getElementById("chat");
 
-      function appendUserMessage(prompt) {
-        const userWrapper = document.createElement("div");
-        userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+  function appendUserMessage(prompt) {
+    const userWrapper = document.createElement("div");
+    userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
 
-        userWrapper.innerHTML = `
-          <div class="user-message p-3">
-            ${prompt}
-          </div>
-          <i 
-            class="bi bi-clipboard-fill text-secondary mt-1" 
-            style="cursor: pointer; font-size: 14px;" 
-            onclick="copyToClipboard(this)"
-            title="Copy"
-          ></i>
-        `;
-        chat.appendChild(userWrapper);
-        chat.scrollTop = chat.scrollHeight;
-      }
+    userWrapper.innerHTML = `
+      <div class="user-message p-3">
+        ${prompt}
+      </div>
+      <i 
+        class="bi bi-clipboard-fill text-secondary mt-1" 
+        style="cursor: pointer; font-size: 14px;" 
+        onclick="copyToClipboard(this)"
+        title="Copy"
+      ></i>
+    `;
+    chat.appendChild(userWrapper);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function appendGeneratingVideoMessage(resolution) {
+    const aiDiv = document.createElement("div");
+    aiDiv.className = "d-flex justify-content-start mb-3 generating-video";
 
-      function appendGeneratingVideoMessage() {
-        const aiDiv = document.createElement("div");
-        aiDiv.className = "d-flex justify-content-start mb-3";
-        aiDiv.innerHTML = `
-          <div class="ai-message p-3">
-            <i class="bi bi-camera-reels me-2"></i>Generating video...
-          </div>
-        `;
-        chat.appendChild(aiDiv);
-        chat.scrollTop = chat.scrollHeight;
-      }
+    aiDiv.innerHTML = `
+      <div class="ai-message p-3 text-muted d-flex align-items-center">
+        <i class="bi bi-camera-reels me-2"></i>
+        Generating video at <strong>&nbsp; ${resolution}</strong> &nbsp;
+        <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
+      </div>
+    `;
 
-      function appendErrorMessage(message) {
-        const chatMessages = document.getElementById("chat");
-
-        const errorDiv = document.createElement("div");
-        errorDiv.className = "d-flex justify-content-start mb-3";
-
-        errorDiv.innerHTML = `
-          <div class="ai-message p-3 text-danger border border-danger">
-            <i class="bi bi-exclamation-triangle me-2"></i>${message}
-          </div>
-        `;
-
-        chatMessages.appendChild(errorDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function appendGeneratedVideo(videoUrl) {
-        const chatMessages = document.getElementById("chat");
-
-        // Remove the "Generating video..." message
-        const loadingMessage = document.querySelector(".generating-video");
-        if (loadingMessage) {
-          loadingMessage.remove();
-        }
-
-        // Create a message container for the AI
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
-
-        // Create the message bubble
-        const bubble = document.createElement("div");
-        bubble.className = "ai-message p-3";
-
-        // Caption
-        const caption = document.createElement("div");
-        caption.textContent = "Generated Video:";
-        caption.classList.add("mb-2");
-
-        // Video
-        const videoElement = document.createElement("video");
-        videoElement.controls = true;
-        videoElement.src = videoUrl;
-        videoElement.classList.add("rounded", "w-100", "shadow");
-        videoElement.style.maxWidth = "500px";
-
-        // Append
-        bubble.appendChild(caption);
-        bubble.appendChild(videoElement);
-        messageElement.appendChild(bubble);
-        chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      async function generateVideo() {
-        const prompt = document.getElementById("promptInput").value.trim();
-        const resolution = document.getElementById("resolutionSelect").value;
-        const userId = localStorage.getItem("userId") || "guest";
-
-        const resultArea = document.getElementById("resultArea");
-        resultArea.innerHTML = "";
-
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          return;
-        }
-
-        resultArea.innerHTML = `<div class="text-muted mb-2">Generating video at ${resolution}...</div>`;
-
-        try {
-          const modelId = new URLSearchParams(window.location.search).get("id") || "pixverse-v4-text-to-video"; // fallback
-          const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${modelId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt, resolution, userId })
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            resultArea.innerHTML = `<div class="alert alert-danger">${data.error || "Server error."}</div>`;
-            return;
-          }
-
-          if (data.videoUrl) {
-            resultArea.innerHTML = `
-          <div class="alert alert-success">Video generated successfully:</div>
-          <video controls class="w-100" style="max-width: 500px;" src="${data.videoUrl}"></video>
-        `;
-          } else {
-            resultArea.innerHTML = `<div class="alert alert-warning">No video URL returned.</div>`;
-          }
-
-        } catch (err) {
-          console.error(err);
-          resultArea.innerHTML = `<div class="alert alert-danger">Failed to generate video. Try again.</div>`;
-        }
-      }
-
-      function copyToClipboard(icon) {
-        const messageText = icon.previousElementSibling.innerText.trim();
-        navigator.clipboard.writeText(messageText).then(() => {
-          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-          setTimeout(() => {
-            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-          }, 1500);
-        }).catch(err => {
-          console.error("Copy failed:", err);
-        });
-      }
-
-      window.addEventListener('DOMContentLoaded', () => {
+    chat.appendChild(aiDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
 
-        // Fetch the URL parameters only once
-        const params = new URLSearchParams(window.location.search);
-        const prompt = params.get('prompt');
-        const input = document.getElementById('promptInput');
+  function appendErrorMessage(message) {
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "d-flex justify-content-start mb-3";
 
+    errorDiv.innerHTML = `
+      <div class="ai-message p-3 text-danger border border-danger">
+        <i class="bi bi-exclamation-triangle me-2"></i>${message}
+      </div>
+    `;
 
-        if (prompt && input) {
-          // Log before setting the value
-          console.log('Setting input value to:', decodeURIComponent(prompt));
+    chat.appendChild(errorDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
-          input.value = decodeURIComponent(prompt);
+  function appendGeneratedVideo(videoUrl) {
+    // Remove the "Generating video..." message
+    const loadingMessage = document.querySelector(".generating-video");
+    if (loadingMessage) {
+      loadingMessage.remove();
+    }
 
-          // Optionally call the generateVideo function
-          console.log('Calling generateVideo function');
-          generateVideo();
-        } else {
-          console.error('Prompt or input not found.');
-        }
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
+
+    const bubble = document.createElement("div");
+    bubble.className = "ai-message p-3";
+
+    const caption = document.createElement("div");
+    caption.textContent = "Generated Video:";
+    caption.classList.add("mb-2");
+
+    const videoElement = document.createElement("video");
+    videoElement.controls = true;
+    videoElement.src = videoUrl;
+    videoElement.classList.add("rounded", "w-100", "shadow");
+    videoElement.style.maxWidth = "500px";
+
+    bubble.appendChild(caption);
+    bubble.appendChild(videoElement);
+    messageElement.appendChild(bubble);
+    chat.appendChild(messageElement);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  async function generateVideo() {
+    const prompt = document.getElementById("promptInput").value.trim();
+    const resolution = document.getElementById("resolutionSelect").value;
+    const userId = localStorage.getItem("userId") || "guest";
+
+    if (!prompt) {
+      alert("Please enter a prompt.");
+      return;
+    }
+
+    appendUserMessage(prompt);
+    appendGeneratingVideoMessage(resolution);
+
+    try {
+      const modelId = new URLSearchParams(window.location.search).get("id") || "pixverse-v4-text-to-video";
+      const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${modelId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, resolution, userId })
       });
 
-      // Create new room on click for both sidebar and mobile buttons
-      ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-        const btn = document.getElementById(id);
-        if (btn) {
-          btn.addEventListener("click", () => {
-            const createdAt = new Date().toISOString();
-            const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-            window.open(url, "_blank");
-          });
-        }
+      const data = await response.json();
+
+      if (!response.ok) {
+        appendErrorMessage(data.error || "Server error.");
+        return;
+      }
+
+      if (data.videoUrl) {
+        appendGeneratedVideo(data.videoUrl);
+      } else {
+        appendErrorMessage("No video URL returned.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      appendErrorMessage("Failed to generate video. Try again.");
+    }
+  }
+
+  function copyToClipboard(icon) {
+    const messageText = icon.previousElementSibling.innerText.trim();
+    navigator.clipboard.writeText(messageText).then(() => {
+      icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+      setTimeout(() => {
+        icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+      }, 1500);
+    }).catch(err => {
+      console.error("Copy failed:", err);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const prompt = params.get('prompt');
+    const input = document.getElementById('promptInput');
+
+    if (prompt && input) {
+      const decodedPrompt = decodeURIComponent(prompt);
+      input.value = decodedPrompt;
+
+      appendUserMessage(decodedPrompt);
+      appendGeneratingVideoMessage();
+      generateVideo();
+    }
+  });
+
+  ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const createdAt = new Date().toISOString();
+        const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+        window.open(url, "_blank");
+      });
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const roomCreatedAt = params.get("room");
+
+  if (roomCreatedAt) {
+    const date = new Date(roomCreatedAt);
+
+    const formatted = date.toLocaleString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    document.getElementById("roomTitle").textContent = "Room created";
+    document.getElementById("roomTimestamp").textContent = formatted;
+  }
+
+  function setAvatarInitials() {
+    const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+
+    const avatars = document.querySelectorAll("#navbar-avatar");
+    const userElements = {
+      desktop: {
+        username: document.getElementById("account-username"),
+        email: document.getElementById("account-email"),
+      },
+      mobile: {
+        username: document.getElementById("account-username-mobile"),
+        email: document.getElementById("account-email-mobile"),
+      }
+    };
+
+    const isLoggedIn = !!userData.username;
+
+    if (isLoggedIn) {
+      const username = userData.username;
+      const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+
+      avatars.forEach(avatar => avatar.textContent = firstInitial);
+
+      userElements.desktop.username && (userElements.desktop.username.textContent = username);
+      userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
+
+      userElements.mobile.username && (userElements.mobile.username.textContent = username);
+      userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
+    } else {
+      avatars.forEach(avatar => {
+        avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
       });
 
-      // Parse URL params
-      const params = new URLSearchParams(window.location.search);
-      const roomCreatedAt = params.get("room");
+      ["desktop", "mobile"].forEach(view => {
+        userElements[view].username && (userElements[view].username.textContent = "Guest");
+        userElements[view].email && (userElements[view].email.textContent = "");
+      });
+    }
+  }
 
-      if (roomCreatedAt) {
-        const date = new Date(roomCreatedAt);
+  document.addEventListener("DOMContentLoaded", setAvatarInitials);
+</script>
 
-        const formatted = date.toLocaleString(undefined, {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
-        document.getElementById("roomTitle").textContent = "Room created";
-        document.getElementById("roomTimestamp").textContent = formatted;
-      }
-
-      function setAvatarInitials() {
-        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-        const avatars = document.querySelectorAll("#navbar-avatar");
-        const userElements = {
-          desktop: {
-            username: document.getElementById("account-username"),
-            email: document.getElementById("account-email"),
-          },
-          mobile: {
-            username: document.getElementById("account-username-mobile"),
-            email: document.getElementById("account-email-mobile"),
-          }
-        };
-
-        const isLoggedIn = !!userData.username;
-
-        if (isLoggedIn) {
-          const username = userData.username;
-          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-          avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-          userElements.desktop.username && (userElements.desktop.username.textContent = username);
-          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-          userElements.mobile.username && (userElements.mobile.username.textContent = username);
-          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-        } else {
-          avatars.forEach(avatar => {
-            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-          });
-
-          ["desktop", "mobile"].forEach(view => {
-            userElements[view].username && (userElements[view].username.textContent = "Guest");
-            userElements[view].email && (userElements[view].email.textContent = "");
-          });
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", setAvatarInitials);
-
-    </script>
 
 </body>
 

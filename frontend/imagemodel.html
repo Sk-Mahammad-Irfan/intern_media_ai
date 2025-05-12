@@ -85,7 +85,10 @@
       width: auto;
       min-width: 160px;
     }
-
+    #resolutionSelect{
+      width: 170px;
+      background-color: #f8f9fa;
+    }
     .model-hr {
       border-top: 1.5px solid #6c757d;
       margin-top: 1rem;
@@ -340,10 +343,16 @@
         <!-- Chat Input Bar with Resolution Dropdown -->
         <div id="promptInputSection" class="container my-3">
           <div class="d-flex flex-column flex-md-row align-items-center gap-2">
-            <!-- Resolution Dropdown -->
-            <div class="d-flex align-items-center" style="gap: 8px;">
-              <label for="resolutionSelect" class="form-label mb-0">Resolution:</label>
-              <select id="resolutionSelect" class="form-select form-select-sm modern-select">
+
+            <!-- Input Bar -->
+            <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 flex-grow-1 input-bar"
+              style="max-width: 100%;">
+              <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
+                placeholder="Start a message..." style="box-shadow: none; outline: none;">
+
+                 <!-- Resolution Dropdown -->
+            <div class="d-flex align-items-center me-3" style="gap: 8px;">
+              <select id="resolutionSelect" class="form-select rounded-pill">
                 <option value="square_hd">Square HD</option>
                 <option value="square">Square</option>
                 <option value="portrait_4_3">Portrait 4:3</option>
@@ -353,11 +362,6 @@
               </select>
             </div>
 
-            <!-- Input Bar -->
-            <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 flex-grow-1 input-bar"
-              style="max-width: 100%;">
-              <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
-                placeholder="Start a message..." style="box-shadow: none; outline: none;">
               <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
                 style="width: 40px; height: 40px;" onclick="generateImage()">
                 <i class="bi bi-send-fill"></i>
