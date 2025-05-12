@@ -376,9 +376,14 @@
                 <a id="chat-button" class="btn btn-primary">
                   <i class="bi bi-chat-dots-fill me-1"></i> Chat
                 </a>
-                <button class="btn btn-outline-secondary">
+                <button
+                  class="btn btn-outline-secondary"
+                  onclick="window.location.href = `compare.html?id=${new URLSearchParams(window.location.search).get('id')}`"
+                >
                   <i class="bi bi-sliders"></i> Compare
                 </button>
+
+
               </div>
             </div>
 
@@ -624,57 +629,54 @@
         }
 
         function setAvatarInitials() {
-          const userData = JSON.parse(
-            localStorage.getItem("user_data") || "{}"
-          );
+      const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
-          const avatars = document.querySelectorAll("#navbar-avatar");
-          const userElements = {
-            desktop: {
-              username: document.getElementById("account-username"),
-              email: document.getElementById("account-email"),
-            },
-            mobile: {
-              username: document.getElementById("account-username-mobile"),
-              email: document.getElementById("account-email-mobile"),
-            },
-          };
+      const avatars = document.querySelectorAll("#navbar-avatar");
+      const userElements = {
+        desktop: {
+          username: document.getElementById("account-username"),
+          email: document.getElementById("account-email"),
+        },
+        mobile: {
+          username: document.getElementById("account-username-mobile"),
+          email: document.getElementById("account-email-mobile"),
+        },
+      };
 
-          const isLoggedIn = !!userData.username;
+      const isLoggedIn = !!userData.username;
 
-          if (isLoggedIn) {
-            const username = userData.username;
-            const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+      if (isLoggedIn) {
+        const username = userData.username;
+        const firstInitial = username.trim()[0]?.toUpperCase() || "U";
 
-            avatars.forEach((avatar) => (avatar.textContent = firstInitial));
+        avatars.forEach((avatar) => (avatar.textContent = firstInitial));
 
-            userElements.desktop.username &&
-              (userElements.desktop.username.textContent = username);
-            userElements.desktop.email &&
-              (userElements.desktop.email.textContent =
-                userData.email || "No email");
+        userElements.desktop.username &&
+          (userElements.desktop.username.textContent = username);
+        userElements.desktop.email &&
+          (userElements.desktop.email.textContent =
+            userData.email || "No email");
 
-            userElements.mobile.username &&
-              (userElements.mobile.username.textContent = username);
-            userElements.mobile.email &&
-              (userElements.mobile.email.textContent =
-                userData.email || "No email");
-          } else {
-            avatars.forEach((avatar) => {
-              avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-            });
+        userElements.mobile.username &&
+          (userElements.mobile.username.textContent = username);
+        userElements.mobile.email &&
+          (userElements.mobile.email.textContent =
+            userData.email || "No email");
+      } else {
+        avatars.forEach((avatar) => {
+          avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+        });
 
-            ["desktop", "mobile"].forEach((view) => {
-              userElements[view].username &&
-                (userElements[view].username.textContent = "Guest");
-              userElements[view].email &&
-                (userElements[view].email.textContent = "");
-            });
-          }
-        }
+        ["desktop", "mobile"].forEach((view) => {
+          userElements[view].username &&
+            (userElements[view].username.textContent = "Guest");
+          userElements[view].email && (userElements[view].email.textContent = "");
+        });
+      }
+    }
 
-        document.addEventListener("DOMContentLoaded", setAvatarInitials);
-      });
+    setAvatarInitials();
+  });
     </script>
   </body>
 </html>
