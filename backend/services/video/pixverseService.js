@@ -7,10 +7,11 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const pixverseFAL = async (prompt) => {
+// resolution options: "360p", "540p", default: "720p", "1080p"
+export const pixverseFAL = async (prompt, resolution = "720p") => {
   try {
     const result = await fal.subscribe("fal-ai/pixverse/v4/text-to-video", {
-      input: { prompt },
+      input: { prompt, resolution },
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
