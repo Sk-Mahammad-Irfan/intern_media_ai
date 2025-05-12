@@ -141,7 +141,7 @@
           <li><a class="dropdown-item" href="model.html">Models</a></li>
           <li><a class="dropdown-item" href="audiomodel.html">Chat</a></li>
           <li><a class="dropdown-item" href="#">Rankings</a></li>
-          <li><a class="dropdown-item" href="#">Docs</a></li>
+          <li><a class="dropdown-item" href="docs.html">Docs</a></li>
           <li><hr class="dropdown-divider" /></li>
           <li><a class="dropdown-item" href="credits.html">Credits</a></li>
           <li><a class="dropdown-item" href="settings.html">Settings</a></li>
@@ -186,7 +186,7 @@
       <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
       <li class="nav-item mx-1"><a class="nav-link fw-medium" href="audiomodel.html">Chat</a></li>
       <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Rankings</a></li>
-      <li class="nav-item mx-1"><a class="nav-link fw-medium" href="#">Docs</a></li>
+      <li class="nav-item mx-1"><a class="nav-link fw-medium" href="docs.html">Docs</a></li>
       <li class="nav-item mx-1" id="signInDesktop">
         <a class="nav-link fw-medium" href="auth.html">
           <button type="button" class="btn btn-outline-primary">Sign in</button>
@@ -270,6 +270,9 @@
       <button class="create-btn">Create Key</button>
     </div>
     <hr />
+    <div id="apiKeyList" class="mt-4"></div>
+
+    <hr>    
     <p class="page-description">
       Create a new API key to acces all models from mediaAi
       <span class="info-icon" data-bs-toggle="tooltip" title="Provisioning keys allow secure programmatic management of API keys.">ⓘ</span>
@@ -309,6 +312,7 @@
     <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/api-keys.js"></script>
     <script>function setAvatarInitials() {
           // Get the stored user data
           const userData = JSON.parse(

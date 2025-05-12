@@ -1,5 +1,6 @@
 import userModel from "../models/userModel.js";
 
+// Existing: updateCreditsController
 export const updateCreditsController = async (req, res) => {
   try {
     const { userId, amount } = req.body;
@@ -46,6 +47,7 @@ export const updateCreditsController = async (req, res) => {
   }
 };
 
+// Existing: getCreditsController
 export const getCreditsController = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -81,6 +83,7 @@ export const getCreditsController = async (req, res) => {
   }
 };
 
+// Existing: decreaseCredits
 export const decreaseCredits = async (userId, amount) => {
   if (!userId || amount === undefined) {
     throw new Error("User ID and amount are required");
@@ -105,4 +108,19 @@ export const decreaseCredits = async (userId, amount) => {
     email: user.email,
     credits: user.credits,
   };
+};
+
+// ✅ New: checkCredits function
+export const checkCredits = async (userId, credits) => {
+  if (!userId || credits === undefined) {
+    throw new Error("User ID and credits are required");
+  }
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.credits >= credits;
 };

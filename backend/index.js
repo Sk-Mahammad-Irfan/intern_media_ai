@@ -3,6 +3,8 @@ import cors from "cors";
 import authRouter from "./router/authRouter.js";
 import creditRouter from "./router/creditRouter.js";
 import adapterRouter from "./router/adapterRouter.js";
+import apiKeyRouter from "./router/apiRouter.js";
+import apiReferenceRouter from "./router/adapterApiRoutes.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import session from "express-session";
@@ -33,6 +35,8 @@ const PORT = process.env.PORT || 5000;
 app.use("/api/auth", authRouter);
 app.use("/api/credits", creditRouter);
 app.use("/api/ai", adapterRouter);
+app.use("/api/api-key", apiKeyRouter);
+app.use("/api/reference", apiReferenceRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is running");

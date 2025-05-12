@@ -45,11 +45,12 @@
       <div
         class="container-fluid d-flex align-items-center justify-content-between"
       >
-      
         <!-- Brand -->
         <a class="navbar-brand fw-bold" href="index.html"
-        >&nbsp;<span style="font-weight: 500;">Open</span><span class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a
-      >
+          >&nbsp;<span style="font-weight: 500">Open</span
+          ><span class="media">Media</span
+          ><span style="font-weight: 500">Flow</span>&nbsp;</a
+        >
 
         <!-- Mobile controls -->
         <div
@@ -134,7 +135,7 @@
               <li><a class="dropdown-item" href="model.html">Models</a></li>
               <li><a class="dropdown-item" href="audiomodel.html">Chat</a></li>
               <li><a class="dropdown-item" href="#">Rankings</a></li>
-              <li><a class="dropdown-item" href="#">Docs</a></li>
+              <li><a class="dropdown-item" href="docs.html">Docs</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="credits.html">Credits</a></li>
               <li>
@@ -214,7 +215,7 @@
             <a class="nav-link fw-medium" href="#">Rankings</a>
           </li>
           <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="#">Docs</a>
+            <a class="nav-link fw-medium" href="docs.html">Docs</a>
           </li>
           <li class="nav-item mx-1" id="signInDesktop">
             <a class="nav-link fw-medium" href="auth.html">
@@ -456,7 +457,10 @@
             <div class="modal-body pt-0">
               <h6 class="fw-semibold mb-3">Profile details</h6>
               <div class="d-flex align-items-center mb-3">
-                <div class="avatar-wrapper position-relative me-2" style="width: 43px; height: 43px;">
+                <div
+                  class="avatar-wrapper position-relative me-2"
+                  style="width: 43px; height: 43px"
+                >
                   <img
                     id="profile-image"
                     src="assets/profile.jpg"
@@ -466,7 +470,7 @@
                   <div
                     id="navbar-avatar"
                     class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center position-absolute top-0 start-0 w-100 h-100"
-                    style="display: none; font-weight: bold; font-size: 18px;"
+                    style="display: none; font-weight: bold; font-size: 18px"
                   ></div>
                 </div>
                 <div>
@@ -571,39 +575,39 @@
 
       // Load user_data from localStorage and update modal
       document.addEventListener("DOMContentLoaded", () => {
-  const userDataRaw = localStorage.getItem("user_data");
-  if (userDataRaw) {
-    try {
-      const user = JSON.parse(userDataRaw);
-      document.getElementById("user-name").textContent =
-        user.username || "Unknown User";
-      document.getElementById(
-        "primary-email"
-      ).innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
-      document.getElementById("user-credits").textContent =
-        user.credits || 0;
-      document.getElementById("user-loginTime").textContent = new Date(
-        user.loginTime
-      ).toLocaleString();
-      document.getElementById("connected-email").textContent =
-        user.email || "";
+        const userDataRaw = localStorage.getItem("user_data");
+        if (userDataRaw) {
+          try {
+            const user = JSON.parse(userDataRaw);
+            document.getElementById("user-name").textContent =
+              user.username || "Unknown User";
+            document.getElementById(
+              "primary-email"
+            ).innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
+            document.getElementById("user-credits").textContent =
+              user.credits || 0;
+            document.getElementById("user-loginTime").textContent = new Date(
+              user.loginTime
+            ).toLocaleString();
+            document.getElementById("connected-email").textContent =
+              user.email || "";
 
-      // Avatar logic
-      const username = user.username || "User";
-      const firstInitial = username.trim()[0].toUpperCase();
-      const avatar = document.getElementById("navbar-avatar");
-      const profileImg = document.getElementById("profile-image");
+            // Avatar logic
+            const username = user.username || "User";
+            const firstInitial = username.trim()[0].toUpperCase();
+            const avatar = document.getElementById("navbar-avatar");
+            const profileImg = document.getElementById("profile-image");
 
-      if (avatar && profileImg) {
-        avatar.textContent = firstInitial;
-        avatar.style.display = "flex";
-        profileImg.style.display = "none"; // hide image
-      }
-    } catch (error) {
-      console.error("Failed to parse user_data:", error);
-    }
-  }
-});
+            if (avatar && profileImg) {
+              avatar.textContent = firstInitial;
+              avatar.style.display = "flex";
+              profileImg.style.display = "none"; // hide image
+            }
+          } catch (error) {
+            console.error("Failed to parse user_data:", error);
+          }
+        }
+      });
       function setAvatarInitials() {
         // Get the stored user data
         const userData = JSON.parse(localStorage.getItem("user_data") || "{}");

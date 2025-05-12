@@ -287,148 +287,163 @@
     </nav>
 
     <!-- Main Container -->
-    <div class="container-fluid main-container">
-      <!-- Desktop Sidebar -->
-      <div class="sidebar d-none d-md-block p-3">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a href="settings.html" class="nav-link text-secondary">
-              <i class="bi bi-gear me-2"></i> Settings
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="credits.html" class="nav-link text-secondary">
-              <i class="bi bi-credit-card me-2"></i> Credits
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="api-keys.html" class="nav-link text-secondary">
-              <i class="bi bi-key me-2"></i> API Keys
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="provisioning.html" class="nav-link">
-              <i class="bi bi-hdd me-2"></i> Provisioning Keys
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="integrations.html" class="nav-link text-secondary">
-              <i class="bi bi-puzzle me-2"></i> Integrations
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="privacy.html" class="nav-link active">
-              <i class="bi bi-shield-lock me-2"></i> Privacy
-            </a>
-          </li>
-        </ul>
-      </div>
+    <main class="container py-5">
+      <h1 class="display-4 mb-4">API Documentation</h1>
+      <p class="lead">
+        Welcome to the Black Forest Labs API. This guide explains how to use our
+        media generation REST API.
+      </p>
 
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="container py-4">
-          <h1 class="mb-3">Privacy Settings</h1>
-          <p class="lead">Manage your privacy settings and data preferences.</p>
+      <h2 class="section-title">Authentication</h2>
+      <p>
+        All requests must include an API key provided in the
+        <code class="text-primary">x-api-key</code> header.
+      </p>
+      <pre
+        style="
+          background-color: #f5f5f5;
+          color: #333;
+          border: 1px solid #ccc;
+          padding: 1rem;
+        "
+      ><code class="text-primary">POST /api/generate-image/:id
+      x-api-key: YOUR_API_KEY</code></pre>
 
-          <!-- Data Collection Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Collection</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowAnalytics"
-                  checked
-                />
-                <label class="form-check-label" for="allowAnalytics"
-                  >Allow analytics data collection</label
-                >
-                <div class="text-muted small">
-                  We collect anonymous usage data to improve our services
-                </div>
-              </div>
+      <h2 class="section-title">Base URL</h2>
+      <p>All endpoints are relative to:</p>
+      <pre
+        style="
+          background-color: #f5f5f5;
+          color: #333;
+          border: 1px solid #ccc;
+          padding: 1rem;
+        "
+      ><code class="text-primary">https://media-ai-backend.vercel.app</code></pre>
 
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowPersonalization"
-                  checked
-                />
-                <label class="form-check-label" for="allowPersonalization"
-                  >Allow personalization</label
-                >
-                <div class="text-muted small">
-                  We use your data to personalize your experience
-                </div>
-              </div>
-            </div>
-          </div>
+      <h2 class="section-title">Endpoints</h2>
 
-          <!-- Model Usage Data Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Model Usage Data</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="saveModelData"
-                  checked
-                />
-                <label class="form-check-label" for="saveModelData"
-                  >Save model interactions</label
-                >
-                <div class="text-muted small">
-                  Your prompts and model responses will be saved for improving
-                  AI models
-                </div>
-              </div>
-
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="shareModelData"
-                />
-                <label class="form-check-label" for="shareModelData"
-                  >Share data with model providers</label
-                >
-                <div class="text-muted small">
-                  Allow us to share anonymized data with our model providers
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Data Management Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Management</h5>
-            </div>
-            <div class="card-body">
-              <p>
-                You can download your data or request deletion of all your data
-                from our servers.
-              </p>
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary w-100 w-sm-auto">
-                  Download My Data
-                </button>
-                <button class="btn btn-outline-danger w-100 w-sm-auto">
-                  Request Data Deletion
-                </button>
-              </div>
-            </div>
-          </div>
+      <div class="card mb-3">
+        <h4 class="card-header">POST /api/reference/generate-image/:id</h4>
+        <div class="card-body">
+          <p>Generates audio for the specified resource ID.</p>
+          <p><strong>Request Body:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code>{
+      "prompt": "a red panda eating a bamboo in front of a poster that says "recraft V3 now available at fal"
+}</code></pre>
+          <p><strong>Example cURL Request:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code class="text-primary">curl -X POST -H "x-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "prompt": "a red panda eating a bamboo in front of a poster that says "recraft V3 now available at fal"
+          }' \
+          https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code></pre>
         </div>
       </div>
-    </div>
+
+      <div class="card mb-3">
+        <h4 class="card-header">POST /api/reference/generate-video/:id</h4>
+        <div class="card-body">
+          <p>Generates audio for the specified resource ID.</p>
+          <p><strong>Request Body:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code>{
+      "prompt": "Two anthropomorphic cats in comfy boxing gear and bright gloves fight intensely on a spotlighted stage."
+}</code></pre>
+          <p><strong>Example cURL Request:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code class="text-primary">curl -X POST -H "x-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "prompt": "Two anthropomorphic cats in comfy boxing gear and bright gloves fight intensely on a spotlighted stage."
+          }' \
+          https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code></pre>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <h4 class="card-header">POST /api/reference/generate-audio/:id</h4>
+        <div class="card-body">
+          <p>Generates audio for the specified resource ID.</p>
+          <p><strong>Request Body:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code>{
+    "prompt": "dog barking in rain",
+    "duration": 10
+}</code></pre>
+          <p><strong>Example cURL Request:</strong></p>
+          <pre
+            style="
+              background-color: #f5f5f5;
+              color: #333;
+              border: 1px solid #ccc;
+              padding: 1rem;
+            "
+          ><code class="text-primary">curl -X POST -H "x-api-key: YOUR_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "prompt": "dog barking in rain",
+          "duration": 10
+        }' \
+        https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code></pre>
+        </div>
+      </div>
+
+      <h2 class="section-title">Error Codes</h2>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong class="text-danger">401 Unauthorized</strong>: Missing or
+          invalid API key.
+        </li>
+        <li class="list-group-item">
+          <strong class="text-danger">404 Not Found</strong>: Resource not
+          found.
+        </li>
+        <li class="list-group-item">
+          <strong class="text-danger">500 Internal Server Error</strong>: A
+          server-side issue occurred.
+        </li>
+      </ul>
+
+      <h2 class="section-title">Support</h2>
+      <p>
+        For help or questions, contact our team at
+        <a href="mailto:support@blackforestlabs.com"
+          >support@blackforestlabs.com</a
+        >.
+      </p>
+    </main>
 
     <footer>
       <div class="f-info mt-3">

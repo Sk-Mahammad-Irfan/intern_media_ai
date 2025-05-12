@@ -1,6 +1,6 @@
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
-import { decreaseCredits } from "./creditController.js";
+import { checkCredits, decreaseCredits } from "./creditController.js";
 
 // Handler imports
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
@@ -38,6 +38,11 @@ export const generateVideo = async (req, res) => {
 
   for (const { handler, credits, type } of matchingHandlers) {
     try {
+      const hasEnoughCredits = await checkCredits(userId, credits);
+
+      if (!hasEnoughCredits) {
+        return res.status(402).json({ error: "Not enough credits." });
+      }
       console.log("Trying handler:", handler.name);
       const rawData = await handler(prompt);
       let videoUrl = null;
@@ -101,6 +106,12 @@ export const generateImage = async (req, res) => {
 
   for (const { handler, credits, type } of matchingHandlers) {
     try {
+      const hasEnoughCredits = await checkCredits(userId, credits);
+
+      if (!hasEnoughCredits) {
+        return res.status(402).json({ error: "Not enough credits." });
+      }
+
       const rawData = await handler(prompt);
       let imageUrl = null;
 
@@ -164,6 +175,12 @@ export const generateAudio = async (req, res) => {
 
   for (const { handler, credits } of matchingHandlers) {
     try {
+      const hasEnoughCredits = await checkCredits(userId, credits);
+
+      if (!hasEnoughCredits) {
+        return res.status(402).json({ error: "Not enough credits." });
+      }
+
       let audioUrl = null;
       if (id === "multilingual-audio") {
         audioUrl = await handler(prompt);

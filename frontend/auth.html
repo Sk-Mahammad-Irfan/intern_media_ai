@@ -32,37 +32,35 @@
       }
 
       .auth-card-wrapper {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
 
-@media (min-width: 576px) {
-  .auth-card-wrapper {
-    max-width: 500px;
-  }
-}
+      @media (min-width: 576px) {
+        .auth-card-wrapper {
+          max-width: 500px;
+        }
+      }
 
-@media (min-width: 768px) {
-  .auth-card-wrapper {
-    max-width: 450px;
-  }
-}
+      @media (min-width: 768px) {
+        .auth-card-wrapper {
+          max-width: 450px;
+        }
+      }
 
-@media (min-width: 992px) {
-  .auth-card-wrapper {
-    max-width: 420px;
-  }
-}
+      @media (min-width: 992px) {
+        .auth-card-wrapper {
+          max-width: 420px;
+        }
+      }
 
-@media (min-width: 1200px) {
-  .auth-card-wrapper {
-    max-width: 450px;
-  }
-}
-
- 
+      @media (min-width: 1200px) {
+        .auth-card-wrapper {
+          max-width: 450px;
+        }
+      }
     </style>
   </head>
   <body class="d-flex flex-column min-vh-100">
@@ -74,10 +72,11 @@
           <div
             class="container-fluid d-flex align-items-center justify-content-between"
           >
-          
             <!-- Brand -->
             <a class="navbar-brand fw-bold" href="index.html"
-              >&nbsp;<span style="font-weight: 500;">Open</span><span class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a
+              >&nbsp;<span style="font-weight: 500">Open</span
+              ><span class="media">Media</span
+              ><span style="font-weight: 500">Flow</span>&nbsp;</a
             >
 
             <!-- Mobile controls -->
@@ -169,7 +168,7 @@
                     <a class="dropdown-item" href="audiomodel.html">Chat</a>
                   </li>
                   <li><a class="dropdown-item" href="#">Rankings</a></li>
-                  <li><a class="dropdown-item" href="#">Docs</a></li>
+                  <li><a class="dropdown-item" href="docs.html">Docs</a></li>
                   <li><hr class="dropdown-divider" /></li>
                   <div class="mobile-auth-only dnone">
                     <li>
@@ -263,7 +262,7 @@
                 <a class="nav-link fw-medium" href="#">Rankings</a>
               </li>
               <li class="nav-item mx-1">
-                <a class="nav-link fw-medium" href="#">Docs</a>
+                <a class="nav-link fw-medium" href="docs.html">Docs</a>
               </li>
               <li class="nav-item mx-1" id="signInDesktop">
                 <a class="nav-link fw-medium" href="auth.html">
@@ -339,49 +338,65 @@
             </ul>
           </div>
         </nav>
-        </div>
-        </div>
-
-        
-
-        <!-- Page Content -->
-<div class="container py-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="auth-card-wrapper">
-
-      <div class="card p-4 shadow-sm">
-        <h3 id="form-title" class="text-center mb-3">Login</h3>
-        <form id="auth-form">
-          <div id="username-field" class="mb-3 d-none">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" id="username" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" required />
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" id="password" class="form-control" required />
-          </div>
-          <button type="submit" class="btn btn-primary w-100" id="submit-btn">
-            Login
-          </button>
-        </form>
-        <p class="text-center mt-3">
-          <span id="toggle-text">Don't have an account?</span>
-          <a href="#" id="toggle-link">Sign Up</a>
-        </p>
-        <button id="google-login" class="btn btn-outline-dark w-100 mb-2">
-          <i class="bi bi-google me-2"></i>Login with Google
-        </button>
-        <div id="msg" class="text-center text-danger mt-2"></div>
       </div>
     </div>
-  </div>
-</div>
 
-     
+    <!-- Page Content -->
+    <div class="container py-5 mb-5">
+      <div class="row justify-content-center">
+        <div class="auth-card-wrapper">
+          <div class="card p-4 shadow-sm">
+            <h3 id="form-title" class="text-center mb-3">Login</h3>
+            <form id="auth-form">
+              <div id="username-field" class="mb-3 d-none">
+                <label for="username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                id="submit-btn"
+              >
+                Login
+              </button>
+            </form>
+            <p class="text-center mt-3">
+              <span id="toggle-text">Don't have an account?</span>
+              <a href="#" id="toggle-link">Sign Up</a>
+            </p>
+            <button id="google-login" class="btn btn-outline-dark w-100 mb-2">
+              <i class="bi bi-google me-2"></i>Login with Google
+            </button>
+            <div id="msg" class="text-center text-danger mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer>
       <div class="f-info mt-3">
@@ -407,54 +422,61 @@
         </div>
       </div>
     </footer>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
     <script>
       function setAvatarInitials() {
-      const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
-      const avatars = document.querySelectorAll(".navbar-avatar");
-      const userElements = {
-        desktop: {
-          username: document.getElementById("account-username"),
-          email: document.getElementById("account-email"),
-        },
-        mobile: {
-          username: document.getElementById("account-username-mobile"),
-          email: document.getElementById("account-email-mobile"),
+        const avatars = document.querySelectorAll(".navbar-avatar");
+        const userElements = {
+          desktop: {
+            username: document.getElementById("account-username"),
+            email: document.getElementById("account-email"),
+          },
+          mobile: {
+            username: document.getElementById("account-username-mobile"),
+            email: document.getElementById("account-email-mobile"),
+          },
+        };
+
+        const isLoggedIn = !!userData.username;
+
+        if (isLoggedIn) {
+          const username = userData.username;
+          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+
+          avatars.forEach((avatar) => (avatar.textContent = firstInitial));
+
+          userElements.desktop.username &&
+            (userElements.desktop.username.textContent = username);
+          userElements.desktop.email &&
+            (userElements.desktop.email.textContent =
+              userData.email || "No email");
+
+          userElements.mobile.username &&
+            (userElements.mobile.username.textContent = username);
+          userElements.mobile.email &&
+            (userElements.mobile.email.textContent =
+              userData.email || "No email");
+        } else {
+          avatars.forEach((avatar) => {
+            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+          });
+
+          ["desktop", "mobile"].forEach((view) => {
+            userElements[view].username &&
+              (userElements[view].username.textContent = "Guest");
+            userElements[view].email &&
+              (userElements[view].email.textContent = "");
+          });
         }
-      };
-
-      const isLoggedIn = !!userData.username;
-
-      if (isLoggedIn) {
-        const username = userData.username;
-        const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-        avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-        userElements.desktop.username && (userElements.desktop.username.textContent = username);
-        userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-        userElements.mobile.username && (userElements.mobile.username.textContent = username);
-        userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-      } else {
-        avatars.forEach(avatar => {
-          avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-        });
-
-        ["desktop", "mobile"].forEach(view => {
-          userElements[view].username && (userElements[view].username.textContent = "Guest");
-          userElements[view].email && (userElements[view].email.textContent = "");
-        });
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", setAvatarInitials);
-
+      document.addEventListener("DOMContentLoaded", setAvatarInitials);
     </script>
-    </body>
+  </body>
 </html>

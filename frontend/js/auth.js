@@ -59,7 +59,7 @@ form.addEventListener("submit", async (e) => {
   const body = isLogin ? { email, password } : { username, email, password };
 
   try {
-    const res = await fetch(`https://media-ai-backend.vercel.app/api/auth${endpoint}`, {
+    const res = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -97,7 +97,7 @@ form.addEventListener("submit", async (e) => {
       msg.classList.add("text-danger");
     }
   } catch (err) {
-    if(err.response && err.response.status===401){
+    if (err.response && err.response.status === 401) {
       msg.textContent = "User already exists. Please login.";
       msg.classList.add("text-danger");
     } else {
@@ -112,7 +112,7 @@ form.addEventListener("submit", async (e) => {
 
 // Google login handler
 document.getElementById("google-login").addEventListener("click", () => {
-  window.location.href = `https://media-ai-backend.vercel.app/api/auth/google`;
+  window.location.href = `http://localhost:5000/api/auth/google`;
 });
 
 // Check if user is already logged in
