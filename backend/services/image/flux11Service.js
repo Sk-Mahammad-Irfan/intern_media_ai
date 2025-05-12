@@ -9,10 +9,14 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const falFluxProV1_1 = async (prompt) => {
+// The size of the generated image. Default value: landscape_4_3
+
+// Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
+
+export const falFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
   try {
     const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
-      input: { prompt },
+      input: { prompt, image_size: resolution },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {

@@ -1,9 +1,10 @@
 import { fal } from "@fal-ai/client";
 
-export const pikaFAL = async (prompt) => {
+// resolution options:default: "720p", "1080p"
+export const pikaFAL = async (prompt, resolution = "720p") => {
   try {
     const result = await fal.subscribe("fal-ai/pika/v2.1/text-to-video", {
-      input: { prompt },
+      input: { prompt, resolution },
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {

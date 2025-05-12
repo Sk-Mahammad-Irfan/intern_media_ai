@@ -1,82 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Chatroom | OpenMediaFlow</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
-    crossorigin="anonymous" 
-    referrerpolicy="no-referrer" />
-   <link href="css/styles.css" rel="stylesheet"/>
-    <style>
-     
-      #chat {
-     height: calc(100vh - 300px);
-    overflow-y: auto;
-    padding: 1rem;
-    padding-bottom: 130px; 
-  
-  }
-      #promptInputSection {
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    right: 0;
-    padding: 1rem;
-    
-    box-sizing: border-box;
-    max-width: calc(100vw - 250px);
-    overflow-x: hidden;
-    z-index: 1000; 
-  }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Chatroom | OpenMediaFlow</title>
 
-  .input-bar{
-    border: 0.6px solid #ddd;
-    margin-right: 10px;
-  }
-      #sidebar {
-        width: 250px;
-        height: 100vh;
-        border-right: 1px solid #dee2e6;
-        overflow-y: auto;
-      }
-      .model-card {
-        border: 1px solid #dee2e6;
-        border-radius: 12px;
-        padding: 1rem;
-        background-color: white;
-        height: 100px;
-      }
-  
-      .user-message {
-    background-color: #0d6efd;
-    color: white;
-    border-radius: 20px;
-    max-width: 70%;
-    word-wrap: break-word;
-  }
-  
-  .ai-message {
-    background-color: #e9ecef;
-    border-radius: 20px;
-    max-width: 70%;
-    word-wrap: break-word;
-  }
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="css/styles.css" rel="stylesheet" />
+  <style>
+    #chat {
+      height: calc(100vh - 300px);
+      overflow-y: auto;
+      padding: 1rem;
+      padding-bottom: 130px;
 
-  
+    }
+
+    #promptInputSection {
+      position: fixed;
+      bottom: 0;
+      left: 250px;
+      right: 0;
+      padding: 1rem;
+
+      box-sizing: border-box;
+      max-width: calc(100vw - 250px);
+      overflow-x: hidden;
+      z-index: 1000;
+    }
+
+    .input-bar {
+      border: 0.6px solid #ddd;
+      margin-right: 10px;
+    }
+
+    #sidebar {
+      width: 250px;
+      height: 100vh;
+      border-right: 1px solid #dee2e6;
+      overflow-y: auto;
+    }
+
+    .model-card {
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 1rem;
+      background-color: white;
+      height: 100px;
+    }
+
+    .user-message {
+      background-color: #0d6efd;
+      color: white;
+      border-radius: 20px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    .ai-message {
+      background-color: #e9ecef;
+      border-radius: 20px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+
     .modern-select {
       border-radius: 0.5rem;
       padding: 0.25rem 0.75rem;
@@ -86,20 +85,22 @@
       width: auto;
       min-width: 160px;
     }
-  
+
     .model-hr {
-    border-top: 1.5px solid #6c757d; 
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  @media (max-width: 768px) {
-    #promptInputSection {
-      left: 0;
-      max-width: 100vw;
+      border-top: 1.5px solid #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
     }
-  
-    #sidebar {display: none;}
+
+    @media (max-width: 768px) {
+      #promptInputSection {
+        left: 0;
+        max-width: 100vw;
+      }
+
+      #sidebar {
+        display: none;
+      }
     }
   
   
@@ -312,274 +313,283 @@
           <button id="newRoomBtnMobile" class="btn btn-outline-secondary mb-3 w-100">New Room</button>
         </div>
 
-  <!-- Model Selector Header -->
-  <div class="px-4 pt-3">
-    <div class="d-flex align-items-center justify-content-between mb-4">
-      <div class="d-flex align-items-center gap-2">
-        <label class="fw-semibold mb-0">Model:</label>
-        <select id="modelSelector" class="form-select form-select-sm modern-select" onchange="handleModelChange()">
-          <!-- Options will be added dynamically -->
-        </select>
-      </div>
-    </div>
-    <hr class="model-hr" />
-  </div>
-
-  
-      
-      
-            <!-- Chat Section -->
-            <div id="chat" class="container-fluid mt-4">
-              <!-- Chat messages with audio will appear here -->
+        <!-- Model Selector Header -->
+        <div class="px-4 pt-3">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <label class="fw-semibold mb-0">Model:</label>
+              <select id="modelSelector" class="form-select form-select-sm modern-select"
+                onchange="handleModelChange()">
+                <!-- Options will be added dynamically -->
+              </select>
             </div>
-      
-            
-                
-    <!-- Chat Input Bar -->
-  <div id="promptInputSection" class="container my-3">
-    <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 input-bar" style="max-width: 100%;">
-  
-      <!-- Prompt Input -->
-      <input 
-        type="text" 
-        id="promptInput" 
-        class="form-control border-0 bg-transparent text-dark"
-        placeholder="Start a message..." 
-        style="box-shadow: none; outline: none;"
-      >
-
-      <!-- Send Button -->
-      <button 
-        class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" 
-        style="width: 40px; height: 40px;" 
-        onclick="generateImage()"
-      >
-        <i class="bi bi-send-fill"></i>
-      </button>
-  
-    </div>
-  </div>
+          </div>
+          <hr class="model-hr" />
         </div>
+
+
+
+
+        <!-- Chat Section -->
+        <div id="chat" class="container-fluid mt-4">
+          <!-- Chat messages with audio will appear here -->
+        </div>
+
+
+
+        <!-- Chat Input Bar with Resolution Dropdown -->
+        <div id="promptInputSection" class="container my-3">
+          <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+            <!-- Resolution Dropdown -->
+            <div class="d-flex align-items-center" style="gap: 8px;">
+              <label for="resolutionSelect" class="form-label mb-0">Resolution:</label>
+              <select id="resolutionSelect" class="form-select form-select-sm modern-select">
+                <option value="square_hd">Square HD</option>
+                <option value="square">Square</option>
+                <option value="portrait_4_3">Portrait 4:3</option>
+                <option value="portrait_16_9">Portrait 16:9</option>
+                <option value="landscape_4_3">Landscape 4:3</option>
+                <option value="landscape_16_9">Landscape 16:9</option>
+              </select>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 flex-grow-1 input-bar"
+              style="max-width: 100%;">
+              <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
+                placeholder="Start a message..." style="box-shadow: none; outline: none;">
+              <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                style="width: 40px; height: 40px;" onclick="generateImage()">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-      <script src="js/script.js"></script>
-      <script src="js/search.js"></script>
-      <script src="js/model-selector.js"></script>
-      <script src="js/auth.js"></script>
-      <script src="js/config.js"></script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/model-selector.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/config.js"></script>
 
 
-      <script>
-        const chat = document.getElementById("chat");
-      
-        document.addEventListener("DOMContentLoaded", () => {
-          console.log('DOM fully loaded and parsed');
-      
-          // Set avatar initials
-          setAvatarInitials();
-      
-          // Parse URL parameters
-          const params = new URLSearchParams(window.location.search);
-          const prompt = params.get('prompt');
-          const input = document.getElementById('promptInput'); // Consistent ID for prompt input
-      
-          console.log('Prompt from URL:', prompt);
-          console.log('Input element:', input);
-      
-          if (prompt && input) {
-            input.value = decodeURIComponent(prompt);
-            console.log('Calling generateImage function');
-            generateImage(); // Updated to call correct function
-          }
-      
-          // Room creation timestamp
-          const roomCreatedAt = params.get("room");
-          if (roomCreatedAt) {
-            const date = new Date(roomCreatedAt);
-            const formatted = date.toLocaleString(undefined, {
-              weekday: "short",
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-            document.getElementById("roomTitle").textContent = "Room created";
-            document.getElementById("roomTimestamp").textContent = formatted;
-          }
-      
-          // Add click listeners for "new room" buttons
-          ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) {
-              btn.addEventListener("click", () => {
-                const createdAt = new Date().toISOString();
-                const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-                window.open(url, "_blank");
-              });
-            }
-          });
-        });
-      
-        function setAvatarInitials() {
-          const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-          const avatars = document.querySelectorAll("#navbar-avatar");
-          const userElements = {
-            desktop: {
-              username: document.getElementById("account-username"),
-              email: document.getElementById("account-email"),
-            },
-            mobile: {
-              username: document.getElementById("account-username-mobile"),
-              email: document.getElementById("account-email-mobile"),
-            }
-          };
-      
-          if (userData.username) {
-            const firstInitial = userData.username.trim()[0]?.toUpperCase() || "U";
-            avatars.forEach(avatar => avatar.textContent = firstInitial);
-            userElements.desktop.username.textContent = userData.username;
-            userElements.desktop.email.textContent = userData.email || "No email";
-            userElements.mobile.username.textContent = userData.username;
-            userElements.mobile.email.textContent = userData.email || "No email";
-          } else {
-            avatars.forEach(avatar => avatar.innerHTML = `<i class="fa-solid fa-user"></i>`);
-            ["desktop", "mobile"].forEach(view => {
-              userElements[view].username.textContent = "Guest";
-              userElements[view].email.textContent = "";
-            });
-          }
+    <script>
+      const chat = document.getElementById("chat");
+
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log('DOM fully loaded and parsed');
+
+        // Set avatar initials
+        setAvatarInitials();
+
+        // Parse URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const prompt = params.get('prompt');
+        const input = document.getElementById('promptInput'); // Consistent ID for prompt input
+
+        console.log('Prompt from URL:', prompt);
+        console.log('Input element:', input);
+
+        if (prompt && input) {
+          input.value = decodeURIComponent(prompt);
+          console.log('Calling generateImage function');
+          generateImage(); // Updated to call correct function
         }
-      
-        function appendUserMessage(prompt) {
-          const userWrapper = document.createElement("div");
-          userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
-          userWrapper.innerHTML = `
+
+        // Room creation timestamp
+        const roomCreatedAt = params.get("room");
+        if (roomCreatedAt) {
+          const date = new Date(roomCreatedAt);
+          const formatted = date.toLocaleString(undefined, {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          document.getElementById("roomTitle").textContent = "Room created";
+          document.getElementById("roomTimestamp").textContent = formatted;
+        }
+
+        // Add click listeners for "new room" buttons
+        ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach(id => {
+          const btn = document.getElementById(id);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              const createdAt = new Date().toISOString();
+              const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+              window.open(url, "_blank");
+            });
+          }
+        });
+      });
+
+      function setAvatarInitials() {
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+        const avatars = document.querySelectorAll("#navbar-avatar");
+        const userElements = {
+          desktop: {
+            username: document.getElementById("account-username"),
+            email: document.getElementById("account-email"),
+          },
+          mobile: {
+            username: document.getElementById("account-username-mobile"),
+            email: document.getElementById("account-email-mobile"),
+          }
+        };
+
+        if (userData.username) {
+          const firstInitial = userData.username.trim()[0]?.toUpperCase() || "U";
+          avatars.forEach(avatar => avatar.textContent = firstInitial);
+          userElements.desktop.username.textContent = userData.username;
+          userElements.desktop.email.textContent = userData.email || "No email";
+          userElements.mobile.username.textContent = userData.username;
+          userElements.mobile.email.textContent = userData.email || "No email";
+        } else {
+          avatars.forEach(avatar => avatar.innerHTML = `<i class="fa-solid fa-user"></i>`);
+          ["desktop", "mobile"].forEach(view => {
+            userElements[view].username.textContent = "Guest";
+            userElements[view].email.textContent = "";
+          });
+        }
+      }
+
+      function appendUserMessage(prompt) {
+        const userWrapper = document.createElement("div");
+        userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+        userWrapper.innerHTML = `
             <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
               ${prompt}
             </div>
             <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
           `;
-          chat.appendChild(userWrapper);
-        }
-      
-        function appendGeneratingMessage() {
-          const aiDiv = document.createElement("div");
-          aiDiv.className = "d-flex justify-content-start mb-3";
-          aiDiv.innerHTML = `<div class="ai-message p-3" id="generating-msg">
+        chat.appendChild(userWrapper);
+      }
+
+      function appendGeneratingMessage() {
+        const aiDiv = document.createElement("div");
+        aiDiv.className = "d-flex justify-content-start mb-3";
+        aiDiv.innerHTML = `<div class="ai-message p-3" id="generating-msg">
             <i class="bi bi-image-fill me-2"></i>Generating image...
           </div>`;
-          chat.appendChild(aiDiv);
+        chat.appendChild(aiDiv);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      function replaceWithErrorMessage(msg) {
+        const genMsg = document.getElementById("generating-msg");
+        const html = `<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i><span class="text-danger fw-semibold">${msg}</span>`;
+        if (genMsg) {
+          genMsg.innerHTML = html;
+        } else {
+          const fallbackError = document.createElement("div");
+          fallbackError.className = "text-danger my-3";
+          fallbackError.innerHTML = html;
+          chat.appendChild(fallbackError);
           chat.scrollTop = chat.scrollHeight;
         }
-      
-        function replaceWithErrorMessage(msg) {
-          const genMsg = document.getElementById("generating-msg");
-          const html = `<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i><span class="text-danger fw-semibold">${msg}</span>`;
-          if (genMsg) {
-            genMsg.innerHTML = html;
-          } else {
-            const fallbackError = document.createElement("div");
-            fallbackError.className = "text-danger my-3";
-            fallbackError.innerHTML = html;
-            chat.appendChild(fallbackError);
-            chat.scrollTop = chat.scrollHeight;
-          }
+      }
+
+      async function generateImage() {
+        const promptInput = document.getElementById("promptInput");
+        const resolutionSelect = document.getElementById("resolutionSelect");
+        const prompt = promptInput.value.trim();
+        const resolution = resolutionSelect?.value || "square_hd";
+        const userId = localStorage.getItem("userId");
+
+        if (!prompt) {
+          alert("Please enter a prompt.");
+          return;
         }
-      
-        async function generateImage() {
-          const promptInput = document.getElementById("promptInput");
-          const prompt = promptInput.value.trim();
-          const userId = localStorage.getItem("userId");
-      
-          if (!prompt) {
-            alert("Please enter a prompt.");
-            return;
-          }
-      
-          appendUserMessage(prompt);
-          promptInput.value = "";
-          appendGeneratingMessage();
-      
-          const modelId = new URLSearchParams(window.location.search).get("id");
-          const modelMap = {
-            "black-forest-labs-flux-1-1-pro": "black-forest-labs-flux-1-1-pro",
-            "fooocus": "fooocus",
-            "recraft-v3": "recraft-v3",
-            "hidream-i1-dev": "hidream-i1-dev",
-            "ideogram-v3": "ideogram-v3",
-          };
-      
-          const backendModelId = modelMap[modelId];
-          if (!backendModelId) {
-            replaceWithErrorMessage("Unsupported model ID in URL.");
-            return;
-          }
-      
-          try {
-            const res = await fetch(`${BACKEND_URL}/api/ai/generate-image/${backendModelId}`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ prompt, userId }),
-            });
-      
-            const data = await res.json();
-            const genMsg = document.getElementById("generating-msg");
-      
-            if (res.status === 402) {
-              replaceWithErrorMessage("Insufficient credits.");
-              return;
-            }
-      
-            if (!res.ok) {
-              replaceWithErrorMessage(`Server returned status ${res.status} (${data.error})`);
-              return;
-            }
-      
-            if (genMsg) genMsg.remove();
-      
-            if (data.imageUrl) {
-              const aiDiv = document.createElement("div");
-              aiDiv.className = "d-flex justify-content-start mb-3";
-              aiDiv.innerHTML = `
-                <div class="ai-message p-2">
-                  <div class="d-flex flex-column align-items-start">
-                    <div class="mb-2 text-muted small">
-                      <i class="bi bi-image-fill me-2"></i>Generated Image
-                    </div>
-                    <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-                      <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-                      <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-                        <i class="bi bi-box-arrow-up-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>`;
-              chat.appendChild(aiDiv);
-              chat.scrollTop = chat.scrollHeight;
-            } else {
-              replaceWithErrorMessage("Image generation failed: no image URL returned.");
-            }
-          } catch (err) {
-            console.error("Network or server error:", err);
-            replaceWithErrorMessage("Image generation failed. Please try again later or use a different model.");
-          }
+
+        appendUserMessage(prompt);
+        promptInput.value = "";
+        appendGeneratingMessage();
+
+        const modelId = new URLSearchParams(window.location.search).get("id");
+        const modelMap = {
+          "black-forest-labs-flux-1-1-pro": "black-forest-labs-flux-1-1-pro",
+          "fooocus": "fooocus",
+          "recraft-v3": "recraft-v3",
+          "hidream-i1-dev": "hidream-i1-dev",
+          "ideogram-v3": "ideogram-v3",
+        };
+
+        const backendModelId = modelMap[modelId];
+        if (!backendModelId) {
+          replaceWithErrorMessage("Unsupported model ID in URL.");
+          return;
         }
-      
-        function copyToClipboard(icon) {
-          const messageText = icon.previousElementSibling.innerText.trim();
-          navigator.clipboard.writeText(messageText).then(() => {
-            icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-            setTimeout(() => {
-              icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-            }, 1500);
-          }).catch(err => {
-            console.error("Copy failed:", err);
+
+        try {
+          const res = await fetch(`${BACKEND_URL}/api/ai/generate-image/${backendModelId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt, userId, resolution }),
           });
+
+          const data = await res.json();
+          const genMsg = document.getElementById("generating-msg");
+
+          if (res.status === 402) {
+            replaceWithErrorMessage("Insufficient credits.");
+            return;
+          }
+
+          if (!res.ok) {
+            replaceWithErrorMessage(`Server returned status ${res.status} (${data.error})`);
+            return;
+          }
+
+          if (genMsg) genMsg.remove();
+
+          if (data.imageUrl) {
+            const aiDiv = document.createElement("div");
+            aiDiv.className = "d-flex justify-content-start mb-3";
+            aiDiv.innerHTML = `
+        <div class="ai-message p-2">
+          <div class="d-flex flex-column align-items-start">
+            <div class="mb-2 text-muted small">
+              <i class="bi bi-image-fill me-2"></i>Generated Image (${resolution})
+            </div>
+            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
+              <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+              <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>`;
+            chat.appendChild(aiDiv);
+            chat.scrollTop = chat.scrollHeight;
+          } else {
+            replaceWithErrorMessage("Image generation failed: no image URL returned.");
+          }
+        } catch (err) {
+          console.error("Network or server error:", err);
+          replaceWithErrorMessage("Image generation failed. Please try again later or use a different model.");
         }
-      </script>
-      
-      
-  </body>
+      }
+
+      function copyToClipboard(icon) {
+        const messageText = icon.previousElementSibling.innerText.trim();
+        navigator.clipboard.writeText(messageText).then(() => {
+          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
+          setTimeout(() => {
+            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+          }, 1500);
+        }).catch(err => {
+          console.error("Copy failed:", err);
+        });
+      }
+    </script>
+
+
+</body>
+
 </html>
