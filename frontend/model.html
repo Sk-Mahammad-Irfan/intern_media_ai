@@ -295,7 +295,7 @@
           <!-- Text-to-Image Models -->
 <h4 class="mt-5 mb-3">Text-to-Image</h4>
 
-<div class="model-card my-2" onclick="window.location.href='model-details.html?id=black-forest-labs-flux-1-1-pro'">
+<div class="model-card my-2" data-provider="deepinfra" onclick="window.location.href='model-details.html?id=black-forest-labs-flux-1-1-pro'">
   <h5 class="fw-semibold">
     Black Forest Labs: FLUX-1.1 Pro
     <i class="bi bi-image text-danger model-icon"></i>
@@ -313,7 +313,7 @@
 
 <!-- FAL AI Text-to-Image -->
 <!-- Recraft V3 Model Card -->
-<div class="model-card" onclick="window.location.href='model-details.html?id=recraft-v3'">
+<div class="model-card" data-provider="huggingface" onclick="window.location.href='model-details.html?id=recraft-v3'">
   <h5 class="fw-semibold">
     Recraft V3: Text-to-Image
     <i class="bi bi-image-alt text-primary model-icon"></i>
@@ -329,7 +329,7 @@
 </div>
 
 <!-- Fooocus Model Card -->
-<div class="model-card" onclick="window.location.href='model-details.html?id=fooocus'">
+<div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=fooocus'">
   <h5 class="fw-semibold">
     Fooocus: Base Model
     <i class="bi bi-image-alt text-primary model-icon"></i>
@@ -343,7 +343,8 @@
     <a href="https://fal.ai" target="_blank">FAL AI</a>
   </small>
 </div>
-<div class="model-card" onclick="window.location.href='model-details.html?id=hidream-i1-dev'">
+
+<div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=hidream-i1-dev'">
   <h5 class="fw-semibold">
     HiDream I1 (Dev)
     <i class="bi bi-image text-info model-icon"></i>
@@ -357,7 +358,8 @@
     <a href="https://fal.ai/models/fal-ai/hidream-i1-dev" target="_blank">FAL AI</a>
   </small>
 </div>
-<div class="model-card" onclick="window.location.href='model-details.html?id=ideogram-v3'">
+
+<div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=ideogram-v3'">
   <h5 class="fw-semibold">
     Ideogram V3
     <i class="bi bi-brush text-purple model-icon"></i>
@@ -377,7 +379,7 @@
 <h4 class="mt-5 mb-3">Text-to-Video</h4>
 
 <!-- DeepInfra Text-to-Video -->
-<div class="model-card my-2" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'">
+<div class="model-card my-2" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'">
   <h5 class="fw-semibold">
     Wan-AI: Wan2.1-T2V-1.3B
     <i class="bi bi-film text-info model-icon"></i>
@@ -392,7 +394,7 @@
   </small>
 </div>
 
-<div class="model-card my-2" onclick="window.location.href='model-details.html?id=pixverse-v4-text-to-video'">
+<div class="model-card my-2" data-provider="huggingface" onclick="window.location.href='model-details.html?id=pixverse-v4-text-to-video'">
   <h5 class="fw-semibold">
     PixVerse: Text-to-Video v4
     <i class="bi bi-film text-info model-icon"></i>
@@ -407,7 +409,7 @@
   </small>
 </div>
 
-<div class="model-card my-2" onclick="window.location.href='model-details.html?id=lightricks-ltx-video'">
+<div class="model-card my-2" data-provider="huggingface" onclick="window.location.href='model-details.html?id=lightricks-ltx-video'">
   <h5 class="fw-semibold">
     Lightricks: LTX-Video
     <i class="bi bi-film text-info model-icon"></i>
@@ -421,7 +423,8 @@
     <a href="https://huggingface.co/lightricks/ltx-video" target="_blank">huggingface.co</a>
   </small>
 </div>
-<div class="model-card" onclick="window.location.href='model-details.html?id=pika-text-to-video-v2-1'">
+
+<div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=pika-text-to-video-v2-1'">
           <h5 class="fw-semibold">
             Pika Text to Video v2.1
             <i class="bi bi-camera-reels text-primary model-icon"></i>
@@ -435,30 +438,29 @@
             <a href="https://fal.ai/models/fal-ai/pika/v2.1/text-to-video" target="_blank">FAL AI</a>
           </small>
         </div>
-        <div class="model-card" onclick="window.location.href='model-details.html?id=luma-ray2-flash'">
-  <h5 class="fw-semibold">
-    Luma Dream Machine: Ray 2 Flash
-    <i class="bi bi-camera-reels text-primary model-icon"></i>
-    <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-  </h5>
-  <p class="text-muted mb-1">
-    Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.
-  </p>
-  <small class="text-muted">
-    Source:
-    <a href="https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash" target="_blank">FAL AI</a>
-  </small>
-</div>
 
 
-
+        <div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=luma-ray2-flash'">
+        <h5 class="fw-semibold">
+          Luma Dream Machine: Ray 2 Flash
+          <i class="bi bi-camera-reels text-primary model-icon"></i>
+          <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
+        </h5>
+        <p class="text-muted mb-1">
+          Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.
+        </p>
+        <small class="text-muted">
+          Source:
+          <a href="https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash" target="_blank">FAL AI</a>
+        </small>
+      </div>
 
 
 <!-- Text-to-Audio -->
 <h4 class="mt-5 mb-3">Text-to-Audio</h4>
 
 <!-- FAL AI Text-to-Audio -->
-        <div class="model-card" onclick="window.location.href='model-details.html?id=stackadoc-stable-audio'">
+        <div class="model-card" data-provider="huggingface" onclick="window.location.href='model-details.html?id=stackadoc-stable-audio'">
           <h5 class="fw-semibold">
             Stable Audio Open 1.0
             <i class="bi bi-soundwave text-success model-icon"></i>
@@ -473,7 +475,7 @@
           </small>
         </div>
         <!-- Dia TTS -->
-        <div class="model-card" onclick="window.location.href='model-details.html?id=cassattemusic-audio'">
+        <div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=cassattemusic-audio'">
           <h5 class="fw-semibold">
             CassetteAI Music Generator
             <i class="bi bi-music-note-beamed text-success model-icon"></i>
@@ -490,7 +492,7 @@
         
 
         <!-- Multilingual TTS -->
-        <div class="model-card" onclick="window.location.href='model-details.html?id=multilingual-audio'">
+        <div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=multilingual-audio'">
           <h5 class="fw-semibold">
             Multilingual TTS
             <i class="bi bi-soundwave text-success model-icon"></i>
@@ -506,7 +508,7 @@
         </div>
 
         <!-- American English TTS -->
-        <div class="model-card" onclick="window.location.href='model-details.html?id=american-audio'">
+        <div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=american-audio'">
           <h5 class="fw-semibold">
             American English TTS
             <i class="bi bi-soundwave text-success model-icon"></i>
@@ -522,7 +524,7 @@
         </div>
 
         <!-- Cassette AI (Sound Effects Generator) -->
-        <div class="model-card" onclick="window.location.href='model-details.html?id=cassetteai-sfx-generator'">
+        <div class="model-card" data-provider="fal" onclick="window.location.href='model-details.html?id=cassetteai-sfx-generator'">
           <h5 class="fw-semibold">
             Cassette Sound Effects Generator
             <i class="bi bi-soundwave text-success model-icon"></i>
@@ -572,6 +574,7 @@
     <script src="js/script.js"></script>
     <script src="js/search.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/ignoredProviders.js"></script>
     <script>
 
       function setAvatarInitials() {

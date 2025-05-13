@@ -1,27 +1,44 @@
-function handleModelChange() {
-  const selectedId = document.getElementById("modelSelector").value;
-  if (!selectedId) return;
 
-  const model = models[selectedId];
-  if (model && model.chatPage) {
-    const newUrl = `${model.chatPage}?id=${model.id}`;
+// ⛔ Utility: Read ignored providers from localStorage
+function getIgnoredProviders() {
+  const stored = localStorage.getItem("ignoredProviders");
+  return stored ? new Set(JSON.parse(stored)) : new Set();
+}
 
-    // Update URL in address bar without reloading
-    window.history.pushState({}, "", newUrl);
+// ✅ Update the output displaying the ignored providers
+function updateOutput() {
+  const ignoredProviders = getIgnoredProviders();
+  const output = document.getElementById("ignoredProvidersOutput");
+  output.innerHTML = "";
 
-    // Optionally, navigate to the page
-    window.location.href = newUrl;
+  if (ignoredProviders.size === 0) {
+    output.textContent = "No providers are ignored.";
+    return;
   }
+
+  output.textContent = "Ignored providers: ";
+
+  ignoredProviders.forEach(provider => {
+    const badge = document.createElement("span");
+    badge.className = "badge bg-secondary me-1";
+    badge.style.cursor = "pointer";
+    badge.textContent = provider + " ✕";
+
+    badge.onclick = function () {
+      ignoredProviders.delete(provider);
+      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      updateOutput();
+      window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
+    };
+
+    output.appendChild(badge);
+  });
 }
 
-function getModelIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
+// ✅ Populate dropdown, skipping ignored providers
 function populateModelSelector() {
   const selector = document.getElementById("modelSelector");
-  selector.innerHTML = ""; // Clear existing options
+  selector.innerHTML = ""; // Clear old options
 
   const grouped = {
     "Text-to-Image": [],
@@ -29,13 +46,30 @@ function populateModelSelector() {
     "Text-to-Audio": [],
   };
 
+  const ignored = getIgnoredProviders();
+  let hasUsableModels = false;
+
   for (const key in models) {
     const model = models[key];
-    const page = model.chatPage;
 
+    // 🔒 Skip if provider is ignored
+    if (ignored.has(model.provider)) continue;
+
+    const page = model.chatPage;
     if (page.includes("image")) grouped["Text-to-Image"].push(model);
     else if (page.includes("video")) grouped["Text-to-Video"].push(model);
     else if (page.includes("audio")) grouped["Text-to-Audio"].push(model);
+
+    hasUsableModels = true;
+  }
+
+  if (!hasUsableModels) {
+    const option = document.createElement("option");
+    option.disabled = true;
+    option.selected = true;
+    option.textContent = "⚠️ All providers are ignored";
+    selector.appendChild(option);
+    return;
   }
 
   for (const group in grouped) {
@@ -61,6 +95,47 @@ function populateModelSelector() {
   }
 }
 
+// ✅ Handle dropdown selection change
+function handleModelChange() {
+  const selectedId = document.getElementById("modelSelector").value;
+  if (!selectedId) return;
+
+  const model = models[selectedId];
+  if (model && model.chatPage) {
+    const newUrl = `${model.chatPage}?id=${model.id}`;
+    window.history.pushState({}, "", newUrl);
+    window.location.href = newUrl;
+  }
+}
+
+// ✅ Get model ID from URL
+function getModelIdFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+// ✅ Initialize on page load
 document.addEventListener("DOMContentLoaded", function () {
   populateModelSelector();
 });
+
+// ✅ Listen for changes to ignored providers and update the selector
+window.addEventListener("ignoredProvidersUpdated", function () {
+  populateModelSelector();
+});
+
+// ✅ Handle ignored provider selection change
+const select = document.getElementById("ignoredProvidersSelect");
+if (select) {
+  select.addEventListener("change", function () {
+    const selected = select.value;
+    if (selected && selected !== "Select a provider") {
+      const ignoredProviders = getIgnoredProviders();
+      ignoredProviders.add(selected);
+      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      updateOutput();
+      window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
+    }
+  });
+}
+

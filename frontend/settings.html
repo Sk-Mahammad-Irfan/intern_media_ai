@@ -370,10 +370,9 @@
 
         <div class="mb-5">
           <h5 class="fw-semibold">Low Balance Notifications</h5>
-          <p class="mb-1">Send me emails</p>
           <p class="text-muted">
             Alert notifications will be sent to
-            <strong>prathmpimpalshende@gmail.com</strong>
+            <p class="primary-email fw-medium"></p>
           </p>
           <div class="form-check form-switch">
             <input
@@ -385,20 +384,20 @@
           </div>
         </div>
 
-        <div class="mb-5">
-          <h5 class="fw-semibold">Ignored Providers</h5>
-          <select class="form-select w-auto" id="ignoredProvidersSelect">
-            <option selected>Select a provider</option>
-            <option value="deepinfra-t2i">DeepInfra - Text to Image</option>
-            <option value="fal-t2i">FAL AI - Text to Image</option>
-            <option value="deepinfra-t2v">DeepInfra - Text to Video</option>
-            <option value="fal-t2v">FAL AI - Text to Video</option>
-            <option value="fal-t2a">FAL AI - Text to Audio</option>
-          </select>
-          <p class="text-muted mt-1" id="ignoredProvidersOutput">
-            No providers are ignored.
-          </p>
-        </div>
+        <div class="mb-5"> 
+        <h5 class="fw-semibold">Ignored Providers</h5>
+        <select class="form-select w-auto" id="ignoredProvidersSelect">
+          <option selected>Select a provider</option>
+          <option value="replicate">Replicate</option>
+          <option value="fal">FAL AI</option>
+          <option value="deepinfra">DeepInfra</option>
+          <option value="huggingface">HuggingFace</option>
+        </select>
+        <p class="text-muted mt-1" id="ignoredProvidersOutput">
+          No providers are ignored.
+        </p>
+      </div>
+
 
         <div class="mb-5">
           <h5 class="fw-semibold">Default Provider Sort</h5>
@@ -481,7 +480,7 @@
 
               <div class="mb-3">
                 <strong>Email addresses</strong>
-                <p class="mb-1" id="primary-email">
+                <p class="mb-1 primary-email">
                   email@example.com
                   <span class="badge bg-secondary">Primary</span>
                 </p>
@@ -563,15 +562,71 @@
         return new bootstrap.Tooltip(tooltipTriggerEl);
       });
 
-      // Ignored Providers select output
-      const select = document.getElementById("ignoredProvidersSelect");
-      const output = document.getElementById("ignoredProvidersOutput");
-      if (select && output) {
-        select.addEventListener("change", function () {
-          const selected = select.value;
-          output.textContent = `Ignored provider: ${selected}`;
-        });
-      }
+
+  const select = document.getElementById("ignoredProvidersSelect");
+const output = document.getElementById("ignoredProvidersOutput");
+const ignoredProviders = new Set();
+
+// Load from localStorage
+const stored = localStorage.getItem("ignoredProviders");
+if (stored) {
+  const parsed = JSON.parse(stored);
+  parsed.forEach(p => ignoredProviders.add(p));
+  updateOutput();
+  updateSelectOptions();
+}
+
+// Handle select change
+if (select && output) {
+  select.addEventListener("change", function () {
+    const selected = select.value;
+    if (selected && selected !== "Select a provider") {
+      ignoredProviders.add(selected);
+      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      updateOutput();
+      updateSelectOptions();
+      select.selectedIndex = 0; // Reset selection
+    }
+  });
+}
+
+// Render ignored provider badges
+function updateOutput() {
+  output.innerHTML = "";
+
+  if (ignoredProviders.size === 0) {
+    output.textContent = "No providers are ignored.";
+    return;
+  }
+
+  output.textContent = "Ignored providers: ";
+
+  Array.from(ignoredProviders).forEach(provider => {
+    const badge = document.createElement("span");
+    badge.className = "badge bg-secondary me-1";
+    badge.style.cursor = "pointer";
+    badge.textContent = provider + " ✕";
+
+    badge.onclick = function () {
+      ignoredProviders.delete(provider);
+      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      updateOutput();
+      updateSelectOptions();
+    };
+
+    output.appendChild(badge);
+  });
+}
+
+// Disable already-selected providers in dropdown
+function updateSelectOptions() {
+  Array.from(select.options).forEach(option => {
+    if (option.value && option.value !== "Select a provider") {
+      option.disabled = ignoredProviders.has(option.value);
+    }
+  });
+}
+
 
       // Load user_data from localStorage and update modal
       document.addEventListener("DOMContentLoaded", () => {
@@ -581,9 +636,10 @@
             const user = JSON.parse(userDataRaw);
             document.getElementById("user-name").textContent =
               user.username || "Unknown User";
-            document.getElementById(
-              "primary-email"
-            ).innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
+            document.querySelectorAll(".primary-email").forEach((el) => {
+            el.innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
+          });
+
             document.getElementById("user-credits").textContent =
               user.credits || 0;
             document.getElementById("user-loginTime").textContent = new Date(

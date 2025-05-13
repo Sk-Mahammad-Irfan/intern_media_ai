@@ -9,6 +9,7 @@ const models = {
     fullDetails:
       "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
     chatPage: "imagemodel.html",
+    provider: "deepinfra"
   },
 
   "recraft-v3": {
@@ -20,6 +21,7 @@ const models = {
     fullDetails:
       "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs.",
     chatPage: "imagemodel.html",
+    provider: "huggingface"
   },
 
   fooocus: {
@@ -31,6 +33,7 @@ const models = {
     fullDetails:
       "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements.",
     chatPage: "imagemodel.html",
+    provider: "fal"
   },
 
   // Text-to-Video
@@ -43,6 +46,7 @@ const models = {
     fullDetails:
       "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis.",
     chatPage: "videomodel.html",
+    provider: "huggingface"
   },
 
   "lightricks-ltx-video": {
@@ -54,6 +58,7 @@ const models = {
     fullDetails:
       "Developed by Lightricks, LTX-Video leverages DiT to deliver ultra-fast, high-resolution video generation.",
     chatPage: "videomodel.html",
+    provider: "huggingface"
   },
 
   "pixverse-v4-text-to-video": {
@@ -65,6 +70,7 @@ const models = {
     fullDetails:
       "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation.",
     chatPage: "videomodel.html",
+    provider: "huggingface"
   },
 
   // Text-to-Audio
@@ -77,6 +83,7 @@ const models = {
     fullDetails:
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
+    provider: "huggingface"
   },
   "cassattemusic-audio": {
     id: "cassattemusic-audio",
@@ -87,6 +94,7 @@ const models = {
     fullDetails:
       "CassetteAI’s music generator creates a 30-second music sample in under 2 seconds and a full 3-minute track in under 10 seconds. Operating at 44.1 kHz stereo, it ensures professional-grade consistency with no breaks, squeaks, or glitches. Ideal for producers, game developers, and content creators.",
     chatPage: "audiomodel.html",
+    provider: "fal"
   },
 
   "multilingual-audio": {
@@ -98,6 +106,7 @@ const models = {
     fullDetails:
       "Multilingual TTS by ElevenLabs supports a wide range of languages and accents, enabling natural voice generation across global content. It's a great fit for multilingual applications and localization.",
     chatPage: "audiomodel.html",
+    provider: "fal"
   },
 
   "american-audio": {
@@ -109,6 +118,7 @@ const models = {
     fullDetails:
       "This American English TTS model offers high-quality, fluent, and natural-sounding speech, making it suitable for virtual assistants, video dubbing, and storytelling use cases.",
     chatPage: "audiomodel.html",
+    provider: "fal"
   },
   "cassetteai-sfx-generator": {
     id: "cassetteai-sfx-generator",
@@ -119,6 +129,7 @@ const models = {
     fullDetails:
       "CassetteAI’s Sound Effects Generator allows for fast and natural creation of high-quality sound effects using only a text prompt. It supports up to 30 seconds of audio with near-instant generation time, perfect for games, films, and immersive experiences.",
     chatPage: "audiomodel.html",
+    provider: "fal"
   },
   "pika-text-to-video-v2-1": {
     id: "pika-text-to-video-v2-1",
@@ -129,6 +140,7 @@ const models = {
     fullDetails:
       "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
     chatPage: "videomodel.html",
+    provider: "fal"
   },
   "luma-ray2-flash": {
     id: "luma-ray2-flash",
@@ -139,6 +151,7 @@ const models = {
     fullDetails:
       "Luma’s Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
     chatPage: "videomodel.html",
+    provider: "fal"
   },
   "hidream-i1-dev": {
     id: "hidream-i1-dev",
@@ -149,6 +162,7 @@ const models = {
     fullDetails:
       "HiDream I1 (Dev) is a text-to-image model optimized for fast generation and visual fidelity. It excels at interpreting imaginative prompts and rendering detailed visuals, making it suitable for artists, creatives, and rapid prototyping scenarios.",
     chatPage: "imagemodel.html",
+    provider: "fal"
   },
   "ideogram-v3": {
     id: "ideogram-v3",
@@ -159,6 +173,7 @@ const models = {
     fullDetails:
       "Ideogram V3 is a next-gen text-to-image model crafted for storytelling and imaginative concepts. It excels at rendering scenes with symbolic, surreal, or fantastical elements, making it perfect for writers, concept artists, and world-builders.",
     chatPage: "imagemodel.html",
+    provider: "fal"
   },
 };
 
