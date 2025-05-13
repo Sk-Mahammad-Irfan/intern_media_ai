@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       li.innerHTML = `
         <div class="ms-2 me-auto">
           <div class="fw-semibold text-dark">${index + 1}. ${item.model}</div>
-          <small class="text-muted">${item.description || "No description available"}</small>
+          
         </div>
         <span class="badge rounded-pill bg-primary-subtle text-dark">
           ${item.count} uses
