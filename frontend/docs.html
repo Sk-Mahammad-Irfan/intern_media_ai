@@ -135,7 +135,9 @@
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="model.html">Models</a></li>
               <li><a class="dropdown-item" href="audiomodel.html">Chat</a></li>
-              <li><a class="dropdown-item" href="#">Rankings</a></li>
+              <li>
+                <a class="dropdown-item" href="rankings.html">Rankings</a>
+              </li>
               <li><a class="dropdown-item" href="docs.html">Docs</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="credits.html">Credits</a></li>
@@ -213,7 +215,7 @@
             <a class="nav-link fw-medium" href="audiomodel.html">Chat</a>
           </li>
           <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="#">Rankings</a>
+            <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
           </li>
           <li class="nav-item mx-1">
             <a class="nav-link fw-medium" href="docs.html">Docs</a>
@@ -288,52 +290,53 @@
 
     <!-- Main Container -->
 
-<main class="container py-5">
-  <div class="mb-5">
-    <h1 class="display-8 fw-bold">API Documentation</h1>
-    <p class="lead text-muted">
-      Welcome to the OpenMediaFlow API. This guide explains how to use our Media generation REST API.
-    </p>
-  </div>
+    <main class="container py-5">
+      <div class="mb-5">
+        <h1 class="display-8 fw-bold">API Documentation</h1>
+        <p class="lead text-muted">
+          Welcome to the OpenMediaFlow API. This guide explains how to use our
+          Media generation REST API.
+        </p>
+      </div>
 
-  <section class="mb-5">
-    <h2 class="h4 mb-3">Authentication</h2>
-    <p>
-      All requests must include an API key provided in the
-      <code class="text-primary">x-api-key</code> header.
-    </p>
-    <pre class="bg-light p-3 border rounded">
+      <section class="mb-5">
+        <h2 class="h4 mb-3">Authentication</h2>
+        <p>
+          All requests must include an API key provided in the
+          <code class="text-primary">x-api-key</code> header.
+        </p>
+        <pre class="bg-light p-3 border rounded">
 <code class="text-dark">POST /api/generate-image/:id
 x-api-key: YOUR_API_KEY</code>
     </pre>
-  </section>
+      </section>
 
-  <section class="mb-5">
-    <h2 class="h4 mb-3">Base URL</h2>
-    <p>All endpoints are relative to:</p>
-    <pre class="bg-light p-3 border rounded">
+      <section class="mb-5">
+        <h2 class="h4 mb-3">Base URL</h2>
+        <p>All endpoints are relative to:</p>
+        <pre class="bg-light p-3 border rounded">
 <code class="text-dark">https://media-ai-backend.vercel.app</code>
     </pre>
-  </section>
+      </section>
 
-  <section class="mb-5">
-    <h2 class="h4 mb-4">Endpoints</h2>
+      <section class="mb-5">
+        <h2 class="h4 mb-4">Endpoints</h2>
 
-    <!-- Generate Image Endpoint -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold bg-white">
-        POST /api/reference/generate-image/:id
-      </div>
-      <div class="card-body">
-        <p>Generates audio for the specified resource ID.</p>
-        <p class="fw-semibold">Request Body:</p>
-        <pre class="bg-light p-3 border rounded">
+        <!-- Generate Image Endpoint -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header fw-semibold bg-white">
+            POST /api/reference/generate-image/:id
+          </div>
+          <div class="card-body">
+            <p>Generates audio for the specified resource ID.</p>
+            <p class="fw-semibold">Request Body:</p>
+            <pre class="bg-light p-3 border rounded">
 <code>{
   "prompt": "a red panda eating a bamboo in front of a poster that says \"recraft V3 now available at fal\""
 }</code>
         </pre>
-        <p class="fw-semibold">Example cURL Request:</p>
-        <pre class="bg-light p-3 border rounded">
+            <p class="fw-semibold">Example cURL Request:</p>
+            <pre class="bg-light p-3 border rounded">
 <code class="text-dark">curl -X POST -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -341,24 +344,24 @@ x-api-key: YOUR_API_KEY</code>
   }' \
   https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code>
         </pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Generate Video Endpoint -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold bg-white">
-        POST /api/reference/generate-video/:id
-      </div>
-      <div class="card-body">
-        <p>Generates audio for the specified resource ID.</p>
-        <p class="fw-semibold">Request Body:</p>
-        <pre class="bg-light p-3 border rounded">
+        <!-- Generate Video Endpoint -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header fw-semibold bg-white">
+            POST /api/reference/generate-video/:id
+          </div>
+          <div class="card-body">
+            <p>Generates audio for the specified resource ID.</p>
+            <p class="fw-semibold">Request Body:</p>
+            <pre class="bg-light p-3 border rounded">
 <code>{
   "prompt": "Two anthropomorphic cats in comfy boxing gear and bright gloves fight intensely on a spotlighted stage."
 }</code>
         </pre>
-        <p class="fw-semibold">Example cURL Request:</p>
-        <pre class="bg-light p-3 border rounded">
+            <p class="fw-semibold">Example cURL Request:</p>
+            <pre class="bg-light p-3 border rounded">
 <code class="text-dark">curl -X POST -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -366,25 +369,25 @@ x-api-key: YOUR_API_KEY</code>
   }' \
   https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code>
         </pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- Generate Audio Endpoint -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold bg-white">
-        POST /api/reference/generate-audio/:id
-      </div>
-      <div class="card-body">
-        <p>Generates audio for the specified resource ID.</p>
-        <p class="fw-semibold">Request Body:</p>
-        <pre class="bg-light p-3 border rounded">
+        <!-- Generate Audio Endpoint -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header fw-semibold bg-white">
+            POST /api/reference/generate-audio/:id
+          </div>
+          <div class="card-body">
+            <p>Generates audio for the specified resource ID.</p>
+            <p class="fw-semibold">Request Body:</p>
+            <pre class="bg-light p-3 border rounded">
 <code>{
   "prompt": "dog barking in rain",
   "duration": 10
 }</code>
         </pre>
-        <p class="fw-semibold">Example cURL Request:</p>
-        <pre class="bg-light p-3 border rounded">
+            <p class="fw-semibold">Example cURL Request:</p>
+            <pre class="bg-light p-3 border rounded">
 <code class="text-dark">curl -X POST -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -393,34 +396,36 @@ x-api-key: YOUR_API_KEY</code>
   }' \
   https://media-ai-backend.vercel.app/api/reference/generate-audio/sample-audio-id</code>
         </pre>
-      </div>
-    </div>
-  </section>
+          </div>
+        </div>
+      </section>
 
-  <section class="mb-5">
-    <h2 class="h4 mb-3">Error Codes</h2>
-    <ul class="list-group">
-      <li class="list-group-item">
-        <strong class="text-danger">401 Unauthorized:</strong> Missing or invalid API key.
-      </li>
-      <li class="list-group-item">
-        <strong class="text-danger">404 Not Found:</strong> Resource not found.
-      </li>
-      <li class="list-group-item">
-        <strong class="text-danger">500 Internal Server Error:</strong> A server-side issue occurred.
-      </li>
-    </ul>
-  </section>
+      <section class="mb-5">
+        <h2 class="h4 mb-3">Error Codes</h2>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <strong class="text-danger">401 Unauthorized:</strong> Missing or
+            invalid API key.
+          </li>
+          <li class="list-group-item">
+            <strong class="text-danger">404 Not Found:</strong> Resource not
+            found.
+          </li>
+          <li class="list-group-item">
+            <strong class="text-danger">500 Internal Server Error:</strong> A
+            server-side issue occurred.
+          </li>
+        </ul>
+      </section>
 
-  <section class="mb-5">
-    <h2 class="h4 mb-3">Support</h2>
-    <p>
-      For help or questions, contact our team at
-      <a href="/">support@openmediaflow.com</a>.
-    </p>
-  </section>
-</main>
-
+      <section class="mb-5">
+        <h2 class="h4 mb-3">Support</h2>
+        <p>
+          For help or questions, contact our team at
+          <a href="/">support@openmediaflow.com</a>.
+        </p>
+      </section>
+    </main>
 
     <footer>
       <div class="f-info mt-3">
@@ -451,49 +456,56 @@ x-api-key: YOUR_API_KEY</code>
     <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
-   <script>
-  function setAvatarInitials() {
-    const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+    <script>
+      function setAvatarInitials() {
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
-    const avatars = document.querySelectorAll("#navbar-avatar");
-    const userElements = {
-      desktop: {
-        username: document.getElementById("account-username"),
-        email: document.getElementById("account-email"),
-      },
-      mobile: {
-        username: document.getElementById("account-username-mobile"),
-        email: document.getElementById("account-email-mobile"),
+        const avatars = document.querySelectorAll("#navbar-avatar");
+        const userElements = {
+          desktop: {
+            username: document.getElementById("account-username"),
+            email: document.getElementById("account-email"),
+          },
+          mobile: {
+            username: document.getElementById("account-username-mobile"),
+            email: document.getElementById("account-email-mobile"),
+          },
+        };
+
+        const isLoggedIn = !!userData.username;
+
+        if (isLoggedIn) {
+          const username = userData.username;
+          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
+
+          avatars.forEach((avatar) => (avatar.textContent = firstInitial));
+
+          userElements.desktop.username &&
+            (userElements.desktop.username.textContent = username);
+          userElements.desktop.email &&
+            (userElements.desktop.email.textContent =
+              userData.email || "No email");
+
+          userElements.mobile.username &&
+            (userElements.mobile.username.textContent = username);
+          userElements.mobile.email &&
+            (userElements.mobile.email.textContent =
+              userData.email || "No email");
+        } else {
+          avatars.forEach((avatar) => {
+            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+          });
+
+          ["desktop", "mobile"].forEach((view) => {
+            userElements[view].username &&
+              (userElements[view].username.textContent = "Guest");
+            userElements[view].email &&
+              (userElements[view].email.textContent = "");
+          });
+        }
       }
-    };
 
-    const isLoggedIn = !!userData.username;
-
-    if (isLoggedIn) {
-      const username = userData.username;
-      const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-      avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-      userElements.desktop.username && (userElements.desktop.username.textContent = username);
-      userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-      userElements.mobile.username && (userElements.mobile.username.textContent = username);
-      userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-    } else {
-      avatars.forEach(avatar => {
-        avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-      });
-
-      ["desktop", "mobile"].forEach(view => {
-        userElements[view].username && (userElements[view].username.textContent = "Guest");
-        userElements[view].email && (userElements[view].email.textContent = "");
-      });
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", setAvatarInitials);
-</script>
-
+      document.addEventListener("DOMContentLoaded", setAvatarInitials);
+    </script>
   </body>
 </html>

@@ -227,9 +227,21 @@
 </div>
 
         <!-- Page content -->
-        <div class="container py-4">
-          <h1>Integrations Page</h1>
+        <div class="container-fluid py-5">
+          <h1 class="mb-4 text-center">Model Usage Statistics</h1>
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+              <div class="card shadow">
+                <div class="card-body">
+                  <div class="chart-container" style="position: relative; height: 70vh; width: 100%;">
+                    <canvas id="usageChart" style=" width: 100%; height: 100%;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        
       </div>
     </div>
 
@@ -263,6 +275,10 @@
     <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Your JS file -->
+    <script src="graph.js"></script>
     <script>function setAvatarInitials() {
           // Get the stored user data
           const userData = JSON.parse(

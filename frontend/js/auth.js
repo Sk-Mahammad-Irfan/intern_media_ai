@@ -50,6 +50,11 @@ toggleLink.addEventListener("click", (e) => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   msg.textContent = "";
+
+  // Disable the button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.textContent = isLogin ? "Logging in..." : "Registering...";
+
   const formData = new FormData(form);
   const email = formData.get("email");
   const password = formData.get("password");
@@ -86,7 +91,7 @@ form.addEventListener("submit", async (e) => {
         };
         localStorage.setItem("user_data", JSON.stringify(userData));
         localStorage.setItem("userId", data.user.userId);
-        document.cookie = `token=${data.token}; HttpOnly; Path=/;`;
+        document.cookie = `token=${data.token}; Path=/;`; // Removed HttpOnly (can't be set via JS)
 
         // Update UI and redirect
         setAvatarInitials();
@@ -97,16 +102,13 @@ form.addEventListener("submit", async (e) => {
       msg.classList.add("text-danger");
     }
   } catch (err) {
-    if (err.response && err.response.status === 401) {
-      msg.textContent = "User already exists. Please login.";
-      msg.classList.add("text-danger");
-    } else {
-      msg.textContent = "An error occurred.";
-      msg.classList.add("text-danger");
-    }
-
     console.error(err);
     msg.textContent = "An error occurred.";
+    msg.classList.add("text-danger");
+  } finally {
+    // Re-enable the button and reset text
+    submitBtn.disabled = false;
+    submitBtn.textContent = isLogin ? "Login" : "Register";
   }
 });
 
