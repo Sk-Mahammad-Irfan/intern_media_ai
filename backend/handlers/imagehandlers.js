@@ -9,41 +9,49 @@ import {
 } from "../services/image/recraftv3Service.js";
 import { hidreamFAL } from "../services/image/hidreamServices.js";
 import { ideogramFAL } from "../services/image/ideogramServices.js";
+import { incrementModelUsage } from "../utils/incrementModelUsage.js";
+
+const wrapHandler = (handler, model) => {
+  return async (...args) => {
+    await incrementModelUsage(model);
+    return handler(...args);
+  };
+};
 
 export const imageGenerationHandlers = [
   {
     model: "black-forest-labs-flux-1-1-pro",
-    handler: falFluxProV1_1,
+    handler: wrapHandler(falFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
     type: "fal",
     credits: 5,
   },
   {
     model: "black-forest-labs-flux-1-1-pro",
-    handler: deepFluxProV1_1,
+    handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
     type: "base64",
     credits: 7,
   },
   {
     model: "recraft-v3",
-    handler: falRecraftV3,
+    handler: wrapHandler(falRecraftV3, "recraft-v3"),
     type: "fal",
     credits: 4,
   },
   {
     model: "fooocus",
-    handler: falFooocus,
+    handler: wrapHandler(falFooocus, "fooocus"),
     type: "fal",
     credits: 3,
   },
   {
     model: "hidream-i1-dev",
-    handler: hidreamFAL,
+    handler: wrapHandler(hidreamFAL, "hidream-i1-dev"),
     type: "fal",
     credits: 6,
   },
   {
     model: "ideogram-v3",
-    handler: ideogramFAL,
+    handler: wrapHandler(ideogramFAL, "ideogram-v3"),
     type: "fal",
     credits: 7,
   },
