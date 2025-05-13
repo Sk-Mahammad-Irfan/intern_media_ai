@@ -7,47 +7,55 @@ import {
   wanFAL,
   wanReplicate,
 } from "../services/video/wanServices.js";
+import { incrementModelUsage } from "../utils/incrementModelUsage.js";
+
+const wrapHandler = (handler, model) => {
+  return async (...args) => {
+    await incrementModelUsage(model);
+    return handler(...args);
+  };
+};
 
 export const videoGenerationHandlers = [
   {
     model: "wan-ai-wan21-t2v-13b",
-    handler: wanFAL,
+    handler: wrapHandler(wanFAL, "wan-ai-wan21-t2v-13b"),
     type: "fal",
     credits: 8,
   },
   {
     model: "wan-ai-wan21-t2v-13b",
-    handler: wanReplicate,
+    handler: wrapHandler(wanReplicate, "wan-ai-wan21-t2v-13b"),
     type: "replicate",
     credits: 10,
   },
   {
     model: "wan-ai-wan21-t2v-13b",
-    handler: wanDeepinfra,
+    handler: wrapHandler(wanDeepinfra, "wan-ai-wan21-t2v-13b"),
     type: "deepinfra",
     credits: 14,
   },
   {
     model: "lightricks-ltx-video",
-    handler: ltxReplicate,
+    handler: wrapHandler(ltxReplicate, "lightricks-ltx-video"),
     type: "replicate",
     credits: 15,
   },
   {
     model: "pixverse-v4-text-to-video",
-    handler: pixverseFAL,
+    handler: wrapHandler(pixverseFAL, "pixverse-v4-text-to-video"),
     type: "fal",
     credits: 12,
   },
   {
     model: "pika-text-to-video-v2-1",
-    handler: pikaFAL,
+    handler: wrapHandler(pikaFAL, "pika-text-to-video-v2-1"),
     type: "fal",
     credits: 18,
   },
   {
     model: "luma-ray2-flash",
-    handler: lumaFAL,
+    handler: wrapHandler(lumaFAL, "luma-ray2-flash"),
     type: "fal",
     credits: 20,
   },
