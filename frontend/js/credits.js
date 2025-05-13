@@ -4,13 +4,16 @@ async function getUserCredits(userId) {
     const token = getAuthToken();
     if (!token) return null;
 
-    const response = await fetch(`${BACKEND_URL}/api/credits/credits/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${BACKEND_URL}/api/credits/credits/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await response.json();
     return data.success ? data.credits : null;
@@ -61,12 +64,15 @@ async function getCreditHistory(userId) {
     const token = getAuthToken();
     if (!token) return [];
 
-    const response = await fetch(`${BACKEND_URL}/api/credits/history/${userId}`, {
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${BACKEND_URL}/api/credits/history/${userId}`,
+      {
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await response.json();
     return data.success ? data.history : [];
@@ -125,7 +131,9 @@ function handleAddCredits() {
     return;
   }
 
-  const addCreditsModal = new bootstrap.Modal(document.getElementById("addCreditsModal"));
+  const addCreditsModal = new bootstrap.Modal(
+    document.getElementById("addCreditsModal")
+  );
   addCreditsModal.show();
 }
 
@@ -133,7 +141,7 @@ function handleAddCredits() {
 function handleConfirmAddCredits() {
   const userId = localStorage.getItem("userId");
   const amountInput = document.getElementById("creditAmount");
-  const cryptoSwitch = document.getElementById("cryptoSwitch");
+  const paymentMethodSelect = document.getElementById("paymentMethod");
 
   if (!userId) {
     alert("Please log in to add credits");
@@ -146,12 +154,14 @@ function handleConfirmAddCredits() {
     return;
   }
 
-  const method = cryptoSwitch?.checked ? "crypto" : "card";
+  const method = paymentMethodSelect?.value || "card";
 
   updateUserCredits(userId, amount, method);
 
   // Close modal
-  const addCreditsModal = bootstrap.Modal.getInstance(document.getElementById("addCreditsModal"));
+  const addCreditsModal = bootstrap.Modal.getInstance(
+    document.getElementById("addCreditsModal")
+  );
   addCreditsModal.hide();
   amountInput.value = "";
 }
@@ -161,14 +171,19 @@ function handleCryptoSwitch() {
   const cryptoSwitch = document.getElementById("cryptoSwitch");
   if (cryptoSwitch) {
     cryptoSwitch.addEventListener("change", function () {
-      console.log("Crypto payment option:", this.checked ? "enabled" : "disabled");
+      console.log(
+        "Crypto payment option:",
+        this.checked ? "enabled" : "disabled"
+      );
     });
   }
 }
 
 // Handle billing portal (placeholder)
 function handleBillingPortal() {
-  const billingLink = document.querySelector('a[href="#"].text-decoration-none.text-primary');
+  const billingLink = document.querySelector(
+    'a[href="#"].text-decoration-none.text-primary'
+  );
   if (billingLink) {
     billingLink.addEventListener("click", function (e) {
       e.preventDefault();
@@ -201,9 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchAndRenderCreditHistory(userId);
   }
 
-  document.getElementById("addCreditsBtn")?.addEventListener("click", handleAddCredits);
-  document.getElementById("confirmAddCredits")?.addEventListener("click", handleConfirmAddCredits);
-  document.getElementById("refreshCredits")?.addEventListener("click", handleRefreshCredits);
+  document
+    .getElementById("addCreditsBtn")
+    ?.addEventListener("click", handleAddCredits);
+  document
+    .getElementById("confirmAddCredits")
+    ?.addEventListener("click", handleConfirmAddCredits);
+  document
+    .getElementById("refreshCredits")
+    ?.addEventListener("click", handleRefreshCredits);
 
   handleCryptoSwitch();
   handleBillingPortal();
