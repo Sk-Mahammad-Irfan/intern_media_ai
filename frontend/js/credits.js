@@ -1,70 +1,49 @@
-// Function to get user credits
+// Get user credits
 async function getUserCredits(userId) {
   try {
-    const token = document.cookie.includes("token=")
-      ? document.cookie.split("token=")[1].split(";")[0]
-      : null;
-    if (!token) {
-      console.error("No authentication token found in cookies");
-      return null;
-    }
+    const token = getAuthToken();
+    if (!token) return null;
 
-    const response = await fetch(
-      `${BACKEND_URL}/api/credits/credits/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_URL}/api/credits/credits/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = await response.json();
-
-    if (data.success) {
-      return data.credits;
-    } else {
-      console.error("Failed to get credits:", data.message);
-      return null;
-    }
+    return data.success ? data.credits : null;
   } catch (error) {
     console.error("Error getting credits:", error);
     return null;
   }
 }
 
-// Function to update user credits
-async function updateUserCredits(userId, amount) {
+// Update user credits
+async function updateUserCredits(userId, amount, method = "card") {
   try {
-    const token = document.cookie.includes("token=")
-      ? document.cookie.split("token=")[1].split(";")[0]
-      : null;
-    if (!token) {
-      console.error("No authentication token found in cookies");
-      return null;
-    }
+    const token = getAuthToken();
+    if (!token) return null;
 
-    const response = await fetch(
-      `${BACKEND_URL}/api/credits/updatecredits`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: localStorage.getItem("userId"),
-          amount,
-        }),
-      }
-    );
+    const response = await fetch(`${BACKEND_URL}/api/credits/updatecredits`, {
+      method: "PATCH",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        amount,
+        method,
+      }),
+    });
 
     const data = await response.json();
 
     if (data.success) {
-      // Update the credits display on the page
       updateCreditsDisplay(data.user.credits);
+      fetchAndRenderCreditHistory(userId);
       return true;
     } else {
       console.error("Failed to update credits:", data.message);
@@ -76,129 +55,155 @@ async function updateUserCredits(userId, amount) {
   }
 }
 
-// Function to update the credits display on the page
-function updateCreditsDisplay(credits) {
-  const creditsElement = document.querySelector(".display-4.fw-bold.text-dark");
-  if (creditsElement) {
-    creditsElement.textContent = credits;
+// Fetch credit history
+async function getCreditHistory(userId) {
+  try {
+    const token = getAuthToken();
+    if (!token) return [];
+
+    const response = await fetch(`${BACKEND_URL}/api/credits/history/${userId}`, {
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    return data.success ? data.history : [];
+  } catch (error) {
+    console.error("Error fetching credit history:", error);
+    return [];
   }
 }
 
-// Function to handle the "Add Credits" button click
+// Render credit history
+async function fetchAndRenderCreditHistory(userId) {
+  const history = await getCreditHistory(userId);
+  const container = document.getElementById("creditHistoryContainer");
+  if (!container) return;
+
+  if (history.length === 0) {
+    container.innerHTML = `<p>No credit history found.</p>`;
+    return;
+  }
+
+  container.innerHTML = history
+    .map((entry) => {
+      const date = new Date(entry.createdAt).toLocaleString();
+      return `<div class="border-bottom py-2">
+        <strong>${entry.amount} credits</strong> via <em>${entry.method}</em> on ${date}
+      </div>`;
+    })
+    .join("");
+}
+
+// Update credits text
+function updateCreditsDisplay(credits) {
+  const creditsElement = document.querySelector(".display-4.fw-bold.text-dark");
+  if (creditsElement) creditsElement.textContent = credits;
+}
+
+// Get token helper
+function getAuthToken() {
+  const token = document.cookie.includes("token=")
+    ? document.cookie.split("token=")[1].split(";")[0]
+    : null;
+
+  if (!token) {
+    console.error("No authentication token found in cookies");
+    return null;
+  }
+
+  return token;
+}
+
+// Handle add credits click
 function handleAddCredits() {
-  // Get the current user ID from localStorage or session
   const userId = localStorage.getItem("userId");
   if (!userId) {
     alert("Please log in to add credits");
     return;
   }
 
-  // Show the modal
-  const addCreditsModal = new bootstrap.Modal(
-    document.getElementById("addCreditsModal")
-  );
+  const addCreditsModal = new bootstrap.Modal(document.getElementById("addCreditsModal"));
   addCreditsModal.show();
 }
 
-// Function to handle the "Confirm Add Credits" button click
+// Handle confirm button
 function handleConfirmAddCredits() {
   const userId = localStorage.getItem("userId");
+  const amountInput = document.getElementById("creditAmount");
+  const cryptoSwitch = document.getElementById("cryptoSwitch");
+
   if (!userId) {
     alert("Please log in to add credits");
     return;
   }
 
-  const amountInput = document.getElementById("creditAmount");
   const amount = parseFloat(amountInput.value);
-
   if (isNaN(amount) || amount <= 0) {
     alert("Please enter a valid positive number");
     return;
   }
 
-  // Update the credits
-  updateUserCredits(userId, amount);
+  const method = cryptoSwitch?.checked ? "crypto" : "card";
 
-  // Close the modal
-  const addCreditsModal = bootstrap.Modal.getInstance(
-    document.getElementById("addCreditsModal")
-  );
+  updateUserCredits(userId, amount, method);
+
+  // Close modal
+  const addCreditsModal = bootstrap.Modal.getInstance(document.getElementById("addCreditsModal"));
   addCreditsModal.hide();
-
-  // Reset the form
   amountInput.value = "";
 }
 
-// Function to handle the "Use crypto" switch
+// Handle crypto switch (placeholder)
 function handleCryptoSwitch() {
   const cryptoSwitch = document.getElementById("cryptoSwitch");
   if (cryptoSwitch) {
     cryptoSwitch.addEventListener("change", function () {
-      // This is a placeholder for crypto payment integration
-      console.log(
-        "Crypto payment option:",
-        this.checked ? "enabled" : "disabled"
-      );
+      console.log("Crypto payment option:", this.checked ? "enabled" : "disabled");
     });
   }
 }
 
-// Function to handle the "Open Billing Portal" link
+// Handle billing portal (placeholder)
 function handleBillingPortal() {
-  const billingLink = document.querySelector(
-    'a[href="#"].text-decoration-none.text-primary'
-  );
+  const billingLink = document.querySelector('a[href="#"].text-decoration-none.text-primary');
   if (billingLink) {
     billingLink.addEventListener("click", function (e) {
       e.preventDefault();
-      // This is a placeholder for billing portal integration
       alert("Billing portal integration would go here");
     });
   }
 }
 
-// Function to handle the refresh button
+// Handle refresh credits
 function handleRefreshCredits() {
   const userId = localStorage.getItem("userId");
   if (userId) {
     getUserCredits(userId).then((credits) => {
       if (credits !== null) {
         updateCreditsDisplay(credits);
+        fetchAndRenderCreditHistory(userId);
       }
     });
   }
 }
 
-// Initialize the page
+// Init
 document.addEventListener("DOMContentLoaded", function () {
-  // Get the current user ID from localStorage or session
   const userId = localStorage.getItem("userId");
+
   if (userId) {
-    // Load the user's credits
     getUserCredits(userId).then((credits) => {
-      if (credits !== null) {
-        updateCreditsDisplay(credits);
-      }
+      if (credits !== null) updateCreditsDisplay(credits);
     });
+    fetchAndRenderCreditHistory(userId);
   }
 
-  // Add event listeners
-  const addCreditsButton = document.getElementById("addCreditsBtn");
-  if (addCreditsButton) {
-    addCreditsButton.addEventListener("click", handleAddCredits);
-  }
-
-  // Add confirm button event listener
-  const confirmAddCreditsButton = document.getElementById("confirmAddCredits");
-  if (confirmAddCreditsButton) {
-    confirmAddCreditsButton.addEventListener("click", handleConfirmAddCredits);
-  }
-
-  // Add refresh button event listener
-  const refreshButton = document.getElementById("refreshCredits");
-  if (refreshButton) {
-    refreshButton.addEventListener("click", handleRefreshCredits);
-  }
+  document.getElementById("addCreditsBtn")?.addEventListener("click", handleAddCredits);
+  document.getElementById("confirmAddCredits")?.addEventListener("click", handleConfirmAddCredits);
+  document.getElementById("refreshCredits")?.addEventListener("click", handleRefreshCredits);
 
   handleCryptoSwitch();
   handleBillingPortal();
