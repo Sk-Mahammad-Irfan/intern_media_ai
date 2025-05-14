@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function createAPIKey() {
+    const label = prompt("Enter a name for your new API key:");
+    if (!label) return;
+
     try {
       const userId = localStorage.getItem("userId");
       const res = await fetch(
@@ -30,20 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId }),
+          body: JSON.stringify({ userId, label }),
         }
       );
 
       const data = await res.json();
 
       if (data.success) {
-        // If key was returned directly (e.g. key already exists), manually add it
-        if (data.key) {
-          renderAPIKeys([{ key: data.key }]);
-          alert(data.message || "API key created.");
-        } else {
-          fetchAPIKeys(); // fallback to fetch all
-        }
+        alert(data.message || "API key created.");
+        fetchAPIKeys();
       } else {
         alert(data.message || "Failed to create API key.");
       }
@@ -85,13 +83,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    keys.forEach(({ key }) => {
+    keys.forEach(({ key, label }) => {
       const item = document.createElement("li");
       item.className =
         "list-group-item d-flex justify-content-between align-items-center flex-wrap";
 
       const keyWrapper = document.createElement("div");
-      keyWrapper.className = "d-flex align-items-center";
+      keyWrapper.className = "d-flex flex-column";
+
+      const labelElement = document.createElement("strong");
+      labelElement.textContent = label || "Unnamed Key";
+      labelElement.className = "mb-1";
 
       const keyMasked = document.createElement("span");
       keyMasked.textContent = "*".repeat(20);
@@ -115,8 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
 
-      keyWrapper.appendChild(keyMasked);
-      keyWrapper.appendChild(toggleBtn);
+      const keyRow = document.createElement("div");
+      keyRow.className = "d-flex align-items-center";
+      keyRow.appendChild(keyMasked);
+      keyRow.appendChild(toggleBtn);
+
+      keyWrapper.appendChild(labelElement);
+      keyWrapper.appendChild(keyRow);
 
       const btnGroup = document.createElement("div");
       btnGroup.className = "d-flex align-items-center";

@@ -1,28 +1,23 @@
 import ApiKeyModel from "../models/apikeyModel.js";
 import { v4 as uuidv4 } from "uuid";
 
-// Create API Key (if not already exists)
 export const generateAPIKey = async (req, res) => {
   try {
     const userId = req.user?._id || req.body.userId || "anonymous";
+    const label = req.body.label || "Unnamed Key";
+    const key = uuidv4();
 
-    // Check if key already exists for this user
-    const existingKey = await ApiKeyModel.findOne({ userId });
+    let userKeys = await ApiKeyModel.findOne({ userId });
 
-    if (existingKey) {
-      return res.json({
-        success: true,
-        key: existingKey.key,
-        message: "API key already exists",
-      });
+    if (!userKeys) {
+      userKeys = new ApiKeyModel({ userId, keys: [] });
     }
 
-    // If not, generate and save new key
-    const key = uuidv4();
-    const newKey = new ApiKeyModel({ userId, key });
-    await newKey.save();
+    // Add new key
+    userKeys.keys.push({ key, label });
+    await userKeys.save();
 
-    res.json({ success: true, key, message: "New API key created" });
+    res.json({ success: true, key, label, message: "API key created" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Error creating API key" });
@@ -32,9 +27,9 @@ export const generateAPIKey = async (req, res) => {
 export const getAPIKeys = async (req, res) => {
   try {
     const userId = req.user?._id || req.body.userId || "anonymous";
+    const userKeys = await ApiKeyModel.findOne({ userId });
 
-    const keys = await ApiKeyModel.find({ userId });
-    res.json({ success: true, keys });
+    res.json({ success: true, keys: userKeys?.keys || [] });
   } catch (err) {
     console.error(err);
     res
@@ -48,12 +43,16 @@ export const deleteAPIKey = async (req, res) => {
   try {
     const { key } = req.params;
 
-    const deleted = await ApiKeyModel.findOneAndDelete({ key });
+    const updated = await ApiKeyModel.findOneAndUpdate(
+      { "keys.key": key },
+      { $pull: { keys: { key } } },
+      { new: true }
+    );
 
-    if (!deleted) {
+    if (!updated) {
       return res.status(404).json({
         success: false,
-        message: "API key not found or not owned by user",
+        message: "API key not found",
       });
     }
 

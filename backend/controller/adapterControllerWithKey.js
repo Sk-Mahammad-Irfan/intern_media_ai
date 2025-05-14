@@ -15,9 +15,18 @@ fal.config({ credentials: process.env.FAL_AI_API });
 const getUserByApiKey = async (req) => {
   const apiKey = req.headers["x-api-key"];
   if (!apiKey) throw new Error("API key missing");
-  const user = await ApiKeyModel.findOne({ key: apiKey });
-  if (!user) throw new Error("Invalid API key");
-  return user;
+
+  const userDoc = await ApiKeyModel.findOne({ "keys.key": apiKey });
+  if (!userDoc) throw new Error("Invalid API key");
+
+  // Optionally, find the exact key object as well
+  const keyInfo = userDoc.keys.find((k) => k.key === apiKey);
+
+  return {
+    userId: userDoc.userId,
+    key: keyInfo, // optional: info about the specific API key
+    _id: userDoc._id,
+  };
 };
 
 // -------- VIDEO GENERATION WITH API KEY --------
