@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const keySchema = new mongoose.Schema({
-  key: { type: String, required: true, unique: true },
+  key: { type: String, required: true },
   label: { type: String, default: "Unnamed Key" },
   createdAt: { type: Date, default: Date.now },
 });

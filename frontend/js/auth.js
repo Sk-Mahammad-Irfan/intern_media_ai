@@ -72,31 +72,29 @@ form.addEventListener("submit", async (e) => {
 
     const data = await res.json();
 
-    if (data.success) {
+    if (data.success && data.token) {
       msg.classList.remove("text-danger");
       msg.classList.add("text-success");
       msg.textContent = data.message;
 
-      if (data.token) {
-        // Store token in cookie (expires in 7 days)
-        setCookie("auth_token", data.token, 7);
+      // Auto-login after successful registration
+      const userData = {
+        userId: data.user.userId,
+        email: email,
+        credits: data.user.credits,
+        username: data.user.username || username || email.split("@")[0],
+        loginTime: new Date().toISOString(),
+      };
 
-        // Store user data in localStorage
-        const userData = {
-          userId: data.user.userId,
-          email: email,
-          credits: data.user.credits,
-          username: username || email.split("@")[0],
-          loginTime: new Date().toISOString(),
-        };
-        localStorage.setItem("user_data", JSON.stringify(userData));
-        localStorage.setItem("userId", data.user.userId);
-        document.cookie = `token=${data.token}; Path=/;`; // Removed HttpOnly (can't be set via JS)
+      // Set cookie and localStorage
+      setCookie("auth_token", data.token, 7);
+      document.cookie = `token=${data.token}; Path=/;`;
+      localStorage.setItem("user_data", JSON.stringify(userData));
+      localStorage.setItem("userId", data.user.userId);
 
-        // Update UI and redirect
-        setAvatarInitials();
-        window.location.href = "index.html";
-      }
+      // Update UI and redirect
+      setAvatarInitials();
+      window.location.href = "index.html";
     } else {
       msg.textContent = data.message;
       msg.classList.add("text-danger");

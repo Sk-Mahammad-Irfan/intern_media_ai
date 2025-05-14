@@ -29,7 +29,6 @@ export const registerController = async (req, res) => {
     }
 
     const existingUser = await userModel.findOne({ email });
-
     if (existingUser) {
       return res.status(401).send({
         success: false,
@@ -46,10 +45,21 @@ export const registerController = async (req, res) => {
       credits: 0,
     }).save();
 
+    // 🔐 Generate JWT Token for auto-login
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
     res.status(200).send({
       success: true,
       message: "User Registered",
-      user,
+      user: {
+        userId: user._id,
+        email: user.email,
+        username: user.username,
+        credits: user.credits,
+      },
+      token, // ✅ Send token back
     });
   } catch (err) {
     console.log(err);
