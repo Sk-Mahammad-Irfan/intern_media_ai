@@ -3,9 +3,7 @@ import mongoose from "mongoose";
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 30000,// Keep trying to send operations for 30 seconds
+      serverSelectionTimeoutMS: 30000, // Keep trying to send operations for 30 seconds
     });
     console.log("Mongo db connected");
   } catch (err) {
