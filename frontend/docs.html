@@ -42,251 +42,239 @@
   </head>
   <body class="d-flex flex-column min-vh-100">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-      <div
-        class="container-fluid d-flex align-items-center justify-content-between"
+   <nav
+        class="navbar navbar-expand-lg navbar-light sticky-top"
       >
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="index.html"
-          >&nbsp;<span style="font-weight: 500">Open</span
-          ><span class="media">Media</span
-          ><span style="font-weight: 500">Flow</span>&nbsp;</a
-        >
-
-        <!-- Mobile controls -->
         <div
-          class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
+          class="container-fluid d-flex align-items-center justify-content-between"
         >
-          <button
-            id="mobileSearchBtn"
-            class="btn btn-light rounded-circle"
-            style="width: 36px; height: 36px"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+          
+           <!-- Brand -->
+           <a class="navbar-brand fw-bold" href="index.html"
+           >&nbsp;<span style="font-weight: 500;">Open</span><span class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a
+         >
 
-          <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+          <!-- Mobile controls -->
           <div
-            id="mobileSearchSidebar"
-            class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-            style="
-              width: 100%;
-              max-width: 300px;
-              height: 100%;
-              transform: translateX(-100%);
-              transition: transform 0.3s ease;
-              z-index: 1050;
-            "
+            class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
           >
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Search</h5>
-              <button
-                id="closeSearchSidebar"
-                class="btn btn-sm btn-outline-secondary"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <input
-              type="text"
-              class="form-control rounded-pill mb-3"
-              id="mobileSearchInput"
-              placeholder="Search models..."
-            />
-            <div
-              id="mobileSearchResults"
-              class="mt-3"
-              style="max-height: 60vh; overflow-y: auto"
-            >
-              <!-- Results will be appended here -->
-            </div>
-          </div>
-          <div class="dropdown">
-            <a
-              href="#"
-              class="d-flex align-items-center text-decoration-none dropdown-toggle"
-              id="navbarDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
-              </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="mobileAvatarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username-mobile">
-                  Username
-                </h6>
-                <p
-                  class="dropdown-item-text mb-1 small"
-                  id="account-email-mobile"
-                >
-                  email@example.com
-                </p>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="model.html">Models</a></li>
-              <li><a class="dropdown-item" href="audiomodel.html">Chat</a></li>
-              <li>
-                <a class="dropdown-item" href="rankings.html">Rankings</a>
-              </li>
-              <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a
-                  class="dropdown-item text-danger"
-                  href="index.html"
-                  onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-              <li>
-                <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">
-                    Sign in
-                  </button>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+          <button
+      id="mobileSearchBtn"
+      class="btn btn-light rounded-circle "
+      style="width: 36px; height: 36px"
+    >
+     <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
 
-        <!-- Search (Desktop only) -->
-        <form class="d-none d-lg-block mx-3 flex-grow-1">
-          <div class="position-relative w-100">
-            <!-- Left search icon -->
-            <span
-              class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"
-            >
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-
-            <!-- Input -->
-            <input
-              class="form-control rounded-pill bg-light ps-5 pe-4"
-              id="navbarSearch"
-              type="search"
-              placeholder="Search models"
-            />
-
-            <!-- Right slash icon -->
-            <span
-              class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
-              style="font-family: monospace"
-            >
-              /
-            </span>
-          </div>
-        </form>
-
-        <!-- Desktop Nav Items -->
-        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="model.html">Models</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="audiomodel.html">Chat</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="docs.html">Docs</a>
-          </li>
-          <li class="nav-item mx-1" id="signInDesktop">
-            <a class="nav-link fw-medium" href="auth.html">
-              <button type="button" class="btn btn-outline-primary">
-                Sign in
-              </button>
-            </a>
-          </li>
-          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
-              </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username">Username</h6>
-              </li>
-              <li>
-                <p class="dropdown-item-text mb-1 small" id="account-email">
-                  email@example.com
-                </p>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="credits.html">Credit</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li>
-                <a class="dropdown-item text-danger" href="#" onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
+   <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+   <div
+     id="mobileSearchSidebar"
+     class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+     style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;"
+     >
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Search</h5>
+        <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
-    </nav>
+      <input
+        type="text"
+        class="form-control rounded-pill mb-3"
+        id="mobileSearchInput"
+        placeholder="Search models..."
+      />
+      <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto;">
+        <!-- Results will be appended here -->
+      </div>
+    </div>
+            <div class="dropdown userAvatarDropdown">
+              <a
+                href="#"
+                class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                id="navbarDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div
+                  id="navbar-avatar"
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px"
+                >
+                  U
+                </div>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="mobileAvatarDropdown"
+              >
+              <div class="mobile-auth-only dnone">
+                <li>
+                  <h6 class="dropdown-header" id="account-username-mobile">
+                    Username
+                  </h6>
+                  <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                    email@example.com
+                  </p>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+              </div>
+                <li><a class="dropdown-item" href="model.html">Models</a></li>
+                <li><a class="dropdown-item" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a></li>
+                <li><a class="dropdown-item" href="rankings.html">Rankings</a></li>
+                <li><a class="dropdown-item" href="docs.html">Docs</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <div class="mobile-auth-only dnone">
+                  <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+                  <li>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="provisioning.html"
+                      >Provisioning Keys</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="integrations.html"
+                      >Integrations</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="privacy.html">Privacy</a>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                     
+                  <li>
+                    <a
+                      class="dropdown-item text-danger"
+                      href="index.html"
+                      onclick="logout()"
+                      >Logout</a
+                    >
+                  </li>
+                 </div>
+                <li>
+                  <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                    <button type="button" class="btn btn-outline-primary w-100">
+                      Sign in
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Search (Desktop only) -->
+          <form class="d-none d-lg-block mx-3 flex-grow-1">
+              <div class="position-relative w-100">
+                <!-- Left search icon -->
+                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            
+                <!-- Input -->
+                <input
+                  class="form-control rounded-pill bg-light ps-5 pe-4"
+                  id="navbarSearch"
+                  type="search"
+                  placeholder="Search models"
+                />
+            
+                <!-- Right slash icon -->
+                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-family: monospace;">
+                  /
+                </span>
+              </div>
+            </form>
+
+          <!-- Desktop Nav Items -->
+          <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="model.html">Models</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="docs.html">Docs</a>
+            </li>
+            <li class="nav-item mx-1" id="signInDesktop">
+              <a class="nav-link fw-medium" href="auth.html">
+                <button type="button" class="btn btn-outline-primary">
+                  Sign in
+                </button>
+              </a>
+            </li>
+            <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div
+                  id="navbar-avatar"
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px"
+                >
+                  U
+                </div>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <h6 class="dropdown-header" id="account-username">
+                    Username
+                  </h6>
+                </li>
+                <li>
+                  <p class="dropdown-item-text mb-1 small" id="account-email">
+                    email@example.com
+                  </p>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="credits.html">Credits</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="provisioning.html"
+                    >Provisioning Keys</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="integrations.html"
+                    >Integrations</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="privacy.html">Privacy</a>
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href="#" onclick="logout()"
+                    >Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
     <!-- Main Container -->
 

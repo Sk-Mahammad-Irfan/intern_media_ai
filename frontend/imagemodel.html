@@ -105,10 +105,16 @@
         display: none;
       }
     }
-  
-  
-  
-     </style>
+    
+  @media (max-width: 576px) {
+    #resolutionSelect {
+      font-size: 12px;
+      padding: 0.25rem 0.5rem;
+      width: 120px;
+    }
+  }
+
+    </style>
     </head>
   
     <body>
@@ -183,7 +189,7 @@
                     <li><hr class="dropdown-divider" /></li>
                   </div>
                   <li><a class="dropdown-item" href="model.html">Models</a></li>
-                  <li><a class="dropdown-item" href="imagemodel.html">Chat</a></li>
+                  <li><a class="dropdown-item" href="">Chat</a></li>
                   <li><a class="dropdown-item" href="rankings.html">Rankings</a></li>
                   <li><a class="dropdown-item" href="docs.html">Docs</a></li>
                   <li><hr class="dropdown-divider" /></li>
@@ -252,7 +258,7 @@
             <!-- Desktop Nav Items -->
             <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="imagemodel.html">Chat</a></li>
+              <li class="nav-item mx-1"><a class="nav-link fw-medium" href="">Chat</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="rankings.html">Rankings</a></li>
               <li class="nav-item mx-1"><a class="nav-link fw-medium" href="docs.html">Docs</a></li>
               <li class="nav-item mx-1" id="signInDesktop">
@@ -351,16 +357,16 @@
                 placeholder="Start a message..." style="box-shadow: none; outline: none;">
 
                  <!-- Resolution Dropdown -->
-            <div class="d-flex align-items-center me-3" style="gap: 8px;">
-              <select id="resolutionSelect" class="form-select rounded-pill">
-                <option value="square_hd">Square HD</option>
-                <option value="square">Square</option>
-                <option value="portrait_4_3">Portrait 4:3</option>
-                <option value="portrait_16_9">Portrait 16:9</option>
-                <option value="landscape_4_3">Landscape 4:3</option>
-                <option value="landscape_16_9">Landscape 16:9</option>
-              </select>
-            </div>
+              <div class="d-flex align-items-center me-3" style="gap: 8px;">
+                <select id="resolutionSelect" class="form-select rounded-pill w-auto">
+                  <option value="square_hd">Square HD</option>
+                  <option value="square">Square</option>
+                  <option value="portrait_4_3">Portrait 4:3</option>
+                  <option value="portrait_16_9">Portrait 16:9</option>
+                  <option value="landscape_4_3">Landscape 4:3</option>
+                  <option value="landscape_16_9">Landscape 16:9</option>
+                </select>
+              </div>
 
               <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
                 style="width: 40px; height: 40px;" onclick="generateImage()">
