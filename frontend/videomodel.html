@@ -105,6 +105,21 @@
       width: 100px;
       background-color: #f8f9fa;
     }
+    #aspectRatioSelect{
+      width: 100px;
+    }
+    @media (max-width: 576px) {
+  .small-select {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .mobile-narrow {
+    width: 120px; /* Adjust width as needed */
+  }
+}
+
+
   </style>
 </head>
 
@@ -331,6 +346,16 @@
               <option value="720p">720p</option>
               <option value="1080p">1080p</option>
             </select>
+
+            <!-- Aspect Ratio Select -->
+            <select id="aspectRatioSelect" class="form-select rounded-pill">
+              <option value="16:9" selected>16:9</option>
+              <option value="9:16">9:16</option>
+              <option value="4:3">4:3</option>
+              <option value="3:4">3:4</option>
+              <option value="21:9">21:9</option>
+              <option value="9:21">9:21</option>
+            </select>
             </div>
            
             <!-- Send Button -->
@@ -376,6 +401,7 @@
     chat.appendChild(userWrapper);
     chat.scrollTop = chat.scrollHeight;
   }
+
   function appendGeneratingVideoMessage(resolution) {
     const aiDiv = document.createElement("div");
     aiDiv.className = "d-flex justify-content-start mb-3 generating-video";
@@ -383,7 +409,7 @@
     aiDiv.innerHTML = `
       <div class="ai-message p-3 text-muted d-flex align-items-center">
         <i class="bi bi-camera-reels me-2"></i>
-        Generating video at <strong>&nbsp; ${resolution}</strong> &nbsp;
+        Generating video &nbsp;
         <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
       </div>
     `;
@@ -391,7 +417,6 @@
     chat.appendChild(aiDiv);
     chat.scrollTop = chat.scrollHeight;
   }
-
 
   function appendErrorMessage(message) {
     const errorDiv = document.createElement("div");
@@ -407,39 +432,63 @@
     chat.scrollTop = chat.scrollHeight;
   }
 
-  function appendGeneratedVideo(videoUrl) {
-    // Remove the "Generating video..." message
-    const loadingMessage = document.querySelector(".generating-video");
-    if (loadingMessage) {
-      loadingMessage.remove();
-    }
+ function appendGeneratedVideo(videoUrl) {
+  const loadingMessage = document.querySelector(".generating-video");
+  if (loadingMessage) loadingMessage.remove();
 
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
+  const resolution = document.getElementById("resolutionSelect").value || "540p";
+  const aspect_ratio = document.getElementById("aspectRatioSelect").value || "16:9";
 
-    const bubble = document.createElement("div");
-    bubble.className = "ai-message p-3";
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
 
-    const caption = document.createElement("div");
-    caption.textContent = "Generated Video:";
-    caption.classList.add("mb-2");
+  const bubble = document.createElement("div");
+  bubble.className = "ai-message p-3";
 
-    const videoElement = document.createElement("video");
-    videoElement.controls = true;
-    videoElement.src = videoUrl;
-    videoElement.classList.add("rounded", "w-100", "shadow");
-    videoElement.style.maxWidth = "500px";
+  const caption = document.createElement("div");
+  caption.textContent = "Generated Video:";
+  caption.classList.add("mb-2");
 
-    bubble.appendChild(caption);
-    bubble.appendChild(videoElement);
-    messageElement.appendChild(bubble);
-    chat.appendChild(messageElement);
-    chat.scrollTop = chat.scrollHeight;
-  }
+  const meta = document.createElement("div");
+  meta.className = "text-muted mb-2";
+  meta.style.fontSize = "0.9em";
+  meta.textContent = `Resolution: ${resolution}, Aspect Ratio: ${aspect_ratio}`;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "video-wrapper rounded shadow";
+  wrapper.style.maxWidth = "500px";
+  wrapper.style.width = "100%";
+  wrapper.style.overflow = "hidden";
+  wrapper.style.backgroundColor = "#000";
+
+  const videoElement = document.createElement("video");
+  videoElement.controls = true;
+  videoElement.src = videoUrl;
+  videoElement.style.width = "100%";
+  videoElement.style.height = "100%";
+  videoElement.style.display = "block";
+  videoElement.style.objectFit = "contain";
+
+  // Use actual aspect ratio if possible
+  videoElement.onloadedmetadata = () => {
+    const w = videoElement.videoWidth;
+    const h = videoElement.videoHeight;
+    wrapper.style.aspectRatio = `${w} / ${h}`;
+  };
+
+  wrapper.appendChild(videoElement);
+  bubble.appendChild(caption);
+  bubble.appendChild(meta);
+  bubble.appendChild(wrapper);
+  messageElement.appendChild(bubble);
+  chat.appendChild(messageElement);
+  chat.scrollTop = chat.scrollHeight;
+}
 
   async function generateVideo() {
     const prompt = document.getElementById("promptInput").value.trim();
     const resolution = document.getElementById("resolutionSelect").value;
+    const aspect_ratio = document.getElementById("aspectRatioSelect").value;
     const userId = localStorage.getItem("userId") || "guest";
 
     if (!prompt) {
@@ -452,10 +501,11 @@
 
     try {
       const modelId = new URLSearchParams(window.location.search).get("id") || "pixverse-v4-text-to-video";
+
       const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${modelId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, resolution, userId })
+        body: JSON.stringify({ prompt, resolution, aspect_ratio, userId })
       });
 
       const data = await response.json();
@@ -520,7 +570,6 @@
 
   if (roomCreatedAt) {
     const date = new Date(roomCreatedAt);
-
     const formatted = date.toLocaleString(undefined, {
       weekday: "short",
       year: "numeric",
@@ -576,6 +625,7 @@
 
   document.addEventListener("DOMContentLoaded", setAvatarInitials);
 </script>
+
 
 </body>
 </html>
