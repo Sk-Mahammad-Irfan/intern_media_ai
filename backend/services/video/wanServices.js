@@ -57,10 +57,12 @@ export const wanReplicate = async (prompt) => {
   }
 };
 
-export const wanFAL = async (prompt) => {
+// Possible enum values: 16:9, 9:16
+
+export const wanFAL = async (prompt, aspect_ratio="16:9") => {
   try {
     const result = await fal.subscribe("fal-ai/wan/v2.1/1.3b/text-to-video", {
-      input: { prompt },
+      input: { prompt, aspect_ratio },
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
