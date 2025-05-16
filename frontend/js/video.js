@@ -1,7 +1,8 @@
 const chat = document.getElementById("chat");
 const providerSelect = document.getElementById("providerSelect");
-const resolutionSelects = document.querySelectorAll(".resolutionSelect");
-const aspectRatioSelects = document.querySelectorAll(".aspectRatioSelect");
+const resolutionSelect = document.getElementById("resolutionSelect");
+const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+
 
 const modelOptions = {
   "lightricks-ltx-video": {
@@ -51,12 +52,10 @@ const modelOptions = {
   },
 };
 
-function getSelectedValue(selects) {
-  for (const s of selects) {
-    if (s.offsetParent !== null && s.value) return s.value;
-  }
-  return null;
+function getSelectedValue(select) {
+  return select?.value || null;
 }
+
 
 function appendUserMessage(prompt) {
   const wrapper = document.createElement("div");
@@ -98,8 +97,8 @@ function appendGeneratedVideo(videoUrl) {
   const loadingMessage = document.querySelector(".generating-video");
   if (loadingMessage) loadingMessage.remove();
 
-  const resolution = getSelectedValue(resolutionSelects) || "720p";
-  const aspect_ratio = getSelectedValue(aspectRatioSelects) || "16:9";
+  const resolution = getSelectedValue(resolutionSelect) || "720p";
+  const aspect_ratio = getSelectedValue(aspectRatioSelect) || "16:9";
 
   const message = document.createElement("div");
   message.className = "d-flex justify-content-start mb-3";
@@ -144,8 +143,8 @@ function appendGeneratedVideo(videoUrl) {
 
 async function generateVideo() {
   const prompt = document.getElementById("promptInput").value.trim();
-  const resolution = getSelectedValue(resolutionSelects);
-  const aspect_ratio = getSelectedValue(aspectRatioSelects);
+  const resolution = getSelectedValue(resolutionSelect);
+  const aspect_ratio = getSelectedValue(aspectRatioSelect);
   const provider = providerSelect.value;
   const modelId =
     new URLSearchParams(window.location.search).get("id") || "wan";
@@ -272,28 +271,26 @@ function populateModelOptions(modelId) {
   providerSelect.value = config.providers[0];
 
   // Populate resolutions
-  resolutionSelects.forEach((select) => {
-    select.innerHTML = `<option value="" disabled selected>Resolution</option>`;
-    Object.keys(config.resolutions).forEach((res) => {
-      const option = document.createElement("option");
-      option.value = res;
-      option.textContent = res;
-      select.appendChild(option);
-    });
-    if (config.resolutions["720p"] !== undefined) select.value = "720p";
-  });
+  resolutionSelect.innerHTML = `<option value="" disabled selected>Resolution</option>`;
+Object.keys(config.resolutions).forEach((res) => {
+  const option = document.createElement("option");
+  option.value = res;
+  option.textContent = res;
+  resolutionSelect.appendChild(option);
+});
+if (config.resolutions["720p"] !== undefined) resolutionSelect.value = "720p";
+
 
   // Populate aspect ratios
-  aspectRatioSelects.forEach((select) => {
-    select.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
-    config.aspect_ratios.forEach((ratio) => {
-      const option = document.createElement("option");
-      option.value = ratio;
-      option.textContent = ratio;
-      select.appendChild(option);
-    });
-    if (config.aspect_ratios.includes("16:9")) select.value = "16:9";
-  });
+  aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
+config.aspect_ratios.forEach((ratio) => {
+  const option = document.createElement("option");
+  option.value = ratio;
+  option.textContent = ratio;
+  aspectRatioSelect.appendChild(option);
+});
+if (config.aspect_ratios.includes("16:9")) aspectRatioSelect.value = "16:9";
+
 }
 
 function getModelIdFromURL() {
@@ -321,3 +318,37 @@ providerSelect.addEventListener("change", () => {
   const replicateOptions = document.getElementById("replicateExtraOptions");
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 });
+
+document.getElementById("applyOptionsBtn").addEventListener("click", () => {
+  // Get values
+  const resolution = document.getElementById("resolutionSelect").value;
+  const aspectRatio = document.getElementById("aspectRatioSelect").value;
+
+  const shift = document.getElementById("shiftInput").value;
+  const steps = document.getElementById("stepsInput").value;
+  const guidance = document.getElementById("guidanceInput").value;
+  const negativePrompt = document.getElementById("negativePromptInput").value;
+  const seed = document.getElementById("seedInput").value;
+  const expansion = document.getElementById("enableExpansion").checked;
+  const safety = document.getElementById("enableSafety").checked;
+
+  // Update values if needed
+  document.getElementById("shiftInput").value = shift;
+  document.getElementById("stepsInput").value = steps;
+  document.getElementById("guidanceInput").value = guidance;
+  document.getElementById("negativePromptInput").value = negativePrompt;
+  document.getElementById("seedInput").value = seed;
+  document.getElementById("enableExpansion").checked = expansion;
+  document.getElementById("enableSafety").checked = safety;
+
+  // Close modal
+  const modalElement = document.getElementById("modelOptionsModal");
+  const modal = bootstrap.Modal.getInstance(modalElement);
+  modal.hide();
+
+  // Manually remove backdrop just in case
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+  document.body.classList.remove('modal-open');
+  document.body.style = ""; // clear inline styles
+});
+

@@ -153,11 +153,47 @@
           flex-wrap: nowrap;
         }
       }
-      .resolutionSelect,
-      .aspectRatioSelect {
-        width: 110px !important;
+      #showModelOptionsBtn {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+        
+        border: 1.5px solid #ced4da;
+        
       }
-    </style>
+
+      @media (max-width: 576px) {
+        #showModelOptionsBtn {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+        }
+      }
+
+.model-select {
+  min-width: 180px;
+}
+
+@media (max-width: 576px) {
+  
+  .model-group label,
+  .provider-group label {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .model-group,
+  .provider-group {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .model-select,
+  .provider-select {
+    width: 100%;
+  }
+}
+
+    
+  </style>
   </head>
 
   <body>
@@ -459,186 +495,148 @@
             </button>
           </div>
 
-          <div class="px-4 pt-3">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-              <div class="d-flex align-items-center gap-2">
-                <label class="fw-semibold mb-0">Model:</label>
-                <select
-                  id="modelSelector"
-                  class="form-select form-select-sm modern-select"
-                  onchange="handleModelChange()"
-                >
-                  <!-- Options dynamically generated -->
-                </select>
-              </div>
-              <select id="providerSelect">
-                <option value="" selected>Select Provider</option>
-              </select>
-            </div>
-            <hr class="model-hr" />
-          </div>
+        <div class="px-4 pt-3">
+  <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+    <!-- Model select -->
+    <div class="model-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap">
+      <label class="fw-semibold mb-0">Model:</label>
+      <select
+        id="modelSelector"
+        class="form-select form-select-sm modern-select model-select"
+        onchange="handleModelChange()"
+      >
+        <!-- Options dynamically generated -->
+      </select>
+    </div>
+
+    <!-- Provider select -->
+    <div class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap">
+      <label class="fw-semibold mb-0">Provider:</label>
+      <select
+        id="providerSelect"
+        class="form-select form-select-sm modern-select provider-select"
+      >
+        <!-- Options dynamically generated -->
+      </select>
+    </div>
+  </div>
+  <hr class="model-hr" />
+</div>
+
+
 
           <div id="chat" class="container-fluid">
             <!-- Chat messages appear here -->
           </div>
 
+          <!-- Parameters  -->
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="modelOptionsModal" tabindex="-1" aria-labelledby="modelOptionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header rounded-top-4">
+        <h5 class="modal-title" id="modelOptionsModalLabel">Model Generation Options</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- FAL Extra Options -->
+        <div id="falExtraOptions" class="row gy-3 mb-4">
+          <h6 class="fw-bold text-secondary">FAL Parameters</h6>
+          <div class="col-md-4">
+            <input type="number" id="shiftInput" class="form-control" placeholder="Shift (e.g. 5)" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="stepsInput" class="form-control" placeholder="Steps (e.g. 30)" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="guidanceInput" class="form-control" placeholder="Guidance Scale (e.g. 7)" />
+          </div>
+          <div class="col-md-4">
+            <input type="text" id="negativePromptInput" class="form-control" placeholder="Negative Prompt" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="seedInput" class="form-control" placeholder="Seed (optional)" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="frameNumInput" class="form-control" placeholder="Frame Count (default 81)" />
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="enableExpansion">
+              <label class="form-check-label" for="enableExpansion">Enable Prompt Expansion</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="enableSafety" checked>
+              <label class="form-check-label" for="enableSafety">Enable Safety Checker</label>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Replicate Extra Options -->
+        <div id="replicateExtraOptions" class="row gy-3 my-4">
+          <h6 class="fw-bold text-secondary">Replicate Parameters</h6>
+          <div class="col-md-4">
+            <input type="number" id="replicateCfgInput" class="form-control" placeholder="Guidance Scale (cfg), e.g. 3" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="replicateStepsInput" class="form-control" placeholder="Inference Steps (e.g. 30)" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="replicateLengthInput" class="form-control" placeholder="Video Length (e.g. 97 frames)" />
+          </div>
+          <div class="col-md-6">
+            <input type="text" id="replicateNegativePromptInput" class="form-control" placeholder="Negative Prompt (optional)" />
+          </div>
+          <div class="col-md-6">
+            <input type="number" step="0.01" id="replicateImageNoiseScaleInput" class="form-control" placeholder="Image Noise Scale (e.g. 0.15)" />
+          </div>
+          <div class="col-md-4">
+            <input type="number" id="replicateSeedInput" class="form-control" placeholder="Seed (optional)" />
+          </div>
+        </div>
+
+        <!-- Resolution and Aspect Ratio -->
+        <div class="row gy-3">
+          <h6 class="fw-bold text-secondary">Output Settings</h6>
+          <div class="col-md-6">
+            <select id="resolutionSelect" class="form-select rounded-pill">
+              <option value="">Resolution</option>
+              <option value="360p">360p</option>
+              <option value="540p">540p</option>
+              <option value="720p">720p</option>
+              <option value="1080p">1080p</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <select id="aspectRatioSelect" class="form-select rounded-pill">
+              <option value="16:9">16:9</option>
+              <option value="9:16">9:16</option>
+              <option value="4:3">4:3</option>
+              <option value="3:4">3:4</option>
+              <option value="21:9">21:9</option>
+              <option value="9:21">9:21</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="applyOptionsBtn" class="btn btn-primary rounded-pill">Apply Options</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
           <div id="promptInputSection">
             <div class="container">
-              <div class="d-flex d-md-none justify-content-end mb-2 gap-2">
-                <select
-                  id="resolutionSelectMobile"
-                  class="form-select rounded-pill w-auto small-select mobile-narrow resolutionSelect"
-                >
-                  <option value="360p">360p</option>
-                  <option value="540p">540p</option>
-                  <option value="720p">720p</option>
-                  <option value="1080p">1080p</option>
-                </select>
-                <select
-                  id="aspectRatioSelectMobile"
-                  class="form-select rounded-pill w-auto small-select mobile-narrow aspectRatioSelect"
-                >
-                  <option value="16:9">16:9</option>
-                  <option value="9:16">9:16</option>
-                  <option value="4:3">4:3</option>
-                  <option value="3:4">3:4</option>
-                  <option value="21:9">21:9</option>
-                  <option value="9:21">9:21</option>
-                </select>
-              </div>
-
-              <div id="falExtraOptions" class="row mt-3" style="display: none">
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="shiftInput"
-                    class="form-control"
-                    placeholder="Shift (e.g. 5)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="stepsInput"
-                    class="form-control"
-                    placeholder="Steps (e.g. 30)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="guidanceInput"
-                    class="form-control"
-                    placeholder="Guidance Scale (e.g. 7)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="text"
-                    id="negativePromptInput"
-                    class="form-control"
-                    placeholder="Negative Prompt"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="seedInput"
-                    class="form-control"
-                    placeholder="Seed (optional)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="frameNumInput"
-                    class="form-control"
-                    placeholder="Frame Count (default 81)"
-                  />
-                </div>
-                <div class="col-md-6 mb-2">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="enableExpansion"
-                    />
-                    <label class="form-check-label" for="enableExpansion">
-                      Enable Prompt Expansion
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-2">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="enableSafety"
-                      checked
-                    />
-                    <label class="form-check-label" for="enableSafety">
-                      Enable Safety Checker
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                id="replicateExtraOptions"
-                class="row mt-3"
-                style="display: none"
-              >
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="replicateCfgInput"
-                    class="form-control"
-                    placeholder="Guidance Scale (cfg), e.g. 3"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="replicateStepsInput"
-                    class="form-control"
-                    placeholder="Inference Steps (e.g. 30)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="replicateLengthInput"
-                    class="form-control"
-                    placeholder="Video Length (e.g. 97 frames)"
-                  />
-                </div>
-                <div class="col-md-6 mb-2">
-                  <input
-                    type="text"
-                    id="replicateNegativePromptInput"
-                    class="form-control"
-                    placeholder="Negative Prompt (optional)"
-                  />
-                </div>
-                <div class="col-md-6 mb-2">
-                  <input
-                    type="number"
-                    step="0.01"
-                    id="replicateImageNoiseScaleInput"
-                    class="form-control"
-                    placeholder="Image Noise Scale (e.g. 0.15)"
-                  />
-                </div>
-                <div class="col-md-4 mb-2">
-                  <input
-                    type="number"
-                    id="replicateSeedInput"
-                    class="form-control"
-                    placeholder="Seed (optional)"
-                  />
-                </div>
-              </div>
-
+          
               <div
                 class="bg-light rounded-pill shadow px-3 py-2 d-flex align-items-center gap-2"
               >
@@ -650,29 +648,16 @@
                   style="box-shadow: none; outline: none"
                 />
 
-                <div class="d-none d-md-flex align-items-center gap-2">
-                  <select
-                    id="resolutionSelectDesktop"
-                    class="resolutionSelect form-select rounded-pill w-auto"
-                  >
-                    <option value="">Resolution</option>
-                    <option value="360p">360p</option>
-                    <option value="540p">540p</option>
-                    <option value="720p">720p</option>
-                    <option value="1080p">1080p</option>
-                  </select>
-                  <select
-                    id="aspectRatioSelectDesktop"
-                    class="aspectRatioSelect form-select rounded-pill w-auto"
-                  >
-                    <option value="16:9">16:9</option>
-                    <option value="9:16">9:16</option>
-                    <option value="4:3">4:3</option>
-                    <option value="3:4">3:4</option>
-                    <option value="21:9">21:9</option>
-                    <option value="9:21">9:21</option>
-                  </select>
-                </div>
+                   <!-- Model Options Button -->
+      <button
+        type="button"
+        class="btn btn-outline-secondary rounded-pill px-3 py-1 shadow-sm border"
+        id="showModelOptionsBtn"
+        data-bs-toggle="modal"
+        data-bs-target="#modelOptionsModal"
+      >
+        <i class="bi bi-sliders2 me-1"></i> Parameters
+      </button>
 
                 <button
                   class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
@@ -691,8 +676,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>
     <script src="js/search.js"></script>
     <script src="js/model-selector.js"></script>
