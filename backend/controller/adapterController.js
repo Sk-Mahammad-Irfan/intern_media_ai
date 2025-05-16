@@ -19,7 +19,7 @@ fal.config({
 // -------- VIDEO GENERATION --------
 export const generateVideo = async (req, res) => {
   const { id } = req.params;
-  const { prompt, userId } = req.body;
+  const { prompt, userId, aspect_ratio, resolution } = req.body;
 
   if (!userId) {
     return res.status(401).json({ error: "Please login to generate videos." });
@@ -43,8 +43,8 @@ export const generateVideo = async (req, res) => {
       if (!hasEnoughCredits) {
         return res.status(402).json({ error: "Not enough credits." });
       }
-      console.log("Trying handler:", handler.name);
-      const rawData = await handler(prompt);
+      console.log("Trying handler:", handler);
+      const rawData = await handler(prompt, resolution, aspect_ratio);
       let videoUrl = null;
 
       switch (type) {

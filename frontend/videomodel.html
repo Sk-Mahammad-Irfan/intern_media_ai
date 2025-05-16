@@ -330,43 +330,39 @@
 
         <!-- Chat Input Bar -->
         <div id="promptInputSection" class="container my-3">
-          <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 input-bar"
-            style="max-width: 100%;">
-
+          <div class="bg-light rounded-pill shadow d-flex flex-column flex-md-row align-items-stretch align-items-md-center px-3 py-2 input-bar" style="max-width: 100%;">
+            
             <!-- Prompt Input -->
-            <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
-              placeholder="Start a message..." style="box-shadow: none; outline: none;">
-
-            <!-- Resolution Select -->
-            <div class="d-flex align-items-center me-2" style="gap: 8px;">
-            <select id="resolutionSelect" class="form-select rounded-pill">
-              <option value="" selected>Select resolution</option>
-              <option value="360p">360p</option>
-              <option value="540p">540p</option>
-              <option value="720p">720p</option>
-              <option value="1080p">1080p</option>
-            </select>
-
-            <!-- Aspect Ratio Select -->
-            <select id="aspectRatioSelect" class="form-select rounded-pill">
-              <option value="16:9" selected>16:9</option>
-              <option value="9:16">9:16</option>
-              <option value="4:3">4:3</option>
-              <option value="3:4">3:4</option>
-              <option value="21:9">21:9</option>
-              <option value="9:21">9:21</option>
-            </select>
+            <input type="text" id="promptInput" class="form-control mb-2 mb-md-0 border-0 bg-transparent text-dark" placeholder="Start a message..." style="box-shadow: none; outline: none;">
+        
+            <!-- Resolution & Aspect Ratio Selects -->
+            <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center me-md-2" style="gap: 8px;">
+              <select id="resolutionSelect" class="form-select rounded-pill">
+                <option value="" selected>Select resolution</option>
+                <option value="360p">360p</option>
+                <option value="540p">540p</option>
+                <option value="720p">720p</option>
+                <option value="1080p">1080p</option>
+              </select>
+        
+              <select id="aspectRatioSelect" class="form-select rounded-pill">
+                <option value="16:9" selected>16:9</option>
+                <option value="9:16">9:16</option>
+                <option value="4:3">4:3</option>
+                <option value="3:4">3:4</option>
+                <option value="21:9">21:9</option>
+                <option value="9:21">9:21</option>
+              </select>
             </div>
-           
+        
             <!-- Send Button -->
-            <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-              style="width: 40px; height: 40px;" onclick="generateVideo()">
+            <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center mt-2 mt-md-0" style="width: 40px; height: 40px;" onclick="generateVideo()">
               <i class="bi bi-send-fill"></i>
             </button>
-
-
+        
           </div>
         </div>
+        
         <div id="resultArea"></div>
       </div>
     </div>
@@ -378,253 +374,10 @@
     <script src="js/model-selector.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/video.js"></script>
     
 
-   <script>
-  const chat = document.getElementById("chat");
-
-  function appendUserMessage(prompt) {
-    const userWrapper = document.createElement("div");
-    userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
-
-    userWrapper.innerHTML = `
-      <div class="user-message p-3">
-        ${prompt}
-      </div>
-      <i 
-        class="bi bi-clipboard-fill text-secondary mt-1" 
-        style="cursor: pointer; font-size: 14px;" 
-        onclick="copyToClipboard(this)"
-        title="Copy"
-      ></i>
-    `;
-    chat.appendChild(userWrapper);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function appendGeneratingVideoMessage(resolution) {
-    const aiDiv = document.createElement("div");
-    aiDiv.className = "d-flex justify-content-start mb-3 generating-video";
-
-    aiDiv.innerHTML = `
-      <div class="ai-message p-3 text-muted d-flex align-items-center">
-        <i class="bi bi-camera-reels me-2"></i>
-        Generating video &nbsp;
-        <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
-      </div>
-    `;
-
-    chat.appendChild(aiDiv);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function appendErrorMessage(message) {
-    const errorDiv = document.createElement("div");
-    errorDiv.className = "d-flex justify-content-start mb-3";
-
-    errorDiv.innerHTML = `
-      <div class="ai-message p-3 text-danger border border-danger">
-        <i class="bi bi-exclamation-triangle me-2"></i>${message}
-      </div>
-    `;
-
-    chat.appendChild(errorDiv);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
- function appendGeneratedVideo(videoUrl) {
-  const loadingMessage = document.querySelector(".generating-video");
-  if (loadingMessage) loadingMessage.remove();
-
-  const resolution = document.getElementById("resolutionSelect").value || "540p";
-  const aspect_ratio = document.getElementById("aspectRatioSelect").value || "16:9";
-
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
-
-  const bubble = document.createElement("div");
-  bubble.className = "ai-message p-3";
-
-  const caption = document.createElement("div");
-  caption.textContent = "Generated Video:";
-  caption.classList.add("mb-2");
-
-  const meta = document.createElement("div");
-  meta.className = "text-muted mb-2";
-  meta.style.fontSize = "0.9em";
-  meta.textContent = `Resolution: ${resolution}, Aspect Ratio: ${aspect_ratio}`;
-
-  const wrapper = document.createElement("div");
-  wrapper.className = "video-wrapper rounded shadow";
-  wrapper.style.maxWidth = "500px";
-  wrapper.style.width = "100%";
-  wrapper.style.overflow = "hidden";
-  wrapper.style.backgroundColor = "#000";
-
-  const videoElement = document.createElement("video");
-  videoElement.controls = true;
-  videoElement.src = videoUrl;
-  videoElement.style.width = "100%";
-  videoElement.style.height = "100%";
-  videoElement.style.display = "block";
-  videoElement.style.objectFit = "contain";
-
-  // Use actual aspect ratio if possible
-  videoElement.onloadedmetadata = () => {
-    const w = videoElement.videoWidth;
-    const h = videoElement.videoHeight;
-    wrapper.style.aspectRatio = `${w} / ${h}`;
-  };
-
-  wrapper.appendChild(videoElement);
-  bubble.appendChild(caption);
-  bubble.appendChild(meta);
-  bubble.appendChild(wrapper);
-  messageElement.appendChild(bubble);
-  chat.appendChild(messageElement);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-  async function generateVideo() {
-    const prompt = document.getElementById("promptInput").value.trim();
-    const resolution = document.getElementById("resolutionSelect").value;
-    const aspect_ratio = document.getElementById("aspectRatioSelect").value;
-    const userId = localStorage.getItem("userId") || "guest";
-
-    if (!prompt) {
-      alert("Please enter a prompt.");
-      return;
-    }
-
-    appendUserMessage(prompt);
-    appendGeneratingVideoMessage(resolution);
-
-    try {
-      const modelId = new URLSearchParams(window.location.search).get("id") || "pixverse-v4-text-to-video";
-
-      const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${modelId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, resolution, aspect_ratio, userId })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        appendErrorMessage(data.error || "Server error.");
-        return;
-      }
-
-      if (data.videoUrl) {
-        appendGeneratedVideo(data.videoUrl);
-      } else {
-        appendErrorMessage("No video URL returned.");
-      }
-
-    } catch (err) {
-      console.error(err);
-      appendErrorMessage("Failed to generate video. Try again.");
-    }
-  }
-
-  function copyToClipboard(icon) {
-    const messageText = icon.previousElementSibling.innerText.trim();
-    navigator.clipboard.writeText(messageText).then(() => {
-      icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-      setTimeout(() => {
-        icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-      }, 1500);
-    }).catch(err => {
-      console.error("Copy failed:", err);
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const prompt = params.get('prompt');
-    const input = document.getElementById('promptInput');
-
-    if (prompt && input) {
-      const decodedPrompt = decodeURIComponent(prompt);
-      input.value = decodedPrompt;
-
-      appendUserMessage(decodedPrompt);
-      appendGeneratingVideoMessage();
-      generateVideo();
-    }
-  });
-
-  ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const createdAt = new Date().toISOString();
-        const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-        window.open(url, "_blank");
-      });
-    }
-  });
-
-  const params = new URLSearchParams(window.location.search);
-  const roomCreatedAt = params.get("room");
-
-  if (roomCreatedAt) {
-    const date = new Date(roomCreatedAt);
-    const formatted = date.toLocaleString(undefined, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    document.getElementById("roomTitle").textContent = "Room created";
-    document.getElementById("roomTimestamp").textContent = formatted;
-  }
-
-  function setAvatarInitials() {
-    const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-    const avatars = document.querySelectorAll("#navbar-avatar");
-    const userElements = {
-      desktop: {
-        username: document.getElementById("account-username"),
-        email: document.getElementById("account-email"),
-      },
-      mobile: {
-        username: document.getElementById("account-username-mobile"),
-        email: document.getElementById("account-email-mobile"),
-      }
-    };
-
-    const isLoggedIn = !!userData.username;
-
-    if (isLoggedIn) {
-      const username = userData.username;
-      const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-      avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-      userElements.desktop.username && (userElements.desktop.username.textContent = username);
-      userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-      userElements.mobile.username && (userElements.mobile.username.textContent = username);
-      userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-    } else {
-      avatars.forEach(avatar => {
-        avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-      });
-
-      ["desktop", "mobile"].forEach(view => {
-        userElements[view].username && (userElements[view].username.textContent = "Guest");
-        userElements[view].email && (userElements[view].email.textContent = "");
-      });
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", setAvatarInitials);
-</script>
+   
 
 
 </body>
