@@ -10,21 +10,32 @@ const modelOptions = {
       "1080p": 960,
     },
     aspect_ratios: [
-      "1:1", "1:2", "2:1", "2:3", "3:2", "3:4",
-      "4:3", "4:5", "5:4", "9:16", "16:9", "9:21", "21:9"
+      "1:1",
+      "1:2",
+      "2:1",
+      "2:3",
+      "3:2",
+      "3:4",
+      "4:3",
+      "4:5",
+      "5:4",
+      "9:16",
+      "16:9",
+      "9:21",
+      "21:9",
     ],
   },
   "luma-ray2-flash": {
     resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1", "4:5", "5:4", "3:2", "2:3"],
+    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
   "pika-text-to-video-v2-1": {
     resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
+    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
   "pixverse-v4-text-to-video": {
     resolutions: { "540p": null, "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
+    aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
   },
   "wan-ai-wan21-t2v-13b": {
     resolutions: { "480p": null },
@@ -37,7 +48,8 @@ const aspectRatioSelects = document.querySelectorAll(".aspectRatioSelect");
 
 function appendUserMessage(prompt) {
   const userWrapper = document.createElement("div");
-  userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
+  userWrapper.className =
+    "d-flex flex-column align-items-end mb-3 position-relative";
 
   userWrapper.innerHTML = `
     <div class="user-message p-3">
@@ -125,7 +137,10 @@ function appendGeneratedVideo(videoUrl) {
 
 function getSelectedValue(selects) {
   for (const s of selects) {
-    if (s && s.value) return s.value;
+    if (s.offsetParent !== null && s.value) {
+      // Check if visible
+      return s.value;
+    }
   }
   return null;
 }
@@ -144,12 +159,17 @@ async function generateVideo() {
   appendGeneratingVideoMessage();
 
   try {
-    const modelId = new URLSearchParams(window.location.search).get("id") || "pixverse-v4-text-to-video";
-    const response = await fetch(`${BACKEND_URL}/api/ai/generate-video/${modelId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, resolution, aspect_ratio, userId }),
-    });
+    const modelId =
+      new URLSearchParams(window.location.search).get("id") ||
+      "pixverse-v4-text-to-video";
+    const response = await fetch(
+      `${BACKEND_URL}/api/ai/generate-video/${modelId}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, resolution, aspect_ratio, userId }),
+      }
+    );
 
     const data = await response.json();
     if (!response.ok) return appendErrorMessage(data.error || "Server error.");
@@ -163,10 +183,18 @@ async function generateVideo() {
 
 function copyToClipboard(icon) {
   const messageText = icon.previousElementSibling.innerText.trim();
-  navigator.clipboard.writeText(messageText)
+  navigator.clipboard
+    .writeText(messageText)
     .then(() => {
       icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-      setTimeout(() => icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill"), 1500);
+      setTimeout(
+        () =>
+          icon.classList.replace(
+            "bi-clipboard-check-fill",
+            "bi-clipboard-fill"
+          ),
+        1500
+      );
     })
     .catch((err) => console.error("Copy failed:", err));
 }
@@ -175,26 +203,38 @@ function populateModelOptions(modelId) {
   const config = modelOptions[modelId];
   if (!config) return console.warn("No config found for model:", modelId);
 
-  resolutionSelects.forEach(select => {
+  resolutionSelects.forEach((select) => {
+    const selectedValue = select.value;
     select.innerHTML = `<option value="" selected>Resolution</option>`;
-    Object.keys(config.resolutions).forEach(res => {
+    Object.keys(config.resolutions).forEach((res) => {
       const option = document.createElement("option");
       option.value = res;
       option.textContent = res;
       select.appendChild(option);
     });
-    if (config.resolutions["720p"] !== undefined) select.value = "720p";
+
+    if (config.resolutions[selectedValue]) {
+      select.value = selectedValue;
+    } else if (config.resolutions["720p"] !== undefined) {
+      select.value = "720p";
+    }
   });
 
-  aspectRatioSelects.forEach(select => {
+  aspectRatioSelects.forEach((select) => {
+    const selectedValue = select.value;
     select.innerHTML = `<option value="" selected>Aspect Ratio</option>`;
-    config.aspect_ratios.forEach(ratio => {
+    config.aspect_ratios.forEach((ratio) => {
       const option = document.createElement("option");
       option.value = ratio;
       option.textContent = ratio;
       select.appendChild(option);
     });
-    if (config.aspect_ratios.includes("16:9")) select.value = "16:9";
+
+    if (config.aspect_ratios.includes(selectedValue)) {
+      select.value = selectedValue;
+    } else if (config.aspect_ratios.includes("16:9")) {
+      select.value = "16:9";
+    }
   });
 }
 
@@ -224,7 +264,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (btn) {
     btn.addEventListener("click", () => {
       const createdAt = new Date().toISOString();
-      const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
+      const url = `${window.location.origin}${
+        window.location.pathname
+      }?room=${encodeURIComponent(createdAt)}`;
       window.open(url, "_blank");
     });
   }
@@ -235,8 +277,12 @@ const roomCreatedAt = params.get("room");
 if (roomCreatedAt) {
   const date = new Date(roomCreatedAt);
   const formatted = date.toLocaleString(undefined, {
-    weekday: "short", year: "numeric", month: "short", day: "numeric",
-    hour: "2-digit", minute: "2-digit"
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
   document.getElementById("roomTitle").textContent = "Room created";
   document.getElementById("roomTimestamp").textContent = formatted;
@@ -260,15 +306,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLoggedIn) {
     const username = userData.username;
     const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-    avatars.forEach(avatar => avatar.textContent = firstInitial);
-    userElements.desktop.username && (userElements.desktop.username.textContent = username);
-    userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-    userElements.mobile.username && (userElements.mobile.username.textContent = username);
-    userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
+    avatars.forEach((avatar) => (avatar.textContent = firstInitial));
+    userElements.desktop.username &&
+      (userElements.desktop.username.textContent = username);
+    userElements.desktop.email &&
+      (userElements.desktop.email.textContent = userData.email || "No email");
+    userElements.mobile.username &&
+      (userElements.mobile.username.textContent = username);
+    userElements.mobile.email &&
+      (userElements.mobile.email.textContent = userData.email || "No email");
   } else {
-    avatars.forEach(avatar => avatar.innerHTML = `<i class="fa-solid fa-user"></i>`);
-    ["desktop", "mobile"].forEach(view => {
-      userElements[view].username && (userElements[view].username.textContent = "Guest");
+    avatars.forEach(
+      (avatar) => (avatar.innerHTML = `<i class="fa-solid fa-user"></i>`)
+    );
+    ["desktop", "mobile"].forEach((view) => {
+      userElements[view].username &&
+        (userElements[view].username.textContent = "Guest");
       userElements[view].email && (userElements[view].email.textContent = "");
     });
   }

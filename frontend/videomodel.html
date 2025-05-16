@@ -1,222 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Chatroom | OpenMediaFlow</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Chatroom | OpenMediaFlow</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <link rel="stylesheet" href="css/styles.css" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    #chat {
-      height: calc(100vh - 300px);
-      overflow-y: auto;
-      padding: 1rem;
-      padding-bottom: 130px;
-    }
-
-    #promptInputSection {
-      position: fixed;
-      bottom: 20px; /* increased spacing from bottom */
-      left: 250px;
-      right: 0;
-      padding: 1rem;
-      width: calc(100vw - 250px);
-      z-index: 1000;
-      background-color: white;
-      box-sizing: border-box;
-      
-    }
-
-    @media (max-width: 768px) {
-      #sidebar {
-        display: none;
+      #chat {
+        height: calc(100vh - 300px);
+        overflow-y: auto;
+        padding: 1rem;
+        padding-bottom: 130px;
       }
 
       #promptInputSection {
-        left: 0;
-        width: 100vw;
-        bottom: 20px; /* maintain bottom spacing on mobile */
+        position: fixed;
+        bottom: 20px; /* increased spacing from bottom */
+        left: 250px;
+        right: 0;
+        padding: 1rem;
+        width: calc(100vw - 250px);
+        z-index: 1000;
+        background-color: white;
+        box-sizing: border-box;
       }
-    }
 
-    @media (max-width: 576px) {
-      .small-select {
-        font-size: 0.8rem;
-        padding: 0.25rem 0.5rem;
+      @media (max-width: 768px) {
+        #sidebar {
+          display: none;
+        }
+
+        #promptInputSection {
+          left: 0;
+          width: 100vw;
+          bottom: 20px; /* maintain bottom spacing on mobile */
+        }
       }
 
-      .mobile-narrow {
-        width: 120px;
+      @media (max-width: 576px) {
+        .small-select {
+          font-size: 0.8rem;
+          padding: 0.25rem 0.5rem;
+        }
+
+        .mobile-narrow {
+          width: 120px;
+        }
       }
-    }
 
-    #sidebar {
-      width: 250px;
-      height: 100vh;
-      border-right: 1px solid #dee2e6;
-      overflow-y: auto;
-    }
+      #sidebar {
+        width: 250px;
+        height: 100vh;
+        border-right: 1px solid #dee2e6;
+        overflow-y: auto;
+      }
 
-    .model-card {
-      border: 1px solid #dee2e6;
-      border-radius: 12px;
-      padding: 1rem;
-      background-color: white;
-      height: 100px;
-    }
+      .model-card {
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 1rem;
+        background-color: white;
+        height: 100px;
+      }
 
-    .user-message {
-      background-color: #0d6efd;
-      color: white;
-      border-radius: 20px;
-      max-width: 70%;
-      word-wrap: break-word;
-    }
+      .user-message {
+        background-color: #0d6efd;
+        color: white;
+        border-radius: 20px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
 
-    .ai-message {
-      background-color: #e9ecef;
-      border-radius: 20px;
-      max-width: 70%;
-      word-wrap: break-word;
-    }
+      .ai-message {
+        background-color: #e9ecef;
+        border-radius: 20px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
 
-    .modern-select {
-      border-radius: 0.5rem;
-      padding: 0.25rem 0.75rem;
-      border: 1px solid #ced4da;
-      background-color: #f8f9fa;
-      font-size: 0.9rem;
-      min-width: 100px;
-    }
+      .modern-select {
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #ced4da;
+        background-color: #f8f9fa;
+        font-size: 0.9rem;
+        min-width: 100px;
+      }
 
-    .model-hr {
-      border-top: 1.5px solid #6c757d;
-      margin-top: 1rem;
-      margin-bottom: 1.5rem;
-    }
+      .model-hr {
+        border-top: 1.5px solid #6c757d;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+      }
 
-    /* Prompt input styles */
-    #promptInputSection .bg-light {
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: none;
-      border: 1.5px solid #ced4da !important;
-box-shadow: none;
-    }
-
-    #promptInput {
-      flex: 1;
-      border-radius: 25px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-      padding-left: 15px;
-      padding-right: 15px;
-      outline: none;
-      height: 40px;
-    }
-
-    #promptInput:focus {
-      border-color: #0d6efd !important;
-      box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
-    }
-
-    #promptInputSection button.btn {
-      margin: 0;
-    }
-
-    @media (max-width: 768px) {
+      /* Prompt input styles */
       #promptInputSection .bg-light {
-        flex-wrap: nowrap;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: none;
+        border: 1.5px solid #ced4da !important;
+        box-shadow: none;
       }
-    }
-    .resolutionSelect,  .aspectRatioSelect{
-      width: 110px !important;
 
-    }
-  
-  </style>
-</head>
+      #promptInput {
+        flex: 1;
+        border-radius: 25px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        padding-left: 15px;
+        padding-right: 15px;
+        outline: none;
+        height: 40px;
+      }
 
-<body>
-  <div class="main-container">
-    <!-- Top Navbar -->
+      #promptInput:focus {
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+      }
+
+      #promptInputSection button.btn {
+        margin: 0;
+      }
+
+      @media (max-width: 768px) {
+        #promptInputSection .bg-light {
+          flex-wrap: nowrap;
+        }
+      }
+      .resolutionSelect,
+      .aspectRatioSelect {
+        width: 110px !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main-container">
+      <!-- Top Navbar -->
       <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div
+          class="container-fluid d-flex align-items-center justify-content-between"
+        >
+          <!-- Brand -->
+          <a class="navbar-brand fw-bold" href="index.html"
+            >&nbsp;<span style="font-weight: 500">Open</span
+            ><span class="media">Media</span
+            ><span style="font-weight: 500">Flow</span>&nbsp;</a
+          >
 
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="index.html">&nbsp;<span style="font-weight: 500;">Open</span><span
-            class="media">Media</span><span style="font-weight: 500;">Flow</span>&nbsp;</a>
+          <!-- Mobile controls -->
+          <div
+            class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
+          >
+            <button
+              id="mobileSearchBtn"
+              class="btn btn-light rounded-circle"
+              style="width: 36px; height: 36px"
+            >
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
 
-        <!-- Mobile controls -->
-        <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
-          <button id="mobileSearchBtn" class="btn btn-light rounded-circle " style="width: 36px; height: 36px">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-
-          <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
-          <div id="mobileSearchSidebar" class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-            style="width: 100%; max-width: 300px; height: 100%; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Search</h5>
-              <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-x-lg"></i>
-              </button>
+            <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+            <div
+              id="mobileSearchSidebar"
+              class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
+              style="
+                width: 100%;
+                max-width: 300px;
+                height: 100%;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1050;
+              "
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="mb-0">Search</h5>
+                <button
+                  id="closeSearchSidebar"
+                  class="btn btn-sm btn-outline-secondary"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+              <input
+                type="text"
+                class="form-control rounded-pill mb-3"
+                id="mobileSearchInput"
+                placeholder="Search models..."
+              />
+              <div
+                id="mobileSearchResults"
+                class="mt-3"
+                style="max-height: 60vh; overflow-y: auto"
+              >
+                <!-- Results will be appended here -->
+              </div>
             </div>
-            <input type="text" class="form-control rounded-pill mb-3" id="mobileSearchInput"
-              placeholder="Search models..." />
-            <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto;">
-              <!-- Results will be appended here -->
+            <div class="dropdown">
+              <a
+                href="#"
+                class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                id="navbarDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div
+                  id="navbar-avatar"
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px"
+                >
+                  U
+                </div>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="mobileAvatarDropdown"
+              >
+                <div class="mobile-auth-only dnone">
+                  <li>
+                    <h6 class="dropdown-header" id="account-username-mobile">
+                      Username
+                    </h6>
+                    <p
+                      class="dropdown-item-text mb-1 small"
+                      id="account-email-mobile"
+                    >
+                      email@example.com
+                    </p>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                </div>
+                <li><a class="dropdown-item" href="model.html">Models</a></li>
+                <li><a class="dropdown-item" href="">Chat</a></li>
+                <li>
+                  <a class="dropdown-item" href="rankings.html">Rankings</a>
+                </li>
+                <li><a class="dropdown-item" href="docs.html">Docs</a></li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <div class="mobile-auth-only dnone">
+                  <li>
+                    <a class="dropdown-item" href="credits.html">Credits</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="api-keys.html">API Keys</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="provisioning.html"
+                      >Provisioning Keys</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="integrations.html"
+                      >Integrations</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="privacy.html">Privacy</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+
+                  <li>
+                    <a
+                      class="dropdown-item text-danger"
+                      href="index.html"
+                      onclick="logout()"
+                      >Logout</a
+                    >
+                  </li>
+                </div>
+                <li>
+                  <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                    <button type="button" class="btn btn-outline-primary w-100">
+                      Sign in
+                    </button>
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <div id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px;">
-                U
-              </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
-              <div class="mobile-auth-only dnone">
+
+          <!-- Search (Desktop only) -->
+          <form class="d-none d-lg-block mx-3 flex-grow-1">
+            <div class="position-relative w-100">
+              <!-- Left search icon -->
+              <span
+                class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+
+              <!-- Input -->
+              <input
+                class="form-control rounded-pill bg-light ps-5 pe-4"
+                id="navbarSearch"
+                type="search"
+                placeholder="Search models"
+              />
+
+              <!-- Right slash icon -->
+              <span
+                class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+                style="font-family: monospace"
+              >
+                /
+              </span>
+            </div>
+          </form>
+
+          <!-- Desktop Nav Items -->
+          <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="model.html">Models</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="">Chat</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link fw-medium" href="docs.html">Docs</a>
+            </li>
+            <li class="nav-item mx-1" id="signInDesktop">
+              <a class="nav-link fw-medium" href="auth.html">
+                <button type="button" class="btn btn-outline-primary">
+                  Sign in
+                </button>
+              </a>
+            </li>
+            <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div
+                  id="navbar-avatar"
+                  class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                  style="width: 32px; height: 32px; font-size: 14px"
+                >
+                  U
+                </div>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown"
+              >
                 <li>
-                  <h6 class="dropdown-header" id="account-username-mobile">
+                  <h6 class="dropdown-header" id="account-username">
                     Username
                   </h6>
-                  <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                </li>
+                <li>
+                  <p class="dropdown-item-text mb-1 small" id="account-email">
                     email@example.com
                   </p>
                 </li>
                 <li>
                   <hr class="dropdown-divider" />
                 </li>
-              </div>
-              <li><a class="dropdown-item" href="model.html">Models</a></li>
-              <li><a class="dropdown-item" href="">Chat</a></li>
-              <li><a class="dropdown-item" href="rankings.html">Rankings</a></li>
-              <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <div class="mobile-auth-only dnone">
-                <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+                <li>
+                  <a class="dropdown-item" href="credits.html">Credits</a>
+                </li>
                 <li>
                   <a class="dropdown-item" href="settings.html">Settings</a>
                 </li>
@@ -224,163 +409,92 @@ box-shadow: none;
                   <a class="dropdown-item" href="api-keys.html">API Keys</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+                  <a class="dropdown-item" href="provisioning.html"
+                    >Provisioning Keys</a
+                  >
                 </li>
                 <li>
-                  <a class="dropdown-item" href="integrations.html">Integrations</a>
+                  <a class="dropdown-item" href="integrations.html"
+                    >Integrations</a
+                  >
                 </li>
                 <li>
                   <a class="dropdown-item" href="privacy.html">Privacy</a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider" />
+                  <a
+                    class="dropdown-item text-danger"
+                    href="#"
+                    onclick="logout()"
+                    >Logout</a
+                  >
                 </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
-                <li>
-                  <a class="dropdown-item text-danger" href="index.html" onclick="logout()">Logout</a>
-                </li>
+      <div class="d-flex">
+        <div id="sidebar" class="p-3">
+          <button
+            id="newRoomBtnSidebar"
+            class="btn btn-outline-secondary w-100 mb-3"
+          >
+            New Room
+          </button>
+          <div id="roomInfo" class="mb-3">
+            <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
+            <div id="roomTimestamp" class="text-muted text-sm"></div>
+          </div>
+        </div>
+
+        <div class="flex-grow-1 d-flex flex-column">
+          <div class="px-4 pt-3 d-md-none">
+            <button
+              id="newRoomBtnMobile"
+              class="btn btn-outline-secondary mb-3 w-100"
+            >
+              New Room
+            </button>
+          </div>
+
+          <div class="px-4 pt-3">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <div class="d-flex align-items-center gap-2">
+                <label class="fw-semibold mb-0">Model:</label>
+                <select
+                  id="modelSelector"
+                  class="form-select form-select-sm modern-select"
+                  onchange="handleModelChange()"
+                >
+                  <!-- Options dynamically generated -->
+                </select>
               </div>
-              <li><a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">Sign in</button>
-                </a></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Search (Desktop only) -->
-        <form class="d-none d-lg-block mx-3 flex-grow-1">
-          <div class="position-relative w-100">
-            <!-- Left search icon -->
-            <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-
-            <!-- Input -->
-            <input class="form-control rounded-pill bg-light ps-5 pe-4" id="navbarSearch" type="search"
-              placeholder="Search models" />
-
-            <!-- Right slash icon -->
-            <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
-              style="font-family: monospace;">
-              /
-            </span>
-          </div>
-        </form>
-
-        <!-- Desktop Nav Items -->
-        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="model.html">Models</a></li>
-          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="">Chat</a></li>
-          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="rankings.html">Rankings</a></li>
-          <li class="nav-item mx-1"><a class="nav-link fw-medium" href="docs.html">Docs</a></li>
-          <li class="nav-item mx-1" id="signInDesktop">
-            <a class="nav-link fw-medium" href="auth.html">
-              <button type="button" class="btn btn-outline-primary">Sign in</button>
-            </a>
-          </li>
-          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <div id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px;">
-                U
-              </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li>
-                <h6 class="dropdown-header" id="account-username">Username</h6>
-              </li>
-              <li>
-                <p class="dropdown-item-text mb-1 small" id="account-email">email@example.com</p>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-              <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-              <li><a class="dropdown-item" href="api-keys.html">API Keys</a></li>
-              <li><a class="dropdown-item" href="provisioning.html">Provisioning Keys</a></li>
-              <li><a class="dropdown-item" href="integrations.html">Integrations</a></li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="d-flex">
-      <div id="sidebar" class="p-3">
-        <button id="newRoomBtnSidebar" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
-        <div id="roomInfo" class="mb-3">
-          <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
-          <div id="roomTimestamp" class="text-muted text-sm"></div>
-        </div>
-      </div>
-
-      <div class="flex-grow-1 d-flex flex-column">
-        <div class="px-4 pt-3 d-md-none">
-          <button id="newRoomBtnMobile" class="btn btn-outline-secondary mb-3 w-100">New Room</button>
-        </div>
-
-        <div class="px-4 pt-3">
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <div class="d-flex align-items-center gap-2">
-              <label class="fw-semibold mb-0">Model:</label>
-              <select
-                id="modelSelector"
-                class="form-select form-select-sm modern-select"
-                onchange="handleModelChange()"
-              >
-                <!-- Options dynamically generated -->
-              </select>
             </div>
+            <hr class="model-hr" />
           </div>
-          <hr class="model-hr" />
-        </div>
 
-        <div id="chat" class="container-fluid mt-4">
-          <!-- Chat messages appear here -->
-        </div>
+          <div id="chat" class="container-fluid">
+            <!-- Chat messages appear here -->
+          </div>
 
-        <div id="promptInputSection">
-          <div class="container">
-            <div class="d-flex d-md-none justify-content-end mb-2 gap-2">
-              <select id="resolutionSelectMobile" class="form-select rounded-pill w-auto small-select mobile-narrow resolutionSelect">
-                <option value="360p">360p</option>
-                <option value="540p">540p</option>
-                <option value="720p">720p</option>
-                <option value="1080p">1080p</option>
-              </select>
-              <select id="aspectRatioSelectMobile" class="form-select rounded-pill w-auto small-select mobile-narrow aspectRatioSelect">
-                <option value="16:9">16:9</option>
-                <option value="9:16">9:16</option>
-                <option value="4:3">4:3</option>
-                <option value="3:4">3:4</option>
-                <option value="21:9">21:9</option>
-                <option value="9:21">9:21</option>
-              </select>
-            </div>
-
-            <div class="bg-light rounded-pill shadow px-3 py-2 d-flex align-items-center gap-2">
-              <input
-                type="text"
-                id="promptInput"
-                class="form-control border-0 bg-transparent text-dark"
-                placeholder="Start a message..."
-                style="box-shadow: none; outline: none;"
-              />
-
-              <div class="d-none d-md-flex align-items-center gap-2">
-                <select id="resolutionSelectDesktop" class=" resolutionSelect form-select rounded-pill w-auto">
-                  <option value="">Resolution</option>
+          <div id="promptInputSection">
+            <div class="container">
+              <div class="d-flex d-md-none justify-content-end mb-2 gap-2">
+                <select
+                  id="resolutionSelectMobile"
+                  class="form-select rounded-pill w-auto small-select mobile-narrow resolutionSelect"
+                >
                   <option value="360p">360p</option>
                   <option value="540p">540p</option>
                   <option value="720p">720p</option>
                   <option value="1080p">1080p</option>
                 </select>
-                <select id="aspectRatioSelectDesktop" class=" aspectRatioSelect form-select rounded-pill w-auto">
+                <select
+                  id="aspectRatioSelectMobile"
+                  class="form-select rounded-pill w-auto small-select mobile-narrow aspectRatioSelect"
+                >
                   <option value="16:9">16:9</option>
                   <option value="9:16">9:16</option>
                   <option value="4:3">4:3</option>
@@ -390,31 +504,65 @@ box-shadow: none;
                 </select>
               </div>
 
-              <button
-                class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-                style="width: 40px; height: 40px;"
-                onclick="generateVideo()"
+              <div
+                class="bg-light rounded-pill shadow px-3 py-2 d-flex align-items-center gap-2"
               >
-                <i class="bi bi-send-fill"></i>
-              </button>
+                <input
+                  type="text"
+                  id="promptInput"
+                  class="form-control border-0 bg-transparent text-dark"
+                  placeholder="Start a message..."
+                  style="box-shadow: none; outline: none"
+                />
+
+                <div class="d-none d-md-flex align-items-center gap-2">
+                  <select
+                    id="resolutionSelectDesktop"
+                    class="resolutionSelect form-select rounded-pill w-auto"
+                  >
+                    <option value="">Resolution</option>
+                    <option value="360p">360p</option>
+                    <option value="540p">540p</option>
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                  </select>
+                  <select
+                    id="aspectRatioSelectDesktop"
+                    class="aspectRatioSelect form-select rounded-pill w-auto"
+                  >
+                    <option value="16:9">16:9</option>
+                    <option value="9:16">9:16</option>
+                    <option value="4:3">4:3</option>
+                    <option value="3:4">3:4</option>
+                    <option value="21:9">21:9</option>
+                    <option value="9:21">9:21</option>
+                  </select>
+                </div>
+
+                <button
+                  class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                  style="width: 40px; height: 40px"
+                  onclick="generateVideo()"
+                >
+                  <i class="bi bi-send-fill"></i>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div id="resultArea"></div>
+          <div id="resultArea"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-  <script src="js/script.js"></script>
-  <script src="js/search.js"></script>
-  <script src="js/model-selector.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/video.js"></script>
-</body>
-
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/model-selector.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/video.js"></script>
+  </body>
 </html>
