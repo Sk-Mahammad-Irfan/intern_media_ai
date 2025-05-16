@@ -7,40 +7,62 @@
   <title>Video Chatroom | OpenMediaFlow</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
     #chat {
       height: calc(100vh - 300px);
       overflow-y: auto;
       padding: 1rem;
       padding-bottom: 130px;
-
     }
 
     #promptInputSection {
       position: fixed;
-      bottom: 0;
+      bottom: 20px; /* increased spacing from bottom */
       left: 250px;
       right: 0;
       padding: 1rem;
-
-      box-sizing: border-box;
-      max-width: calc(100vw - 250px);
-      overflow-x: hidden;
+      width: calc(100vw - 250px);
       z-index: 1000;
+      background-color: white;
+      box-sizing: border-box;
+      
     }
 
-    .input-bar {
-      border: 0.6px solid #ddd;
-      margin-right: 10px;
+    @media (max-width: 768px) {
+      #sidebar {
+        display: none;
+      }
+
+      #promptInputSection {
+        left: 0;
+        width: 100vw;
+        bottom: 20px; /* maintain bottom spacing on mobile */
+      }
+    }
+
+    @media (max-width: 576px) {
+      .small-select {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .mobile-narrow {
+        width: 120px;
+      }
     }
 
     #sidebar {
@@ -73,15 +95,13 @@
       word-wrap: break-word;
     }
 
-
     .modern-select {
       border-radius: 0.5rem;
       padding: 0.25rem 0.75rem;
       border: 1px solid #ced4da;
       background-color: #f8f9fa;
       font-size: 0.9rem;
-      width: auto;
-      min-width: 160px;
+      min-width: 100px;
     }
 
     .model-hr {
@@ -90,43 +110,54 @@
       margin-bottom: 1.5rem;
     }
 
+    /* Prompt input styles */
+    #promptInputSection .bg-light {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: none;
+      border: 1.5px solid #ced4da !important;
+box-shadow: none;
+    }
+
+    #promptInput {
+      flex: 1;
+      border-radius: 25px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      padding-left: 15px;
+      padding-right: 15px;
+      outline: none;
+      height: 40px;
+    }
+
+    #promptInput:focus {
+      border-color: #0d6efd !important;
+      box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+    }
+
+    #promptInputSection button.btn {
+      margin: 0;
+    }
+
     @media (max-width: 768px) {
-      #promptInputSection {
-        left: 0;
-        max-width: 100vw;
+      #promptInputSection .bg-light {
+        flex-wrap: nowrap;
       }
-
-      #sidebar {
-        display: none;
-      }
+    }
+    .resolutionSelect,  .aspectRatioSelect{
+      width: 110px !important;
 
     }
-    #resolutionSelect{
-      width: 100px;
-      background-color: #f8f9fa;
-    }
-    #aspectRatioSelect{
-      width: 100px;
-    }
-    @media (max-width: 576px) {
-  .small-select {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .mobile-narrow {
-    width: 120px; /* Adjust width as needed */
-  }
-}
-
-
+  
   </style>
 </head>
 
 <body>
   <div class="main-container">
     <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+      <nav class="navbar navbar-expand-lg navbar-light sticky-top">
       <div class="container-fluid d-flex align-items-center justify-content-between">
 
         <!-- Brand -->
@@ -279,74 +310,51 @@
       </div>
     </nav>
 
-
-    <!-- Main Content -->
     <div class="d-flex">
-
-      <!-- Sidebar -->
       <div id="sidebar" class="p-3">
         <button id="newRoomBtnSidebar" class="btn btn-outline-secondary w-100 mb-3">New Room</button>
-
-        <!-- Room name & timestamp -->
         <div id="roomInfo" class="mb-3">
           <div id="roomTitle" class="fw-bold text-dark">Current Room</div>
           <div id="roomTimestamp" class="text-muted text-sm"></div>
         </div>
       </div>
 
-
-
-      <!-- Main Area -->
       <div class="flex-grow-1 d-flex flex-column">
-
-        <!-- New Room button visible only on mobile -->
         <div class="px-4 pt-3 d-md-none">
           <button id="newRoomBtnMobile" class="btn btn-outline-secondary mb-3 w-100">New Room</button>
         </div>
 
-        <!-- Model Selector Header -->
         <div class="px-4 pt-3">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center gap-2">
               <label class="fw-semibold mb-0">Model:</label>
-              <select id="modelSelector" class="form-select form-select-sm modern-select"
-                onchange="handleModelChange()">
-                <!-- Dynamically populated -->
+              <select
+                id="modelSelector"
+                class="form-select form-select-sm modern-select"
+                onchange="handleModelChange()"
+              >
+                <!-- Options dynamically generated -->
               </select>
             </div>
           </div>
           <hr class="model-hr" />
         </div>
 
-
-
-
-        <!-- Chat Section -->
         <div id="chat" class="container-fluid mt-4">
-          <!-- Chat messages with audio will appear here -->
+          <!-- Chat messages appear here -->
         </div>
 
-
-
-        <!-- Chat Input Bar -->
-        <div id="promptInputSection" class="container my-3">
-          <div class="bg-light rounded-pill shadow d-flex flex-column flex-md-row align-items-stretch align-items-md-center px-3 py-2 input-bar" style="max-width: 100%;">
-            
-            <!-- Prompt Input -->
-            <input type="text" id="promptInput" class="form-control mb-2 mb-md-0 border-0 bg-transparent text-dark" placeholder="Start a message..." style="box-shadow: none; outline: none;">
-        
-            <!-- Resolution & Aspect Ratio Selects -->
-            <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center me-md-2" style="gap: 8px;">
-              <select id="resolutionSelect" class="form-select rounded-pill">
-                <option value="" selected>Select resolution</option>
+        <div id="promptInputSection">
+          <div class="container">
+            <div class="d-flex d-md-none justify-content-end mb-2 gap-2">
+              <select id="resolutionSelectMobile" class="form-select rounded-pill w-auto small-select mobile-narrow resolutionSelect">
                 <option value="360p">360p</option>
                 <option value="540p">540p</option>
                 <option value="720p">720p</option>
                 <option value="1080p">1080p</option>
               </select>
-        
-              <select id="aspectRatioSelect" class="form-select rounded-pill">
-                <option value="16:9" selected>16:9</option>
+              <select id="aspectRatioSelectMobile" class="form-select rounded-pill w-auto small-select mobile-narrow aspectRatioSelect">
+                <option value="16:9">16:9</option>
                 <option value="9:16">9:16</option>
                 <option value="4:3">4:3</option>
                 <option value="3:4">3:4</option>
@@ -354,33 +362,59 @@
                 <option value="9:21">9:21</option>
               </select>
             </div>
-        
-            <!-- Send Button -->
-            <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center mt-2 mt-md-0" style="width: 40px; height: 40px;" onclick="generateVideo()">
-              <i class="bi bi-send-fill"></i>
-            </button>
-        
+
+            <div class="bg-light rounded-pill shadow px-3 py-2 d-flex align-items-center gap-2">
+              <input
+                type="text"
+                id="promptInput"
+                class="form-control border-0 bg-transparent text-dark"
+                placeholder="Start a message..."
+                style="box-shadow: none; outline: none;"
+              />
+
+              <div class="d-none d-md-flex align-items-center gap-2">
+                <select id="resolutionSelectDesktop" class=" resolutionSelect form-select rounded-pill w-auto">
+                  <option value="">Resolution</option>
+                  <option value="360p">360p</option>
+                  <option value="540p">540p</option>
+                  <option value="720p">720p</option>
+                  <option value="1080p">1080p</option>
+                </select>
+                <select id="aspectRatioSelectDesktop" class=" aspectRatioSelect form-select rounded-pill w-auto">
+                  <option value="16:9">16:9</option>
+                  <option value="9:16">9:16</option>
+                  <option value="4:3">4:3</option>
+                  <option value="3:4">3:4</option>
+                  <option value="21:9">21:9</option>
+                  <option value="9:21">9:21</option>
+                </select>
+              </div>
+
+              <button
+                class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                style="width: 40px; height: 40px;"
+                onclick="generateVideo()"
+              >
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
           </div>
         </div>
-        
+
         <div id="resultArea"></div>
       </div>
     </div>
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/model-selector.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/video.js"></script>
-    
+  </div>
 
-   
-
-
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/model-selector.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/video.js"></script>
 </body>
-</html>
 
- 
+</html>
