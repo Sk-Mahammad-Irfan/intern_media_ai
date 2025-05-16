@@ -121,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
       chatPage: "audiomodel.html",
       creditPrice: "8 credits/second",
       providers: ["replicate", "fal"],
-      providers: ["replicate", "fal"],
     },
     "cassetteai-sfx-generator": {
       title: "CassetteAI Music Generator",
@@ -257,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </p>
 `;
 
-providerHeader.innerHTML = `
+  providerHeader.innerHTML = `
   <h5 class="mb-1 text-light">Providers for ${model.title}</h5>
   <p class="text-secondary mb-3">
     OpenMediaFlow <a href="https://openmediaflow.netlify.app/docs" target="_blank" class="text-info">routes requests</a>
@@ -266,7 +265,7 @@ providerHeader.innerHTML = `
   </p>
 `;
 
-providerHeader.innerHTML = `
+  providerHeader.innerHTML = `
   <h5 class="mb-2">Providers for ${model.title}</h5>
   <p class="text-muted mb-4">
     OpenMediaFlow <a href="https://openmediaflow.netlify.app/docs" target="_blank">routes requests</a>
@@ -275,14 +274,14 @@ providerHeader.innerHTML = `
   </p>
 `;
 
-const providerSection = document.getElementById("provider-details-section");
+  const providerSection = document.getElementById("provider-details-section");
 
-if (model.providers && model.providers.length > 0) {
-  model.providers.forEach((providerId) => {
-    const p = providers[providerId];
-    if (!p) return;
+  if (model.providers && model.providers.length > 0) {
+    model.providers.forEach((providerId) => {
+      const p = providers[providerId];
+      if (!p) return;
 
-    const providerHTML = `
+      const providerHTML = `
       <div class="card mb-4 shadow-sm border rounded-3">
         <div class="card-body">
           <h5 class="card-title d-flex align-items-center justify-content-between">
@@ -301,12 +300,11 @@ if (model.providers && model.providers.length > 0) {
       </div>
     `;
 
-    providerSection.innerHTML += providerHTML;
-  });
-} else {
-  providerSection.innerHTML = `<p class="text-muted">No provider data available.</p>`;
-}
-
+      providerSection.innerHTML += providerHTML;
+    });
+  } else {
+    providerSection.innerHTML = `<p class="text-muted">No provider data available.</p>`;
+  }
 
   function setAvatarInitials() {
     const userData = JSON.parse(localStorage.getItem("user_data") || "{}");

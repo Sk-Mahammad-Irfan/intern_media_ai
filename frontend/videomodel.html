@@ -471,6 +471,9 @@
                   <!-- Options dynamically generated -->
                 </select>
               </div>
+              <select id="providerSelect">
+                <option value="" selected>Select Provider</option>
+              </select>
             </div>
             <hr class="model-hr" />
           </div>
@@ -502,6 +505,138 @@
                   <option value="21:9">21:9</option>
                   <option value="9:21">9:21</option>
                 </select>
+              </div>
+
+              <div id="falExtraOptions" class="row mt-3" style="display: none">
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="shiftInput"
+                    class="form-control"
+                    placeholder="Shift (e.g. 5)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="stepsInput"
+                    class="form-control"
+                    placeholder="Steps (e.g. 30)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="guidanceInput"
+                    class="form-control"
+                    placeholder="Guidance Scale (e.g. 7)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="text"
+                    id="negativePromptInput"
+                    class="form-control"
+                    placeholder="Negative Prompt"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="seedInput"
+                    class="form-control"
+                    placeholder="Seed (optional)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="frameNumInput"
+                    class="form-control"
+                    placeholder="Frame Count (default 81)"
+                  />
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="enableExpansion"
+                    />
+                    <label class="form-check-label" for="enableExpansion">
+                      Enable Prompt Expansion
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="enableSafety"
+                      checked
+                    />
+                    <label class="form-check-label" for="enableSafety">
+                      Enable Safety Checker
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                id="replicateExtraOptions"
+                class="row mt-3"
+                style="display: none"
+              >
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="replicateCfgInput"
+                    class="form-control"
+                    placeholder="Guidance Scale (cfg), e.g. 3"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="replicateStepsInput"
+                    class="form-control"
+                    placeholder="Inference Steps (e.g. 30)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="replicateLengthInput"
+                    class="form-control"
+                    placeholder="Video Length (e.g. 97 frames)"
+                  />
+                </div>
+                <div class="col-md-6 mb-2">
+                  <input
+                    type="text"
+                    id="replicateNegativePromptInput"
+                    class="form-control"
+                    placeholder="Negative Prompt (optional)"
+                  />
+                </div>
+                <div class="col-md-6 mb-2">
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="replicateImageNoiseScaleInput"
+                    class="form-control"
+                    placeholder="Image Noise Scale (e.g. 0.15)"
+                  />
+                </div>
+                <div class="col-md-4 mb-2">
+                  <input
+                    type="number"
+                    id="replicateSeedInput"
+                    class="form-control"
+                    placeholder="Seed (optional)"
+                  />
+                </div>
               </div>
 
               <div
@@ -564,5 +699,6 @@
     <script src="js/auth.js"></script>
     <script src="js/config.js"></script>
     <script src="js/video.js"></script>
+    <script src="js/avtar.js"></script>
   </body>
 </html>

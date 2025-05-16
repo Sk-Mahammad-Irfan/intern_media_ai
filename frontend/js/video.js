@@ -1,7 +1,11 @@
 const chat = document.getElementById("chat");
+const providerSelect = document.getElementById("providerSelect");
+const resolutionSelects = document.querySelectorAll(".resolutionSelect");
+const aspectRatioSelects = document.querySelectorAll(".aspectRatioSelect");
 
 const modelOptions = {
   "lightricks-ltx-video": {
+    providers: ["replicate", "auto"],
     resolutions: {
       "360p": 512,
       "540p": 576,
@@ -26,39 +30,43 @@ const modelOptions = {
     ],
   },
   "luma-ray2-flash": {
+    providers: ["fal", "auto"],
     resolutions: { "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
   "pika-text-to-video-v2-1": {
+    providers: ["fal", "auto"],
     resolutions: { "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
   "pixverse-v4-text-to-video": {
+    providers: ["fal", "auto"],
     resolutions: { "540p": null, "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
   },
   "wan-ai-wan21-t2v-13b": {
+    providers: ["fal", "replicate", "deepinfra", "auto"],
     resolutions: { "480p": null },
     aspect_ratios: ["16:9", "9:16"],
   },
 };
 
-const resolutionSelects = document.querySelectorAll(".resolutionSelect");
-const aspectRatioSelects = document.querySelectorAll(".aspectRatioSelect");
+function getSelectedValue(selects) {
+  for (const s of selects) {
+    if (s.offsetParent !== null && s.value) return s.value;
+  }
+  return null;
+}
 
 function appendUserMessage(prompt) {
-  const userWrapper = document.createElement("div");
-  userWrapper.className =
+  const wrapper = document.createElement("div");
+  wrapper.className =
     "d-flex flex-column align-items-end mb-3 position-relative";
-
-  userWrapper.innerHTML = `
-    <div class="user-message p-3">
-      ${prompt}
-    </div>
+  wrapper.innerHTML = `
+    <div class="user-message p-3">${prompt}</div>
     <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
   `;
-
-  chat.appendChild(userWrapper);
+  chat.appendChild(wrapper);
   chat.scrollTop = chat.scrollHeight;
 }
 
@@ -68,7 +76,7 @@ function appendGeneratingVideoMessage() {
   aiDiv.innerHTML = `
     <div class="ai-message p-3 text-muted d-flex align-items-center">
       <i class="bi bi-camera-reels me-2"></i>
-      Generating video &nbsp;
+      Generating video&nbsp;
       <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
     </div>`;
   chat.appendChild(aiDiv);
@@ -90,11 +98,11 @@ function appendGeneratedVideo(videoUrl) {
   const loadingMessage = document.querySelector(".generating-video");
   if (loadingMessage) loadingMessage.remove();
 
-  const resolution = getSelectedValue(resolutionSelects) || "540p";
+  const resolution = getSelectedValue(resolutionSelects) || "720p";
   const aspect_ratio = getSelectedValue(aspectRatioSelects) || "16:9";
 
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("d-flex", "justify-content-start", "mb-3");
+  const message = document.createElement("div");
+  message.className = "d-flex justify-content-start mb-3";
 
   const bubble = document.createElement("div");
   bubble.className = "ai-message p-3";
@@ -115,61 +123,116 @@ function appendGeneratedVideo(videoUrl) {
   wrapper.style.overflow = "hidden";
   wrapper.style.backgroundColor = "#000";
 
-  const videoElement = document.createElement("video");
-  videoElement.controls = true;
-  videoElement.src = videoUrl;
-  videoElement.style.width = "100%";
-  videoElement.style.height = "100%";
-  videoElement.style.display = "block";
-  videoElement.style.objectFit = "contain";
-  videoElement.onloadedmetadata = () => {
-    wrapper.style.aspectRatio = `${videoElement.videoWidth} / ${videoElement.videoHeight}`;
+  const video = document.createElement("video");
+  video.controls = true;
+  video.src = videoUrl;
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "contain";
+  video.onloadedmetadata = () => {
+    wrapper.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
   };
 
-  wrapper.appendChild(videoElement);
+  wrapper.appendChild(video);
   bubble.appendChild(caption);
   bubble.appendChild(meta);
   bubble.appendChild(wrapper);
-  messageElement.appendChild(bubble);
-  chat.appendChild(messageElement);
+  message.appendChild(bubble);
+  chat.appendChild(message);
   chat.scrollTop = chat.scrollHeight;
-}
-
-function getSelectedValue(selects) {
-  for (const s of selects) {
-    if (s.offsetParent !== null && s.value) {
-      // Check if visible
-      return s.value;
-    }
-  }
-  return null;
 }
 
 async function generateVideo() {
   const prompt = document.getElementById("promptInput").value.trim();
   const resolution = getSelectedValue(resolutionSelects);
   const aspect_ratio = getSelectedValue(aspectRatioSelects);
+  const provider = providerSelect.value;
+  const modelId =
+    new URLSearchParams(window.location.search).get("id") || "wan";
   const userId = localStorage.getItem("userId") || "guest";
 
-  if (!prompt) return alert("Please enter a prompt.");
-  if (!resolution) return alert("Please select a resolution.");
-  if (!aspect_ratio) return alert("Please select an aspect ratio.");
+  if (!prompt || !resolution || !aspect_ratio) {
+    return alert("Please complete all required fields.");
+  }
 
   appendUserMessage(prompt);
   appendGeneratingVideoMessage();
 
   try {
-    const modelId =
-      new URLSearchParams(window.location.search).get("id") ||
-      "pixverse-v4-text-to-video";
-    const response = await fetch(
-      `${BACKEND_URL}/api/ai/generate-video/${modelId}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, resolution, aspect_ratio, userId }),
-      }
-    );
+    let requestUrl = "";
+    let requestBody = {};
+
+    if (provider === "auto") {
+      // Auto Mode (Basic Input)
+      requestUrl = `${BACKEND_URL}/api/ai/generate-video/${modelId}`;
+      requestBody = {
+        prompt,
+        resolution,
+        aspect_ratio,
+        userId,
+      };
+    } else if (provider === "fal") {
+      // FAL Mode (Advanced)
+      requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
+      requestBody = {
+        provider: "fal",
+        prompt,
+        resolution,
+        aspect_ratio,
+        shift: Number(document.getElementById("shiftInput").value) || 4,
+        sampler: "unipc",
+        num_inference_steps:
+          Number(document.getElementById("stepsInput").value) || 30,
+        guidance_scale:
+          Number(document.getElementById("guidanceInput").value) || 7,
+        negative_prompt:
+          document.getElementById("negativePromptInput").value || "",
+        seed: Number(document.getElementById("seedInput").value) || undefined,
+        enable_prompt_expansion:
+          document.getElementById("enableExpansion").checked,
+        enable_safety_checker: document.getElementById("enableSafety").checked,
+        frame_num: 81,
+        userId,
+      };
+    } else if (provider === "replicate") {
+      // FAL Mode (Advanced)
+      requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
+      requestBody = {
+        provider: "replicate",
+        prompt,
+        resolution,
+        aspect_ratio,
+        shift: Number(document.getElementById("shiftInput").value) || 4,
+        sampler: "unipc",
+        num_inference_steps:
+          Number(document.getElementById("stepsInput").value) || 30,
+        guidance_scale:
+          Number(document.getElementById("guidanceInput").value) || 7,
+        negative_prompt:
+          document.getElementById("negativePromptInput").value || "",
+        seed: Number(document.getElementById("seedInput").value) || undefined,
+        enable_prompt_expansion:
+          document.getElementById("enableExpansion").checked,
+        enable_safety_checker: document.getElementById("enableSafety").checked,
+        frame_num: 81,
+        userId,
+      };
+    } else {
+      // Other providers like replicate, deepinfra
+      requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
+      requestBody = {
+        prompt,
+        resolution,
+        aspect_ratio,
+        userId,
+      };
+    }
+
+    const response = await fetch(requestUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
 
     const data = await response.json();
     if (!response.ok) return appendErrorMessage(data.error || "Server error.");
@@ -182,59 +245,54 @@ async function generateVideo() {
 }
 
 function copyToClipboard(icon) {
-  const messageText = icon.previousElementSibling.innerText.trim();
+  const message = icon.previousElementSibling.innerText.trim();
   navigator.clipboard
-    .writeText(messageText)
+    .writeText(message)
     .then(() => {
       icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-      setTimeout(
-        () =>
-          icon.classList.replace(
-            "bi-clipboard-check-fill",
-            "bi-clipboard-fill"
-          ),
-        1500
-      );
+      setTimeout(() => {
+        icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
+      }, 1500);
     })
     .catch((err) => console.error("Copy failed:", err));
 }
 
 function populateModelOptions(modelId) {
   const config = modelOptions[modelId];
-  if (!config) return console.warn("No config found for model:", modelId);
+  if (!config) return;
 
+  // Populate providers
+  providerSelect.innerHTML = `<option value="auto">Select Provider</option>`;
+  config.providers.forEach((provider) => {
+    const option = document.createElement("option");
+    option.value = provider;
+    option.textContent = provider;
+    providerSelect.appendChild(option);
+  });
+  providerSelect.value = config.providers[0];
+
+  // Populate resolutions
   resolutionSelects.forEach((select) => {
-    const selectedValue = select.value;
-    select.innerHTML = `<option value="" selected>Resolution</option>`;
+    select.innerHTML = `<option value="" disabled selected>Resolution</option>`;
     Object.keys(config.resolutions).forEach((res) => {
       const option = document.createElement("option");
       option.value = res;
       option.textContent = res;
       select.appendChild(option);
     });
-
-    if (config.resolutions[selectedValue]) {
-      select.value = selectedValue;
-    } else if (config.resolutions["720p"] !== undefined) {
-      select.value = "720p";
-    }
+    if (config.resolutions["720p"] !== undefined) select.value = "720p";
   });
 
+  // Populate aspect ratios
   aspectRatioSelects.forEach((select) => {
-    const selectedValue = select.value;
-    select.innerHTML = `<option value="" selected>Aspect Ratio</option>`;
+    select.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
     config.aspect_ratios.forEach((ratio) => {
       const option = document.createElement("option");
       option.value = ratio;
       option.textContent = ratio;
       select.appendChild(option);
     });
-
-    if (config.aspect_ratios.includes(selectedValue)) {
-      select.value = selectedValue;
-    } else if (config.aspect_ratios.includes("16:9")) {
-      select.value = "16:9";
-    }
+    if (config.aspect_ratios.includes("16:9")) select.value = "16:9";
   });
 }
 
@@ -245,84 +303,21 @@ function getModelIdFromURL() {
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const prompt = params.get("prompt");
-  const input = document.getElementById("promptInput");
   const modelId = getModelIdFromURL();
-
   if (modelId) populateModelOptions(modelId);
 
-  if (prompt && input) {
-    const decodedPrompt = decodeURIComponent(prompt);
-    input.value = decodedPrompt;
-    appendUserMessage(decodedPrompt);
+  if (prompt) {
+    document.getElementById("promptInput").value = decodeURIComponent(prompt);
+    appendUserMessage(prompt);
     appendGeneratingVideoMessage();
     generateVideo();
   }
 });
 
-["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const createdAt = new Date().toISOString();
-      const url = `${window.location.origin}${
-        window.location.pathname
-      }?room=${encodeURIComponent(createdAt)}`;
-      window.open(url, "_blank");
-    });
-  }
-});
-
-const params = new URLSearchParams(window.location.search);
-const roomCreatedAt = params.get("room");
-if (roomCreatedAt) {
-  const date = new Date(roomCreatedAt);
-  const formatted = date.toLocaleString(undefined, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  document.getElementById("roomTitle").textContent = "Room created";
-  document.getElementById("roomTimestamp").textContent = formatted;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-  const avatars = document.querySelectorAll("#navbar-avatar");
-  const userElements = {
-    desktop: {
-      username: document.getElementById("account-username"),
-      email: document.getElementById("account-email"),
-    },
-    mobile: {
-      username: document.getElementById("account-username-mobile"),
-      email: document.getElementById("account-email-mobile"),
-    },
-  };
-  const isLoggedIn = !!userData.username;
-
-  if (isLoggedIn) {
-    const username = userData.username;
-    const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-    avatars.forEach((avatar) => (avatar.textContent = firstInitial));
-    userElements.desktop.username &&
-      (userElements.desktop.username.textContent = username);
-    userElements.desktop.email &&
-      (userElements.desktop.email.textContent = userData.email || "No email");
-    userElements.mobile.username &&
-      (userElements.mobile.username.textContent = username);
-    userElements.mobile.email &&
-      (userElements.mobile.email.textContent = userData.email || "No email");
-  } else {
-    avatars.forEach(
-      (avatar) => (avatar.innerHTML = `<i class="fa-solid fa-user"></i>`)
-    );
-    ["desktop", "mobile"].forEach((view) => {
-      userElements[view].username &&
-        (userElements[view].username.textContent = "Guest");
-      userElements[view].email && (userElements[view].email.textContent = "");
-    });
-  }
+providerSelect.addEventListener("change", () => {
+  const selected = providerSelect.value;
+  const falOptions = document.getElementById("falExtraOptions");
+  falOptions.style.display = selected === "fal" ? "block" : "none";
+  const replicateOptions = document.getElementById("replicateExtraOptions");
+  replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 });

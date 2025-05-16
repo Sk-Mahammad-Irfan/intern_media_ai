@@ -6,6 +6,7 @@ import adapterRouter from "./router/adapterRouter.js";
 import apiKeyRouter from "./router/apiRouter.js";
 import apiReferenceRouter from "./router/adapterApiRoutes.js";
 import usageRouter from "./router/usageRouter.js";
+import providerRouter from "./router/providerRouter.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import session from "express-session";
@@ -39,6 +40,7 @@ app.use("/api/ai", adapterRouter);
 app.use("/api/api-key", apiKeyRouter);
 app.use("/api/reference", apiReferenceRouter);
 app.use("/api/usage", usageRouter);
+app.use("/api/provider", providerRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
