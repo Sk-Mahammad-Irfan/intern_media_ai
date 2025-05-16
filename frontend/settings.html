@@ -553,6 +553,8 @@
     <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/credits.js"></script>
     <script>
       // Bootstrap tooltip init
       const tooltipTriggerList = [].slice.call(
@@ -629,22 +631,26 @@ function updateSelectOptions() {
 
 
       // Load user_data from localStorage and update modal
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
         const userDataRaw = localStorage.getItem("user_data");
+        const userId = localStorage.getItem("userId");
+
         if (userDataRaw) {
           try {
             const user = JSON.parse(userDataRaw);
+
+            // Populate user name and email
             document.getElementById("user-name").textContent =
               user.username || "Unknown User";
-            document.querySelectorAll(".primary-email").forEach((el) => {
-            el.innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
-          });
 
-            document.getElementById("user-credits").textContent =
-              user.credits || 0;
+            document.querySelectorAll(".primary-email").forEach((el) => {
+              el.innerHTML = `${user.email} <span class="badge bg-secondary">Primary</span>`;
+            });
+
             document.getElementById("user-loginTime").textContent = new Date(
               user.loginTime
             ).toLocaleString();
+
             document.getElementById("connected-email").textContent =
               user.email || "";
 
@@ -659,12 +665,19 @@ function updateSelectOptions() {
               avatar.style.display = "flex";
               profileImg.style.display = "none"; // hide image
             }
+
+            // 🟡 Fetch and display credits from backend
+            if (userId) {
+              const credits = await getUserCredits(userId);
+              document.getElementById("user-credits").textContent =
+                credits !== null ? credits : "N/A";
+            }
           } catch (error) {
             console.error("Failed to parse user_data:", error);
           }
         }
       });
-      function setAvatarInitials() {
+     function setAvatarInitials() {
         // Get the stored user data
         const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
 
