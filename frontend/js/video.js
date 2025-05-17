@@ -160,7 +160,6 @@ async function generateVideo() {
     let requestBody = {};
 
     if (provider === "auto") {
-      // Auto Mode (Basic Input)
       requestUrl = `${BACKEND_URL}/api/ai/generate-video/${modelId}`;
       requestBody = {
         prompt,
@@ -169,21 +168,21 @@ async function generateVideo() {
         userId,
       };
     } else if (provider === "fal") {
-      // FAL Mode (Advanced)
-      const shift = Number(document.getElementById("shiftInput").value);
-      const steps = Number(document.getElementById("stepsInput").value);
-      const guidance = Number(document.getElementById("guidanceInput").value);
+      const shift = Number(document.getElementById("shiftInput")?.value || 0);
+      const steps = Number(document.getElementById("stepsInput")?.value || 1);
+      const guidance = Number(
+        document.getElementById("guidanceInput")?.value || 1
+      );
       const negativePrompt =
-        document.getElementById("negativePromptInput").value || "";
-      const seed =
-        Number(document.getElementById("seedInput").value) || undefined;
+        document.getElementById("negativePromptInput")?.value || "";
+      const seed = document.getElementById("seedInput")?.value;
+      const frameNum = Number(
+        document.getElementById("frameNumInput")?.value || 81
+      );
       const enableExpansion =
-        document.getElementById("enableExpansion").checked;
-      const enableSafety = document.getElementById("enableSafety").checked;
-
-      if (!shift || !steps || !guidance || !negativePrompt) {
-        return alert("Please fill in all required fields for FAL Mode");
-      }
+        document.getElementById("enableExpansion")?.checked || false;
+      const enableSafety =
+        document.getElementById("enableSafety")?.checked || false;
 
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
@@ -196,28 +195,44 @@ async function generateVideo() {
         num_inference_steps: steps,
         guidance_scale: guidance,
         negative_prompt: negativePrompt,
-        seed,
+        seed: seed ? Number(seed) : undefined,
         enable_prompt_expansion: enableExpansion,
         enable_safety_checker: enableSafety,
-        frame_num: 81,
+        frame_num: frameNum,
         userId,
       };
     } else if (provider === "replicate") {
-      // Replicate Mode (Advanced)
-      const shift = Number(document.getElementById("shiftInput").value);
-      const steps = Number(document.getElementById("stepsInput").value);
-      const guidance = Number(document.getElementById("guidanceInput").value);
-      const negativePrompt =
-        document.getElementById("negativePromptInput").value || "";
-      const seed =
-        Number(document.getElementById("seedInput").value) || undefined;
-      const enableExpansion =
-        document.getElementById("enableExpansion").checked;
-      const enableSafety = document.getElementById("enableSafety").checked;
+      const guidanceInput = document.getElementById("replicateCfgInput");
+      const stepsInput = document.getElementById("replicateStepsInput");
+      const lengthInput = document.getElementById("replicateLengthInput");
+      const negativePromptInput = document.getElementById(
+        "replicateNegativePromptInput"
+      );
+      const seedInput = document.getElementById("replicateSeedInput");
+      const noiseScaleInput = document.getElementById(
+        "replicateImageNoiseScaleInput"
+      );
 
-      if (!shift || !steps || !guidance || !negativePrompt) {
-        return alert("Please fill in all required fields for Replicate Mode");
+      const guidance = guidanceInput
+        ? Number(guidanceInput.value.trim()) || 3
+        : 3;
+      const steps = stepsInput ? Number(stepsInput.value.trim()) || 30 : 30;
+
+      if (steps < 10) {
+        alert("Replicate: Inference steps must be at least 10.");
+        return;
       }
+
+      const frameNum = lengthInput
+        ? Number(lengthInput.value.trim()) || 81
+        : 81;
+      const negativePrompt = negativePromptInput
+        ? negativePromptInput.value.trim()
+        : "";
+      const seed = seedInput ? Number(seedInput.value) : undefined;
+      const imageNoiseScale = noiseScaleInput
+        ? Number(noiseScaleInput.value)
+        : undefined;
 
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
@@ -225,19 +240,15 @@ async function generateVideo() {
         prompt,
         resolution,
         aspect_ratio,
-        shift,
-        sampler: "unipc",
         num_inference_steps: steps,
         guidance_scale: guidance,
+        frame_num: frameNum,
         negative_prompt: negativePrompt,
         seed,
-        enable_prompt_expansion: enableExpansion,
-        enable_safety_checker: enableSafety,
-        frame_num: 81,
+        image_noise_scale: imageNoiseScale,
         userId,
       };
     } else {
-      // Other providers like replicate, deepinfra
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
         prompt,
@@ -352,37 +363,43 @@ providerSelect.addEventListener("change", () => {
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 });
 
-document.getElementById("applyOptionsBtn").addEventListener("click", () => {
-  // Get values
-  const resolution = document.getElementById("resolutionSelect").value;
-  const aspectRatio = document.getElementById("aspectRatioSelect").value;
+document
+  .getElementById("applyOptionsBtn")
+  .addEventListener("click", async () => {
+    // Get values
+    const resolution = getSelectedValue(resolutionSelect);
+    const aspectRatio = getSelectedValue(aspectRatioSelect);
 
-  const shift = document.getElementById("shiftInput").value;
-  const steps = document.getElementById("stepsInput").value;
-  const guidance = document.getElementById("guidanceInput").value;
-  const negativePrompt = document.getElementById("negativePromptInput").value;
-  const seed = document.getElementById("seedInput").value;
-  const expansion = document.getElementById("enableExpansion").checked;
-  const safety = document.getElementById("enableSafety").checked;
+    const shift = document.getElementById("shiftInput").value || "5";
+    const steps = document.getElementById("stepsInput").value || "10";
+    const guidance = document.getElementById("guidanceInput").value || "7";
+    const negativePrompt =
+      document.getElementById("negativePromptInput").value || "";
+    const seed = document.getElementById("seedInput").value || "";
+    const expansion = document.getElementById("enableExpansion").checked;
+    const safety = document.getElementById("enableSafety").checked;
 
-  // Update values if needed
-  document.getElementById("shiftInput").value = shift;
-  document.getElementById("stepsInput").value = steps;
-  document.getElementById("guidanceInput").value = guidance;
-  document.getElementById("negativePromptInput").value = negativePrompt;
-  document.getElementById("seedInput").value = seed;
-  document.getElementById("enableExpansion").checked = expansion;
-  document.getElementById("enableSafety").checked = safety;
+    // Update values if needed
+    document.getElementById("shiftInput").value = shift;
+    document.getElementById("stepsInput").value = steps;
+    document.getElementById("guidanceInput").value = guidance;
+    document.getElementById("negativePromptInput").value = negativePrompt;
+    document.getElementById("seedInput").value = seed;
+    document.getElementById("enableExpansion").checked = expansion;
+    document.getElementById("enableSafety").checked = safety;
 
-  // Close modal
-  const modalElement = document.getElementById("modelOptionsModal");
-  const modal = bootstrap.Modal.getInstance(modalElement);
-  modal.hide();
+    // Close modal
+    const modalElement = document.getElementById("modelOptionsModal");
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
 
-  // Manually remove backdrop just in case
-  document
-    .querySelectorAll(".modal-backdrop")
-    .forEach((backdrop) => backdrop.remove());
-  document.body.classList.remove("modal-open");
-  document.body.style = ""; // clear inline styles
-});
+    // Manually remove backdrop just in case
+    document
+      .querySelectorAll(".modal-backdrop")
+      .forEach((backdrop) => backdrop.remove());
+    document.body.classList.remove("modal-open");
+    document.body.style = ""; // clear inline styles
+
+    // Generate video
+    await generateVideo();
+  });
