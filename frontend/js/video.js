@@ -398,8 +398,5 @@ document
       .querySelectorAll(".modal-backdrop")
       .forEach((backdrop) => backdrop.remove());
     document.body.classList.remove("modal-open");
-    document.body.style = ""; // clear inline styles
-
-    // Generate video
-    await generateVideo();
+    document.body.style = ""; // clear
   });
