@@ -3,7 +3,6 @@ const providerSelect = document.getElementById("providerSelect");
 const resolutionSelect = document.getElementById("resolutionSelect");
 const aspectRatioSelect = document.getElementById("aspectRatioSelect");
 
-
 const modelOptions = {
   "lightricks-ltx-video": {
     providers: ["replicate", "auto"],
@@ -55,7 +54,6 @@ const modelOptions = {
 function getSelectedValue(select) {
   return select?.value || null;
 }
-
 
 function appendUserMessage(prompt) {
   const wrapper = document.createElement("div");
@@ -151,7 +149,7 @@ async function generateVideo() {
   const userId = localStorage.getItem("userId") || "guest";
 
   if (!prompt || !resolution || !aspect_ratio) {
-    return alert("Please complete all required fields.");
+    return alert("Please complete all required parameters.");
   }
 
   appendUserMessage(prompt);
@@ -172,47 +170,69 @@ async function generateVideo() {
       };
     } else if (provider === "fal") {
       // FAL Mode (Advanced)
+      const shift = Number(document.getElementById("shiftInput").value);
+      const steps = Number(document.getElementById("stepsInput").value);
+      const guidance = Number(document.getElementById("guidanceInput").value);
+      const negativePrompt =
+        document.getElementById("negativePromptInput").value || "";
+      const seed =
+        Number(document.getElementById("seedInput").value) || undefined;
+      const enableExpansion =
+        document.getElementById("enableExpansion").checked;
+      const enableSafety = document.getElementById("enableSafety").checked;
+
+      if (!shift || !steps || !guidance || !negativePrompt) {
+        return alert("Please fill in all required fields for FAL Mode");
+      }
+
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
         provider: "fal",
         prompt,
         resolution,
         aspect_ratio,
-        shift: Number(document.getElementById("shiftInput").value) || 4,
+        shift,
         sampler: "unipc",
-        num_inference_steps:
-          Number(document.getElementById("stepsInput").value) || 30,
-        guidance_scale:
-          Number(document.getElementById("guidanceInput").value) || 7,
-        negative_prompt:
-          document.getElementById("negativePromptInput").value || "",
-        seed: Number(document.getElementById("seedInput").value) || undefined,
-        enable_prompt_expansion:
-          document.getElementById("enableExpansion").checked,
-        enable_safety_checker: document.getElementById("enableSafety").checked,
+        num_inference_steps: steps,
+        guidance_scale: guidance,
+        negative_prompt: negativePrompt,
+        seed,
+        enable_prompt_expansion: enableExpansion,
+        enable_safety_checker: enableSafety,
         frame_num: 81,
         userId,
       };
     } else if (provider === "replicate") {
-      // FAL Mode (Advanced)
+      // Replicate Mode (Advanced)
+      const shift = Number(document.getElementById("shiftInput").value);
+      const steps = Number(document.getElementById("stepsInput").value);
+      const guidance = Number(document.getElementById("guidanceInput").value);
+      const negativePrompt =
+        document.getElementById("negativePromptInput").value || "";
+      const seed =
+        Number(document.getElementById("seedInput").value) || undefined;
+      const enableExpansion =
+        document.getElementById("enableExpansion").checked;
+      const enableSafety = document.getElementById("enableSafety").checked;
+
+      if (!shift || !steps || !guidance || !negativePrompt) {
+        return alert("Please fill in all required fields for Replicate Mode");
+      }
+
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
         provider: "replicate",
         prompt,
         resolution,
         aspect_ratio,
-        shift: Number(document.getElementById("shiftInput").value) || 4,
+        shift,
         sampler: "unipc",
-        num_inference_steps:
-          Number(document.getElementById("stepsInput").value) || 30,
-        guidance_scale:
-          Number(document.getElementById("guidanceInput").value) || 7,
-        negative_prompt:
-          document.getElementById("negativePromptInput").value || "",
-        seed: Number(document.getElementById("seedInput").value) || undefined,
-        enable_prompt_expansion:
-          document.getElementById("enableExpansion").checked,
-        enable_safety_checker: document.getElementById("enableSafety").checked,
+        num_inference_steps: steps,
+        guidance_scale: guidance,
+        negative_prompt: negativePrompt,
+        seed,
+        enable_prompt_expansion: enableExpansion,
+        enable_safety_checker: enableSafety,
         frame_num: 81,
         userId,
       };
@@ -261,36 +281,44 @@ function populateModelOptions(modelId) {
   if (!config) return;
 
   // Populate providers
-  providerSelect.innerHTML = `<option value="auto">Select Provider</option>`;
-  config.providers.forEach((provider) => {
+  // Populate providers
+  providerSelect.innerHTML = "";
+  modelOptions[modelId].providers.forEach((provider) => {
     const option = document.createElement("option");
     option.value = provider;
-    option.textContent = provider;
+    option.textContent =
+      provider === "auto"
+        ? "Auto (default)"
+        : provider.charAt(0).toUpperCase() + provider.slice(1);
     providerSelect.appendChild(option);
   });
-  providerSelect.value = config.providers[0];
+
+  // ✅ Always select "auto" if available
+  if (config.providers.includes("auto")) {
+    providerSelect.value = "auto";
+  } else {
+    providerSelect.value = config.providers[0];
+  }
 
   // Populate resolutions
   resolutionSelect.innerHTML = `<option value="" disabled selected>Resolution</option>`;
-Object.keys(config.resolutions).forEach((res) => {
-  const option = document.createElement("option");
-  option.value = res;
-  option.textContent = res;
-  resolutionSelect.appendChild(option);
-});
-if (config.resolutions["720p"] !== undefined) resolutionSelect.value = "720p";
-
+  Object.keys(config.resolutions).forEach((res) => {
+    const option = document.createElement("option");
+    option.value = res;
+    option.textContent = res;
+    resolutionSelect.appendChild(option);
+  });
+  if (config.resolutions["720p"] !== undefined) resolutionSelect.value = "720p";
 
   // Populate aspect ratios
   aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
-config.aspect_ratios.forEach((ratio) => {
-  const option = document.createElement("option");
-  option.value = ratio;
-  option.textContent = ratio;
-  aspectRatioSelect.appendChild(option);
-});
-if (config.aspect_ratios.includes("16:9")) aspectRatioSelect.value = "16:9";
-
+  config.aspect_ratios.forEach((ratio) => {
+    const option = document.createElement("option");
+    option.value = ratio;
+    option.textContent = ratio;
+    aspectRatioSelect.appendChild(option);
+  });
+  if (config.aspect_ratios.includes("16:9")) aspectRatioSelect.value = "16:9";
 }
 
 function getModelIdFromURL() {
@@ -309,6 +337,11 @@ window.addEventListener("DOMContentLoaded", () => {
     appendGeneratingVideoMessage();
     generateVideo();
   }
+  const selected = providerSelect.value;
+  const falOptions = document.getElementById("falExtraOptions");
+  falOptions.style.display = selected === "fal" ? "block" : "none";
+  const replicateOptions = document.getElementById("replicateExtraOptions");
+  replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 });
 
 providerSelect.addEventListener("change", () => {
@@ -347,8 +380,9 @@ document.getElementById("applyOptionsBtn").addEventListener("click", () => {
   modal.hide();
 
   // Manually remove backdrop just in case
-  document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
-  document.body.classList.remove('modal-open');
+  document
+    .querySelectorAll(".modal-backdrop")
+    .forEach((backdrop) => backdrop.remove());
+  document.body.classList.remove("modal-open");
   document.body.style = ""; // clear inline styles
 });
-

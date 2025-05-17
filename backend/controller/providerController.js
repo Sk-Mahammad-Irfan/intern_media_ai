@@ -3,6 +3,7 @@ import { generateVideoWan } from "../providers/wanProviders.js";
 import { generateVideoLuma } from "../providers/lumaProviders.js";
 import { generateVideoPika } from "../providers/pikaProviders.js";
 import { generateVideoPixverse } from "../providers/pixverseProviders.js";
+import { generateVideoLTX } from "../providers/ltxProvidrs.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -29,6 +30,10 @@ export const generateVideoforProvider = async (req, res) => {
       case "pixverse-v4-text-to-video":
         console.log("pixverse-v4-text-to-video");
         rawData = await generateVideoPixverse(body);
+        break;
+      case "lightricks-ltx-video":
+        console.log("lightricks-ltx-video");
+        rawData = await generateVideoLTX(body);
         break;
       default:
         return res
