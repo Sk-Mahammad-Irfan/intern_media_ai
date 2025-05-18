@@ -123,6 +123,11 @@ export const falRecraftV3 = async (
     );
     resolution = "square_hd";
   }
+  // Validate style
+  if (!IMAGE_STYLES.includes(style)) {
+    console.warn(`Invalid style "${style}", defaulting to "realistic_image"`);
+    style = "realistic_image";
+  }
   // Validate enable_safety_checker
   if (typeof enable_safety_checker !== "boolean") {
     console.warn(
@@ -130,7 +135,6 @@ export const falRecraftV3 = async (
     );
     enable_safety_checker = true;
   }
-
 
   try {
     const result = await fal.subscribe("fal-ai/recraft-v3", {
