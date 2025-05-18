@@ -87,7 +87,7 @@ export const generateVideo = async (req, res) => {
 // -------- IMAGE GENERATION --------
 export const generateImage = async (req, res) => {
   const { id } = req.params;
-  const { prompt, userId } = req.body;
+  const { prompt, userId, resolution } = req.body;
 
   if (!userId) {
     return res.status(401).json({ error: "Please login to generate videos." });
@@ -112,7 +112,7 @@ export const generateImage = async (req, res) => {
         return res.status(402).json({ error: "Not enough credits." });
       }
 
-      const rawData = await handler(prompt);
+      const rawData = await handler(prompt, resolution);
       let imageUrl = null;
 
       switch (type) {

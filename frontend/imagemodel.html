@@ -324,12 +324,31 @@
 
         <!-- Model Selector Header -->
         <div class="px-4 pt-3">
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <div class="d-flex align-items-center gap-2">
+          <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+            <!-- Model select -->
+            <div
+              class="model-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
+            >
               <label class="fw-semibold mb-0">Model:</label>
-              <select id="modelSelector" class="form-select form-select-sm modern-select"
-                onchange="handleModelChange()">
-                <!-- Options will be added dynamically -->
+              <select
+                id="modelSelector"
+                class="form-select form-select-sm modern-select model-select"
+                onchange="handleModelChange()"
+              >
+                <!-- Options dynamically generated -->
+              </select>
+            </div>
+
+            <!-- Provider select -->
+            <div
+              class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
+            >
+              <label class="fw-semibold mb-0">Provider:</label>
+              <select
+                id="providerSelect"
+                class="form-select form-select-sm modern-select provider-select"
+              >
+                <!-- Options dynamically generated -->
               </select>
             </div>
           </div>
@@ -344,32 +363,97 @@
           <!-- Chat messages with audio will appear here -->
         </div>
 
+        <div
+            class="modal fade"
+            id="modelOptionsModal"
+            tabindex="-1"
+            aria-labelledby="modelOptionsModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+              <div class="modal-content rounded-4 shadow">
+                <div class="modal-header rounded-top-4">
+                  <h5 class="modal-title" id="modelOptionsModalLabel">
+                    Model Generation Options
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  
+                  <div id="inputsContainer"></div>
+
+          
+                  <!-- Resolution and Aspect Ratio -->
+                  <div id="outputSettingsContainer" class="row gy-3 mt-3" style="display: none;">
+                    <h6 class="fw-bold text-secondary">Output Settings</h6>
+                    <div class="col-md-6">
+                      <select
+                        id="aspectRatioSelect"
+                        class="form-select rounded-pill"
+                      >
+                        <!-- Options will be dynamically populated -->
+                      </select>
+                    </div>
+                  </div>
+                  
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary rounded-pill"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    id="applyOptionsBtn"
+                    class="btn btn-primary rounded-pill"
+                  >
+                    Apply Options
+                  </button>
+                </div>
+              </div>
+            </div>
+        </div>
+
 
 
         <!-- Chat Input Bar with Resolution Dropdown -->
-        <div id="promptInputSection" class="container my-3">
-          <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+        <div id="promptInputSection">
+          <div class="container">
+            <div
+              class="bg-light rounded-pill shadow px-3 py-2 d-flex align-items-center gap-2"
+            >
+              <input
+                type="text"
+                id="promptInput"
+                class="form-control border-0 bg-transparent text-dark"
+                placeholder="Start a message..."
+                style="box-shadow: none; outline: none"
+              />
 
-            <!-- Input Bar -->
-            <div class="bg-light rounded-pill shadow d-flex align-items-center px-3 py-2 flex-grow-1 input-bar"
-              style="max-width: 100%;">
-              <input type="text" id="promptInput" class="form-control border-0 bg-transparent text-dark"
-                placeholder="Start a message..." style="box-shadow: none; outline: none;">
+              <!-- Model Options Button -->
+              <button
+                type="button"
+                class="btn btn-outline-secondary rounded-pill px-3 py-1 shadow-sm border"
+                id="showModelOptionsBtn"
+                data-bs-toggle="modal"
+                data-bs-target="#modelOptionsModal"
+              >
+                <i class="bi bi-sliders2 me-1"></i> Parameters
+              </button>
 
-                 <!-- Resolution Dropdown -->
-              <div class="d-flex align-items-center me-3" style="gap: 8px;">
-                <select id="resolutionSelect" class="form-select rounded-pill w-auto">
-                  <option value="square_hd">Square HD</option>
-                  <option value="square">Square</option>
-                  <option value="portrait_4_3">Portrait 4:3</option>
-                  <option value="portrait_16_9">Portrait 16:9</option>
-                  <option value="landscape_4_3">Landscape 4:3</option>
-                  <option value="landscape_16_9">Landscape 16:9</option>
-                </select>
-              </div>
-
-              <button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-                style="width: 40px; height: 40px;" onclick="generateImage()">
+              <button
+                class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                style="width: 40px; height: 40px"
+                onclick="generateImage()"
+              >
                 <i class="bi bi-send-fill"></i>
               </button>
             </div>
@@ -385,219 +469,11 @@
     <script src="js/model-selector.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/image.js"></script>
+    <script src="js/avtar.js"></script>
 
 
-    <script>
-      const chat = document.getElementById("chat");
-
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log('DOM fully loaded and parsed');
-
-        // Set avatar initials
-        setAvatarInitials();
-
-        // Parse URL parameters
-        const params = new URLSearchParams(window.location.search);
-        const prompt = params.get('prompt');
-        const input = document.getElementById('promptInput'); // Consistent ID for prompt input
-
-        console.log('Prompt from URL:', prompt);
-        console.log('Input element:', input);
-
-        if (prompt && input) {
-          input.value = decodeURIComponent(prompt);
-          console.log('Calling generateImage function');
-          generateImage(); // Updated to call correct function
-        }
-
-        // Room creation timestamp
-        const roomCreatedAt = params.get("room");
-        if (roomCreatedAt) {
-          const date = new Date(roomCreatedAt);
-          const formatted = date.toLocaleString(undefined, {
-            weekday: "short",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          document.getElementById("roomTitle").textContent = "Room created";
-          document.getElementById("roomTimestamp").textContent = formatted;
-        }
-
-        // Add click listeners for "new room" buttons
-        ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach(id => {
-          const btn = document.getElementById(id);
-          if (btn) {
-            btn.addEventListener("click", () => {
-              const createdAt = new Date().toISOString();
-              const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-              window.open(url, "_blank");
-            });
-          }
-        });
-      });
-
-      function setAvatarInitials() {
-        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-        const avatars = document.querySelectorAll("#navbar-avatar");
-        const userElements = {
-          desktop: {
-            username: document.getElementById("account-username"),
-            email: document.getElementById("account-email"),
-          },
-          mobile: {
-            username: document.getElementById("account-username-mobile"),
-            email: document.getElementById("account-email-mobile"),
-          }
-        };
-
-        if (userData.username) {
-          const firstInitial = userData.username.trim()[0]?.toUpperCase() || "U";
-          avatars.forEach(avatar => avatar.textContent = firstInitial);
-          userElements.desktop.username.textContent = userData.username;
-          userElements.desktop.email.textContent = userData.email || "No email";
-          userElements.mobile.username.textContent = userData.username;
-          userElements.mobile.email.textContent = userData.email || "No email";
-        } else {
-          avatars.forEach(avatar => avatar.innerHTML = `<i class="fa-solid fa-user"></i>`);
-          ["desktop", "mobile"].forEach(view => {
-            userElements[view].username.textContent = "Guest";
-            userElements[view].email.textContent = "";
-          });
-        }
-      }
-
-      function appendUserMessage(prompt) {
-        const userWrapper = document.createElement("div");
-        userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
-        userWrapper.innerHTML = `
-            <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
-              ${prompt}
-            </div>
-            <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
-          `;
-        chat.appendChild(userWrapper);
-      }
-
-      function appendGeneratingMessage() {
-        const aiDiv = document.createElement("div");
-        aiDiv.className = "d-flex justify-content-start mb-3";
-        aiDiv.innerHTML = `<div class="ai-message p-3" id="generating-msg">
-            <i class="bi bi-image-fill me-2"></i>Generating image...
-          </div>`;
-        chat.appendChild(aiDiv);
-        chat.scrollTop = chat.scrollHeight;
-      }
-
-      function replaceWithErrorMessage(msg) {
-        const genMsg = document.getElementById("generating-msg");
-        const html = `<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i><span class="text-danger fw-semibold">${msg}</span>`;
-        if (genMsg) {
-          genMsg.innerHTML = html;
-        } else {
-          const fallbackError = document.createElement("div");
-          fallbackError.className = "text-danger my-3";
-          fallbackError.innerHTML = html;
-          chat.appendChild(fallbackError);
-          chat.scrollTop = chat.scrollHeight;
-        }
-      }
-
-      async function generateImage() {
-        const promptInput = document.getElementById("promptInput");
-        const resolutionSelect = document.getElementById("resolutionSelect");
-        const prompt = promptInput.value.trim();
-        const resolution = resolutionSelect?.value || "square_hd";
-        const userId = localStorage.getItem("userId");
-
-        if (!prompt) {
-          alert("Please enter a prompt.");
-          return;
-        }
-
-        appendUserMessage(prompt);
-        promptInput.value = "";
-        appendGeneratingMessage();
-
-        const modelId = new URLSearchParams(window.location.search).get("id");
-        const modelMap = {
-          "black-forest-labs-flux-1-1-pro": "black-forest-labs-flux-1-1-pro",
-          "fooocus": "fooocus",
-          "recraft-v3": "recraft-v3",
-          "hidream-i1-dev": "hidream-i1-dev",
-          "ideogram-v3": "ideogram-v3",
-        };
-
-        const backendModelId = modelMap[modelId];
-        if (!backendModelId) {
-          replaceWithErrorMessage("Unsupported model ID in URL.");
-          return;
-        }
-
-        try {
-          const res = await fetch(`${BACKEND_URL}/api/ai/generate-image/${backendModelId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt, userId, resolution }),
-          });
-
-          const data = await res.json();
-          const genMsg = document.getElementById("generating-msg");
-
-          if (res.status === 402) {
-            replaceWithErrorMessage("Insufficient credits.");
-            return;
-          }
-
-          if (!res.ok) {
-            replaceWithErrorMessage(`Server returned status ${res.status} (${data.error})`);
-            return;
-          }
-
-          if (genMsg) genMsg.remove();
-
-          if (data.imageUrl) {
-            const aiDiv = document.createElement("div");
-            aiDiv.className = "d-flex justify-content-start mb-3";
-            aiDiv.innerHTML = `
-        <div class="ai-message p-2">
-          <div class="d-flex flex-column align-items-start">
-            <div class="mb-2 text-muted small">
-              <i class="bi bi-image-fill me-2"></i>Generated Image (${resolution})
-            </div>
-            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-              <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-              <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-                <i class="bi bi-box-arrow-up-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>`;
-            chat.appendChild(aiDiv);
-            chat.scrollTop = chat.scrollHeight;
-          } else {
-            replaceWithErrorMessage("Image generation failed: no image URL returned.");
-          }
-        } catch (err) {
-          console.error("Network or server error:", err);
-          replaceWithErrorMessage("Image generation failed. Please try again later or use a different model.");
-        }
-      }
-
-      function copyToClipboard(icon) {
-        const messageText = icon.previousElementSibling.innerText.trim();
-        navigator.clipboard.writeText(messageText).then(() => {
-          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-          setTimeout(() => {
-            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-          }, 1500);
-        }).catch(err => {
-          console.error("Copy failed:", err);
-        });
-      }
-    </script>
+    
 
 
 </body>
