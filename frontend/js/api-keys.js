@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchAPIKeys() {
     try {
       const userId = localStorage.getItem("userId");
-      const res = await fetch("http://localhost:5000/api/api-key/my-api-keys", {
+      const res = await fetch("https://media-ai-backend.vercel.app/api/api-key/my-api-keys", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const userId = localStorage.getItem("userId");
       const res = await fetch(
-        "http://localhost:5000/api/api-key/generate-api-key",
+        "https://media-ai-backend.vercel.app/api/api-key/generate-api-key",
         {
           method: "POST",
           headers: {
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/api-key/delete-api-key/${key}`,
+        `https://media-ai-backend.vercel.app/api/api-key/delete-api-key/${key}`,
         {
           method: "DELETE",
         }

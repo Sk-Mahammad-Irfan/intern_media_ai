@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/usage/stats");
+    const response = await fetch("https://media-ai-backend.vercel.app/api/usage/stats");
     const result = await response.json();
 
     if (!result.success) throw new Error("Failed to load data");
