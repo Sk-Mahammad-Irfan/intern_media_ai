@@ -9,6 +9,14 @@ import { generateImageFooocus } from "../providers/image/fooocusProvider.js";
 import { generateImageHidream } from "../providers/image/hidreamprovider.js";
 import { generateImageIdeogram } from "../providers/image/ideogramProvider.js";
 import { generateImageRecraftFAL } from "../providers/image/recraftv3Provider.js";
+import { generateAudioCassatteMusic } from "../providers/audio/cassettemusicProvider.js";
+import { generateAudioCassetteFAL } from "../providers/audio/cassetteProvider.js";
+import { generateAudioMultilingualTtsFAL } from "../providers/audio/multilingualTtsProvider.js";
+import {
+  generateAudioStableFal,
+  generateAudioStableReplicate,
+} from "../providers/audio/stableProvider.js";
+import { generateAudioaAmericanEnglishFAL } from "../providers/audio/americanEnglishprovider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -140,6 +148,59 @@ export const generateImageForProvider = async (req, res) => {
     }
 
     res.json({ imageUrl });
+  } catch (err) {
+    console.error(`Error in /image/${id}:`, err);
+    res.status(500).json({
+      error: "Image generation failed.",
+      details: err?.message || err,
+    });
+  }
+};
+
+export const generateAudioForProvider = async (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  const provider = body?.provider || id.toLowerCase(); // fallback if missing
+
+  try {
+    let audioUrl;
+
+    switch (id.toLowerCase()) {
+      case "cassattemusic-audio":
+        audioUrl = await generateAudioCassatteMusic(body);
+        break;
+      case "cassetteai-sfx-generator":
+        audioUrl = await generateAudioCassetteFAL(body);
+        break;
+      case "multilingual-audio":
+        audioUrl = await generateAudioMultilingualTtsFAL(body);
+        break;
+      case "stackadoc-stable-audio":
+        if (provider === "fal") {
+          audioUrl = await generateAudioStableFal(body);
+        } else {
+          audioUrl = await generateAudioStableReplicate(body);
+        }
+        break;
+      case "american-audio":
+        audioUrl = await generateAudioaAmericanEnglishFAL(body);
+        break;
+      default:
+        return res
+          .status(400)
+          .json({ error: `Unknown image generator: ${id}` });
+    }
+
+    // Map to final image URL depending on provider
+
+    if (!audioUrl) {
+      return res.status(502).json({
+        error: "Failed to extract image URL",
+        audioUrl,
+      });
+    }
+
+    return res.status(200).json({ audioUrl });
   } catch (err) {
     console.error(`Error in /image/${id}:`, err);
     res.status(500).json({

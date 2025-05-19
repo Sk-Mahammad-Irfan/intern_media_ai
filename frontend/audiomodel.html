@@ -338,8 +338,20 @@
                 <!-- Dynamically populated -->
               </select>
             </div>
+            <div
+              class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
+            >
+              <label class="fw-semibold mb-0">Provider:</label>
+              <select
+                id="providerSelect"
+                class="form-select form-select-sm modern-select provider-select"
+              >
+                <!-- Options dynamically generated -->
+              </select>
+            </div>
           </div>
           <hr class="model-hr" />
+          
         </div>
 
 
@@ -349,6 +361,68 @@
           <div id="chat" class="container-fluid mt-4">
             <!-- Chat messages with audio will appear here -->
           </div>
+
+          <div
+            class="modal fade"
+            id="modelOptionsModal"
+            tabindex="-1"
+            aria-labelledby="modelOptionsModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+              <div class="modal-content rounded-4 shadow">
+                <div class="modal-header rounded-top-4">
+                  <h5 class="modal-title" id="modelOptionsModalLabel">
+                    Model Generation Options
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  
+                  <div id="inputsContainer"></div>
+
+          
+                  <!-- Resolution and Aspect Ratio -->
+                  <div id="outputSettingsContainer" class="row gy-3 mt-3" style="display: none;">
+                    <h6 class="fw-bold text-secondary">Output Settings</h6>
+                    <div class="col-md-6">
+                      <label for="durationInput" class="form-label">Duration (seconds)</label>
+                      <input
+                        type="number"
+                        id="durationInput"
+                        class="form-control rounded-pill"
+                        min="1"
+                        max="3600"
+                        step="1"
+                      />
+                    </div>
+                  </div>
+                  
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary rounded-pill"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    id="applyOptionsBtn"
+                    class="btn btn-primary rounded-pill"
+                  >
+                    Apply Options
+                  </button>
+                </div>
+              </div>
+            </div>
+        </div>
     
           
               
@@ -365,17 +439,15 @@
       style="box-shadow: none; outline: none;"
     >
 
-    <!-- Duration Input -->
-     <div class="d-flex align-items-center me-2" style="gap: 8px;">
-    <input 
-      type="number" 
-      id="duration" 
-      class="form-control border-0 bg-white text-dark mx-2 resolutionSelect"
-      value="10" 
-      min="1" 
-      max="60"
-      >
-      </div>
+    <button
+                type="button"
+                class="btn btn-outline-secondary rounded-pill px-3 py-1 shadow-sm border"
+                id="showModelOptionsBtn"
+                data-bs-toggle="modal"
+                data-bs-target="#modelOptionsModal"
+              >
+                <i class="bi bi-sliders2 me-1"></i> Parameters
+              </button>
 
     <!-- Send Button -->
     <button 
@@ -399,224 +471,8 @@
     <script src="js/auth.js"></script>
     <script src="js/model-selector.js"></script>
     <script src="js/config.js"></script>
-    <script>
-      // Global functions first
-    
-      function setAvatarInitials() {
-        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-    
-        const avatars = document.querySelectorAll("#navbar-avatar");
-        const userElements = {
-          desktop: {
-            username: document.getElementById("account-username"),
-            email: document.getElementById("account-email"),
-          },
-          mobile: {
-            username: document.getElementById("account-username-mobile"),
-            email: document.getElementById("account-email-mobile"),
-          }
-        };
-    
-        const isLoggedIn = !!userData.username;
-    
-        if (isLoggedIn) {
-          const username = userData.username;
-          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-    
-          avatars.forEach(avatar => avatar.textContent = firstInitial);
-    
-          userElements.desktop.username && (userElements.desktop.username.textContent = username);
-          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-    
-          userElements.mobile.username && (userElements.mobile.username.textContent = username);
-          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-        } else {
-          avatars.forEach(avatar => {
-            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-          });
-    
-          ["desktop", "mobile"].forEach(view => {
-            userElements[view].username && (userElements[view].username.textContent = "Guest");
-            userElements[view].email && (userElements[view].email.textContent = "");
-          });
-        }
-      }
-    
-      function copyToClipboard(icon) {
-        const messageText = icon.previousElementSibling.innerText.trim();
-        navigator.clipboard.writeText(messageText).then(() => {
-          icon.classList.replace("bi-clipboard-fill", "bi-clipboard-check-fill");
-          setTimeout(() => {
-            icon.classList.replace("bi-clipboard-check-fill", "bi-clipboard-fill");
-          }, 1500);
-        }).catch(err => {
-          console.error("Copy failed:", err);
-        });
-      }
-    
-      // Main DOMContentLoaded block
-      window.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM fully loaded and parsed');
-    
-        // Avatar setup
-        setAvatarInitials();
-    
-        // Chat helpers
-        const chat = document.getElementById("chat");
-    
-        function appendUserMessage(prompt) {
-          const userWrapper = document.createElement("div");
-          userWrapper.className = "d-flex flex-column align-items-end mb-3 position-relative";
-    
-          userWrapper.innerHTML = `
-            <div class="bg-primary text-white p-3 rounded" style="max-width: 80%; border-radius: 1rem;">
-              ${prompt}
-            </div>
-            <i class="bi bi-clipboard-fill text-secondary mt-1" style="cursor: pointer; font-size: 14px;" onclick="copyToClipboard(this)" title="Copy"></i>
-          `;
-          chat.appendChild(userWrapper);
-        }
-    
-        function appendGeneratingMessage() {
-          const aiDiv = document.createElement("div");
-          aiDiv.className = "d-flex justify-content-start mb-3";
-          aiDiv.innerHTML = `
-            <div class="ai-message p-3" id="generating-audio-msg">
-              <i class="bi bi-music-note-beamed me-2"></i>Generating audio...
-            </div>
-          `;
-          chat.appendChild(aiDiv);
-          chat.scrollTop = chat.scrollHeight;
-        }
-    
-        function replaceWithErrorMessage(msg) {
-          const genMsg = document.getElementById("generating-audio-msg");
-          if (genMsg) {
-            genMsg.innerHTML = `<span class="text-danger">${msg}</span>`;
-          }
-        }
-    
-        function replaceWithAudioMessage(audioUrl) {
-          const genMsg = document.getElementById("generating-audio-msg");
-          if (genMsg) {
-            genMsg.innerHTML = `
-              <div class="d-flex flex-column align-items-start">
-                <div class="mb-2 text-muted small">
-                  <i class="bi bi-music-note-beamed me-2"></i>Generated Audio
-                </div>
-                <audio controls class="w-100">
-                  <source src="${audioUrl}" type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            `;
-          }
-        }
-    
-        window.generateAudio = async function generateAudio() {
-          const promptInput = document.getElementById("promptInput");
-          const durationInput = document.getElementById("duration");
-          const prompt = promptInput?.value.trim();
-          const duration = parseInt(durationInput?.value);
-          const userId = localStorage.getItem("userId");
-    
-          if (!prompt) {
-            alert("Please enter a prompt.");
-            return;
-          }
-    
-          if (isNaN(duration) || duration < 1 || duration > 60) {
-            alert("Please enter a valid duration (1–60 seconds).");
-            return;
-          }
-    
-          appendUserMessage(prompt);
-          promptInput.value = "";
-          appendGeneratingMessage();
-    
-          const urlParams = new URLSearchParams(window.location.search);
-          const modelId = urlParams.get("id");
-    
-          const modelMap = {
-            "stackadoc-stable-audio": "stackadoc-stable-audio",
-            "cassetteai-sfx-generator": "cassetteai-sfx-generator",
-            "cassattemusic-audio": "cassattemusic-audio",
-            "multilingual-audio": "multilingual-audio",
-            "american-audio": "american-audio"
-          };
-    
-          const backendModelId = modelMap[modelId];
-    
-          if (!backendModelId) {
-            alert("Unsupported model ID in URL.");
-            return;
-          }
-    
-          try {
-            const res = await fetch(`${BACKEND_URL}/api/ai/generate-audio/${backendModelId}`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ prompt, duration, userId }),
-            });
-    
-            const data = await res.json();
-    
-            if (res.ok && data.audioUrl) {
-              replaceWithAudioMessage(data.audioUrl);
-            } else {
-              if (res.status === 402) {
-                replaceWithErrorMessage("Insufficient credits.");
-              } else {
-                replaceWithErrorMessage(`❌ Error generating audio. ${data.error}`);
-              }
-            }
-          } catch (err) {
-            console.error(err);
-            replaceWithErrorMessage("Audio generation failed. Please try again later or use a different model.");
-          }
-        };
-    
-        // Room info parsing
-        const params = new URLSearchParams(window.location.search);
-        const roomCreatedAt = params.get("room");
-    
-        if (roomCreatedAt) {
-          const date = new Date(roomCreatedAt);
-          const formatted = date.toLocaleString(undefined, {
-            weekday: "short",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-    
-          document.getElementById("roomTitle").textContent = "Room created";
-          document.getElementById("roomTimestamp").textContent = formatted;
-        }
-    
-        // New room buttons
-        ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-          const btn = document.getElementById(id);
-          if (btn) {
-            btn.addEventListener("click", () => {
-              const createdAt = new Date().toISOString();
-              const url = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(createdAt)}`;
-              window.open(url, "_blank");
-            });
-          }
-        });
-    
-        // Handle prompt from URL
-        const promptFromURL = params.get('prompt');
-        const input = document.getElementById("promptInput");
-    
-        if (promptFromURL && input) {
-          input.value = decodeURIComponent(promptFromURL);
-          generateAudio();
-        }
-      });
-    </script>
+    <script src="js/audio.js"></script>
+    <script src="js/avtar.js"></script>
     
     
     
