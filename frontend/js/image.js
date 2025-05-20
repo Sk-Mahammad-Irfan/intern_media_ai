@@ -653,7 +653,8 @@ function appendGeneratingMessage() {
   aiDiv.className = "d-flex justify-content-start mb-3";
   aiDiv.innerHTML = `
     <div class="ai-message p-3" id="generating-msg">             
-      <i class="bi bi-image-fill me-2"></i>Generating image...           
+      <i class="bi bi-image-fill me-2"></i>Generating image&nbsp;
+      <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>           
     </div>`;
   chat.appendChild(aiDiv);
   chat.scrollTop = chat.scrollHeight;

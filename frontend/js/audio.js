@@ -329,7 +329,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const inner = document.createElement("div");
     inner.className = "ai-message p-3 text-muted small bg-light";
-    inner.innerHTML = `<i class="bi bi-music-note-beamed me-2"></i>Generating audio...`;
+    inner.innerHTML = `<i class="bi bi-music-note-beamed me-2"></i>Generating audio&nbsp;
+      <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>`;
 
     wrapper.appendChild(inner);
     chat.appendChild(wrapper);
@@ -346,16 +347,15 @@ window.addEventListener("DOMContentLoaded", () => {
   function replaceWithAudioMessage(el, audioUrl) {
     if (!el) return;
     el.innerHTML = `
-      <div class="p-3 rounded-4 shadow-sm bg-white w-100">
-        <div class="mb-2 text-muted d-flex align-items-center">
-          <i class="bi bi-music-note-beamed me-2"></i>
-          <span class="fw-semibold small">Generated Audio</span>
-        </div>
-        <audio controls class="w-100 rounded">
-          <source src="${audioUrl}" type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      </div>
+      <div class="d-flex flex-column align-items-start w-100" custom-audio-player">
+            <div class="mb-2 text-muted small">
+              <i class="bi bi-music-note-beamed me-2"></i>Generated Audio
+            </div>
+            <audio controls class="audio-player" style="width: 250px;">
+              <source src="${audioUrl}" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
     `;
   }
 
@@ -566,3 +566,18 @@ window.addEventListener("DOMContentLoaded", () => {
     outputSettingsContainer.style.display = "block";
   }
 });
+document
+  .getElementById("applyOptionsBtn")
+  .addEventListener("click", async () => {
+    const modalElement = document.getElementById("modelOptionsModal");
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+
+    // Manually remove backdrop just in case
+    document
+      .querySelectorAll(".modal-backdrop")
+      .forEach((backdrop) => backdrop.remove());
+    document.body.classList.remove("modal-open");
+    document.body.style = ""; // clear
+  });
+
