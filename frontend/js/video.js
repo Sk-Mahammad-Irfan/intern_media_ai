@@ -251,6 +251,7 @@ async function generateVideo() {
     } else {
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
+        provider,
         prompt,
         resolution,
         aspect_ratio,
