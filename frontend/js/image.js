@@ -651,18 +651,26 @@ function appendUserMessage(prompt) {
 function appendGeneratingMessage() {
   const aiDiv = document.createElement("div");
   aiDiv.className = "d-flex justify-content-start mb-3";
+
+  // Unique ID based on timestamp
+  const genId = "generating-msg-" + Date.now();
+
   aiDiv.innerHTML = `
-    <div class="ai-message p-3" id="generating-msg">             
+    <div class="ai-message p-3" id="${genId}">             
       <i class="bi bi-image-fill me-2"></i>Generating image&nbsp;
       <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>           
     </div>`;
+
   chat.appendChild(aiDiv);
   chat.scrollTop = chat.scrollHeight;
+
+  return genId;
 }
 
-function replaceWithErrorMessage(msg) {
-  const genMsg = document.getElementById("generating-msg");
+function replaceWithErrorMessage(msg, genMsgId = null) {
+  const genMsg = genMsgId ? document.getElementById(genMsgId) : null;
   const html = `<i class="bi bi-exclamation-triangle-fill text-danger me-2"></i><span class="text-danger fw-semibold">${msg}</span>`;
+
   if (genMsg) {
     genMsg.innerHTML = html;
   } else {
@@ -713,13 +721,14 @@ async function generateImage() {
 
   appendUserMessage(prompt);
   promptInput.value = "";
-  appendGeneratingMessage();
+
+  const genMsgId = appendGeneratingMessage(); // <- Unique ID for this response
 
   const modelId = new URLSearchParams(window.location.search).get("id");
-  const backendModelId = modelId; // Assuming backend uses same model ID
+  const backendModelId = modelId;
 
   if (!backendModelId || !imageModelOptions[modelId]) {
-    replaceWithErrorMessage("Unsupported or missing model ID.");
+    replaceWithErrorMessage("Unsupported or missing model ID.", genMsgId);
     return;
   }
 
@@ -732,25 +741,18 @@ async function generateImage() {
       userId,
     };
 
-    // Include aspect ratio if it's defined
     const aspectRatioSelect = document.getElementById("aspectRatioSelect");
-    const aspectRatio =
-      aspectRatioSelect && aspectRatioSelect.value
-        ? aspectRatioSelect.value
-        : null;
+    const aspectRatio = aspectRatioSelect?.value || null;
 
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-image/${backendModelId}`;
       if (aspectRatio) requestBody.resolution = aspectRatio;
     } else {
-      // Construct request for provider like "fal"
       requestUrl = `${BACKEND_URL}/api/provider/image/${backendModelId}`;
       requestBody.provider = provider;
 
-      // Add resolution if applicable
       if (aspectRatio) requestBody.resolution = aspectRatio;
 
-      // Add dynamic custom inputs from modelConfig
       modelConfig.custom_inputs?.forEach((inputConfig) => {
         const { id, type } = inputConfig;
         const el = document.getElementById(id);
@@ -764,14 +766,10 @@ async function generateImage() {
           case "number":
             value = el.value === "" ? undefined : Number(el.value);
             break;
-          case "text":
-          case "select":
           default:
             value = el.value;
-            break;
         }
 
-        // Only include value if it's defined
         if (value !== undefined && value !== "") {
           requestBody[id] = value;
         }
@@ -785,55 +783,60 @@ async function generateImage() {
     });
 
     const data = await res.json();
-    const genMsg = document.getElementById("generating-msg");
 
     if (res.status === 402) {
-      replaceWithErrorMessage("Insufficient credits.");
+      replaceWithErrorMessage("Insufficient credits.", genMsgId);
       return;
     }
 
     if (!res.ok) {
       replaceWithErrorMessage(
-        `Server returned status ${res.status} (${data.error})`
+        `Server returned status ${res.status} (${data.error})`,
+        genMsgId
       );
       return;
     }
 
+    const genMsg = document.getElementById(genMsgId);
     if (genMsg) genMsg.remove();
 
     if (data.imageUrl) {
       const aiDiv = document.createElement("div");
       aiDiv.className = "d-flex justify-content-start mb-3";
       aiDiv.innerHTML = `
-          <div class="ai-message p-2">
-            <div class="d-flex flex-column align-items-start">
-              <div class="mb-2 text-muted small">
-                <i class="bi bi-image-fill me-2"></i>Generated Image (${
-                  aspectRatio || "default"
-                })
-              </div>
-              <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-                <img src="${
-                  data.imageUrl
-                }" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-                <a href="${
-                  data.imageUrl
-                }" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-                  <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-              </div>
+        <div class="ai-message p-2">
+          <div class="d-flex flex-column align-items-start">
+            <div class="mb-2 text-muted small">
+              <i class="bi bi-image-fill me-2"></i>Generated Image (${
+                aspectRatio || "default"
+              })
             </div>
-          </div>`;
+            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
+              <img src="${
+                data.imageUrl
+              }" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+              <a href="${
+                data.imageUrl
+              }" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>`;
       chat.appendChild(aiDiv);
       chat.scrollTop = chat.scrollHeight;
     } else {
       replaceWithErrorMessage(
-        "Image generation failed: no image URL returned."
+        "Image generation failed: no image URL returned.",
+        genMsgId
       );
     }
   } catch (err) {
     console.error("Network or server error:", err);
-    replaceWithErrorMessage("Image generation failed. Please try again later.");
+    replaceWithErrorMessage(
+      "Image generation failed. Please try again later.",
+      genMsgId
+    );
   }
 }
 

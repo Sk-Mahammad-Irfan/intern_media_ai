@@ -633,68 +633,74 @@
                   <!-- Replicate Extra Options -->
                   <div id="replicateExtraOptions" class="row gy-3 my-4">
                     <h6 class="fw-bold text-secondary">Replicate Parameters</h6>
+
                     <div class="col-md-4">
                       <input
                         type="number"
                         id="replicateCfgInput"
                         class="form-control"
-                        placeholder="Guidance Scale (e.g. 6)"
+                        placeholder="Guidance Scale (Recommended: 6)"
                         step="0.1"
                         min="0"
                         max="20"
                         value="6"
                       />
                     </div>
+
                     <div class="col-md-4">
                       <input
                         type="number"
                         id="replicateStepsInput"
                         class="form-control"
-                        placeholder="Sampling Steps (e.g. 30)"
+                        placeholder="Sampling Steps (Min: 10, e.g. 30)"
                         min="10"
                         max="50"
                         value="30"
                       />
                     </div>
+
                     <div class="col-md-4">
                       <select
                         class="form-select"
                         id="replicateLengthInput"
                         aria-label="Video Length"
                       >
-                        <option value="17">17 frames</option>
-                        <option value="33">33 frames</option>
-                        <option value="49">49 frames</option>
-                        <option value="65">65 frames</option>
-                        <option value="81" selected>81 frames</option>
+                        <option value="17">Short (17 frames)</option>
+                        <option value="33">Medium (33 frames)</option>
+                        <option value="49">Standard (49 frames)</option>
+                        <option value="65">Long (65 frames)</option>
+                        <option value="81" selected>Full (81 frames)</option>
                       </select>
                     </div>
+
                     <div class="col-md-6">
                       <input
                         type="text"
                         id="replicateNegativePromptInput"
                         class="form-control"
-                        placeholder="Negative Prompt (optional)"
+                        placeholder="Negative Prompt (e.g. blurry, low quality)"
                       />
                     </div>
+
                     <div class="col-md-4">
                       <input
                         type="number"
                         id="replicateImageNoiseScaleInput"
                         class="form-control"
-                        placeholder="Sample Shift (e.g. 8)"
+                        placeholder="Noise Scale (0-1, Recommended: 0.8)"
                         step="0.1"
                         min="0"
-                        max="20"
-                        value="8"
+                        max="1"
+                        value="0.8"
                       />
                     </div>
+
                     <div class="col-md-4">
                       <input
                         type="number"
                         id="replicateSeedInput"
                         class="form-control"
-                        placeholder="Seed (optional)"
+                        placeholder="Random Seed (Leave blank for random)"
                       />
                     </div>
                   </div>
