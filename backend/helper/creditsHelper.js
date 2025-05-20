@@ -7,3 +7,10 @@ export const getCreditsForGeneration = (handlersArray, model, providerType) => {
   );
   return match?.credits || 0;
 };
+
+export function getCreditsForImageGeneration(handlersObject, id, providerType) {
+  const model = handlersObject[id.toLowerCase()];
+  if (!model) return null;
+
+  return model[providerType] || null;
+}

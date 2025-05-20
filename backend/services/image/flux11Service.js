@@ -9,10 +9,17 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-// The size of the generated image. Default value: landscape_4_3
+// Mapping enum resolutions to DeepInfra-supported resolutions
+const resolutionMap = {
+  square_hd: "1024x1024",
+  square: "1024x1024",
+  portrait_4_3: "768x1024",
+  portrait_16_9: "576x1024",
+  landscape_4_3: "1024x768",
+  landscape_16_9: "1024x576",
+};
 
-// Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
-
+// FAL API wrapper
 export const falFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
   try {
     const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
@@ -34,13 +41,16 @@ export const falFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
   }
 };
 
-export const deepFluxProV1_1 = async (prompt) => {
+// DeepInfra API wrapper
+export const deepFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
   try {
+    const mappedResolution = resolutionMap[resolution] || "1024x768"; // default if unknown
+
     const response = await axios.post(
       "https://api.deepinfra.com/v1/openai/images/generations",
       {
         prompt,
-        size: "1024x1024",
+        size: mappedResolution,
         model: "black-forest-labs/FLUX-1.1-pro",
         n: 1,
       },
@@ -51,6 +61,7 @@ export const deepFluxProV1_1 = async (prompt) => {
         },
       }
     );
+
     return response.data;
   } catch (error) {
     console.error(

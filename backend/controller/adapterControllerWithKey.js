@@ -1,7 +1,6 @@
 // controller/adapterControllerWithKey.js
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
-import User from "../models/userModel.js"; // assuming you already have a User model
 import { checkCredits, decreaseCredits } from "./creditController.js";
 
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";

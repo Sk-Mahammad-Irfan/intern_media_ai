@@ -239,18 +239,38 @@ const imageModelOptions = {
   },
 
   "black-forest-labs-flux-1-1-pro": {
-    providers: ["auto", "fal"],
-    aspect_ratios: [
-      "21:9",
-      "16:9",
-      "4:3",
-      "3:2",
-      "1:1",
-      "2:3",
-      "3:4",
-      "9:16",
-      "9:21",
-    ],
+    providers: ["auto", "fal", "deepinfra"],
+    aspect_ratios: {
+      // Default aspect ratios (used when provider is 'auto')
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    // Provider-specific aspect ratios
+    provider_aspect_ratios: {
+      fal: {
+        square_hd: null,
+        square: null,
+        portrait_4_3: null,
+        portrait_16_9: null,
+        landscape_4_3: null,
+        landscape_16_9: null,
+      },
+      deepinfra: [
+        "1024x448",
+        "1024x576",
+        "1024x768",
+        "1024x688",
+        "1024x1024",
+        "688x1024",
+        "768x1024",
+        "576x1024",
+        "448x1024",
+      ],
+    },
     custom_inputs: [
       {
         id: "seedInput",
@@ -421,9 +441,10 @@ providerSelect.addEventListener("change", () => {
 function renderAspectRatioOptions(modelId) {
   const model = imageModelOptions[modelId];
   const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+  const provider = providerSelect.value;
 
-  if (!model || !model.aspect_ratios) {
-    console.warn(`No aspect ratios defined for model ${modelId}`);
+  if (!model) {
+    console.warn(`Model ${modelId} not found`);
     aspectRatioSelect.innerHTML =
       '<option value="" disabled selected>No aspect ratios available</option>';
     return;
@@ -432,10 +453,29 @@ function renderAspectRatioOptions(modelId) {
   aspectRatioSelect.innerHTML =
     '<option value="" disabled selected>Select Aspect Ratio</option>';
 
-  // Handle both array and object formats
-  const ratios = Array.isArray(model.aspect_ratios)
-    ? model.aspect_ratios
-    : Object.keys(model.aspect_ratios);
+  let ratios = [];
+
+  // Special handling for black-forest-labs-flux-1-1-pro
+  if (modelId === "black-forest-labs-flux-1-1-pro") {
+    if (provider === "fal" && model.provider_aspect_ratios?.fal) {
+      ratios = Object.keys(model.provider_aspect_ratios.fal);
+    } else if (
+      provider === "deepinfra" &&
+      model.provider_aspect_ratios?.deepinfra
+    ) {
+      ratios = model.provider_aspect_ratios.deepinfra;
+    } else {
+      // Default to standard aspect ratios for other cases
+      ratios = Array.isArray(model.aspect_ratios)
+        ? model.aspect_ratios
+        : Object.keys(model.aspect_ratios);
+    }
+  } else {
+    // Normal behavior for other models
+    ratios = Array.isArray(model.aspect_ratios)
+      ? model.aspect_ratios
+      : Object.keys(model.aspect_ratios);
+  }
 
   if (ratios.length === 0) {
     aspectRatioSelect.innerHTML =
@@ -455,6 +495,38 @@ function renderAspectRatioOptions(modelId) {
     aspectRatioSelect.value = ratios[0];
   }
 }
+
+// Update the provider select change listener
+providerSelect.addEventListener("change", () => {
+  const selected = providerSelect.value;
+  const modelId = new URLSearchParams(window.location.search).get("id");
+
+  const outputSettingsContainer = document.getElementById(
+    "outputSettingsContainer"
+  );
+  const customInputsContainer = document.getElementById("inputsContainer");
+
+  // Clear aspect ratio
+  document.getElementById("aspectRatioSelect").innerHTML = "";
+
+  if (selected === "auto") {
+    outputSettingsContainer.style.display = "block";
+    customInputsContainer.style.display = "none";
+    renderAspectRatioOptions(modelId);
+  } else if (selected === "deepinfra") {
+    outputSettingsContainer.style.display = "block";
+    customInputsContainer.style.display = "none";
+    renderAspectRatioOptions(modelId);
+  } else if (selected === "fal") {
+    outputSettingsContainer.style.display = "block";
+    customInputsContainer.style.display = "block";
+    displayCustomInputs(modelId, "inputsContainer");
+    renderAspectRatioOptions(modelId);
+  } else {
+    outputSettingsContainer.style.display = "none";
+    customInputsContainer.style.display = "none";
+  }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed");
@@ -540,6 +612,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("aspectRatioSelect").innerHTML = "";
 
     if (selected === "auto") {
+      outputSettingsContainer.style.display = "block";
+      customInputsContainer.style.display = "none";
+      renderAspectRatioOptions(modelId);
+    } else if (selected === "deepinfra") {
       outputSettingsContainer.style.display = "block";
       customInputsContainer.style.display = "none";
       renderAspectRatioOptions(modelId);

@@ -16,11 +16,14 @@ import {
   generateAudioStableReplicate,
 } from "../providers/audio/stableProvider.js";
 import { generateAudioaAmericanEnglishFAL } from "../providers/audio/americanEnglishprovider.js";
-import { getCreditsForGeneration } from "../helper/creditsHelper.js";
+import {
+  getCreditsForGeneration,
+  getCreditsForImageGeneration,
+} from "../helper/creditsHelper.js";
 import { checkCredits, decreaseCredits } from "./creditController.js";
-import { imageGenerationHandlers } from "../handlers/imagehandlers.js";
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
 import { audioGenerationHandlers } from "../handlers/audiohandlers.js";
+import { deepFluxProV1_1 } from "../services/image/flux11Service.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -100,8 +103,27 @@ export const generateImageForProvider = async (req, res) => {
   const { userId, provider } = body;
   const providerType = provider?.toLowerCase();
 
+  const imageGenerationHandlers = {
+    "black-forest-labs-flux-1-1-pro": {
+      fal: 5,
+      deepinfra: 7,
+    },
+    "recraft-v3": {
+      fal: 4,
+    },
+    fooocus: {
+      fal: 3,
+    },
+    "hidream-i1-dev": {
+      fal: 6,
+    },
+    "ideogram-v3": {
+      fal: 7,
+    },
+  };
+
   try {
-    const credits = getCreditsForGeneration(
+    const credits = getCreditsForImageGeneration(
       imageGenerationHandlers,
       id,
       providerType
@@ -120,7 +142,12 @@ export const generateImageForProvider = async (req, res) => {
     let rawData;
     switch (id.toLowerCase()) {
       case "black-forest-labs-flux-1-1-pro":
-        rawData = await generateImageFluxPro(body);
+        if (provider === "fal") {
+          rawData = await generateImageFluxPro(body);
+        }
+        if (provider === "deepinfra" || provider === "base64") {
+          rawData = await deepFluxProV1_1(body.prompt, body.resolution);
+        }
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);

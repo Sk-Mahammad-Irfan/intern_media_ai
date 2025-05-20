@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
       chatPage: "imagemodel.html",
       creditPrice: "5 credits/image",
-      providers: ["fal", "replicate", "deepinfra"],
+      providers: ["fal", "deepinfra"],
     },
 
     "recraft-v3": {
