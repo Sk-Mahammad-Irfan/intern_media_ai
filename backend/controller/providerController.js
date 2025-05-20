@@ -1,4 +1,3 @@
-import express from "express";
 import { generateVideoWan } from "../providers/video/wanProviders.js";
 import { generateVideoLuma } from "../providers/video/lumaProviders.js";
 import { generateVideoPika } from "../providers/video/pikaProviders.js";
@@ -17,35 +16,50 @@ import {
   generateAudioStableReplicate,
 } from "../providers/audio/stableProvider.js";
 import { generateAudioaAmericanEnglishFAL } from "../providers/audio/americanEnglishprovider.js";
+import { getCreditsForGeneration } from "../helper/creditsHelper.js";
+import { checkCredits, decreaseCredits } from "./creditController.js";
+import { imageGenerationHandlers } from "../handlers/imagehandlers.js";
+import { videoGenerationHandlers } from "../handlers/videohandlers.js";
+import { audioGenerationHandlers } from "../handlers/audiohandlers.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  const provider = body?.provider || id.toLowerCase(); // fallback if missing
+  const { userId, provider } = body;
+  const providerType = provider?.toLowerCase();
 
   try {
-    let rawData;
-    let videoUrl;
+    const credits = getCreditsForGeneration(
+      videoGenerationHandlers,
+      id,
+      providerType
+    );
+    if (!credits) {
+      return res
+        .status(400)
+        .json({ error: `Unknown video generator or provider: ${id}` });
+    }
 
+    const hasEnoughCredits = await checkCredits(userId, credits);
+    if (!hasEnoughCredits) {
+      return res.status(402).json({ error: "Not enough credits." });
+    }
+
+    let rawData;
     switch (id.toLowerCase()) {
       case "wan-ai-wan21-t2v-13b":
-        console.log("wan-ai-wan21-t2v-13b");
         rawData = await generateVideoWan(body);
         break;
       case "luma-ray2-flash":
-        console.log("luma-ray2-flash");
         rawData = await generateVideoLuma(body);
         break;
       case "pika-text-to-video-v2-1":
-        console.log("pika-text-to-video-v2-1");
         rawData = await generateVideoPika(body);
         break;
       case "pixverse-v4-text-to-video":
-        console.log("pixverse-v4-text-to-video");
         rawData = await generateVideoPixverse(body);
         break;
       case "lightricks-ltx-video":
-        console.log("lightricks-ltx-video");
         rawData = await generateVideoLTX(body);
         break;
       default:
@@ -54,29 +68,22 @@ export const generateVideoforProvider = async (req, res) => {
           .json({ error: `Unknown video generator: ${id}` });
     }
 
-    // Map to final video URL depending on provider
-    switch (provider) {
-      case "fal":
-        videoUrl = rawData?.video?.url;
-        break;
-      case "replicate":
-        videoUrl = rawData?.video?.url || rawData?.url || rawData;
-        break;
-      case "deepinfra":
-        videoUrl = rawData?.video_url || rawData?.data?.video_url;
-        break;
-      default:
-        console.warn(`Unknown provider type: ${provider}`);
-        videoUrl = null;
+    let videoUrl;
+    if (providerType === "fal") {
+      videoUrl = rawData?.video?.url;
+    } else if (providerType === "replicate") {
+      videoUrl = rawData?.video?.url || rawData?.url || rawData;
+    } else if (providerType === "deepinfra") {
+      videoUrl = rawData?.video_url || rawData?.data?.video_url;
     }
 
     if (!videoUrl) {
-      return res.status(502).json({
-        error: "Failed to extract video URL",
-        rawData,
-      });
+      return res
+        .status(502)
+        .json({ error: "Failed to extract video URL", rawData });
     }
 
+    await decreaseCredits(userId, credits);
     res.json({ videoUrl });
   } catch (err) {
     console.error(`Error in /video/${id}:`, err);
@@ -90,31 +97,41 @@ export const generateVideoforProvider = async (req, res) => {
 export const generateImageForProvider = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  const provider = body?.provider || id.toLowerCase(); // fallback if missing
+  const { userId, provider } = body;
+  const providerType = provider?.toLowerCase();
 
   try {
-    let rawData;
-    let imageUrl;
+    const credits = getCreditsForGeneration(
+      imageGenerationHandlers,
+      id,
+      providerType
+    );
+    if (!credits) {
+      return res
+        .status(400)
+        .json({ error: `Unknown image generator or provider: ${id}` });
+    }
 
+    const hasEnoughCredits = await checkCredits(userId, credits);
+    if (!hasEnoughCredits) {
+      return res.status(402).json({ error: "Not enough credits." });
+    }
+
+    let rawData;
     switch (id.toLowerCase()) {
       case "black-forest-labs-flux-1-1-pro":
-        console.log("black-forest-labs-flux-1-1-pro");
         rawData = await generateImageFluxPro(body);
         break;
       case "fooocus":
-        console.log("fooocus");
         rawData = await generateImageFooocus(body);
         break;
       case "hidream-i1-dev":
-        console.log("hidream-i1-dev");
         rawData = await generateImageHidream(body);
         break;
       case "ideogram-v3":
-        console.log("ideogram-v3");
         rawData = await generateImageIdeogram(body);
         break;
       case "recraft-v3":
-        console.log("recraft-v3");
         rawData = await generateImageRecraftFAL(body);
         break;
       default:
@@ -123,30 +140,23 @@ export const generateImageForProvider = async (req, res) => {
           .json({ error: `Unknown image generator: ${id}` });
     }
 
-    // Map to final image URL depending on provider
-    switch (provider) {
-      case "fal":
-        imageUrl = rawData?.images?.[0]?.url;
-        break;
-      case "replicate":
-        imageUrl = rawData?.image?.url || rawData?.url || rawData;
-        break;
-      case "deepinfra":
-        const base64 = rawData?.data?.[0]?.b64_json;
-        imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
-        break;
-      default:
-        console.warn(`Unknown provider type: ${provider}`);
-        imageUrl = null;
+    let imageUrl;
+    if (providerType === "fal") {
+      imageUrl = rawData?.images?.[0]?.url;
+    } else if (providerType === "replicate") {
+      imageUrl = rawData?.image?.url || rawData?.url || rawData;
+    } else if (providerType === "deepinfra" || providerType === "base64") {
+      const base64 = rawData?.data?.[0]?.b64_json;
+      imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
     }
 
     if (!imageUrl) {
-      return res.status(502).json({
-        error: "Failed to extract image URL",
-        rawData,
-      });
+      return res
+        .status(502)
+        .json({ error: "Failed to extract image URL", rawData });
     }
 
+    await decreaseCredits(userId, credits);
     res.json({ imageUrl });
   } catch (err) {
     console.error(`Error in /image/${id}:`, err);
@@ -160,11 +170,27 @@ export const generateImageForProvider = async (req, res) => {
 export const generateAudioForProvider = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  const provider = body?.provider || id.toLowerCase(); // fallback if missing
+  const { userId, provider } = body;
+  const providerType = provider?.toLowerCase();
 
   try {
-    let audioUrl;
+    const credits = getCreditsForGeneration(
+      audioGenerationHandlers,
+      id,
+      providerType
+    );
+    if (!credits) {
+      return res
+        .status(400)
+        .json({ error: `Unknown audio generator or provider: ${id}` });
+    }
 
+    const hasEnoughCredits = await checkCredits(userId, credits);
+    if (!hasEnoughCredits) {
+      return res.status(402).json({ error: "Not enough credits." });
+    }
+
+    let audioUrl;
     switch (id.toLowerCase()) {
       case "cassattemusic-audio":
         audioUrl = await generateAudioCassatteMusic(body);
@@ -176,11 +202,10 @@ export const generateAudioForProvider = async (req, res) => {
         audioUrl = await generateAudioMultilingualTtsFAL(body);
         break;
       case "stackadoc-stable-audio":
-        if (provider === "fal") {
-          audioUrl = await generateAudioStableFal(body);
-        } else {
-          audioUrl = await generateAudioStableReplicate(body);
-        }
+        audioUrl =
+          provider === "fal"
+            ? await generateAudioStableFal(body)
+            : await generateAudioStableReplicate(body);
         break;
       case "american-audio":
         audioUrl = await generateAudioaAmericanEnglishFAL(body);
@@ -188,23 +213,19 @@ export const generateAudioForProvider = async (req, res) => {
       default:
         return res
           .status(400)
-          .json({ error: `Unknown image generator: ${id}` });
+          .json({ error: `Unknown audio generator: ${id}` });
     }
-
-    // Map to final image URL depending on provider
 
     if (!audioUrl) {
-      return res.status(502).json({
-        error: "Failed to extract image URL",
-        audioUrl,
-      });
+      return res.status(502).json({ error: "Failed to extract audio URL" });
     }
 
-    return res.status(200).json({ audioUrl });
+    await decreaseCredits(userId, credits);
+    res.status(200).json({ audioUrl });
   } catch (err) {
-    console.error(`Error in /image/${id}:`, err);
+    console.error(`Error in /audio/${id}:`, err);
     res.status(500).json({
-      error: "Image generation failed.",
+      error: "Audio generation failed.",
       details: err?.message || err,
     });
   }
