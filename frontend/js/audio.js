@@ -344,19 +344,128 @@ window.addEventListener("DOMContentLoaded", () => {
     el.innerHTML = `<span class="text-danger">${msg}</span>`;
   }
 
-  function replaceWithAudioMessage(el, audioUrl) {
+  function bufferToWav(buffer) {
+    const numOfChannels = buffer.numberOfChannels;
+    const sampleRate = buffer.sampleRate;
+    const format = 1; // PCM
+    const bitDepth = 16;
+
+    const samples = buffer.length;
+    const blockAlign = (numOfChannels * bitDepth) / 8;
+    const byteRate = sampleRate * blockAlign;
+    const dataSize = samples * blockAlign;
+
+    const bufferLength = 44 + dataSize;
+    const arrayBuffer = new ArrayBuffer(bufferLength);
+    const view = new DataView(arrayBuffer);
+
+    var offset = 0;
+
+    const writeString = (str) => {
+      for (let i = 0; i < str.length; i++) {
+        view.setUint8(offset++, str.charCodeAt(i));
+      }
+    };
+
+    // RIFF chunk descriptor
+    writeString("RIFF");
+    view.setUint32(offset, 36 + dataSize, true);
+    offset += 4;
+    writeString("WAVE");
+
+    // fmt subchunk
+    writeString("fmt ");
+    view.setUint32(offset, 16, true);
+    offset += 4;
+    view.setUint16(offset, format, true);
+    offset += 2;
+    view.setUint16(offset, numOfChannels, true);
+    offset += 2;
+    view.setUint32(offset, sampleRate, true);
+    offset += 4;
+    view.setUint32(offset, byteRate, true);
+    offset += 4;
+    view.setUint16(offset, blockAlign, true);
+    offset += 2;
+    view.setUint16(offset, bitDepth, true);
+    offset += 2;
+
+    // data subchunk
+    writeString("data");
+    view.setUint32(offset, dataSize, true);
+    offset += 4;
+
+    // Write interleaved PCM samples
+    const interleaved = new Int16Array(dataSize / 2);
+    for (let i = 0; i < samples; i++) {
+      for (let channel = 0; channel < numOfChannels; channel++) {
+        const sample = buffer.getChannelData(channel)[i];
+        const intSample = Math.max(-1, Math.min(1, sample));
+        interleaved[i * numOfChannels + channel] =
+          intSample < 0 ? intSample * 0x8000 : intSample * 0x7fff;
+      }
+    }
+
+    new DataView(arrayBuffer, 44).setInt16(0, interleaved[0], true);
+    for (let i = 0; i < interleaved.length; i++) {
+      view.setInt16(offset, interleaved[i], true);
+      offset += 2;
+    }
+
+    return new Blob([view], { type: "audio/wav" });
+  }
+
+  async function replaceWithAudioMessage(el, audioUrl, durationSeconds) {
     if (!el) return;
-    el.innerHTML = `
-      <div class="d-flex flex-column align-items-start w-100" custom-audio-player">
-            <div class="mb-2 text-muted small">
-              <i class="bi bi-music-note-beamed me-2"></i>Generated Audio
-            </div>
-            <audio controls class="audio-player" style="width: 250px;">
-              <source src="${audioUrl}" type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
+
+    try {
+      // Fetch and decode the audio
+      const response = await fetch(audioUrl);
+      const arrayBuffer = await response.arrayBuffer();
+
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+      // Calculate number of samples to include
+      const trimmedDuration = Math.min(durationSeconds, audioBuffer.duration);
+      const sampleRate = audioBuffer.sampleRate;
+      const trimmedLength = Math.floor(trimmedDuration * sampleRate);
+
+      // Create a new buffer with the trimmed length
+      const trimmedBuffer = audioContext.createBuffer(
+        audioBuffer.numberOfChannels,
+        trimmedLength,
+        sampleRate
+      );
+
+      // Copy each channel
+      for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
+        const oldData = audioBuffer.getChannelData(i);
+        const newData = trimmedBuffer.getChannelData(i);
+        newData.set(oldData.subarray(0, trimmedLength));
+      }
+
+      // Encode to Blob (WAV format)
+      const wavBlob = bufferToWav(trimmedBuffer);
+      const trimmedAudioUrl = URL.createObjectURL(wavBlob);
+
+      // Inject the audio player with trimmed audio
+      el.innerHTML = `
+        <div class="d-flex flex-column align-items-start w-100" custom-audio-player">
+          <div class="mb-2 text-muted small">
+            <i class="bi bi-music-note-beamed me-2"></i>Trimmed Audio (${trimmedDuration}s)
           </div>
-    `;
+          <audio controls class="audio-player" style="width: 250px;">
+            <source src="${trimmedAudioUrl}" type="audio/wav" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      `;
+    } catch (err) {
+      console.error("Error trimming audio:", err);
+      replaceWithErrorMessage(el, "❌ Failed to trim audio.");
+    }
   }
 
   window.generateAudio = async function generateAudio() {
@@ -452,7 +561,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.audioUrl) {
-        replaceWithAudioMessage(genMsgEl, data.audioUrl);
+        replaceWithAudioMessage(genMsgEl, data.audioUrl, duration);
       } else {
         if (res.status === 402) {
           replaceWithErrorMessage(genMsgEl, "Insufficient credits.");
@@ -580,4 +689,3 @@ document
     document.body.classList.remove("modal-open");
     document.body.style = ""; // clear
   });
-
