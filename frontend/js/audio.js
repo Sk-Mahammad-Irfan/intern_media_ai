@@ -323,39 +323,40 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function appendGeneratingMessage() {
-    const aiDiv = document.createElement("div");
-    aiDiv.className = "d-flex justify-content-start mb-3";
-    aiDiv.innerHTML = `
-        <div class="ai-message p-3" id="generating-audio-msg">
-          <i class="bi bi-music-note-beamed me-2"></i>Generating audio...
-        </div>
-      `;
-    chat.appendChild(aiDiv);
+    const chat = document.getElementById("chat");
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex justify-content-start mb-3";
+
+    const inner = document.createElement("div");
+    inner.className = "ai-message p-3 text-muted small bg-light";
+    inner.innerHTML = `<i class="bi bi-music-note-beamed me-2"></i>Generating audio...`;
+
+    wrapper.appendChild(inner);
+    chat.appendChild(wrapper);
     chat.scrollTop = chat.scrollHeight;
+
+    return inner; // return reference to the specific message
   }
 
-  function replaceWithErrorMessage(msg) {
-    const genMsg = document.getElementById("generating-audio-msg");
-    if (genMsg) {
-      genMsg.innerHTML = `<span class="text-danger">${msg}</span>`;
-    }
+  function replaceWithErrorMessage(el, msg) {
+    if (!el) return;
+    el.innerHTML = `<span class="text-danger">${msg}</span>`;
   }
 
-  function replaceWithAudioMessage(audioUrl) {
-    const genMsg = document.getElementById("generating-audio-msg");
-    if (genMsg) {
-      genMsg.innerHTML = `
-          <div class="d-flex flex-column align-items-start">
-            <div class="mb-2 text-muted small">
-              <i class="bi bi-music-note-beamed me-2"></i>Generated Audio
-            </div>
-            <audio controls class="w-100">
-              <source src="${audioUrl}" type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </div>
-        `;
-    }
+  function replaceWithAudioMessage(el, audioUrl) {
+    if (!el) return;
+    el.innerHTML = `
+      <div class="p-3 rounded-4 shadow-sm bg-white w-100">
+        <div class="mb-2 text-muted d-flex align-items-center">
+          <i class="bi bi-music-note-beamed me-2"></i>
+          <span class="fw-semibold small">Generated Audio</span>
+        </div>
+        <audio controls class="w-100 rounded">
+          <source src="${audioUrl}" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    `;
   }
 
   window.generateAudio = async function generateAudio() {
@@ -375,7 +376,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     appendUserMessage(prompt);
     promptInput.value = "";
-    appendGeneratingMessage();
+    const genMsgEl = appendGeneratingMessage(); // store reference
 
     const modelMap = {
       "stackadoc-stable-audio": "stackadoc-stable-audio",
@@ -451,17 +452,21 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.audioUrl) {
-        replaceWithAudioMessage(data.audioUrl);
+        replaceWithAudioMessage(genMsgEl, data.audioUrl);
       } else {
         if (res.status === 402) {
-          replaceWithErrorMessage("Insufficient credits.");
+          replaceWithErrorMessage(genMsgEl, "Insufficient credits.");
         } else {
-          replaceWithErrorMessage(`❌ Error generating audio. ${data.error}`);
+          replaceWithErrorMessage(
+            genMsgEl,
+            `❌ Error generating audio. ${data.error}`
+          );
         }
       }
     } catch (err) {
       console.error(err);
       replaceWithErrorMessage(
+        genMsgEl,
         "Audio generation failed. Please try again later or use a different model."
       );
     }
