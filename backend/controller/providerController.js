@@ -106,7 +106,7 @@ export const generateImageForProvider = async (req, res) => {
   const imageGenerationHandlers = {
     "black-forest-labs-flux-1-1-pro": {
       fal: 5,
-      deepinfra: 7,
+      deepinfra: 4,
     },
     "recraft-v3": {
       fal: 4,
@@ -115,7 +115,7 @@ export const generateImageForProvider = async (req, res) => {
       fal: 3,
     },
     "hidream-i1-dev": {
-      fal: 6,
+      fal: 4,
     },
     "ideogram-v3": {
       fal: 7,

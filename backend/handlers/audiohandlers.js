@@ -18,37 +18,37 @@ export const audioGenerationHandlers = [
   {
     model: "stackadoc-stable-audio", // Matches your modelData key
     handler: wrapHandler(stableReplicate, "stackadoc-stable-audio"),
-    credits: 6,
+    credits: 1,
     type: "replicate",
   },
   {
     model: "stackadoc-stable-audio",
     handler: wrapHandler(stableFal, "stackadoc-stable-audio"),
-    credits: 4,
+    credits: 2,
     type: "fal",
   },
   {
     model: "cassetteai-sfx-generator",
     handler: wrapHandler(cassetteFAL, "cassetteai-sfx-generator"),
-    credits: 6,
+    credits: 1,
     type: "fal",
   },
   {
     model: "cassattemusic-audio",
     handler: wrapHandler(cassatteMusic, "cassattemusic-audio"),
-    credits: 3,
+    credits: 2,
     type: "fal",
   },
   {
     model: "multilingual-audio",
     handler: wrapHandler(multilingualTtsFAL, "multilingual-audio"),
-    credits: 5,
+    credits: 9,
     type: "fal",
   },
   {
     model: "american-audio",
     handler: wrapHandler(americanEnglishFAL, "american-audio"),
-    credits: 4,
+    credits: 2,
     type: "fal",
   },
 ];

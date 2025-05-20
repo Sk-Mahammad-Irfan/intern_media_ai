@@ -29,7 +29,7 @@ export const imageGenerationHandlers = [
     model: "black-forest-labs-flux-1-1-pro",
     handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
     type: "base64",
-    credits: 7,
+    credits: 4,
   },
   {
     model: "recraft-v3",
@@ -47,7 +47,7 @@ export const imageGenerationHandlers = [
     model: "hidream-i1-dev",
     handler: wrapHandler(hidreamFAL, "hidream-i1-dev"),
     type: "fal",
-    credits: 6,
+    credits: 4,
   },
   {
     model: "ideogram-v3",

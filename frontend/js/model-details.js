@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "FLUX-1.1 Pro by Black Forest Labs delivers top-tier text-to-image generation with industry-leading prompt alignment, visual fidelity, intricate detailing, and outstanding output variety — ideal for creative, professional, and commercial applications.",
       chatPage: "imagemodel.html",
-      creditPrice: "5 credits/image",
+      creditPrice: "4-5 credits/image",
       providers: ["fal", "deepinfra"],
     },
 
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
       chatPage: "videomodel.html",
-      creditPrice: "10 credits/second",
+      creditPrice: "10-18 credits/second",
       providers: ["fal", "replicate", "deepinfra"],
     },
 
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
       chatPage: "videomodel.html",
-      creditPrice: "15 credits/second",
+      creditPrice: "5 credits/second",
       providers: ["replicate"],
     },
     "pixverse-v4-text-to-video": {
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
       chatPage: "videomodel.html",
-      creditPrice: "12 credits/second",
+      creditPrice: "27-70 credits/second",
       providers: ["fal"],
     },
 
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements. It supports creative workflows in game development, video production, and audio prototyping with natural, prompt-based sound generation.",
       chatPage: "audiomodel.html",
-      creditPrice: "8 credits/second",
+      creditPrice: "1 credits/generation",
       providers: ["replicate", "fal"],
     },
     "cassetteai-sfx-generator": {
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "CassetteAI’s music generator creates a 30-second music sample in under 2 seconds and a full 3-minute track in under 10 seconds. Operating at 44.1 kHz stereo, it ensures professional-grade consistency with no breaks, squeaks, or glitches. Ideal for producers, game developers, and content creators.",
       chatPage: "audiomodel.html",
-      creditPrice: "6 credits/second",
+      creditPrice: "1 credits/generation",
       providers: ["fal"],
     },
     "cassattemusic-audio": {
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "CassetteAI’s music generator creates a 30-second music sample in under 2 seconds and a full 3-minute track in under 10 seconds. Operating at 44.1 kHz stereo, it ensures professional-grade consistency with no breaks, squeaks, or glitches. Ideal for producers, game developers, and content creators.",
       chatPage: "audiomodel.html",
-      creditPrice: "3 credits/100 characters",
+      creditPrice: "2 credits/generation",
       providers: ["fal"],
     },
     "multilingual-audio": {
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Multilingual TTS by ElevenLabs supports a wide range of languages and accents, enabling natural voice generation across global content. It's a great fit for multilingual applications and localization.",
       chatPage: "audiomodel.html",
-      creditPrice: "5 credits/100 characters",
+      creditPrice: "9 credits/generation",
       providers: ["fal"],
     },
 
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "This American English TTS model offers high-quality, fluent, and natural-sounding speech, making it suitable for virtual assistants, video dubbing, and storytelling use cases.",
       chatPage: "audiomodel.html",
-      creditPrice: "4 credits/100 characters",
+      creditPrice: "2 credits/generation",
       providers: ["fal"],
     },
     "pika-text-to-video-v2-1": {
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
       chatPage: "videomodel.html",
-      creditPrice: "18 credits/second",
+      creditPrice: "40 credits/second",
       providers: ["fal"],
     },
     "luma-ray2-flash": {
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Luma's Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
       chatPage: "videomodel.html",
-      creditPrice: "20 credits/second",
+      creditPrice: "25 credits/second",
       providers: ["fal"],
     },
     "hidream-i1-dev": {
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "HiDream I1 (Dev) is a text-to-image model optimized for fast generation and visual fidelity. It excels at interpreting imaginative prompts and rendering detailed visuals, making it suitable for artists, creatives, and rapid prototyping scenarios.",
       chatPage: "imagemodel.html",
-      creditPrice: "6 credits/image",
+      creditPrice: "4 credits/image",
     },
     "ideogram-v3": {
       title: "Ideogram V3",
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fullDetails:
         "Ideogram V3 is a next-gen text-to-image model crafted for storytelling and imaginative concepts. It excels at rendering scenes with symbolic, surreal, or fantastical elements, making it perfect for writers, concept artists, and world-builders.",
       chatPage: "imagemodel.html",
-      creditPrice: "7 credits/image",
+      creditPrice: "5-8 credits/image",
     },
   };
 
