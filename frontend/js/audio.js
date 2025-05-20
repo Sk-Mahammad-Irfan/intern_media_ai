@@ -1,55 +1,108 @@
 const audioModelOptions = {
   "stackadoc-stable-audio": {
     providers: ["auto", "fal", "replicate"],
+    // Default custom inputs (used when provider is 'auto')
     custom_inputs: [
       {
         id: "steps",
         type: "number",
         label: "Steps",
         default: 100,
-      },
-      {
-        id: "text",
-        type: "text",
-        label: "Text",
-      },
-      {
-        id: "voice",
-        type: "select",
-        label: "Voice",
-        options: ["Rachel"],
-        default: "Rachel",
-      },
-      {
-        id: "stability",
-        type: "number",
-        label: "Stability",
-        default: 0.5,
-        min: 0,
-        max: 1,
-      },
-      {
-        id: "similarity_boost",
-        type: "number",
-        label: "Similarity Boost",
-        default: 0.75,
-        min: 0,
-        max: 1,
-      },
-      {
-        id: "style",
-        type: "text",
-        label: "Style",
-      },
-      {
-        id: "speed",
-        type: "number",
-        label: "Speed",
-        default: 1,
-        min: 0.5,
-        max: 2,
+        description:
+          "The number of steps to denoise the audio for. Default value: 100",
       },
     ],
+    // Provider-specific custom inputs
+    provider_custom_inputs: {
+      fal: [
+        {
+          id: "steps",
+          type: "number",
+          label: "Steps",
+          default: 100,
+          description:
+            "The number of steps to denoise the audio for. Default value: 100",
+        },
+      ],
+      replicate: [
+        {
+          id: "seed",
+          type: "number",
+          label: "Seed",
+          default: -1,
+        },
+        {
+          id: "steps",
+          type: "number",
+          label: "Steps",
+          default: 100,
+        },
+        {
+          id: "cfg_scale",
+          type: "number",
+          label: "CFG Scale",
+          default: 6,
+        },
+        {
+          id: "sigma_max",
+          type: "number",
+          label: "Sigma Max",
+          default: 500,
+        },
+        {
+          id: "sigma_min",
+          type: "number",
+          label: "Sigma Min",
+          default: 0.03,
+        },
+        {
+          id: "batch_size",
+          type: "number",
+          label: "Batch Size",
+          default: 1,
+        },
+        {
+          id: "sampler_type",
+          type: "select",
+          label: "Sampler Type",
+          default: "dpmpp-3m-sde",
+          options: [
+            "dpmpp-3m-sde",
+            "euler",
+            "heun",
+            "lms",
+            "dpm2",
+            "dpm2-a",
+            "dpm++-2m",
+            "dpm++-2m-sde",
+          ],
+        },
+        {
+          id: "seconds_start",
+          type: "number",
+          label: "Seconds Start",
+          default: 0,
+        },
+        {
+          id: "seconds_total",
+          type: "number",
+          label: "Seconds Total",
+          default: 8,
+        },
+        {
+          id: "negative_prompt",
+          type: "text",
+          label: "Negative Prompt",
+          default: "",
+        },
+        {
+          id: "init_noise_level",
+          type: "number",
+          label: "Init Noise Level",
+          default: 1,
+        },
+      ],
+    },
   },
   "cassetteai-sfx-generator": {
     providers: ["auto", "fal"],
@@ -115,16 +168,35 @@ function copyToClipboard(icon) {
 }
 
 function displayCustomInputs(modelId, containerId) {
-  const model = audioModelOptions[modelId];
-  if (!model || !model.custom_inputs) {
-    console.error("Model not found or no custom inputs.");
+  const provider = document.getElementById("providerSelect").value;
+  let model = audioModelOptions[modelId];
+
+  if (!model) {
+    console.error("Model not found.");
     return;
   }
 
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  model.custom_inputs.forEach((input) => {
+  // Special handling for stackadoc-stable-audio with provider-specific inputs
+  let inputsToDisplay = [];
+
+  if (
+    modelId === "stackadoc-stable-audio" &&
+    model.provider_custom_inputs?.[provider]
+  ) {
+    inputsToDisplay = model.provider_custom_inputs[provider];
+  } else if (model.custom_inputs) {
+    inputsToDisplay = model.custom_inputs;
+  }
+
+  if (inputsToDisplay.length === 0) {
+    console.log("No custom inputs to display for this model/provider");
+    return;
+  }
+
+  inputsToDisplay.forEach((input) => {
     const wrapper = document.createElement("div");
     wrapper.className = "mb-3";
     wrapper.style.fontFamily = "Arial, sans-serif";
@@ -179,6 +251,18 @@ function displayCustomInputs(modelId, containerId) {
         wrapper.appendChild(label);
         break;
 
+      case "text":
+        inputEl = document.createElement("input");
+        inputEl.type = "text";
+        inputEl.className = "form-control";
+        if (input.default !== undefined) {
+          inputEl.value = input.default;
+        }
+        if (input.placeholder) {
+          inputEl.placeholder = input.placeholder;
+        }
+        break;
+
       default:
         console.warn("Unknown input type:", input.type);
         return;
@@ -190,10 +274,17 @@ function displayCustomInputs(modelId, containerId) {
       wrapper.appendChild(inputEl);
     }
 
+    // Add description if available
+    if (input.description) {
+      const desc = document.createElement("small");
+      desc.className = "form-text text-muted";
+      desc.textContent = input.description;
+      wrapper.appendChild(desc);
+    }
+
     container.appendChild(wrapper);
   });
 }
-
 function populateAudioModelOptions(modelId) {
   const config = audioModelOptions[modelId];
   if (!config) return;
@@ -275,6 +366,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
     const providerSelect = document.getElementById("providerSelect");
     const provider = providerSelect?.value || "auto";
+    const modelId = new URLSearchParams(window.location.search).get("id");
 
     if (!prompt) {
       alert("Please enter a prompt.");
@@ -284,9 +376,6 @@ window.addEventListener("DOMContentLoaded", () => {
     appendUserMessage(prompt);
     promptInput.value = "";
     appendGeneratingMessage();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const modelId = urlParams.get("id");
 
     const modelMap = {
       "stackadoc-stable-audio": "stackadoc-stable-audio",
@@ -311,29 +400,39 @@ window.addEventListener("DOMContentLoaded", () => {
         duration,
       };
 
-      if (modelConfig?.custom_inputs) {
-        modelConfig.custom_inputs.forEach((input) => {
-          const el = document.getElementById(input.id);
-          if (!el) return;
-
-          let value;
-          switch (input.type) {
-            case "checkbox":
-              value = el.checked;
-              break;
-            case "number":
-              value = el.value === "" ? undefined : Number(el.value);
-              break;
-            default:
-              value = el.value;
-              break;
-          }
-
-          if (value !== undefined && value !== "") {
-            requestBody[input.id] = value;
-          }
-        });
+      // Get the appropriate custom inputs based on provider
+      let inputsToProcess = [];
+      if (
+        modelId === "stackadoc-stable-audio" &&
+        modelConfig.provider_custom_inputs?.[provider]
+      ) {
+        inputsToProcess = modelConfig.provider_custom_inputs[provider];
+      } else if (modelConfig.custom_inputs) {
+        inputsToProcess = modelConfig.custom_inputs;
       }
+
+      // Process all custom inputs
+      inputsToProcess.forEach((input) => {
+        const el = document.getElementById(input.id);
+        if (!el) return;
+
+        let value;
+        switch (input.type) {
+          case "checkbox":
+            value = el.checked;
+            break;
+          case "number":
+            value = el.value === "" ? undefined : Number(el.value);
+            break;
+          default:
+            value = el.value;
+            break;
+        }
+
+        if (value !== undefined && value !== "") {
+          requestBody[input.id] = value;
+        }
+      });
 
       let endpoint;
       if (provider === "auto") {
@@ -382,7 +481,7 @@ window.addEventListener("DOMContentLoaded", () => {
         displayCustomInputs(modelId, "inputsContainer");
       }
 
-      if (selected === "fal") {
+      if (selected === "fal" || selected === "replicate") {
         customInputsContainer.style.display = "block";
         outputSettingsContainer.style.display = "block";
       } else {

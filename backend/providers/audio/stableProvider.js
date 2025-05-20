@@ -14,20 +14,15 @@ fal.config({
  */
 export const generateAudioStableFal = async (input) => {
   try {
-    const {
-      prompt,
-      seconds_start = 0,
-      seconds_total = 30,
-      steps = 100,
-    } = input;
+    const { prompt, duration = 10, steps = 100 } = input;
 
     if (!prompt) throw new Error("Prompt is required for FAL");
 
     const result = await fal.subscribe("fal-ai/stable-audio", {
       input: {
         prompt,
-        seconds_start,
-        seconds_total,
+        seconds_start: 0,
+        seconds_total: duration,
         steps,
       },
       logs: false,
@@ -66,8 +61,7 @@ export const generateAudioStableReplicate = async (input) => {
     sigma_min = 0.03,
     batch_size = 1,
     sampler_type = "dpmpp-3m-sde",
-    seconds_start = 0,
-    seconds_total = 8,
+    duration = 10,
     negative_prompt = "",
     init_noise_level = 1,
   } = input;
@@ -85,8 +79,8 @@ export const generateAudioStableReplicate = async (input) => {
       sigma_min,
       batch_size,
       sampler_type,
-      seconds_start,
-      seconds_total,
+      seconds_start: 0,
+      seconds_total: duration,
       negative_prompt,
       init_noise_level,
     },
