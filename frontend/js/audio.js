@@ -415,7 +415,29 @@ window.addEventListener("DOMContentLoaded", () => {
     return new Blob([view], { type: "audio/wav" });
   }
 
-  async function replaceWithAudioMessage(el, audioUrl, durationSeconds) {
+  async function replaceWithAudioMessage(el, audioUrl) {
+    if (!el) return;
+
+    try {
+      // Directly inject the audio URL without re-decoding and encoding it
+      el.innerHTML = `
+        <div class="d-flex flex-column align-items-start w-100" custom-audio-player>
+          <div class="mb-2 text-muted small">
+            <i class="bi bi-music-note-beamed me-2"></i>Audio
+          </div>
+          <audio controls class="audio-player" style="width: 250px;">
+            <source src="${audioUrl}" type="audio/wav" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      `;
+    } catch (err) {
+      console.error("Error loading audio:", err);
+      replaceWithErrorMessage(el, "❌ Failed to load audio.");
+    }
+  }
+
+  async function replaceWithAudioMessageRep(el, audioUrl, durationSeconds) {
     if (!el) return;
 
     try {
@@ -485,7 +507,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     appendUserMessage(prompt);
     promptInput.value = "";
-    const genMsgEl = appendGeneratingMessage(); // store reference
+    const genMsgEl = appendGeneratingMessage();
 
     const modelMap = {
       "stackadoc-stable-audio": "stackadoc-stable-audio",
@@ -510,7 +532,6 @@ window.addEventListener("DOMContentLoaded", () => {
         duration,
       };
 
-      // Get the appropriate custom inputs based on provider
       let inputsToProcess = [];
       if (
         modelId === "stackadoc-stable-audio" &&
@@ -521,7 +542,6 @@ window.addEventListener("DOMContentLoaded", () => {
         inputsToProcess = modelConfig.custom_inputs;
       }
 
-      // Process all custom inputs
       inputsToProcess.forEach((input) => {
         const el = document.getElementById(input.id);
         if (!el) return;
@@ -561,7 +581,13 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.audioUrl) {
-        replaceWithAudioMessage(genMsgEl, data.audioUrl, duration);
+        if (provider === "fal") {
+          replaceWithAudioMessage(genMsgEl, data.audioUrl);
+        } else if (provider === "replicate") {
+          replaceWithAudioMessageRep(genMsgEl, data.audioUrl, duration);
+        } else {
+          replaceWithAudioMessage(genMsgEl, data.audioUrl);
+        }
       } else {
         if (res.status === 402) {
           replaceWithErrorMessage(genMsgEl, "Insufficient credits.");

@@ -251,7 +251,7 @@ async function generateVideo() {
     } else {
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
-        provider,
+        provider: "deepinfra",
         prompt,
         resolution,
         aspect_ratio,
