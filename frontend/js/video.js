@@ -341,7 +341,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const prompt = params.get("prompt");
   const modelId = getModelIdFromURL();
-  if (modelId) populateModelOptions(modelId);
+  if (modelId) {
+    populateModelOptions(modelId);
+    // Update aspect ratio options after populating the model options
+    updateAspectRatioOptions();
+  }
 
   if (prompt) {
     document.getElementById("promptInput").value = decodeURIComponent(prompt);
@@ -349,6 +353,8 @@ window.addEventListener("DOMContentLoaded", () => {
     appendGeneratingVideoMessage();
     generateVideo();
   }
+
+  // Show/hide extra options for fal and replicate based on initial provider selection.
   const selected = providerSelect.value;
   const falOptions = document.getElementById("falExtraOptions");
   falOptions.style.display = selected === "fal" ? "block" : "none";
@@ -356,12 +362,42 @@ window.addEventListener("DOMContentLoaded", () => {
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 });
 
+function updateAspectRatioOptions() {
+  const modelId = getModelIdFromURL();
+  const config = modelOptions[modelId];
+
+  // If model id is 'wan-ai-wan21-t2v-13b' and provider is 'deepinfra', force only 16:9.
+  if (
+    modelId === "wan-ai-wan21-t2v-13b" &&
+    providerSelect.value === "deepinfra"
+  ) {
+    aspectRatioSelect.innerHTML = `<option value="16:9">16:9</option>`;
+    aspectRatioSelect.value = "16:9";
+  } else if (config) {
+    // Otherwise, populate aspect ratios from the model's config
+    aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
+    config.aspect_ratios.forEach((ratio) => {
+      const option = document.createElement("option");
+      option.value = ratio;
+      option.textContent = ratio;
+      aspectRatioSelect.appendChild(option);
+    });
+    // Set a default if possible (here choosing 16:9 if available)
+    if (config.aspect_ratios.includes("16:9")) {
+      aspectRatioSelect.value = "16:9";
+    }
+  }
+}
+
 providerSelect.addEventListener("change", () => {
   const selected = providerSelect.value;
   const falOptions = document.getElementById("falExtraOptions");
   falOptions.style.display = selected === "fal" ? "block" : "none";
   const replicateOptions = document.getElementById("replicateExtraOptions");
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
+
+  // Update aspect ratios after provider changes
+  updateAspectRatioOptions();
 });
 
 document
