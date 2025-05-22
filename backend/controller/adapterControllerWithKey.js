@@ -71,7 +71,7 @@ export const generateVideoWithKey = async (req, res) => {
 
       if (!videoUrl) continue;
 
-      await decreaseCredits(user.userId, credits);
+      await decreaseCredits(user.userId, credits, "api");
       return res.status(200).json({ videoUrl });
     } catch (err) {
       console.error("Video handler error:", err.message || err);
@@ -125,7 +125,7 @@ export const generateImageWithKey = async (req, res) => {
 
       if (!imageUrl) continue;
 
-      await decreaseCredits(user.userId, credits);
+      await decreaseCredits(user.userId, credits, "api");
       return res.status(200).json({ imageUrl });
     } catch (err) {
       console.error("Image handler error:", err.message || err);
@@ -168,7 +168,7 @@ export const generateAudioWithKey = async (req, res) => {
 
       if (!audioUrl) continue;
 
-      await decreaseCredits(user.userId, credits);
+      await decreaseCredits(user.userId, credits, "api");
       return res.status(200).json({ audioUrl });
     } catch (err) {
       console.error("Audio handler error:", err.message || err);

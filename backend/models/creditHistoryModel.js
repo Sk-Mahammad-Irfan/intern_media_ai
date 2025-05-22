@@ -13,7 +13,7 @@ const creditHistorySchema = new mongoose.Schema(
     },
     method: {
       type: String,
-      enum: ["card", "crypto", "paypal"],
+      enum: ["card", "crypto", "paypal", "usage", "api"],
       default: "card",
     },
   },

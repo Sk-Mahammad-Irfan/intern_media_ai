@@ -10,7 +10,9 @@ export const getCreditsController = async (req, res) => {
 
     const user = await User.findById(userId).select("credits");
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     res.status(200).json({
@@ -40,7 +42,9 @@ export const updateCreditsController = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     // Add credits
@@ -73,7 +77,8 @@ export const updateCreditsController = async (req, res) => {
 };
 
 // ✅ Decrease credits (backend logic only)
-export const decreaseCredits = async (userId, amount) => {
+// ✅ Decrease credits and log history
+export const decreaseCredits = async (userId, amount, method = "usage") => {
   if (!userId || amount === undefined) {
     throw new Error("User ID and amount are required");
   }
@@ -89,6 +94,13 @@ export const decreaseCredits = async (userId, amount) => {
 
   user.credits -= amount;
   await user.save();
+
+  // Log credit deduction in history
+  await CreditHistory.create({
+    userId,
+    amount: -Math.abs(amount), // Ensure it's stored as negative
+    method, // e.g., "usage", "download", etc.
+  });
 
   return {
     username: user.username,
@@ -115,14 +127,27 @@ export const checkCredits = async (userId, credits) => {
 export const getCreditHistoryController = async (req, res) => {
   try {
     const userId = req.params.userId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
 
     const history = await CreditHistory.find({ userId })
       .sort({ createdAt: -1 })
-      .limit(20);
+      .skip(skip)
+      .limit(limit);
+
+    const total = await CreditHistory.countDocuments({ userId });
 
     res.status(200).json({
       success: true,
       history,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.error("Error fetching credit history:", error);

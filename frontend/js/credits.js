@@ -59,13 +59,14 @@ async function updateUserCredits(userId, amount, method = "card") {
 }
 
 // Fetch credit history
-async function getCreditHistory(userId) {
+// Fetch credit history with pagination
+async function getCreditHistory(userId, page = 1, limit = 10) {
   try {
     const token = getAuthToken();
     if (!token) return [];
 
     const response = await fetch(
-      `${BACKEND_URL}/api/credits/history/${userId}`,
+      `${BACKEND_URL}/api/credits/history/${userId}?page=${page}&limit=${limit}`,
       {
         headers: {
           Authorization: token,
@@ -83,24 +84,74 @@ async function getCreditHistory(userId) {
 }
 
 // Render credit history
-async function fetchAndRenderCreditHistory(userId) {
-  const history = await getCreditHistory(userId);
+let currentPage = 1;
+const creditsPerPage = 10;
+
+async function fetchAndRenderCreditHistory(userId, page = 1) {
+  const history = await getCreditHistory(userId, page, creditsPerPage);
   const container = document.getElementById("creditHistoryContainer");
+  const paginationContainer = document.getElementById("paginationContainer");
+
   if (!container) return;
 
-  if (history.length === 0) {
+  if (history.length === 0 && page === 1) {
     container.innerHTML = `<p>No credit history found.</p>`;
+    if (paginationContainer) paginationContainer.innerHTML = "";
     return;
   }
 
   container.innerHTML = history
     .map((entry) => {
       const date = new Date(entry.createdAt).toLocaleString();
+      let colorClass;
+
+      // Set color based on method
+      if (entry.method === "usage") {
+        colorClass = "text-danger"; // red
+      } else if (entry.method === "api") {
+        colorClass = "text-warning"; // orange
+      } else {
+        colorClass = "text-success"; // green
+      }
+
       return `<div class="border-bottom py-2">
-        <strong>${entry.amount} credits</strong> via <em>${entry.method}</em> on ${date}
-      </div>`;
+      <strong class="${colorClass}">${entry.amount} credits</strong> via <em>${entry.method}</em> on ${date}
+    </div>`;
     })
     .join("");
+
+  // Add pagination controls
+  if (paginationContainer) {
+    paginationContainer.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <button class="btn btn-outline-primary" id="prevPageBtn" ${
+          page === 1 ? "disabled" : ""
+        }>
+          <i class="bi bi-chevron-left me-2"></i>Previous
+        </button>
+        <span>Page ${page}</span>
+        <button class="btn btn-outline-primary" id="nextPageBtn" ${
+          history.length < creditsPerPage ? "disabled" : ""
+        }>
+          Next<i class="bi bi-chevron-right ms-2"></i>
+        </button>
+      </div>
+    `;
+
+    document.getElementById("prevPageBtn")?.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        fetchAndRenderCreditHistory(userId, currentPage);
+      }
+    });
+
+    document.getElementById("nextPageBtn")?.addEventListener("click", () => {
+      if (history.length === creditsPerPage) {
+        currentPage++;
+        fetchAndRenderCreditHistory(userId, currentPage);
+      }
+    });
+  }
 }
 
 // Update credits text
@@ -213,7 +264,8 @@ document.addEventListener("DOMContentLoaded", function () {
     getUserCredits(userId).then((credits) => {
       if (credits !== null) updateCreditsDisplay(credits);
     });
-    fetchAndRenderCreditHistory(userId);
+
+    fetchAndRenderCreditHistory(userId, currentPage);
   }
 
   document
@@ -222,9 +274,11 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("confirmAddCredits")
     ?.addEventListener("click", handleConfirmAddCredits);
-  document
-    .getElementById("refreshCredits")
-    ?.addEventListener("click", handleRefreshCredits);
+  document.getElementById("refreshCredits")?.addEventListener("click", () => {
+    handleRefreshCredits();
+    fetchAndRenderCreditHistory(userId, 1);
+    currentPage = 1;
+  });
 
   handleCryptoSwitch();
   handleBillingPortal();
