@@ -16,6 +16,12 @@ const creditHistorySchema = new mongoose.Schema(
       enum: ["card", "crypto", "paypal", "usage", "api"],
       default: "card",
     },
+    createdAt: {
+      type: Date,
+      default: Date.now, // Set to current time
+      index: true,
+      expires: 3600, // 1 hour in seconds
+    },
   },
   { timestamps: true }
 );
