@@ -143,6 +143,8 @@ async function generateVideo() {
   const prompt = document.getElementById("promptInput").value.trim();
   const resolution = getSelectedValue(resolutionSelect);
   const aspect_ratio = getSelectedValue(aspectRatioSelect);
+  const seedInputAuto = document.getElementById("seedInputAuto");
+  let seed = seedInputAuto ? seedInputAuto.value.trim() : "";
   const provider = providerSelect.value;
   const modelId =
     new URLSearchParams(window.location.search).get("id") || "wan";
@@ -161,10 +163,16 @@ async function generateVideo() {
 
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-video/${modelId}`;
+
+      // Convert seed to integer if it's a valid number
+      const parsedSeed =
+        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : undefined;
+
       requestBody = {
         prompt,
         resolution,
         aspect_ratio,
+        seed: parsedSeed,
         userId,
       };
     } else if (provider === "fal") {
@@ -395,6 +403,12 @@ providerSelect.addEventListener("change", () => {
   falOptions.style.display = selected === "fal" ? "block" : "none";
   const replicateOptions = document.getElementById("replicateExtraOptions");
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
+
+  const seedInputAuto = document.getElementById("seedInputAuto");
+  seedInputAuto.style.display =
+    selected === "replicate" || "fal" ? "none" : "block";
+
+  seedInputAuto.style.display = selected === "auto" ? "block" : "none";
 
   // Update aspect ratios after provider changes
   updateAspectRatioOptions();

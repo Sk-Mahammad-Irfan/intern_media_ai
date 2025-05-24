@@ -19,7 +19,7 @@ fal.config({
 // -------- VIDEO GENERATION --------
 export const generateVideo = async (req, res) => {
   const { id } = req.params;
-  const { prompt, userId, aspect_ratio, resolution } = req.body;
+  const { prompt, userId, aspect_ratio, resolution, seed } = req.body;
 
   if (!userId) {
     return res.status(401).json({ error: "Please login to generate videos." });
@@ -44,7 +44,7 @@ export const generateVideo = async (req, res) => {
         return res.status(402).json({ error: "Not enough credits." });
       }
       console.log("Trying handler:", handler);
-      const rawData = await handler(prompt, resolution, aspect_ratio);
+      const rawData = await handler(prompt, resolution, aspect_ratio, seed);
       let videoUrl = null;
 
       switch (type) {
@@ -87,7 +87,7 @@ export const generateVideo = async (req, res) => {
 // -------- IMAGE GENERATION --------
 export const generateImage = async (req, res) => {
   const { id } = req.params;
-  const { prompt, userId, resolution } = req.body;
+  const { prompt, userId, resolution, seed } = req.body;
 
   if (!userId) {
     return res.status(401).json({ error: "Please login to generate videos." });
@@ -112,7 +112,7 @@ export const generateImage = async (req, res) => {
         return res.status(402).json({ error: "Not enough credits." });
       }
 
-      const rawData = await handler(prompt, resolution);
+      const rawData = await handler(prompt, resolution, seed);
       let imageUrl = null;
 
       switch (type) {
@@ -155,7 +155,7 @@ export const generateImage = async (req, res) => {
 
 // -------- AUDIO GENERATION --------
 export const generateAudio = async (req, res) => {
-  const { prompt, userId, duration } = req.body;
+  const { prompt, userId, duration, step } = req.body;
   const { id } = req.params;
 
   if (!userId) {
@@ -185,7 +185,7 @@ export const generateAudio = async (req, res) => {
       if (id === "multilingual-audio") {
         audioUrl = await handler(prompt);
       } else {
-        audioUrl = await handler(prompt, duration);
+        audioUrl = await handler(prompt, duration, step);
       }
 
       if (!audioUrl) {

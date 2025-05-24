@@ -42,7 +42,8 @@ const mapToClosestSupportedAspectRatio = (inputRatioStr) => {
 export const pikaFAL = async (
   prompt,
   resolution = "720p",
-  aspect_ratio = "16:9"
+  aspect_ratio = "16:9",
+  seed = ""
 ) => {
   try {
     if (!SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)) {
@@ -54,7 +55,7 @@ export const pikaFAL = async (
     console.log("Aspect Ratio:", aspect_ratio);
 
     const result = await fal.subscribe("fal-ai/pika/v2.1/text-to-video", {
-      input: { prompt, resolution, aspect_ratio },
+      input: { prompt, resolution, aspect_ratio, seed },
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {

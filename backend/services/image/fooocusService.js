@@ -8,10 +8,10 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const falFooocus = async (prompt, resolution) => {
+export const falFooocus = async (prompt, resolution, seed) => {
   try {
     const result = await fal.subscribe("fal-ai/fooocus", {
-      input: { prompt, aspect_ratio: resolution },
+      input: { prompt, aspect_ratio: resolution, seed },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {

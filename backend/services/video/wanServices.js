@@ -48,7 +48,8 @@ export const wanDeepinfra = async (prompt) => {
 export const wanReplicate = async (
   prompt,
   resolution = "480p",
-  aspect_ratio = "16:9"
+  aspect_ratio = "16:9",
+  seed = ""
 ) => {
   try {
     const validRes = validateResolution(resolution);
@@ -62,6 +63,7 @@ export const wanReplicate = async (
       sample_shift: 8,
       sample_steps: 30,
       sample_guide_scale: 6,
+      seed,
     };
 
     const output = await replicate.run("wan-video/wan-2.1-1.3b", { input });
@@ -80,7 +82,8 @@ export const wanReplicate = async (
 export const wanFAL = async (
   prompt,
   resolution = "480p",
-  aspect_ratio = "16:9"
+  aspect_ratio = "16:9",
+  seed = ""
 ) => {
   try {
     const validRes = validateResolution(resolution);
@@ -91,6 +94,7 @@ export const wanFAL = async (
         prompt,
         resolution: validRes,
         aspect_ratio: validAspect,
+        seed,
       },
       logs: false,
       onQueueUpdate: (update) => {

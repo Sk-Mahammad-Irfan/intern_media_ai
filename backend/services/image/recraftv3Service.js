@@ -14,10 +14,10 @@ fal.config({
 
 // Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
 
-export const falRecraftV3 = async (prompt, resolution = "square_hd") => {
+export const falRecraftV3 = async (prompt, resolution = "square_hd", seed) => {
   try {
     const result = await fal.subscribe("fal-ai/recraft-v3", {
-      input: { prompt, image_size: resolution },
+      input: { prompt, image_size: resolution, seed },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {

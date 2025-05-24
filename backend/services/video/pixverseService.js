@@ -53,7 +53,7 @@ export const pixverseFAL = async (
   duration = 5,
   negative_prompt = "",
   style = null,
-  seed = null
+  seed = ""
 ) => {
   try {
     // Validate resolution

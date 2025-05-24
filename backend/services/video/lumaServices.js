@@ -46,7 +46,8 @@ export const lumaFAL = async (
   resolution = "720p",
   aspect_ratio = "16:9",
   duration = "5s",
-  loop = false
+  loop = false,
+  seed = ""
 ) => {
   try {
     // Validate resolution
@@ -77,6 +78,7 @@ export const lumaFAL = async (
           aspect_ratio,
           duration,
           loop,
+          seed,
         },
         logs: false,
         onQueueUpdate: (update) => {

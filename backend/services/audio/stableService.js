@@ -8,10 +8,10 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const stableFal = async (prompt) => {
+export const stableFal = async (prompt, duration = 20, step) => {
   try {
     const result = await fal.subscribe("fal-ai/stable-audio", {
-      input: { prompt },
+      input: { prompt, seconds_start: 0, seconds_total: duration, steps: step },
       logs: false,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
@@ -30,14 +30,14 @@ export const stableFal = async (prompt) => {
   }
 };
 
-export const stableReplicate = async (prompt, duration = 8) => {
+export const stableReplicate = async (prompt, duration = 8, step) => {
   const replicateApiToken = process.env.REPLICATE_API_TOKEN;
 
   const payload = {
     version: "9aff84a639f96d0f7e6081cdea002d15133d0043727f849c40abdd166b7c75a8",
     input: {
       seed: -1,
-      steps: 100,
+      steps: step,
       prompt: prompt,
       cfg_scale: 6,
       sigma_max: 500,

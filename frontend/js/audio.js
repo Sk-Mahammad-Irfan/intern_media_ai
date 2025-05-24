@@ -499,6 +499,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const providerSelect = document.getElementById("providerSelect");
     const provider = providerSelect?.value || "auto";
     const modelId = new URLSearchParams(window.location.search).get("id");
+    const stepsInputAuto = document.getElementById("stepsInputAuto");
+    let step = stepsInputAuto ? stepsInputAuto.value.trim() : "";
 
     if (!prompt) {
       alert("Please enter a prompt.");
@@ -567,6 +569,9 @@ window.addEventListener("DOMContentLoaded", () => {
       let endpoint;
       if (provider === "auto") {
         endpoint = `${BACKEND_URL}/api/ai/generate-audio/${backendModelId}`;
+        const parsedStep =
+          step !== "" && !isNaN(step) ? parseInt(step, 10) : undefined;
+        requestBody.step = parsedStep;
       } else {
         endpoint = `${BACKEND_URL}/api/provider/audio/${backendModelId}`;
         requestBody.provider = provider;
@@ -616,6 +621,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const outputSettingsContainer = document.getElementById(
         "outputSettingsContainer"
       );
+      const stepsInputAuto = document.getElementById("stepsInputAuto");
 
       if (modelId) {
         displayCustomInputs(modelId, "inputsContainer");
@@ -624,6 +630,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (selected === "fal" || selected === "replicate") {
         customInputsContainer.style.display = "block";
         outputSettingsContainer.style.display = "block";
+        stepsInputAuto.style.display = "none";
       } else {
         customInputsContainer.style.display = "none";
         outputSettingsContainer.style.display = "block";

@@ -708,7 +708,7 @@
                   <!-- Resolution and Aspect Ratio -->
                   <div class="row gy-3">
                     <h6 class="fw-bold text-secondary">Output Settings</h6>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <select
                         id="resolutionSelect"
                         class="form-select rounded-pill"
@@ -720,7 +720,7 @@
                         <option value="1080p">1080p</option>
                       </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <select
                         id="aspectRatioSelect"
                         class="form-select rounded-pill"
@@ -732,6 +732,14 @@
                         <option value="21:9">21:9</option>
                         <option value="9:21">9:21</option>
                       </select>
+                    </div>
+                    <div class="col-md-4">
+                      <input
+                        type="number"
+                        id="seedInputAuto"
+                        class="form-control"
+                        placeholder="Seed (optional)"
+                      />
                     </div>
                   </div>
                 </div>

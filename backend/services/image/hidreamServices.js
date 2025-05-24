@@ -11,10 +11,10 @@ fal.config({
 
 // The resolution of the generated image Default value: square_hd
 // Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
-export const hidreamFAL = async (prompt, resolution = "square_hd") => {
+export const hidreamFAL = async (prompt, resolution = "square_hd", seed) => {
   try {
     const result = await fal.subscribe("fal-ai/hidream-i1-dev", {
-      input: { prompt, image_size: resolution },
+      input: { prompt, image_size: resolution, seed },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {

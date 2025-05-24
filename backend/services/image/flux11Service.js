@@ -20,10 +20,14 @@ const resolutionMap = {
 };
 
 // FAL API wrapper
-export const falFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
+export const falFluxProV1_1 = async (
+  prompt,
+  resolution = "landscape_4_3",
+  seed
+) => {
   try {
     const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
-      input: { prompt, image_size: resolution },
+      input: { prompt, image_size: resolution, seed },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {

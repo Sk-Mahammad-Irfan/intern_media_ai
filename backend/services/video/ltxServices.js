@@ -51,7 +51,8 @@ function mapResolutionToTargetSize(res) {
 export const ltxReplicate = async (
   prompt,
   resolution = "720p",
-  aspect_ratio = "16:9"
+  aspect_ratio = "16:9",
+  seed = ""
 ) => {
   try {
     const validAspectRatio = validateAspectRatio(aspect_ratio);
@@ -66,6 +67,7 @@ export const ltxReplicate = async (
           steps: 30,
           length: 97,
           prompt,
+          seed,
           target_size: targetSize,
           aspect_ratio: validAspectRatio,
           negative_prompt:

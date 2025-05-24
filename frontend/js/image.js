@@ -607,6 +607,11 @@ document.addEventListener("DOMContentLoaded", () => {
       "outputSettingsContainer"
     );
     const customInputsContainer = document.getElementById("inputsContainer");
+    const seedInputAuto = document.getElementById("seedInputAuto");
+    seedInputAuto.style.display =
+      selected === "replicate" || "fal" ? "none" : "block";
+
+    seedInputAuto.style.display = selected === "auto" ? "block" : "none";
 
     // Clear aspect ratio
     document.getElementById("aspectRatioSelect").innerHTML = "";
@@ -744,9 +749,15 @@ async function generateImage() {
     const aspectRatioSelect = document.getElementById("aspectRatioSelect");
     const aspectRatio = aspectRatioSelect?.value || null;
 
+    const seedInputAuto = document.getElementById("seedInputAuto");
+    let seed = seedInputAuto ? seedInputAuto.value.trim() : "";
+
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-image/${backendModelId}`;
+      const parsedSeed =
+        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : undefined;
       if (aspectRatio) requestBody.resolution = aspectRatio;
+      if (parsedSeed) requestBody.seed = parsedSeed;
     } else {
       requestUrl = `${BACKEND_URL}/api/provider/image/${backendModelId}`;
       requestBody.provider = provider;
