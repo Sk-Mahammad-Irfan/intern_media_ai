@@ -20,7 +20,7 @@ const creditHistorySchema = new mongoose.Schema(
       type: Date,
       default: Date.now, // Set to current time
       index: true,
-      expires: 3600, // 1 hour in seconds
+      expires: 604800, // 7 days in seconds
     },
   },
   { timestamps: true }
