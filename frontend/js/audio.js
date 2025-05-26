@@ -151,7 +151,68 @@ const audioModelOptions = {
     ],
   },
 };
+let selectedAudioModels = [];
 
+function populateAudioModelCheckboxes() {
+  const container = document.getElementById("modelCheckboxes");
+  container.innerHTML = "";
+
+  Object.keys(audioModelOptions).forEach((modelId) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "form-check";
+
+    const checkbox = document.createElement("input");
+    checkbox.className = "form-check-input";
+    checkbox.type = "checkbox";
+    checkbox.value = modelId;
+    checkbox.id = `model-${modelId}`;
+    checkbox.addEventListener("change", updateSelectedAudioModels);
+
+    const label = document.createElement("label");
+    label.className = "form-check-label";
+    label.htmlFor = `model-${modelId}`;
+    label.textContent = modelId;
+
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+    container.appendChild(wrapper);
+  });
+}
+
+function updateSelectedAudioModels() {
+  selectedAudioModels = [];
+  document
+    .querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked')
+    .forEach((checkbox) => {
+      selectedAudioModels.push(checkbox.value);
+    });
+}
+
+function toggleAudioMultiModelMode() {
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  const multiModelContainer = document.getElementById(
+    "multiModelSelectionContainer"
+  );
+  const providerContainer =
+    document.getElementById("providerSelect").parentElement;
+  const durationContainer =
+    document.getElementById("durationInput").parentElement;
+
+  if (isMultiModel) {
+    multiModelContainer.style.display = "block";
+    providerContainer.style.display = "none";
+    durationContainer.style.display = "none";
+    populateAudioModelCheckboxes();
+  } else {
+    multiModelContainer.style.display = "none";
+    providerContainer.style.display = "block";
+    durationContainer.style.display = "block";
+    selectedAudioModels = [];
+    // Restore default model options
+    const modelId = new URLSearchParams(window.location.search).get("id");
+    if (modelId) populateAudioModelOptions(modelId);
+  }
+}
 function copyToClipboard(icon) {
   const messageText = icon.previousElementSibling.innerText.trim();
   navigator.clipboard
@@ -492,23 +553,65 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.generateAudio = async function generateAudio() {
     const promptInput = document.getElementById("promptInput");
-    const durationInput = document.getElementById("durationInput");
     const prompt = promptInput?.value.trim();
-    const duration = Number(durationInput?.value.trim());
+    const isMultiModel = document.getElementById(
+      "multiModelModeToggle"
+    ).checked;
     const userId = localStorage.getItem("userId");
-    const providerSelect = document.getElementById("providerSelect");
-    const provider = providerSelect?.value || "auto";
-    const modelId = new URLSearchParams(window.location.search).get("id");
-    const stepsInputAuto = document.getElementById("stepsInputAuto");
-    let step = stepsInputAuto ? stepsInputAuto.value.trim() : "";
 
     if (!prompt) {
       alert("Please enter a prompt.");
       return;
     }
 
+    if (isMultiModel && selectedAudioModels.length === 0) {
+      return alert("Please select at least one model in multi-model mode.");
+    }
+
     appendUserMessage(prompt);
     promptInput.value = "";
+
+    if (isMultiModel) {
+      // Generate audio for all selected models
+      for (const modelId of selectedAudioModels) {
+        await generateSingleAudio({
+          modelId,
+          prompt,
+          userId,
+          isMultiModel: true,
+        });
+      }
+      return;
+    }
+
+    // Original single model generation
+    const durationInput = document.getElementById("durationInput");
+    const duration = Number(durationInput?.value.trim());
+    const provider = document.getElementById("providerSelect")?.value || "auto";
+    const modelId = new URLSearchParams(window.location.search).get("id");
+
+    if (!duration) {
+      return alert("Please enter a duration.");
+    }
+
+    await generateSingleAudio({
+      modelId,
+      prompt,
+      duration,
+      provider,
+      userId,
+      isMultiModel: false,
+    });
+  };
+
+  async function generateSingleAudio({
+    modelId,
+    prompt,
+    duration = 10, // Default duration if not provided
+    provider = "auto",
+    userId,
+    isMultiModel,
+  }) {
     const genMsgEl = appendGeneratingMessage();
 
     const modelMap = {
@@ -523,7 +626,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const modelConfig = audioModelOptions[modelId];
 
     if (!backendModelId) {
-      alert("Unsupported model ID in URL.");
+      replaceWithErrorMessage(genMsgEl, "Unsupported model ID.");
       return;
     }
 
@@ -569,6 +672,8 @@ window.addEventListener("DOMContentLoaded", () => {
       let endpoint;
       if (provider === "auto") {
         endpoint = `${BACKEND_URL}/api/ai/generate-audio/${backendModelId}`;
+        const stepsInputAuto = document.getElementById("stepsInputAuto");
+        const step = stepsInputAuto ? stepsInputAuto.value.trim() : "";
         const parsedStep =
           step !== "" && !isNaN(step) ? parseInt(step, 10) : undefined;
         requestBody.step = parsedStep;
@@ -586,7 +691,23 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.audioUrl) {
-        if (provider === "fal") {
+        if (isMultiModel) {
+          // For multi-model, include the model name in the display
+          const modelName = modelId
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+          genMsgEl.innerHTML = `
+            <div class="d-flex flex-column align-items-start w-100">
+              <div class="mb-2 text-muted small">
+                <i class="bi bi-music-note-beamed me-2"></i>Generated Audio (${modelName})
+              </div>
+              <audio controls class="audio-player" style="width: 250px;">
+                <source src="${data.audioUrl}" type="audio/wav" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          `;
+        } else if (provider === "fal") {
           replaceWithAudioMessage(genMsgEl, data.audioUrl);
         } else if (provider === "replicate") {
           replaceWithAudioMessageRep(genMsgEl, data.audioUrl, duration);
@@ -599,7 +720,7 @@ window.addEventListener("DOMContentLoaded", () => {
         } else {
           replaceWithErrorMessage(
             genMsgEl,
-            `❌ Error generating audio. ${data.error}`
+            `❌ Error generating audio. ${data.error || ""}`
           );
         }
       }
@@ -610,7 +731,7 @@ window.addEventListener("DOMContentLoaded", () => {
         "Audio generation failed. Please try again later or use a different model."
       );
     }
-  };
+  }
 
   const providerSelect = document.getElementById("providerSelect");
   if (providerSelect) {
@@ -687,25 +808,49 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  const selected = providerSelect.value;
-  const modelId = new URLSearchParams(window.location.search).get("id");
+  // Initialize multi-model mode
+  document
+    .getElementById("multiModelModeToggle")
+    .addEventListener("change", toggleAudioMultiModelMode);
+  document.getElementById("multiModelModeToggle").checked = false;
+
+  const params = new URLSearchParams(window.location.search);
+  const prompt = params.get("prompt");
+  const modelId = params.get("id");
+
+  if (modelId) {
+    populateAudioModelOptions(modelId);
+    displayCustomInputs(modelId, "inputsContainer");
+  }
+
+  if (prompt) {
+    const input = document.getElementById("promptInput");
+    if (input) {
+      input.value = decodeURIComponent(prompt);
+      generateAudio();
+    }
+  }
+
+  // Populate model checkboxes (hidden until multi-model mode is enabled)
+  populateAudioModelCheckboxes();
+
+  // Show/hide extra options based on initial provider selection
+  const selected = document.getElementById("providerSelect")?.value || "auto";
+  const falOptions = document.getElementById("inputsContainer");
   const outputSettingsContainer = document.getElementById(
     "outputSettingsContainer"
   );
+  const stepsInputAuto = document.getElementById("stepsInputAuto");
 
-  if (modelId) {
-    displayCustomInputs(modelId, "inputsContainer");
-  }
-  console.log(selected);
-  if (selected === "fal") {
-    displayCustomInputs(modelId, "inputsContainer");
-    const customInputsContainer = document.getElementById("inputsContainer");
-    customInputsContainer.style.display = "block";
-    outputSettingsContainer.style.display = "block";
+  if (selected === "fal" || selected === "replicate") {
+    if (falOptions) falOptions.style.display = "block";
+    if (outputSettingsContainer)
+      outputSettingsContainer.style.display = "block";
+    if (stepsInputAuto) stepsInputAuto.style.display = "none";
   } else {
-    const customInputsContainer = document.getElementById("inputsContainer");
-    customInputsContainer.style.display = "none";
-    outputSettingsContainer.style.display = "block";
+    if (falOptions) falOptions.style.display = "none";
+    if (outputSettingsContainer)
+      outputSettingsContainer.style.display = "block";
   }
 });
 document
@@ -722,3 +867,27 @@ document
     document.body.classList.remove("modal-open");
     document.body.style = ""; // clear
   });
+
+document.getElementById("providerSelect")?.addEventListener("change", () => {
+  const selected = document.getElementById("providerSelect").value;
+  const modelId = new URLSearchParams(window.location.search).get("id");
+  const customInputsContainer = document.getElementById("inputsContainer");
+  const outputSettingsContainer = document.getElementById(
+    "outputSettingsContainer"
+  );
+  const stepsInputAuto = document.getElementById("stepsInputAuto");
+
+  if (modelId) {
+    displayCustomInputs(modelId, "inputsContainer");
+  }
+
+  if (selected === "fal" || selected === "replicate") {
+    customInputsContainer.style.display = "block";
+    outputSettingsContainer.style.display = "block";
+    if (stepsInputAuto) stepsInputAuto.style.display = "none";
+  } else {
+    customInputsContainer.style.display = "none";
+    outputSettingsContainer.style.display = "block";
+    if (stepsInputAuto) stepsInputAuto.style.display = "block";
+  }
+});

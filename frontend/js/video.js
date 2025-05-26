@@ -51,6 +51,73 @@ const modelOptions = {
   },
 };
 
+let selectedModels = [];
+
+function populateModelCheckboxes() {
+  const container = document.getElementById("modelCheckboxes");
+  container.innerHTML = "";
+
+  Object.keys(modelOptions).forEach((modelId) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "form-check";
+
+    const checkbox = document.createElement("input");
+    checkbox.className = "form-check-input";
+    checkbox.type = "checkbox";
+    checkbox.value = modelId;
+    checkbox.id = `model-${modelId}`;
+    checkbox.addEventListener("change", updateSelectedModels);
+
+    const label = document.createElement("label");
+    label.className = "form-check-label";
+    label.htmlFor = `model-${modelId}`;
+    label.textContent = modelId;
+
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+    container.appendChild(wrapper);
+  });
+}
+
+function updateSelectedModels() {
+  selectedModels = [];
+  document
+    .querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked')
+    .forEach((checkbox) => {
+      selectedModels.push(checkbox.value);
+    });
+}
+
+function toggleMultiModelMode() {
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  const multiModelContainer = document.getElementById(
+    "multiModelSelectionContainer"
+  );
+  const providerContainer =
+    document.getElementById("providerSelect").parentElement;
+  const resolutionContainer =
+    document.getElementById("resolutionSelect").parentElement;
+  const aspectRatioContainer =
+    document.getElementById("aspectRatioSelect").parentElement;
+
+  if (isMultiModel) {
+    multiModelContainer.style.display = "block";
+    providerContainer.style.display = "none";
+    resolutionContainer.style.display = "none";
+    aspectRatioContainer.style.display = "none";
+    populateModelCheckboxes();
+  } else {
+    multiModelContainer.style.display = "none";
+    providerContainer.style.display = "block";
+    resolutionContainer.style.display = "block";
+    aspectRatioContainer.style.display = "block";
+    selectedModels = [];
+    // Restore default model options
+    const modelId = getModelIdFromURL();
+    if (modelId) populateModelOptions(modelId);
+  }
+}
+
 function getSelectedValue(select) {
   return select?.value || null;
 }
@@ -141,20 +208,62 @@ function appendGeneratedVideo(videoUrl) {
 
 async function generateVideo() {
   const prompt = document.getElementById("promptInput").value.trim();
-  const resolution = getSelectedValue(resolutionSelect);
-  const aspect_ratio = getSelectedValue(aspectRatioSelect);
-  const seedInputAuto = document.getElementById("seedInputAuto");
-  let seed = seedInputAuto ? seedInputAuto.value.trim() : "";
-  const provider = providerSelect.value;
-  const modelId =
-    new URLSearchParams(window.location.search).get("id") || "wan";
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
   const userId = localStorage.getItem("userId") || "guest";
 
-  if (!prompt || !resolution || !aspect_ratio) {
-    return alert("Please complete all required parameters.");
+  if (!prompt) {
+    return alert("Please enter a prompt.");
+  }
+
+  if (isMultiModel && selectedModels.length === 0) {
+    return alert("Please select at least one model in multi-model mode.");
   }
 
   appendUserMessage(prompt);
+
+  if (isMultiModel) {
+    // Generate videos for all selected models
+    for (const modelId of selectedModels) {
+      await generateSingleVideo({
+        modelId,
+        prompt,
+        userId,
+        isMultiModel: true,
+      });
+    }
+    return;
+  }
+
+  // Original single model generation
+  const resolution = getSelectedValue(resolutionSelect);
+  const aspect_ratio = getSelectedValue(aspectRatioSelect);
+  const provider = providerSelect.value;
+  const modelId = getModelIdFromURL() || "wan";
+
+  if (!resolution || !aspect_ratio) {
+    return alert("Please complete all required parameters.");
+  }
+
+  await generateSingleVideo({
+    modelId,
+    prompt,
+    resolution,
+    aspect_ratio,
+    provider,
+    userId,
+    isMultiModel: false,
+  });
+}
+
+async function generateSingleVideo({
+  modelId,
+  prompt,
+  resolution = "720p",
+  aspect_ratio = "16:9",
+  provider = "auto",
+  userId,
+  isMultiModel,
+}) {
   appendGeneratingVideoMessage();
 
   try {
@@ -163,8 +272,8 @@ async function generateVideo() {
 
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-video/${modelId}`;
-
-      // Convert seed to integer if it's a valid number
+      const seedInputAuto = document.getElementById("seedInputAuto");
+      const seed = seedInputAuto ? seedInputAuto.value.trim() : "";
       const parsedSeed =
         seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : undefined;
 
@@ -227,7 +336,7 @@ async function generateVideo() {
       const steps = stepsInput ? Number(stepsInput.value.trim()) || 30 : 30;
 
       if (steps < 10) {
-        alert("Replicate: Inference steps must be at least 10.");
+        appendErrorMessage("Replicate: Inference steps must be at least 10.");
         return;
       }
 
@@ -274,9 +383,59 @@ async function generateVideo() {
     });
 
     const data = await response.json();
-    if (!response.ok) return appendErrorMessage(data.error || "Server error.");
-    if (data.videoUrl) appendGeneratedVideo(data.videoUrl);
-    else appendErrorMessage("No video URL returned.");
+    if (!response.ok) {
+      appendErrorMessage(data.error || "Server error.");
+      return;
+    }
+
+    if (data.videoUrl) {
+      const loadingMessage = document.querySelector(".generating-video");
+      if (loadingMessage) loadingMessage.remove();
+
+      const message = document.createElement("div");
+      message.className = "d-flex justify-content-start mb-3";
+
+      const bubble = document.createElement("div");
+      bubble.className = "ai-message p-3";
+
+      const caption = document.createElement("div");
+      caption.textContent = isMultiModel
+        ? `Generated Video (${modelId}):`
+        : "Generated Video:";
+      caption.classList.add("mb-2");
+
+      const meta = document.createElement("div");
+      meta.className = "text-muted mb-2";
+      meta.style.fontSize = "0.9em";
+      meta.textContent = `Resolution: ${resolution}, Aspect Ratio: ${aspect_ratio}`;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "video-wrapper rounded shadow";
+      wrapper.style.maxWidth = "500px";
+      wrapper.style.width = "100%";
+      wrapper.style.overflow = "hidden";
+      wrapper.style.backgroundColor = "#000";
+
+      const video = document.createElement("video");
+      video.controls = true;
+      video.src = data.videoUrl;
+      video.style.width = "100%";
+      video.style.height = "100%";
+      video.style.objectFit = "contain";
+      video.onloadedmetadata = () => {
+        wrapper.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+      };
+
+      wrapper.appendChild(video);
+      bubble.appendChild(caption);
+      bubble.appendChild(meta);
+      bubble.appendChild(wrapper);
+      message.appendChild(bubble);
+      chat.appendChild(message);
+      chat.scrollTop = chat.scrollHeight;
+    } else {
+      appendErrorMessage("No video URL returned.");
+    }
   } catch (err) {
     console.error(err);
     appendErrorMessage("Failed to generate video. Try again.");
@@ -349,9 +508,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const prompt = params.get("prompt");
   const modelId = getModelIdFromURL();
+
+  // Initialize multi-model mode
+  document
+    .getElementById("multiModelModeToggle")
+    .addEventListener("change", toggleMultiModelMode);
+  document.getElementById("multiModelModeToggle").checked = false;
+
   if (modelId) {
     populateModelOptions(modelId);
-    // Update aspect ratio options after populating the model options
     updateAspectRatioOptions();
   }
 
@@ -368,6 +533,9 @@ window.addEventListener("DOMContentLoaded", () => {
   falOptions.style.display = selected === "fal" ? "block" : "none";
   const replicateOptions = document.getElementById("replicateExtraOptions");
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
+
+  // Populate model checkboxes (hidden until multi-model mode is enabled)
+  populateModelCheckboxes();
 });
 
 function updateAspectRatioOptions() {

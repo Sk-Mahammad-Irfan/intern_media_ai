@@ -1,4 +1,3 @@
-// pixverseFAL.js
 import dotenv from "dotenv";
 import { fal } from "@fal-ai/client";
 
@@ -20,7 +19,7 @@ const SUPPORTED_STYLES = [
   "cyberpunk",
 ];
 
-// Helper to convert string like "21:9" to numeric ratio
+// Helper to convert "21:9" to numeric ratio
 const parseRatio = (str) => {
   const [w, h] = str.split(":").map(Number);
   return w / h;
@@ -53,7 +52,7 @@ export const pixverseFAL = async (
   duration = 5,
   negative_prompt = "",
   style = null,
-  seed = ""
+  seed = null
 ) => {
   try {
     // Validate resolution
@@ -62,7 +61,7 @@ export const pixverseFAL = async (
       resolution = "720p";
     }
 
-    // Validate duration (max 5s for 1080p)
+    // Validate duration
     if (
       !SUPPORTED_DURATIONS.includes(duration) ||
       (resolution === "1080p" && duration !== 5)
@@ -84,7 +83,7 @@ export const pixverseFAL = async (
       style = null;
     }
 
-    // Prepare input object
+    // Prepare input
     const input = {
       prompt,
       resolution,
@@ -94,7 +93,9 @@ export const pixverseFAL = async (
     };
 
     if (style) input.style = style;
-    if (seed !== null) input.seed = seed;
+    if (typeof seed === "number" && Number.isInteger(seed) && seed >= 0) {
+      input.seed = seed;
+    }
 
     console.log("Pixverse Input:", input);
 
