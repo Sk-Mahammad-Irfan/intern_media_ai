@@ -319,6 +319,77 @@ const imageModelOptions = {
     ],
   },
 };
+let selectedModels = [];
+
+function populateModelCheckboxes() {
+  const container = document.getElementById("modelCheckboxes");
+  container.innerHTML = "";
+
+  Object.keys(imageModelOptions).forEach((modelId) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "form-check";
+
+    const checkbox = document.createElement("input");
+    checkbox.className = "form-check-input";
+    checkbox.type = "checkbox";
+    checkbox.value = modelId;
+    checkbox.id = `model-${modelId}`;
+    checkbox.addEventListener("change", updateSelectedModels);
+
+    const label = document.createElement("label");
+    label.className = "form-check-label";
+    label.htmlFor = `model-${modelId}`;
+    label.textContent = modelId;
+
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+    container.appendChild(wrapper);
+  });
+}
+
+function updateSelectedModels() {
+  selectedModels = [];
+  document
+    .querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked')
+    .forEach((checkbox) => {
+      selectedModels.push(checkbox.value);
+    });
+
+  console.log("Selected models:", selectedModels);
+}
+
+function toggleMultiModelMode() {
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  const multiModelContainer = document.getElementById(
+    "multiModelSelectionContainer"
+  );
+  const modelSelectorContainer = document.getElementById(
+    "modelSelectorContainer"
+  );
+  const providerSelectorContainer = document.getElementById(
+    "providerSelectorContainer"
+  );
+  const aspectRatioContainer =
+    document.getElementById("aspectRatioSelect")?.parentElement;
+
+  if (isMultiModel) {
+    multiModelContainer.style.display = "block";
+    modelSelectorContainer.style.display = "none";
+    providerSelectorContainer.style.display = "none";
+    if (aspectRatioContainer) aspectRatioContainer.style.display = "none";
+    populateModelCheckboxes();
+  } else {
+    multiModelContainer.style.display = "none";
+    modelSelectorContainer.style.display = "flex";
+    providerSelectorContainer.style.display = "flex";
+    if (aspectRatioContainer) aspectRatioContainer.style.display = "flex";
+    selectedModels = [];
+  }
+}
+
+document
+  .getElementById("multiModelModeToggle")
+  .addEventListener("change", toggleMultiModelMode);
 
 function displayCustomInputs(modelId, containerId) {
   const model = imageModelOptions[modelId];
@@ -636,10 +707,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Provider select change listener
-
-// Initialize provider-specific options visibility
-
 function appendUserMessage(prompt) {
   const userWrapper = document.createElement("div");
   userWrapper.className =
@@ -716,7 +783,7 @@ function populateImageModelOptions(modelId) {
 async function generateImage() {
   const promptInput = document.getElementById("promptInput");
   const prompt = promptInput.value.trim();
-  const provider = providerSelect.value;
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
   const userId = localStorage.getItem("userId");
 
   if (!prompt) {
@@ -727,17 +794,67 @@ async function generateImage() {
   appendUserMessage(prompt);
   promptInput.value = "";
 
-  const genMsgId = appendGeneratingMessage(); // <- Unique ID for this response
-
-  const modelId = new URLSearchParams(window.location.search).get("id");
-  const backendModelId = modelId;
-
-  if (!backendModelId || !imageModelOptions[modelId]) {
-    replaceWithErrorMessage("Unsupported or missing model ID.", genMsgId);
+  if (isMultiModel && selectedModels.length === 0) {
+    replaceWithErrorMessage(
+      "Please select at least one model in multi-model mode."
+    );
     return;
   }
 
+  // If in multi-model mode, generate for each selected model
+  if (isMultiModel) {
+    for (const modelId of selectedModels) {
+      const genMsgId = appendGeneratingMessage();
+
+      try {
+        await generateSingleImage({
+          modelId,
+          prompt,
+          userId,
+          isMultiModel: true,
+          genMsgId,
+        });
+      } catch (error) {
+        console.error(`Error generating image for model ${modelId}:`, error);
+        replaceWithErrorMessage(
+          `Failed to generate image for ${modelId}`,
+          genMsgId
+        );
+      }
+    }
+    return;
+  }
+
+  // Original single model generation
+  const provider = providerSelect.value;
+  const modelId = new URLSearchParams(window.location.search).get("id");
+  const genMsgId = appendGeneratingMessage();
+
+  await generateSingleImage({
+    modelId,
+    prompt,
+    userId,
+    provider,
+    isMultiModel: false,
+    genMsgId,
+  });
+}
+
+async function generateSingleImage({
+  modelId,
+  prompt,
+  userId,
+  provider = "auto",
+  isMultiModel,
+  genMsgId,
+}) {
+  const backendModelId = modelId;
   const modelConfig = imageModelOptions[modelId];
+
+  if (!backendModelId || !modelConfig) {
+    replaceWithErrorMessage("Unsupported or missing model ID.", genMsgId);
+    return;
+  }
 
   try {
     let requestUrl = "";
@@ -814,13 +931,16 @@ async function generateImage() {
     if (data.imageUrl) {
       const aiDiv = document.createElement("div");
       aiDiv.className = "d-flex justify-content-start mb-3";
+
+      const modelLabel = isMultiModel ? ` (${modelId})` : "";
+
       aiDiv.innerHTML = `
         <div class="ai-message p-2">
           <div class="d-flex flex-column align-items-start">
             <div class="mb-2 text-muted small">
-              <i class="bi bi-image-fill me-2"></i>Generated Image (${
-                aspectRatio || "default"
-              })
+              <i class="bi bi-image-fill me-2"></i>Generated Image${modelLabel} (${
+        aspectRatio || "default"
+      })
             </div>
             <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
               <img src="${
@@ -869,6 +989,8 @@ function copyToClipboard(icon) {
 document.addEventListener("DOMContentLoaded", () => {
   const modelId = new URLSearchParams(window.location.search).get("id");
 
+  document.getElementById("multiModelModeToggle").checked = false;
+
   providerSelect.value = "auto";
 
   if (modelId) {
@@ -884,6 +1006,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selected === "auto")
       document.getElementById("inputsContainer").style.display = "none";
   }
+  populateModelCheckboxes();
 });
 
 document

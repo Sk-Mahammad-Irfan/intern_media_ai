@@ -394,30 +394,39 @@
         <div class="px-4 pt-3">
           <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
             <!-- Model select -->
-            <div
-              class="model-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
+          <div id="modelSelectorContainer" class="model-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap">
+            <label class="fw-semibold mb-0">Model:</label>
+            <select
+              id="modelSelector"
+              class="form-select form-select-sm modern-select model-select"
+              onchange="handleModelChange()"
             >
-              <label class="fw-semibold mb-0">Model:</label>
-              <select
-                id="modelSelector"
-                class="form-select form-select-sm modern-select model-select"
-                onchange="handleModelChange()"
-              >
-                <!-- Options dynamically generated -->
-              </select>
-            </div>
+              <!-- Options dynamically generated -->
+            </select>
+          </div>
 
-            <!-- Provider select -->
-            <div
-              class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
+          <!-- Multi-model container (already exists) -->
+          <div id="multiModelSelectionContainer" style="display: none;">
+            <label class="form-label">Select Models:</label>
+            <div id="modelCheckboxes" class="mb-3"></div>
+          </div>
+
+          <!-- Provider select -->
+          <div id="providerSelectorContainer" class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap">
+            <label class="fw-semibold mb-0">Provider:</label>
+            <select
+              id="providerSelect"
+              class="form-select form-select-sm modern-select provider-select"
             >
-              <label class="fw-semibold mb-0">Provider:</label>
-              <select
-                id="providerSelect"
-                class="form-select form-select-sm modern-select provider-select"
-              >
-                <!-- Options dynamically generated -->
-              </select>
+              <!-- Options dynamically generated -->
+            </select>
+          </div>
+
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="multiModelModeToggle" onchange="toggleMultiModelMode()">
+                <label class="form-check-label" for="multiModelModeToggle">Multi-Model Mode</label>
+              </div>
             </div>
           </div>
           <hr class="model-hr" />
