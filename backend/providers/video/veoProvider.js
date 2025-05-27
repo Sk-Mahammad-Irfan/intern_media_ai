@@ -10,7 +10,7 @@ fal.config({
 
 // === Supported enums for Pixverse v4 ===
 const SUPPORTED_ASPECT_RATIOS = ["16:9", "9:16"];
-const SUPPORTED_DURATIONS = ["5s", "6s", "7s", "8s"];
+const SUPPORTED_DURATIONS = ["5", "8"];
 
 // === Ratio parsing utility ===
 const parseRatio = (str) => {
@@ -55,7 +55,7 @@ export const generateVideoVeo = async (body) => {
     // Final duration validation
     const finalDuration = SUPPORTED_DURATIONS.includes(duration)
       ? duration
-      : "5s"; // Default to 5s if unsupported
+      : "5"; // Default to 5s if unsupported
 
     const input = {
       prompt,
@@ -63,10 +63,7 @@ export const generateVideoVeo = async (body) => {
       duration: finalDuration,
     };
 
-    if (finalStyle) input.style = finalStyle;
-    if (seed !== null) input.seed = seed;
-
-    console.log("Pixverse Input:", input);
+    console.log("Veo Input:", input);
 
     const result = await fal.subscribe("fal-ai/pixverse/v4/text-to-video", {
       input,

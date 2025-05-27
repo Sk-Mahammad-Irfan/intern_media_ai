@@ -98,6 +98,51 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "5 credits/second",
       providers: ["replicate"],
     },
+    "kling-video-v2-master": {
+      title: "Kling 2.0 Master",
+      description:
+        "Generate video clips from your prompts using Kling 2.0 Master – high-speed, cinematic text-to-video generation with exceptional motion quality.",
+      link: "https://fal.ai/models/fal-ai/kling-video/v2/master/text-to-video",
+      fullDetails:
+        "Kling 2.0 Master delivers ultra-fast and visually compelling video generation from natural language prompts. Optimized for storytelling, content creation, and idea visualization, this model offers smooth motion, cinematic aesthetics, and creative flexibility.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
+    magi: {
+      title: "MAGI-1",
+      description:
+        "MAGI-1 is a video generation model with exceptional understanding of physical interactions and cinematic prompts.",
+      link: "https://fal.ai/models/fal-ai/magi",
+      fullDetails:
+        "MAGI-1 stands out for its advanced reasoning around physics, spatial dynamics, and cinematic structure. From simple text prompts, it creates visually rich video clips that excel in realism and motion logic. Ideal for simulations, storytelling, and creative ideation.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
+    "vidu-q1": {
+      title: "Vidu Q1",
+      description:
+        "Vidu Q1 Text to Video generates high-quality 1080p videos with exceptional visual quality and motion diversity.",
+      link: "https://fal.ai/models/fal-ai/vidu/q1/text-to-video",
+      fullDetails:
+        "Vidu Q1 is engineered for producing crisp 1080p video from natural language prompts. With outstanding clarity, diverse motion, and cinematic realism, it’s tailored for creators seeking professional results in visual storytelling, ideation, and content production.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
+    veo2: {
+      id: "veo2",
+      title: "Veo 2",
+      description:
+        "Veo 2 creates videos with realistic motion and high quality output. Explore different styles and find your own with extensive camera controls.",
+      link: "https://fal.ai/models/fal-ai/veo2",
+      fullDetails:
+        "Veo 2 is a powerful text-to-video model that emphasizes stylistic flexibility, cinematic quality, and precise motion control. With advanced camera options and support for a range of visual aesthetics, it’s ideal for creators looking to produce polished, professional-grade video content directly from text.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
     "pixverse-v4-text-to-video": {
       title: "PixVerse: Text-to-Video v4",
       description:
@@ -174,6 +219,17 @@ document.addEventListener("DOMContentLoaded", function () {
       link: "https://fal.ai/models/fal-ai/pika/v2.1/text-to-video",
       fullDetails:
         "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
+    "cogvideox-5b": {
+      title: "CogVideoX-5B",
+      description:
+        "Generate videos from prompts using CogVideoX-5B – a powerful model designed for text-to-video synthesis with detailed visuals and smooth motion.",
+      link: "https://fal.ai/models/fal-ai/cogvideox-5b",
+      fullDetails:
+        "CogVideoX-5B leverages advanced generative architecture to produce dynamic video content from natural language prompts. Designed for creative applications such as concept development, visualization, and storytelling, it delivers rich detail and temporal consistency.",
       chatPage: "videomodel.html",
       creditPrice: "40 credits/second",
       providers: ["fal"],

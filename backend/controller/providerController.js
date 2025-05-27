@@ -72,19 +72,19 @@ export const generateVideoforProvider = async (req, res) => {
       case "lightricks-ltx-video":
         rawData = await generateVideoLTX(body);
         break;
-      case "kling-video-v2-master-text-to-video":
+      case "kling-video-v2-master":
         rawData = await generateVideoKling(body);
         break;
-      case "vidu-q1-text-to-video":
+      case "vidu-q1":
         rawData = await generateVideoVidu(body);
         break;
       case "magi":
         rawData = await generateVideoMagi(body);
         break;
-      case "Veo":
+      case "veo2":
         rawData = await generateVideoVeo(body);
         break;
-      case "cogvideoX":
+      case "cogvideox-5b":
         rawData = await generateVideoCogvideoX(body);
         break;
       default:
@@ -142,7 +142,7 @@ export const generateImageForProvider = async (req, res) => {
     "ideogram-v3": {
       fal: 7,
     },
-    "bagel": {
+    bagel: {
       fal: 10,
     },
     "image-gen4": {

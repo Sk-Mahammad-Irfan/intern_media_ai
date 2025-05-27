@@ -49,6 +49,38 @@ const modelOptions = {
     resolutions: { "480p": null },
     aspect_ratios: ["16:9", "9:16"],
   },
+  "cogvideox-5b": {
+    providers: ["fal", "auto"],
+    resolutions: { "720p": null, "1080p": null },
+    aspect_ratios: [
+      "square_hd",
+      "square",
+      "portrait_4_3",
+      "portrait_16_9",
+      "landscape_4_3",
+      "landscape_16_9",
+    ],
+  },
+  "kling-video-v2-master": {
+    providers: ["fal", "auto"],
+    resolutions: { "720p": null, "1080p": null },
+    aspect_ratios: ["16:9", "9:16", "1:1"],
+  },
+  magi: {
+    providers: ["fal", "auto"],
+    resolutions: { "480p": null, "720p": null },
+    aspect_ratios: ["16:9", "9:16", "1:1"],
+  },
+  "vidu-q1": {
+    providers: ["fal", "auto"],
+    resolutions: { "480p": null, "720p": null },
+    aspect_ratios: ["16:9", "9:16", "1:1"],
+  },
+  veo2: {
+    providers: ["fal", "auto"],
+    resolutions: { "480p": null, "720p": null },
+    aspect_ratios: ["16:9", "9:16"],
+  },
 };
 
 let selectedModels = [];
