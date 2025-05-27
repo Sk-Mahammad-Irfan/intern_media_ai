@@ -5,6 +5,7 @@ import { multilingualTtsFAL } from "../services/audio/multilingualTtsServices.js
 import { americanEnglishFAL } from "../services/audio/americanEnglishServices.js";
 import { soundEffectsGeneratorFAL } from "../services/audio/soundEffectsGeneratorServices.js";
 import { incrementModelUsage } from "../utils/incrementModelUsage.js";
+import { KokoroServiceFAL } from "../services/audio/kokoroService.js";
 // import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 
 const wrapHandler = (handler, model) => {
@@ -49,6 +50,12 @@ export const audioGenerationHandlers = [
     model: "american-audio",
     handler: wrapHandler(americanEnglishFAL, "american-audio"),
     credits: 2,
+    type: "fal",
+  },
+  {
+    model: "kokoro-hindi",
+    handler: wrapHandler(KokoroServiceFAL, "kokoro-hindi"),
+    credits: 5,
     type: "fal",
   },
 ];

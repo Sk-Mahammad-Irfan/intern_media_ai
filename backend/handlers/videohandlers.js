@@ -1,7 +1,12 @@
+import { cogvideoFAL } from "../services/video/cogvideoxService.js";
+import { klingService } from "../services/video/klingServices.js";
 import { ltxReplicate } from "../services/video/ltxServices.js";
 import { lumaFAL } from "../services/video/lumaServices.js";
+import { MagiFAL } from "../services/video/magiService.js";
 import { pikaFAL } from "../services/video/pikaServices.js";
 import { pixverseFAL } from "../services/video/pixverseService.js";
+import { veoServiceFal } from "../services/video/veoService.js";
+import { viduService } from "../services/video/viduService.js";
 import {
   wanDeepinfra,
   wanFAL,
@@ -56,6 +61,36 @@ export const videoGenerationHandlers = [
   {
     model: "luma-ray2-flash",
     handler: wrapHandler(lumaFAL, "luma-ray2-flash"),
+    type: "fal",
+    credits: 25,
+  },
+  {
+    model: "kling-video-v2-master-text-to-video",
+    handler: wrapHandler(klingService, "kling-video-v2-master-text-to-video"),
+    type: "fal",
+    credits: 20,
+  },
+  {
+    model: "vidu-q1-text-to-video",
+    handler: wrapHandler(viduService, "vidu-q1-text-to-video"),
+    type: "fal",
+    credits: 18,
+  },
+  {
+    model: "magi",
+    handler: wrapHandler(MagiFAL, "magi"),
+    type: "fal",
+    credits: 22,
+  },
+  {
+    model: "Veo",
+    handler: wrapHandler(veoServiceFal, "Veo"),
+    type: "fal",
+    credits: 18,
+  },
+  {
+    model: "CogVideoX",
+    handler: wrapHandler(cogvideoFAL, "CogVideoX"),
     type: "fal",
     credits: 25,
   },

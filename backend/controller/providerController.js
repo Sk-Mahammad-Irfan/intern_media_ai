@@ -24,6 +24,13 @@ import { checkCredits, decreaseCredits } from "./creditController.js";
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
 import { audioGenerationHandlers } from "../handlers/audiohandlers.js";
 import { deepFluxProV1_1 } from "../services/image/flux11Service.js";
+import { generateVideoKling } from "../providers/video/klingProviders.js";
+import { generateVideoVidu } from "../providers/video/viduProvider.js";
+import { generateVideoMagi } from "../providers/video/magiProvider.js";
+import { generateVideoVeo } from "../providers/video/veoProvider.js";
+import { generateVideoCogvideoX } from "../providers/video/cogvideoxProvider.js";
+import { generateImageBagel } from "../providers/image/bagelProvider.js";
+import { generateAudioKokoroHindiFAL } from "../providers/audio/kokoroProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -64,6 +71,21 @@ export const generateVideoforProvider = async (req, res) => {
         break;
       case "lightricks-ltx-video":
         rawData = await generateVideoLTX(body);
+        break;
+      case "kling-video-v2-master-text-to-video":
+        rawData = await generateVideoKling(body);
+        break;
+      case "vidu-q1-text-to-video":
+        rawData = await generateVideoVidu(body);
+        break;
+      case "magi":
+        rawData = await generateVideoMagi(body);
+        break;
+      case "Veo":
+        rawData = await generateVideoVeo(body);
+        break;
+      case "cogvideoX":
+        rawData = await generateVideoCogvideoX(body);
         break;
       default:
         return res
@@ -120,6 +142,12 @@ export const generateImageForProvider = async (req, res) => {
     "ideogram-v3": {
       fal: 7,
     },
+    "bagel": {
+      fal: 10,
+    },
+    "image-gen4": {
+      fal: 12,
+    },
   };
 
   try {
@@ -160,6 +188,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "recraft-v3":
         rawData = await generateImageRecraftFAL(body);
+        break;
+      case "bagel":
+        rawData = await generateImageBagel(body);
         break;
       default:
         return res
@@ -236,6 +267,9 @@ export const generateAudioForProvider = async (req, res) => {
         break;
       case "american-audio":
         audioUrl = await generateAudioaAmericanEnglishFAL(body);
+        break;
+      case "kokoro-hindi":
+        audioUrl = await generateAudioKokoroHindiFAL(body);
         break;
       default:
         return res

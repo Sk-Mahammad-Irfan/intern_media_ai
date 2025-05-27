@@ -10,6 +10,8 @@ import {
 import { hidreamFAL } from "../services/image/hidreamServices.js";
 import { ideogramFAL } from "../services/image/ideogramServices.js";
 import { incrementModelUsage } from "../utils/incrementModelUsage.js";
+import { bagelFAL } from "../services/image/bagelService.js";
+import { imageGenFAL } from "../services/image/imageGen4Service.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -54,5 +56,17 @@ export const imageGenerationHandlers = [
     handler: wrapHandler(ideogramFAL, "ideogram-v3"),
     type: "fal",
     credits: 7,
+  },
+  {
+    model: "bagel",
+    handler: wrapHandler(bagelFAL, "bagel"),
+    type: "fal",
+    credits: 10,
+  },
+  {
+    model: "image-gen4",
+    handler: wrapHandler(imageGenFAL, "image-gen4"),
+    type: "fal",
+    credits: 12,
   },
 ];
