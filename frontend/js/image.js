@@ -358,34 +358,6 @@ function updateSelectedModels() {
   console.log("Selected models:", selectedModels);
 }
 
-function toggleMultiModelMode() {
-  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
-  const multiModelContainer = document.getElementById(
-    "multiModelSelectionContainer"
-  );
-  const modelSelectorContainer = document.getElementById(
-    "modelSelectorContainer"
-  );
-  const providerSelectorContainer = document.getElementById(
-    "providerSelectorContainer"
-  );
-  const aspectRatioContainer =
-    document.getElementById("aspectRatioSelect")?.parentElement;
-
-  if (isMultiModel) {
-    multiModelContainer.style.display = "block";
-    modelSelectorContainer.style.display = "none";
-    providerSelectorContainer.style.display = "none";
-    if (aspectRatioContainer) aspectRatioContainer.style.display = "none";
-    populateModelCheckboxes();
-  } else {
-    multiModelContainer.style.display = "none";
-    modelSelectorContainer.style.display = "flex";
-    providerSelectorContainer.style.display = "flex";
-    if (aspectRatioContainer) aspectRatioContainer.style.display = "flex";
-    selectedModels = [];
-  }
-}
 
 document
   .getElementById("multiModelModeToggle")

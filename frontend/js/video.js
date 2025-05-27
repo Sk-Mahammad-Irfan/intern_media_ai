@@ -88,36 +88,6 @@ function updateSelectedModels() {
     });
 }
 
-function toggleMultiModelMode() {
-  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
-  const multiModelContainer = document.getElementById(
-    "multiModelSelectionContainer"
-  );
-  const providerContainer =
-    document.getElementById("providerSelect").parentElement;
-  const resolutionContainer =
-    document.getElementById("resolutionSelect").parentElement;
-  const aspectRatioContainer =
-    document.getElementById("aspectRatioSelect").parentElement;
-
-  if (isMultiModel) {
-    multiModelContainer.style.display = "block";
-    providerContainer.style.display = "none";
-    resolutionContainer.style.display = "none";
-    aspectRatioContainer.style.display = "none";
-    populateModelCheckboxes();
-  } else {
-    multiModelContainer.style.display = "none";
-    providerContainer.style.display = "block";
-    resolutionContainer.style.display = "block";
-    aspectRatioContainer.style.display = "block";
-    selectedModels = [];
-    // Restore default model options
-    const modelId = getModelIdFromURL();
-    if (modelId) populateModelOptions(modelId);
-  }
-}
-
 function getSelectedValue(select) {
   return select?.value || null;
 }

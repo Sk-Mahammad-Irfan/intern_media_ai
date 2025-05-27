@@ -138,4 +138,36 @@ if (select) {
     }
   });
 }
+function toggleMultiModelMode() {
+  const isChecked = document.getElementById('multiModelModeToggle').checked;
+  const singleModelControls = document.getElementById('singleModelControls');
+  const multiModelContainer = document.getElementById('multiModelSelectionContainer');
 
+  const aspectRatioContainer = document.getElementById('aspectRatioSelect')?.parentElement;
+
+  if (isChecked) {
+    // Show multi-model controls
+    singleModelControls.classList.add('d-none');
+    singleModelControls.classList.remove('d-flex');
+    multiModelContainer.style.display = 'block';
+    
+    if (aspectRatioContainer) aspectRatioContainer.style.display = 'none';
+
+    // Optional: Populate multi-model checkboxes
+    if (typeof populateModelCheckboxes === 'function') {
+      populateModelCheckboxes();
+    }
+  } else {
+    // Show single-model controls
+    singleModelControls.classList.remove('d-none');
+    singleModelControls.classList.add('d-flex');
+    multiModelContainer.style.display = 'none';
+
+    if (aspectRatioContainer) aspectRatioContainer.style.display = 'flex';
+
+    // Optional: Clear selected models
+    if (typeof selectedModels !== 'undefined') {
+      selectedModels = [];
+    }
+  }
+}

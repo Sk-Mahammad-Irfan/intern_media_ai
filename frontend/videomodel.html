@@ -189,6 +189,53 @@
           width: 100%;
         }
       }
+            /* Container spacing */
+      #multiModelSelectionContainer {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      /* Model option styling */
+      #modelCheckboxes .model-option {
+        padding: 0.6rem 0.9rem;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #e1e5ea;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        min-width: 240px;
+        max-width: 100%;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      #modelCheckboxes .model-option:hover {
+        background-color: #e9ecef;
+        border-color: #ced4da;
+        transform: translateY(-1px);
+      }
+
+      /* Checkbox appearance */
+      #modelCheckboxes .form-check-input {
+        margin: 0;
+        transform: scale(1.1);
+        margin-right: 0.5rem;
+      }
+
+      /* When checked, highlight the label */
+      #modelCheckboxes .form-check-input:checked + .form-check-label,
+      #modelCheckboxes .model-option input:checked ~ span {
+        font-weight: 600;
+        color: #0d6efd;
+      }
+
+      /* Text appearance */
+      #modelCheckboxes .form-check-label {
+        font-size: 0.95rem;
+        color: #343a40;
+      }
+
     </style>
   </head>
 
@@ -491,53 +538,54 @@
             </button>
           </div>
 
-          <div class="px-4 pt-3">
-            <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-              <!-- Model select -->
-              <div
-                class="model-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
-              >
-                <label class="fw-semibold mb-0">Model:</label>
-                <select
-                  id="modelSelector"
-                  class="form-select form-select-sm modern-select model-select"
-                  onchange="handleModelChange()"
-                >
-                  <!-- Options dynamically generated -->
-                </select>
-              </div>
-              <div class="mb-3">
-                <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="multiModelModeToggle"
-                  />
-                  <label class="form-check-label" for="multiModelModeToggle"
-                    >Multi-Model Mode</label
-                  >
-                </div>
-              </div>
-              <div id="multiModelSelectionContainer" style="display: none">
-                <label class="form-label">Select Models:</label>
-                <div id="modelCheckboxes" class="mb-3"></div>
-              </div>
+          <!-- Model Selector Header -->
+<div class="px-4 pt-3">
+  <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+    <!-- Model select -->
+    <div
+      id="singleModelControls"
+      class="d-flex align-items-center gap-3 flex-grow-1 flex-sm-nowrap flex-wrap"
+    >
+      <div class="model-group d-flex align-items-center gap-2">
+        <label class="fw-semibold mb-0">Model:</label>
+        <select
+          id="modelSelector"
+          class="form-select form-select-sm modern-select model-select"
+          onchange="handleModelChange()"
+        ></select>
+      </div>
 
-              <!-- Provider select -->
-              <div
-                class="provider-group d-flex align-items-center gap-2 flex-grow-1 flex-sm-nowrap flex-wrap"
-              >
-                <label class="fw-semibold mb-0">Provider:</label>
-                <select
-                  id="providerSelect"
-                  class="form-select form-select-sm modern-select provider-select"
-                >
-                  <!-- Options dynamically generated -->
-                </select>
-              </div>
-            </div>
-            <hr class="model-hr" />
-          </div>
+      <!-- Provider select -->
+      <div class="provider-group d-flex align-items-center gap-2">
+        <label class="fw-semibold mb-0">Provider:</label>
+        <select
+          id="providerSelect"
+          class="form-select form-select-sm modern-select provider-select"
+        ></select>
+      </div>
+    </div>
+
+    <!-- Multi-model mode toggle -->
+    <div class="mb-3">
+      <div class="form-check form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="multiModelModeToggle"
+          onchange="toggleMultiModelMode()"
+        />
+        <label class="form-check-label" for="multiModelModeToggle">Multi-Model Mode</label>
+      </div>
+    </div>
+    
+<!-- Multi-model selection (hidden by default) -->
+<div id="multiModelSelectionContainer" class="p-3 mb-3 mx-auto" style="display: none; max-width: 900px;">
+
+  <!-- <label class="form-label fw-semibold mb-3 d-block text-primary" style="font-size: 1.1rem; letter-spacing: 0.02em;">Select Models:</label> -->
+  <div id="modelCheckboxes" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2"></div>
+
+</div>
+
 
           <div id="chat" class="container-fluid">
             <!-- Chat messages appear here -->
