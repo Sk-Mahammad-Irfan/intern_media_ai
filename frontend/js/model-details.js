@@ -255,6 +255,56 @@ document.addEventListener("DOMContentLoaded", function () {
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
     },
+    bagel: {
+      title: "Bagel",
+      description:
+        "Bagel is a 7B parameter multimodal model by Bytedance-Seed that generates both text and high-quality images from prompts.",
+      link: "https://fal.ai/models/fal-ai/bagel",
+      fullDetails:
+        "Bagel is a powerful 7B parameter model developed by Bytedance-Seed that can generate both natural language and visual content from text prompts. It is designed for multimodal applications, offering balanced performance in both image synthesis and text generation.",
+      chatPage: "imagemodel.html",
+      creditPrice: "4 credits/image",
+    },
+    "imagen4-preview": {
+      title: "Imagen 4 (Preview)",
+      description:
+        "Imagen 4 is Google’s highest quality image generation model, known for photorealism and prompt accuracy.",
+      link: "https://fal.ai/models/fal-ai/imagen4/preview",
+      fullDetails:
+        "Imagen 4 (Preview) represents Google's cutting-edge in text-to-image generation. It delivers state-of-the-art visual quality, high prompt fidelity, and realism, making it ideal for photorealistic renders, marketing visuals, and creative content generation.",
+      chatPage: "imagemodel.html",
+      creditPrice: "4 credits/image",
+    },
+    "f-lite-standard": {
+      title: "F Lite (Standard)",
+      description:
+        "F Lite is a 10B parameter diffusion model by Fal and Freepik, trained on copyright-safe and SFW content.",
+      link: "https://fal.ai/models/fal-ai/f-lite/standard",
+      fullDetails:
+        "F Lite (Standard) is a powerful 10B parameter diffusion model co-developed by Fal and Freepik. It is optimized for generating safe-for-work, copyright-compliant imagery across a wide range of commercial and creative applications.",
+      chatPage: "imagemodel.html",
+      creditPrice: "4 credits/image",
+    },
+    "sana-v1.5-4.8b": {
+      title: "Sana V1.5 (4.8B)",
+      description:
+        "Sana v1.5 4.8B is a powerful text-to-image model that generates ultra-high quality 4K images with remarkable detail.",
+      link: "https://fal.ai/models/fal-ai/sana/v1.5/4.8b",
+      fullDetails:
+        "Sana V1.5 (4.8B) is a state-of-the-art text-to-image model designed for high-resolution generation. With support for 4K image outputs and fine visual fidelity, it's ideal for digital art, detailed product mockups, and visually rich storytelling.",
+      chatPage: "imagemodel.html",
+      creditPrice: "4 credits/image",
+    },
+    "minimax-image-01": {
+      title: "MiniMax Image-01",
+      description:
+        "Generate high quality images from text prompts using MiniMax Image-01. Longer text prompts improve image quality.",
+      link: "https://fal.ai/models/fal-ai/minimax/image-01",
+      fullDetails:
+        "MiniMax Image-01 is a text-to-image generation model capable of creating high-quality visuals from natural language descriptions. It performs best with longer, more detailed prompts, and is suitable for general-purpose visual content creation.",
+      chatPage: "imagemodel.html",
+      creditPrice: "4 credits/image",
+    },
     "ideogram-v3": {
       title: "Ideogram V3",
       description:

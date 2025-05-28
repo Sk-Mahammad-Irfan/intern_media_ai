@@ -318,6 +318,221 @@ const imageModelOptions = {
       },
     ],
   },
+
+  bagel: {
+    providers: ["fal", "auto"],
+    aspect_ratios: {
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    provider_aspect_ratios: {
+      fal: ["1024x1024"],
+    },
+    custom_inputs: [
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+      },
+    ],
+  },
+  "imagen4-preview": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      "1: 1": null,
+      " 16: 9": null,
+      "9: 16": null,
+      "3: 4": null,
+      "4: 3": null,
+    },
+    provider_aspect_ratios: {
+      fal: ["1024x1024"],
+    },
+    custom_inputs: [
+      {
+        id: "negativePromptInput",
+        type: "text",
+        label: "Negative Prompt",
+        placeholder: "What to discourage in the generated images (optional)",
+        default: "",
+      },
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+      },
+    ],
+  },
+  "f-lite-standard": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    provider_aspect_ratios: {
+      fal: ["1024x1024"],
+    },
+    custom_inputs: [
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+      },
+      {
+        id: "negative_prompt",
+        type: "text",
+        label: "Negative Prompt",
+        placeholder: "What to avoid in the image",
+      },
+      {
+        id: "num_inference_steps",
+        type: "number",
+        label: "Inference Steps",
+        placeholder: "e.g. 28",
+        default: 28,
+      },
+      {
+        id: "guidance_scale",
+        type: "number",
+        label: "Guidance Scale",
+        placeholder: "e.g. 3.5",
+        default: 3.5,
+      },
+      {
+        id: "sync_mode",
+        type: "boolean",
+        label: "Sync Mode",
+        default: false,
+      },
+      {
+        id: "num_images",
+        type: "number",
+        label: "Number of Images",
+        placeholder: "e.g. 1",
+        default: 1,
+      },
+      {
+        id: "enable_safety_checker",
+        type: "boolean",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+    ],
+  },
+  "sana-v1.5-4.8b": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    provider_aspect_ratios: {
+      fal: ["1024x1024"],
+    },
+    custom_inputs: [
+      {
+        id: "seed",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+      },
+      {
+        id: "negative_prompt",
+        type: "text",
+        label: "Negative Prompt",
+        placeholder: "What to avoid in the image",
+      },
+      {
+        id: "num_inference_steps",
+        type: "number",
+        label: "Inference Steps",
+        placeholder: "e.g. 18",
+        default: 18,
+      },
+      {
+        id: "guidance_scale",
+        type: "number",
+        label: "Guidance Scale",
+        placeholder: "e.g. 5",
+        default: 5,
+      },
+      {
+        id: "sync_mode",
+        type: "boolean",
+        label: "Sync Mode",
+        default: false,
+      },
+      {
+        id: "num_images",
+        type: "number",
+        label: "Number of Images",
+        placeholder: "e.g. 1",
+        default: 1,
+      },
+      {
+        id: "enable_safety_checker",
+        type: "boolean",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+      {
+        id: "output_format",
+        type: "select",
+        label: "Output Format",
+        default: "jpeg",
+        options: ["jpeg", "png"],
+      },
+      {
+        id: "style_name",
+        type: "select",
+        label: "Style",
+        default: "(No style)",
+        options: [
+          "(No style)",
+          "Cinematic",
+          "Photographic",
+          "Anime",
+          "Manga",
+          "Digital Art",
+          "Pixel art",
+          "Fantasy art",
+          "Neonpunk",
+          "3D Model",
+        ],
+      },
+    ],
+  },
+  "minimax-image-01": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      "1:1": null,
+      "16:9": null,
+      "4:3": null,
+      "3:2": null,
+      "2:3": null,
+      "3:4": null,
+      "9:16": null,
+      "21:9": null,
+    },
+    provider_aspect_ratios: {
+      fal: ["1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9"],
+    },
+    custom_inputs: [],
+  },
 };
 let selectedModels = [];
 
@@ -357,7 +572,6 @@ function updateSelectedModels() {
 
   console.log("Selected models:", selectedModels);
 }
-
 
 document
   .getElementById("multiModelModeToggle")

@@ -12,6 +12,9 @@ import { ideogramFAL } from "../services/image/ideogramServices.js";
 import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 import { bagelFAL } from "../services/image/bagelService.js";
 import { imageGenFAL } from "../services/image/imageGen4Service.js";
+import { fLiteStandard } from "../services/image/fliteService.js";
+import { sanaGenerate } from "../services/image/sanaService.js";
+import { minimaxGenerate } from "../services/image/minmaxService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -64,8 +67,26 @@ export const imageGenerationHandlers = [
     credits: 10,
   },
   {
-    model: "image-gen4",
-    handler: wrapHandler(imageGenFAL, "image-gen4"),
+    model: "imagen4-preview",
+    handler: wrapHandler(imageGenFAL, "imagen4-preview"),
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "imagen4-preview",
+    handler: wrapHandler(fLiteStandard, "imagen4-preview"),
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "sana-v1.5-4.8b",
+    handler: wrapHandler(sanaGenerate, "sana-v1.5-4.8b"),
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "minimax-image-01",
+    handler: wrapHandler(minimaxGenerate, "minimax-image-01"),
     type: "fal",
     credits: 12,
   },

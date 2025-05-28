@@ -31,6 +31,11 @@ import { generateVideoVeo } from "../providers/video/veoProvider.js";
 import { generateVideoCogvideoX } from "../providers/video/cogvideoxProvider.js";
 import { generateImageBagel } from "../providers/image/bagelProvider.js";
 import { generateAudioKokoroHindiFAL } from "../providers/audio/kokoroProvider.js";
+import { generateImageImageGen } from "../providers/image/imageGen4Provider.js";
+import { fal } from "@fal-ai/client";
+import { fLiteStandardProvider } from "../providers/image/fLiteProvider.js";
+import { generateImageSana } from "../providers/image/sanaProvider.js";
+import { generateImageWithMinimax } from "../providers/image/minmaxProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -145,8 +150,14 @@ export const generateImageForProvider = async (req, res) => {
     bagel: {
       fal: 10,
     },
-    "image-gen4": {
+    "imagen4-preview": {
       fal: 12,
+    },
+    "f-lite-standard": {
+      fal: 14,
+    },
+    "sana-v1.5-4.8b": {
+      fal: 15,
     },
   };
 
@@ -189,8 +200,20 @@ export const generateImageForProvider = async (req, res) => {
       case "recraft-v3":
         rawData = await generateImageRecraftFAL(body);
         break;
+      case "imagen4-preview":
+        rawData = await generateImageImageGen(body);
+        break;
+      case "f-lite-standard":
+        rawData = await fLiteStandardProvider(body);
+        break;
       case "bagel":
         rawData = await generateImageBagel(body);
+        break;
+      case "sana-v1.5-4.8b":
+        rawData = await generateImageSana(body);
+        break;
+      case "minimax-image-01":
+        rawData = await generateImageWithMinimax(body);
         break;
       default:
         return res
