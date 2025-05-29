@@ -1,4 +1,3 @@
-
 // ⛔ Utility: Read ignored providers from localStorage
 function getIgnoredProviders() {
   const stored = localStorage.getItem("ignoredProviders");
@@ -18,7 +17,7 @@ function updateOutput() {
 
   output.textContent = "Ignored providers: ";
 
-  ignoredProviders.forEach(provider => {
+  ignoredProviders.forEach((provider) => {
     const badge = document.createElement("span");
     badge.className = "badge bg-secondary me-1";
     badge.style.cursor = "pointer";
@@ -26,7 +25,10 @@ function updateOutput() {
 
     badge.onclick = function () {
       ignoredProviders.delete(provider);
-      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      localStorage.setItem(
+        "ignoredProviders",
+        JSON.stringify(Array.from(ignoredProviders))
+      );
       updateOutput();
       window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
     };
@@ -132,44 +134,58 @@ if (select) {
     if (selected && selected !== "Select a provider") {
       const ignoredProviders = getIgnoredProviders();
       ignoredProviders.add(selected);
-      localStorage.setItem("ignoredProviders", JSON.stringify(Array.from(ignoredProviders)));
+      localStorage.setItem(
+        "ignoredProviders",
+        JSON.stringify(Array.from(ignoredProviders))
+      );
       updateOutput();
       window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
     }
   });
 }
 function toggleMultiModelMode() {
-  const isChecked = document.getElementById('multiModelModeToggle').checked;
-  const singleModelControlsList = document.querySelectorAll('.singleModelControls');
-  const multiModelContainer = document.getElementById('multiModelSelectionContainer');
-  const aspectRatioContainer = document.getElementById('aspectRatioSelect')?.parentElement;
+  const isChecked = document.getElementById("multiModelModeToggle").checked;
+  const singleModelControlsList = document.querySelectorAll(
+    ".singleModelControls"
+  );
+  const multiModelContainer = document.getElementById(
+    "multiModelSelectionContainer"
+  );
+  const aspectRatioContainer =
+    document.getElementById("aspectRatioSelect")?.parentElement;
+
+  const providerSelect = document.getElementById("providerSelect");
+
+  providerSelect.value = "auto";
+
+  console.log(providerSelect.value);
 
   if (isChecked) {
     // Hide all single model controls
-    singleModelControlsList.forEach(control => {
-      control.classList.add('d-none');
-      control.classList.remove('d-flex');
+    singleModelControlsList.forEach((control) => {
+      control.classList.add("d-none");
+      control.classList.remove("d-flex");
     });
 
-    multiModelContainer.style.display = 'block';
-    if (aspectRatioContainer) aspectRatioContainer.style.display = 'none';
+    multiModelContainer.style.display = "block";
+    if (aspectRatioContainer) aspectRatioContainer.style.display = "none";
 
     // Optional: Populate multi-model checkboxes
-    if (typeof populateModelCheckboxes === 'function') {
+    if (typeof populateModelCheckboxes === "function") {
       populateModelCheckboxes();
     }
   } else {
     // Show all single model controls
-    singleModelControlsList.forEach(control => {
-      control.classList.remove('d-none');
-      control.classList.add('d-flex');
+    singleModelControlsList.forEach((control) => {
+      control.classList.remove("d-none");
+      control.classList.add("d-flex");
     });
 
-    multiModelContainer.style.display = 'none';
-    if (aspectRatioContainer) aspectRatioContainer.style.display = 'flex';
+    multiModelContainer.style.display = "none";
+    if (aspectRatioContainer) aspectRatioContainer.style.display = "flex";
 
     // Optional: Clear selected models
-    if (typeof selectedModels !== 'undefined') {
+    if (typeof selectedModels !== "undefined") {
       selectedModels = [];
     }
   }

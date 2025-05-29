@@ -201,38 +201,55 @@ const audioModelOptions = {
 };
 let selectedAudioModels = [];
 
-function populateAudioModelCheckboxes() {
+function prettifyModelName(modelId) {
+  return modelId
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
 
   Object.keys(audioModelOptions).forEach((modelId) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "form-check";
+    const col = document.createElement("div");
+    col.className = "col";
+
+    const card = document.createElement("div");
+    card.className = "model-card";
+    card.setAttribute("data-id", modelId);
 
     const checkbox = document.createElement("input");
-    checkbox.className = "form-check-input";
     checkbox.type = "checkbox";
     checkbox.value = modelId;
     checkbox.id = `model-${modelId}`;
-    checkbox.addEventListener("change", updateSelectedAudioModels);
+    checkbox.className = "hidden-checkbox";
+    checkbox.addEventListener("change", updateSelectedModels);
 
     const label = document.createElement("label");
-    label.className = "form-check-label";
+    label.className = "model-label";
     label.htmlFor = `model-${modelId}`;
-    label.textContent = modelId;
+    label.textContent = prettifyModelName(modelId);
 
-    wrapper.appendChild(checkbox);
-    wrapper.appendChild(label);
-    container.appendChild(wrapper);
+    card.appendChild(checkbox);
+    card.appendChild(label);
+    card.addEventListener("click", () => {
+      checkbox.checked = !checkbox.checked;
+      card.classList.toggle("selected", checkbox.checked);
+      updateSelectedModels();
+    });
+
+    col.appendChild(card);
+    container.appendChild(col);
   });
 }
 
-function updateSelectedAudioModels() {
-  selectedAudioModels = [];
+function updateSelectedModels() {
+  selectedModels = [];
   document
     .querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked')
     .forEach((checkbox) => {
-      selectedAudioModels.push(checkbox.value);
+      selectedModels.push(checkbox.value);
     });
 }
 
@@ -250,7 +267,7 @@ function toggleAudioMultiModelMode() {
     multiModelContainer.style.display = "block";
     providerContainer.style.display = "none";
     durationContainer.style.display = "none";
-    populateAudioModelCheckboxes();
+    populateModelCheckboxes();
   } else {
     multiModelContainer.style.display = "none";
     providerContainer.style.display = "block";
@@ -884,7 +901,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // Populate model checkboxes (hidden until multi-model mode is enabled)
-  populateAudioModelCheckboxes();
+  populateModelCheckboxes();
 
   // Show/hide extra options based on initial provider selection
   const selected = document.getElementById("providerSelect")?.value || "auto";

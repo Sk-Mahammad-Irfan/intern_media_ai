@@ -85,29 +85,46 @@ const modelOptions = {
 
 let selectedModels = [];
 
+function prettifyModelName(modelId) {
+  return modelId
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
 
   Object.keys(modelOptions).forEach((modelId) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "form-check";
+    const col = document.createElement("div");
+    col.className = "col";
+
+    const card = document.createElement("div");
+    card.className = "model-card";
+    card.setAttribute("data-id", modelId);
 
     const checkbox = document.createElement("input");
-    checkbox.className = "form-check-input";
     checkbox.type = "checkbox";
     checkbox.value = modelId;
     checkbox.id = `model-${modelId}`;
+    checkbox.className = "hidden-checkbox";
     checkbox.addEventListener("change", updateSelectedModels);
 
     const label = document.createElement("label");
-    label.className = "form-check-label";
+    label.className = "model-label";
     label.htmlFor = `model-${modelId}`;
-    label.textContent = modelId;
+    label.textContent = prettifyModelName(modelId);
 
-    wrapper.appendChild(checkbox);
-    wrapper.appendChild(label);
-    container.appendChild(wrapper);
+    card.appendChild(checkbox);
+    card.appendChild(label);
+    card.addEventListener("click", () => {
+      checkbox.checked = !checkbox.checked;
+      card.classList.toggle("selected", checkbox.checked);
+      updateSelectedModels();
+    });
+
+    col.appendChild(card);
+    container.appendChild(col);
   });
 }
 
