@@ -42,11 +42,19 @@ export const fLiteStandard = async (
         }
       },
     });
-    return {
-      data: result.data,
-      requestId: result.requestId,
-    };
+    return result?.data;
   } catch (error) {
-    console.error("Error generating image with f-lite standard:", error);
+    // Custom error message extraction for ValidationError
+    if (error?.body?.detail) {
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
+    }
+
+    // Generic fallback error
+    console.error("Error generating mmaudio audio:", error);
+    throw new Error(`Failed to generate audio: ${error.message || error}`);
   }
 };

@@ -150,6 +150,54 @@ const audioModelOptions = {
       },
     ],
   },
+  "fal-ai-lyria2": {
+    providers: ["auto", "fal"],
+    custom_inputs: [],
+  },
+  "fal-ai-kokoro-hindi": {
+    providers: ["auto", "fal"],
+    custom_inputs: [],
+  },
+  "fal-ai-elevenlabs-sound-effects": {
+    providers: ["auto", "fal"],
+    custom_inputs: [],
+  },
+  "fal-ai-mmaudio-v2-text-to-audio": {
+    providers: ["auto", "fal"],
+    custom_inputs: [
+      {
+        id: "negative_prompt",
+        type: "text",
+        label: "Negative Prompt",
+        default: "",
+      },
+      {
+        id: "seed",
+        type: "number",
+        label: "Seed",
+        placeholder: "Leave empty for random",
+      },
+      {
+        id: "num_steps",
+        type: "number",
+        label: "Steps",
+        default: 25,
+      },
+      {
+        id: "cfg_strength",
+        type: "number",
+        label: "CFG Strength",
+        default: 4.5,
+        step: 0.1,
+      },
+      {
+        id: "mask_away_clip",
+        type: "boolean",
+        label: "Mask Away Clip",
+        default: false,
+      },
+    ],
+  },
 };
 let selectedAudioModels = [];
 
@@ -620,6 +668,10 @@ window.addEventListener("DOMContentLoaded", () => {
       "cassattemusic-audio": "cassattemusic-audio",
       "multilingual-audio": "multilingual-audio",
       "american-audio": "american-audio",
+      "fal-ai-kokoro-hindi": "fal-ai-kokoro-hindi",
+      "fal-ai-lyria2": "fal-ai-lyria2",
+      "fal-ai-elevenlabs-sound-effects": "fal-ai-elevenlabs-sound-effects",
+      "fal-ai-mmaudio-v2-text-to-audio": "fal-ai-mmaudio-v2-text-to-audio",
     };
 
     const backendModelId = modelMap[modelId];

@@ -6,6 +6,9 @@ import { americanEnglishFAL } from "../services/audio/americanEnglishServices.js
 import { soundEffectsGeneratorFAL } from "../services/audio/soundEffectsGeneratorServices.js";
 import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 import { KokoroServiceFAL } from "../services/audio/kokoroService.js";
+import { lyria2Audio } from "../services/audio/lyria2Services.js";
+import { evenlabAudio } from "../services/audio/evenlabService.js";
+import { generateMMAudio } from "../services/audio/mmaudioServices.js";
 // import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 
 const wrapHandler = (handler, model) => {
@@ -53,8 +56,26 @@ export const audioGenerationHandlers = [
     type: "fal",
   },
   {
-    model: "kokoro-hindi",
-    handler: wrapHandler(KokoroServiceFAL, "kokoro-hindi"),
+    model: "fal-ai-kokoro-hindi",
+    handler: wrapHandler(KokoroServiceFAL, "fal-ai-kokoro-hindi"),
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-lyria2",
+    handler: wrapHandler(lyria2Audio, "fal-ai-lyria2"),
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-elevenlabs-sound-effects",
+    handler: wrapHandler(evenlabAudio, "fal-ai-elevenlabs-sound-effects"),
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-mmaudio-v2-text-to-audio",
+    handler: wrapHandler(generateMMAudio, "fal-ai-mmaudio-v2-text-to-audio"),
     credits: 5,
     type: "fal",
   },

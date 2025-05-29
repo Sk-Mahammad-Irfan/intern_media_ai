@@ -178,6 +178,50 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "1 credits/generation",
       providers: ["fal"],
     },
+    "fal-ai-lyria2": {
+      title: "Lyria 2 by Google DeepMind",
+      description:
+        "Advanced AI model for generating a wide range of music genres using natural language prompts.",
+      link: "https://huggingface.co/fal-ai/lyria2",
+      fullDetails:
+        "Lyria 2 is Google DeepMind’s latest music generation model, offering high-fidelity, versatile musical compositions with natural instrument simulation and multi-track support. Ideal for artists, developers, and creatives seeking AI-generated music.",
+      chatPage: "audiomodel.html",
+      creditPrice: "1 credits/generation",
+      providers: ["fal"],
+    },
+    "fal-ai-kokoro-hindi": {
+      title: "Kokoro Hindi TTS",
+      description:
+        "A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.",
+      link: "https://huggingface.co/fal-ai/kokoro/hindi",
+      fullDetails:
+        "Kokoro Hindi is an advanced TTS model from fal.ai designed to deliver expressive and natural-sounding Hindi speech. Optimized for clarity, prosody, and speed, it's ideal for voice apps, narration, and accessibility tools.",
+      chatPage: "audiomodel.html",
+      creditPrice: "1 credits/generation",
+      providers: ["fal"],
+    },
+    "fal-ai-elevenlabs-sound-effects": {
+      title: "ElevenLabs Sound Effects",
+      description:
+        "Generate sound effects using ElevenLabs' advanced sound effects model.",
+      link: "https://huggingface.co/fal-ai/elevenlabs/sound-effects",
+      fullDetails:
+        "This sound effects generator from ElevenLabs enables high-quality, AI-generated audio snippets across a variety of themes and use cases. Perfect for games, films, and multimedia projects needing immersive sound design.",
+      chatPage: "audiomodel.html",
+      creditPrice: "1 credits/generation",
+      providers: ["fal"],
+    },
+    "fal-ai-mmaudio-v2-text-to-audio": {
+      title: "MMAudio V2 Text-to-Audio",
+      description:
+        "MMAudio generates synchronized audio from text inputs, creating sounds directly from descriptive prompts.",
+      link: "https://huggingface.co/fal-ai/mmaudio-v2/text-to-audio",
+      fullDetails:
+        "MMAudio V2 is a powerful text-to-audio generation model capable of producing synchronized, realistic audio clips from natural language prompts. Ideal for sound design, multimedia content, and accessibility solutions.",
+      chatPage: "audiomodel.html",
+      creditPrice: "1 credits/generation",
+      providers: ["huggingface"],
+    },
     "cassattemusic-audio": {
       title: "CassetteAI Music Generator",
       description:

@@ -1,4 +1,3 @@
-// generatePixverseVideo.js
 import dotenv from "dotenv";
 import { fal } from "@fal-ai/client";
 
@@ -8,17 +7,17 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-// === Supported enums for Pixverse v4 ===
+// Supported enums for Pixverse v4
 const SUPPORTED_ASPECT_RATIOS = ["16:9", "9:16"];
-const SUPPORTED_DURATIONS = ["5", "8"];
+const SUPPORTED_DURATIONS = ["5s", "6s", "7s", "8s"];
 
-// === Ratio parsing utility ===
+// Helper to convert "21:9" to numeric ratio
 const parseRatio = (str) => {
   const [w, h] = str.split(":").map(Number);
   return w / h;
 };
 
-// === Find closest supported aspect ratio ===
+// Find closest supported aspect ratio
 const mapToClosestSupportedAspectRatio = (input) => {
   const inputRatio = parseRatio(input);
   let closest = SUPPORTED_ASPECT_RATIOS[0];
@@ -38,24 +37,28 @@ const mapToClosestSupportedAspectRatio = (input) => {
   return closest;
 };
 
-// === Unified Veo Video Generator ===
-export const generateVideoVeo = async (body) => {
-  const { prompt, aspect_ratio = "16:9", duration = 5 } = body;
-
+export const generateVideoVeo = async (
+  prompt,
+  aspect_ratio = "16:9",
+  duration = 5
+) => {
   try {
-    if (!prompt || typeof prompt !== "string") {
-      throw new Error("Prompt is required and must be a string.");
+    // Convert duration to string and validate
+    const durationStr = `${duration}s`;
+    const finalDuration = SUPPORTED_DURATIONS.includes(durationStr)
+      ? durationStr
+      : "5s";
+
+    if (durationStr !== finalDuration) {
+      console.warn(
+        `Invalid or unsupported duration "${durationStr}", defaulting to "${finalDuration}"`
+      );
     }
 
-    // Final validated values
+    // Validate or map aspect ratio
     const finalAspectRatio = SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)
       ? aspect_ratio
       : mapToClosestSupportedAspectRatio(aspect_ratio);
-
-    // Final duration validation
-    const finalDuration = SUPPORTED_DURATIONS.includes(duration)
-      ? duration
-      : "5"; // Default to 5s if unsupported
 
     const input = {
       prompt,
@@ -65,7 +68,7 @@ export const generateVideoVeo = async (body) => {
 
     console.log("Veo Input:", input);
 
-    const result = await fal.subscribe("fal-ai/pixverse/v4/text-to-video", {
+    const result = await fal.subscribe("fal-ai/veo2", {
       input,
       logs: false,
       onQueueUpdate: (update) => {
@@ -77,15 +80,15 @@ export const generateVideoVeo = async (body) => {
 
     return result?.data;
   } catch (error) {
-    console.error("Error generating video with Pixverse (FAL):", error);
-
     if (error?.body?.detail) {
-      console.error(
-        "Validation details:",
-        JSON.stringify(error.body.detail, null, 2)
-      );
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
     }
 
-    throw error;
+    console.error("Error generating video:", error);
+    throw new Error(`Failed to generate video: ${error.message || error}`);
   }
 };

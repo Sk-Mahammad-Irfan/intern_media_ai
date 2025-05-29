@@ -43,26 +43,27 @@ export const veoServiceFal = async (
   duration = 5
 ) => {
   try {
-    // Validate duration
-    if (!SUPPORTED_DURATIONS.includes(`${duration}s`)) {
+    // Convert duration to string and validate
+    const durationStr = `${duration}s`;
+    const finalDuration = SUPPORTED_DURATIONS.includes(durationStr)
+      ? durationStr
+      : "5s";
+
+    if (durationStr !== finalDuration) {
       console.warn(
-        `Invalid or unsupported duration "${duration}", defaulting to "5s"`
+        `Invalid or unsupported duration "${durationStr}", defaulting to "${finalDuration}"`
       );
-      duration = 5;
-    } else {
-      duration = `${duration}s`;
     }
 
-    // Validate aspect ratio
-    if (!SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)) {
-      aspect_ratio = mapToClosestSupportedAspectRatio(aspect_ratio);
-    }
+    // Validate or map aspect ratio
+    const finalAspectRatio = SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)
+      ? aspect_ratio
+      : mapToClosestSupportedAspectRatio(aspect_ratio);
 
-    // Prepare input
     const input = {
       prompt,
-      aspect_ratio,
-      duration,
+      aspect_ratio: finalAspectRatio,
+      duration: finalDuration,
     };
 
     console.log("Veo Input:", input);
@@ -79,13 +80,15 @@ export const veoServiceFal = async (
 
     return result?.data;
   } catch (error) {
-    console.error("Error generating video with Pixverse (FAL):", error);
-
     if (error?.body?.detail) {
-      console.error(
-        "Validation details:",
-        JSON.stringify(error.body.detail, null, 2)
-      );
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
     }
+
+    console.error("Error generating video:", error);
+    throw new Error(`Failed to generate video: ${error.message || error}`);
   }
 };

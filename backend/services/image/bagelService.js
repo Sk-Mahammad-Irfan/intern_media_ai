@@ -13,10 +13,10 @@ fal.config({
 
 // Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
 
-export const bagelFAL = async (prompt, seed) => {
+export const bagelFAL = async (prompt) => {
   try {
     const result = await fal.subscribe("fal-ai/bagel", {
-      input: { prompt, seed },
+      input: { prompt },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
@@ -26,6 +26,17 @@ export const bagelFAL = async (prompt, seed) => {
     });
     return result.data;
   } catch (error) {
-    console.error("Error generating image with Ideogram V3:", error);
+    // Custom error message extraction for ValidationError
+    if (error?.body?.detail) {
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
+    }
+
+    // Generic fallback error
+    console.error("Error generating mmaudio audio:", error);
+    throw new Error(`Failed to generate audio: ${error.message || error}`);
   }
 };

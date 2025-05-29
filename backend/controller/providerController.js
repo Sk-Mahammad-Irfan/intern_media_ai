@@ -36,6 +36,9 @@ import { fal } from "@fal-ai/client";
 import { fLiteStandardProvider } from "../providers/image/fLiteProvider.js";
 import { generateImageSana } from "../providers/image/sanaProvider.js";
 import { generateImageWithMinimax } from "../providers/image/minmaxProvider.js";
+import { generateAudioLyria2 } from "../providers/audio/lyria2Provider.js";
+import { generateAudioEvenLab } from "../providers/audio/evenlabProvider.js";
+import { generateAudioMM } from "../providers/audio/mmaudioProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -291,8 +294,17 @@ export const generateAudioForProvider = async (req, res) => {
       case "american-audio":
         audioUrl = await generateAudioaAmericanEnglishFAL(body);
         break;
-      case "kokoro-hindi":
+      case "fal-ai-kokoro-hindi":
         audioUrl = await generateAudioKokoroHindiFAL(body);
+        break;
+      case "fal-ai-lyria2":
+        audioUrl = await generateAudioLyria2(body);
+        break;
+      case "fal-ai-elevenlabs-sound-effects":
+        audioUrl = await generateAudioEvenLab(body);
+        break;
+      case "fal-ai-mmaudio-v2-text-to-audio":
+        audioUrl = await generateAudioMM(body);
         break;
       default:
         return res

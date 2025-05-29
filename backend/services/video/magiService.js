@@ -94,13 +94,17 @@ export const MagiFAL = async (
 
     return result?.data;
   } catch (error) {
-    console.error("Error generating video with Magi (FAL):", error);
-
+    // Custom error message extraction for ValidationError
     if (error?.body?.detail) {
-      console.error(
-        "Validation details:",
-        JSON.stringify(error.body.detail, null, 2)
-      );
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
     }
+
+    // Generic fallback error
+    console.error("Error generating cog Video:", error);
+    throw new Error(`Failed to generate Video: ${error.message || error}`);
   }
 };

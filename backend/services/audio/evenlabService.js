@@ -1,34 +1,31 @@
-// ideogramFAL.js
-
 import { fal } from "@fal-ai/client";
-import dotenv from "dotenv";
 
-dotenv.config();
+export const evenlabAudio = async (body) => {
+  const {
+    prompt = "Spacious braam suitable for high-impact movie trailer moments",
+    duration = 10,
+    prompt_influence = 0.3,
+  } = body;
 
-fal.config({
-  credentials: process.env.FAL_AI_API,
-});
-
-// The resolution of the generated image Default value: square_hd
-
-// Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
-export const imageGenFAL = async (
-  prompt,
-  aspect_ratio = "1:1",
-  seed,
-  negative_prompt
-) => {
   try {
-    const result = await fal.subscribe("fal-ai/imagen4/preview", {
-      input: { prompt, aspect_ratio, seed, negative_prompt },
+    const result = await fal.subscribe("fal-ai/elevenlabs/sound-effects", {
+      input: {
+        text: prompt,
+        duration_seconds: duration,
+        prompt_influence,
+      },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
-          update.logs.map((log) => log.message).forEach(console.log);
+          update.logs?.map((log) => log.message).forEach(console.log);
         }
       },
     });
-    return result.data;
+
+    const audioUrl = result.data?.audio?.url || result.data?.audio_file?.url;
+    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+
+    return audioUrl;
   } catch (error) {
     // Custom error message extraction for ValidationError
     if (error?.body?.detail) {

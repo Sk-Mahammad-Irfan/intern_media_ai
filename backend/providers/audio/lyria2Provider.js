@@ -1,34 +1,33 @@
-// ideogramFAL.js
-
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 fal.config({
-  credentials: process.env.FAL_AI_API,
+  credentials: process.env.FAL_AI_AUDIO_API,
 });
 
-// The resolution of the generated image Default value: square_hd
+export const generateAudioLyria2 = async (body) => {
+  const { prompt = "", negative_prompt = "", seed = 65535 } = body;
 
-// Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
-export const imageGenFAL = async (
-  prompt,
-  aspect_ratio = "1:1",
-  seed,
-  negative_prompt
-) => {
   try {
-    const result = await fal.subscribe("fal-ai/imagen4/preview", {
-      input: { prompt, aspect_ratio, seed, negative_prompt },
+    const result = await fal.subscribe("fal-ai/lyria2", {
+      input: {
+        prompt,
+        negative_prompt,
+        seed,
+      },
       logs: true,
       onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
+        if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
           update.logs.map((log) => log.message).forEach(console.log);
         }
       },
     });
-    return result.data;
+
+    const audioUrl = result.data?.audio_file?.url || result?.data?.audio?.url;
+    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+    return audioUrl;
   } catch (error) {
     // Custom error message extraction for ValidationError
     if (error?.body?.detail) {

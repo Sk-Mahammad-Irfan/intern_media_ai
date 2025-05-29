@@ -29,9 +29,9 @@ export const cogvideoFAL = async (
     // Validate video size
     if (!SUPPORTED_VIDEO_SIZE.includes(aspect_ratio)) {
       console.warn(
-        `Invalid video size "${video_size}", defaulting to "landscape_16_9"`
+        `Invalid video size "${aspect_ratio}", defaulting to "landscape_16_9"`
       );
-      video_size = "landscape_16_9";
+      aspect_ratio = "landscape_16_9";
     }
 
     if (
@@ -63,13 +63,17 @@ export const cogvideoFAL = async (
 
     return result?.data;
   } catch (error) {
-    console.error("Error generating video with CogVideoX (FAL):", error);
-
+    // Custom error message extraction for ValidationError
     if (error?.body?.detail) {
-      console.error(
-        "Validation details:",
-        JSON.stringify(error.body.detail, null, 2)
-      );
+      const validationDetails = error.body.detail
+        .map((d) => `${d.loc?.join(".") || "unknown"}: ${d.msg}`)
+        .join("\n");
+      console.error("Validation error(s) from FAL:\n", validationDetails);
+      throw new Error(`Validation failed:\n${validationDetails}`);
     }
+
+    // Generic fallback error
+    console.error("Error generating cog Video:", error);
+    throw new Error(`Failed to generate Video: ${error.message || error}`);
   }
 };

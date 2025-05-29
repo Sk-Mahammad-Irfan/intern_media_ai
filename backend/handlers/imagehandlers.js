@@ -73,8 +73,8 @@ export const imageGenerationHandlers = [
     credits: 12,
   },
   {
-    model: "imagen4-preview",
-    handler: wrapHandler(fLiteStandard, "imagen4-preview"),
+    model: "f-lite-standard",
+    handler: wrapHandler(fLiteStandard, "f-lite-standard"),
     type: "fal",
     credits: 12,
   },
