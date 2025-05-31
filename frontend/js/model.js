@@ -233,7 +233,7 @@ const allmodels = {
       tags: ["1080p", "high-quality"],
     },
     {
-      id: "veo-2",
+      id: "veo2",
       name: "Veo 2",
       type: "video",
       icon: "camera-reels",
