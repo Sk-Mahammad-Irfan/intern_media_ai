@@ -385,7 +385,7 @@ function renderAllModels() {
       card.innerHTML = `
             <div class="model-header">
               <h5 class="model-name">${model.name}</h5>
-              <div class="model-icons">
+              <div class="model-icons">&nbsp;
                 <i class="bi bi-${model.icon} text-${model.iconColor}"></i>
                 <i class="bi bi-box-arrow-up-right text-secondary"></i>
               </div>
@@ -414,9 +414,9 @@ function renderAllModels() {
 
 function getCategoryIcon(category) {
   const icons = {
-    image: "image",
+    image: "images",
     video: "video",
-    audio: "soundwave",
+    audio: "podcast",
   };
   return icons[category] || "box";
 }
