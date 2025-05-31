@@ -18,62 +18,140 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/styles.css" />
     <style>
+      :root {
+        --primary-color: #6366f1;
+        --secondary-color: #f1f5f9;
+        --text-color: #334155;
+        --light-text: #64748b;
+        --border-radius: 12px;
+        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        --transition: all 0.2s ease;
+      }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text-color);
+        background-color: #f8fafc;
+      }
+      
       .main-container {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
       }
-
+      
       .main-content {
         flex-grow: 1;
         padding: 2rem;
-        background-color: #fff;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
       }
-
+      
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 3rem 0 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+      
+      .model-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+      }
+      
       .model-card {
-        padding: 1.2rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        transition: all 0.2s ease-in-out;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        border: 1px solid #e2e8f0;
+        transition: var(--transition);
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
-
+      
       .model-card:hover {
-        background-color: #f1f4f9;
-        transform: scale(1.01);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-color);
       }
-
-      .model-icon {
-        font-size: 1.3rem;
-        vertical-align: middle;
-        margin-left: 8px;
+      
+      .model-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
       }
+      
+      .model-name {
+        font-weight: 600;
+        margin: 0;
+        flex: 1;
+      }
+      
+      .model-icons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      .model-description {
+        color: var(--light-text);
+        font-size: 0.9rem;
+        flex-grow: 1;
+        margin-bottom: 1.5rem;
+      }
+      
+      .model-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-size: 0.8rem;
+      }
+      
+      .model-source a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+      
+      .model-tags {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      .model-tag {
+        background-color: var(--secondary-color);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        color: var(--light-text);
+      }
+      
+      .model-divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+        margin: 2rem 0;
+      }
+      
       @media (max-width: 768px) {
-    .model-card {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .model-card > div {
-      width: 100%;
-      text-align: center !important;
-    }
-
-    .model-description {
-      margin: 0.5rem 0;
-    }
-  }
-
-    .model-hr {
-    border: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, black, transparent);
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-  }
+        .main-content {
+          padding: 1rem;
+        }
+        
+        .model-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100 bg-white">
     <div class="main-container">
       <!-- Top Navbar -->
       <nav
@@ -311,544 +389,11 @@
       </nav>
 
       <!-- Main Content -->
-      <div class="main-content">
-        <h2 class="mb-4 fw-bold display-6 pb-2">Available Models</h2>
-
-        <!-- Text-to-Image Models -->
-        <h4 class="mt-5 mb-5 fw-semibold text-primary d-flex align-items-center">
-          <i class="fa-solid fa-image"></i>&nbsp;Image Models
-        </h4>
-
-
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="deepinfra" onclick="window.location.href='model-details.html?id=black-forest-labs-flux-1-1-pro'" style="cursor: pointer;">
-          
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Black Forest Labs: FLUX-1.1 Pro
-                <span>
-              <i class="bi bi-image text-danger model-icon me-1"></i>
-              <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-            </span>
-          </div>
-
-
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Black Forest Labs' latest state-of-the-art proprietary model, offering exceptional prompt following, visual quality, detail, and output diversity.
-          </div>
-
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://deepinfra.com/black-forest-labs/FLUX-1.1-pro" target="_blank">blackforestlabs.ai</a>
-          </div>
-
-        </div>
-
-
-        <!-- FAL AI Text-to-Image -->
-        <!-- Recraft V3 Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=recraft-v3'" style="cursor: pointer;">
-          
-          
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Recraft V3: Text-to-Image
-          <span>
-            <i class="bi bi-image-alt text-primary model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </span>
-          </div>
-
-          <div class="model-description text-center mx-3 p-2" style="flex: 2;  font-size: 0.85rem; min-width: 200px;">
-            Recraft V3 is a text-to-image model with the ability to generate long texts, vector art, images in brand style, and much more. It is SOTA in image generation, proven by Hugging Face's industry-leading benchmark.
-          </div>
-
-
-          <div class="model-source " style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://huggingface.co" target="_blank">Hugging Face</a>
-          </div>
-
-        </div>
-
-
-        <!-- Fooocus Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=fooocus'" style="cursor: pointer;">
-        
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Fooocus: Base Model
-            <i class="bi bi-image-alt text-primary model-icon ms-2"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon ms-1" title="Open"></i>
-          </div>
-        
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Fooocus is a text-to-image model offering base parameters with automated optimizations and quality improvements, providing a solid foundation for various creative outputs.
-          </div>
-          
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- HiDream I1 (Dev) Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=hidream-i1-dev'" style="cursor: pointer;">
-          
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            HiDream I1 (Dev)
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-          
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            HiDream I1 generates high-quality, imaginative images from text prompts with speed and clarity – ideal for concept art and design prototyping.
-          </div>
-          <!-- Right: Source -->
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/hidream-i1-dev" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- Bagel Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=bagel'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Bagel
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Bagel is a 7B parameter multimodal model by Bytedance-Seed that generates both text and high-quality images from prompts.
-          </div>
-        
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/bagel" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- Imagen 4 (Preview) Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=imagen4-preview'" style="cursor: pointer;">
-          
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Imagen 4 (Preview)
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-          
-          <div class="model-description mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Imagen 4 is Google’s highest quality image generation model, known for photorealism and prompt accuracy.
-          </div>
-        
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/imagen4/preview" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- F Lite (Standard) Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=f-lite-standard'" style="cursor: pointer;">
-        
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            F Lite (Standard)
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-        
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            F Lite is a 10B parameter diffusion model by Fal and Freepik, trained on copyright-safe and SFW content.
-          </div>
-        
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/f-lite/standard" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- Sana V1.5 (4.8B) Model Card -->
-        <div class="model-card my-2 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=sana-v1.5-4.8b'" style="cursor: pointer;">
-          
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Sana V1.5 (4.8B)
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-          
-          <div class="model-description mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Sana v1.5 4.8B is a powerful text-to-image model that generates ultra-high quality 4K images with remarkable detail.
-          </div>
-          
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/sana/v1.5/4.8b" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- MiniMax Image-01 Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=minimax-image-01'" style="cursor: pointer;">
-        
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            MiniMax Image-01
-            <i class="bi bi-image text-info model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-        
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate high quality images from text prompts using MiniMax Image-01. Longer text prompts improve image quality.
-          </div>
-        
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/minimax/image-01" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- Ideogram V3 Model Card -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="fal" onclick="window.location.href='model-details.html?id=ideogram-v3'" style="cursor: pointer;">
-        
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Ideogram V3
-            <i class="bi bi-brush text-purple model-icon ms-2"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon ms-1" title="Fast Generation"></i>
-          </div>
-
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Turn complex, creative prompts into visually rich illustrations with Ideogram V3 – ideal for surreal, conceptual, and narrative-driven artwork.
-          </div>
-
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source: <a href="https://fal.ai/models/fal-ai/ideogram/v3" target="_blank">FAL AI</a>
-          </div>
-            </div>
-          <hr class="model-hr">
-
-
-      <!-- Text-to-Video (More sources) -->
-      <h4 class="mt-5 mb-5 fw-semibold text-primary d-flex align-items-center">
-        <i class="fa-solid fa-video"></i>&nbsp; Video Models
-      </h4>
-
-      <!-- DeepInfra Text-to-Video -->
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Wan-AI: Wan2.1-T2V-1.3B
-          <i class="bi bi-film text-info model-icon"></i>
-          <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          The Wan2.1 1.3B model is a lightweight, efficient text-to-video generator. Despite its compact size, it delivers impressive performance across benchmarks and generates high-quality 480P videos.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B" target="_blank">huggingface.co</a>
-        </div>
-      </div>
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          PixVerse: Text-to-Video v4
-          <i class="bi bi-film text-info model-icon"></i>
-          <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-        </div>
-
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.
-        </div>
-
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://huggingface.co/pixverse/v4/text-to-video" target="_blank">huggingface.co</a>
-        </div>
-      </div>
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-      <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Lightricks: LTX-Video
-          <i class="bi bi-film text-info model-icon"></i>
-          <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-        </div>
-
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.
-        </div>
-
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://huggingface.co/lightricks/ltx-video" target="_blank">huggingface.co</a>
-        </div>
-      </div>
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Pika Text to Video v2.1
-            <i class="bi bi-camera-reels text-primary model-icon"></i>
-            <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-          </div>
-           <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate high-quality, cinematic videos from text prompts with Pika’s advanced v2.1 model – ideal for storytelling and visual ideation.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://fal.ai/models/fal-ai/pika/v2.1/text-to-video" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Luma Dream Machine: Ray 2 Flash
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-          <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.
-        </div>
-         <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash" target="_blank">FAL AI</a>
-        </div>
-      </div>
-
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-         <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          CogVideoX-5B
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Generate videos from prompts using CogVideoX-5B – a powerful model designed for text-to-video synthesis with detailed visuals and smooth motion.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/cogvideox-5b" target="_blank">FAL AI</a>
-        </div>
-      </div>
-
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Kling 2.0 Master
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-          <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Generate video clips from your prompts using Kling 2.0 Master – high-speed, cinematic text-to-video generation with exceptional motion quality.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/kling-video/v2/master/text-to-video" target="_blank">FAL AI</a>
-        </div>
-      </div>
-
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          MAGI-1
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          MAGI-1 is a video generation model with exceptional understanding of physical interactions and cinematic prompts.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/magi" target="_blank">FAL AI</a>
-        </div>
-      </div>
-
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Vidu Q1
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-          <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Vidu Q1 Text to Video generates high-quality 1080p videos with exceptional visual quality and motion diversity.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/vidu/q1/text-to-video" target="_blank">FAL AI</a>
-        </div>
+      <div class="main-content bg-white">
+        <h2 class="page-title mb-4">Available Models</h2>
+        <!-- Models will be rendered here by JavaScript -->
       </div>
       
-      <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-        <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-          Veo 2
-          <i class="bi bi-camera-reels text-primary model-icon"></i>
-          <i class="bi bi-lightning-charge text-warning model-icon" title="Fast Generation"></i>
-        </div>
-        <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-          Veo 2 creates videos with realistic motion and high quality output. Explore different styles and find your own with extensive camera controls.
-        </div>
-        <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-          Source:
-          <a href="https://fal.ai/models/fal-ai/veo2" target="_blank">FAL AI</a>
-        </div>
-      </div>
-      <hr class="model-hr">
-
-
-        <!-- Text-to-Audio -->
-        <h4 class="mt-5 mb-5 fw-semibold text-primary d-flex align-items-center">
-         <i class="bi bi-soundwave"></i>&nbsp; Audio Models
-        </h4>
-
-        <!-- FAL AI Text-to-Audio -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Stable Audio Open 1.0
-            <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            An open-source model for generating short audio samples, sound effects, and production elements using text prompts.
-          </div>
-
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0" target="_blank">Hugging Face</a>
-          </div>
-        </div>
-
-        <!-- Lyria 2 by Google DeepMind -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Lyria 2 by Google DeepMind
-            <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Google's latest state-of-the-art music generation model capable of producing diverse, high-quality music tracks from text prompts.
-          </div>
-           <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://huggingface.co/fal-ai/lyria2" target="_blank">Hugging Face</a>
-          </div>
-        </div>
-
-         <!-- Kokoro Hindi TTS -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Kokoro Hindi TTS
-            <i class="bi bi-voice-overplay text-primary model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://huggingface.co/fal-ai/kokoro/hindi" target="_blank">Hugging Face</a>
-          </div>
-        </div>
-
-        <!-- ElevenLabs Sound Effects -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            ElevenLabs Sound Effects
-            <i class="bi bi-magic text-warning model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate sound effects using ElevenLabs' advanced sound effects model.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://huggingface.co/fal-ai/elevenlabs/sound-effects" target="_blank">Hugging Face</a>
-          </div>
-        </div>
-
-         <!-- MMAudio V2 Text-to-Audio -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            MMAudio V2 Text-to-Audio
-            <i class="bi bi-file-music text-info model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            MMAudio generates synchronized audio from text prompts, enabling realistic sound creation based on descriptions.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://huggingface.co/fal-ai/mmaudio-v2/text-to-audio" target="_blank">Hugging Face</a>
-          </div>
-        </div>
-                        
-        
-        <!-- Dia TTS -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            CassetteAI Music Generator
-            <i class="bi bi-music-note-beamed text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate professional-quality music in seconds with CassetteAI’s ultra-fast and consistent AI music engine.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://fal.ai/models/cassetteai/music-generator" target="_blank">CassetteAI</a>
-          </div>
-        </div>
-        
-
-        <!-- Multilingual TTS -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Multilingual TTS
-            <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate speech in multiple languages with ElevenLabs multilingual TTS powered by FAL – clear, natural, and diverse voices.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://fal.ai/models/fal-ai/elevenlabs/tts/multilingual-v2" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- American English TTS -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-          <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            American English TTS
-            <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            A high-quality American English TTS model for creating clear, friendly, and professional-sounding voices from text.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://fal.ai/models/fal-ai/kokoro/american-english" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        <!-- Cassette AI (Sound Effects Generator) -->
-        <div class="model-card my-3 p-3 border rounded d-flex align-items-center justify-content-between" data-provider="huggingface" onclick="window.location.href='model-details.html?id=wan-ai-wan21-t2v-13b'" style="cursor: pointer;">
-
-           <div class="model-name fw-semibold align-items-center" style="flex: 1;">
-            Cassette Sound Effects Generator
-            <i class="bi bi-soundwave text-success model-icon"></i>
-            <i class="bi bi-box-arrow-up-right text-secondary model-icon" title="Open"></i>
-          </div>
-          <div class="model-description text-center mx-3 p-2" style="flex: 2; font-size: 0.85rem; min-width: 200px;">
-            Generate creative sound effects and ambient audio using Cassette AI’s open-source sound design model.
-          </div>
-          <div class="model-source" style="flex: 1; font-size: 0.75rem;">
-            Source:
-            <a href="https://fal.ai/models/cassetteai/sound-effects-generator" target="_blank">FAL AI</a>
-          </div>
-        </div>
-
-        
-        </div>
       </div>
     </div>
 
@@ -883,51 +428,8 @@
     <script src="js/search.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ignoredProviders.js"></script>
-    <script>
-
-      function setAvatarInitials() {
-        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
-
-        const avatars = document.querySelectorAll("#navbar-avatar");
-        const userElements = {
-          desktop: {
-            username: document.getElementById("account-username"),
-            email: document.getElementById("account-email"),
-          },
-          mobile: {
-            username: document.getElementById("account-username-mobile"),
-            email: document.getElementById("account-email-mobile"),
-          }
-        };
-
-        const isLoggedIn = !!userData.username;
-
-        if (isLoggedIn) {
-          const username = userData.username;
-          const firstInitial = username.trim()[0]?.toUpperCase() || "U";
-
-          avatars.forEach(avatar => avatar.textContent = firstInitial);
-
-          userElements.desktop.username && (userElements.desktop.username.textContent = username);
-          userElements.desktop.email && (userElements.desktop.email.textContent = userData.email || "No email");
-
-          userElements.mobile.username && (userElements.mobile.username.textContent = username);
-          userElements.mobile.email && (userElements.mobile.email.textContent = userData.email || "No email");
-        } else {
-          avatars.forEach(avatar => {
-            avatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
-          });
-
-          ["desktop", "mobile"].forEach(view => {
-            userElements[view].username && (userElements[view].username.textContent = "Guest");
-            userElements[view].email && (userElements[view].email.textContent = "");
-          });
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", setAvatarInitials);
-
-
-        </script>
+    <script src="js/model.js"></script>
+    <script src="js/avtar.js"></script>
+    
   </body>
 </html>

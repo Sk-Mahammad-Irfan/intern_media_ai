@@ -245,11 +245,11 @@ function populateModelCheckboxes() {
 }
 
 function updateSelectedModels() {
-  selectedModels = [];
+  selectedAudioModels = [];
   document
     .querySelectorAll('#modelCheckboxes input[type="checkbox"]:checked')
     .forEach((checkbox) => {
-      selectedModels.push(checkbox.value);
+      selectedAudioModels.push(checkbox.value);
     });
 }
 
