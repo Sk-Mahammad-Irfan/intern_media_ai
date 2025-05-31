@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "40 credits/second",
       providers: ["fal"],
     },
-    "pixverse-v4-text-to-video": {
+    "pixverse-v4": {
       title: "PixVerse: Text-to-Video v4",
       description:
         "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
@@ -298,6 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "HiDream I1 (Dev) is a text-to-image model optimized for fast generation and visual fidelity. It excels at interpreting imaginative prompts and rendering detailed visuals, making it suitable for artists, creatives, and rapid prototyping scenarios.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     bagel: {
       title: "Bagel",
@@ -308,6 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Bagel is a powerful 7B parameter model developed by Bytedance-Seed that can generate both natural language and visual content from text prompts. It is designed for multimodal applications, offering balanced performance in both image synthesis and text generation.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     "imagen4-preview": {
       title: "Imagen 4 (Preview)",
@@ -318,6 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Imagen 4 (Preview) represents Google's cutting-edge in text-to-image generation. It delivers state-of-the-art visual quality, high prompt fidelity, and realism, making it ideal for photorealistic renders, marketing visuals, and creative content generation.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     "f-lite-standard": {
       title: "F Lite (Standard)",
@@ -328,6 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "F Lite (Standard) is a powerful 10B parameter diffusion model co-developed by Fal and Freepik. It is optimized for generating safe-for-work, copyright-compliant imagery across a wide range of commercial and creative applications.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     "sana-v1.5-4.8b": {
       title: "Sana V1.5 (4.8B)",
@@ -338,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Sana V1.5 (4.8B) is a state-of-the-art text-to-image model designed for high-resolution generation. With support for 4K image outputs and fine visual fidelity, it's ideal for digital art, detailed product mockups, and visually rich storytelling.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     "minimax-image-01": {
       title: "MiniMax Image-01",
@@ -348,6 +353,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "MiniMax Image-01 is a text-to-image generation model capable of creating high-quality visuals from natural language descriptions. It performs best with longer, more detailed prompts, and is suitable for general-purpose visual content creation.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
+      providers: ["fal"],
     },
     "ideogram-v3": {
       title: "Ideogram V3",
@@ -358,6 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Ideogram V3 is a next-gen text-to-image model crafted for storytelling and imaginative concepts. It excels at rendering scenes with symbolic, surreal, or fantastical elements, making it perfect for writers, concept artists, and world-builders.",
       chatPage: "imagemodel.html",
       creditPrice: "5-8 credits/image",
+      providers: ["fal"],
     },
   };
 

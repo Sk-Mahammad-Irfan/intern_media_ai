@@ -160,7 +160,7 @@ const allmodels = {
       tags: ["real-time", "DiT"],
     },
     {
-      id: "pika-v2.1",
+      id: "pika-text-to-video-v2-1",
       name: "Pika Text to Video v2.1",
       type: "video",
       icon: "camera-reels",
@@ -172,7 +172,7 @@ const allmodels = {
       tags: ["cinematic", "storytelling"],
     },
     {
-      id: "luma-dream-machine",
+      id: "luma-ray2-flash",
       name: "Luma Dream Machine: Ray 2 Flash",
       type: "video",
       icon: "camera-reels",
@@ -196,7 +196,7 @@ const allmodels = {
       tags: ["detailed", "smooth-motion"],
     },
     {
-      id: "kling-2.0-master",
+      id: "kling-video-v2-master",
       name: "Kling 2.0 Master",
       type: "video",
       icon: "camera-reels",
@@ -209,7 +209,7 @@ const allmodels = {
       tags: ["high-speed", "cinematic"],
     },
     {
-      id: "magi-1",
+      id: "magi",
       name: "MAGI-1",
       type: "video",
       icon: "camera-reels",
@@ -247,7 +247,7 @@ const allmodels = {
   ],
   audio: [
     {
-      id: "stable-audio-open-1.0",
+      id: "stackadoc-stable-audio",
       name: "Stable Audio Open 1.0",
       type: "audio",
       icon: "soundwave",
@@ -260,7 +260,7 @@ const allmodels = {
       tags: ["open-source", "sound-effects"],
     },
     {
-      id: "lyria-2",
+      id: "fal-ai-lyria2",
       name: "Lyria 2 by Google DeepMind",
       type: "audio",
       icon: "soundwave",
@@ -272,7 +272,7 @@ const allmodels = {
       tags: ["music", "high-quality"],
     },
     {
-      id: "kokoro-hindi-tts",
+      id: "fal-ai-kokoro-hindi",
       name: "Kokoro Hindi TTS",
       type: "audio",
       icon: "voice-overplay",
@@ -284,7 +284,7 @@ const allmodels = {
       tags: ["hindi", "tts"],
     },
     {
-      id: "elevenlabs-sound-effects",
+      id: "fal-ai-elevenlabs-sound-effects",
       name: "ElevenLabs Sound Effects",
       type: "audio",
       icon: "magic",
@@ -296,7 +296,7 @@ const allmodels = {
       tags: ["sound-effects", "elevenlabs"],
     },
     {
-      id: "mmaudio-v2",
+      id: "fal-ai-mmaudio-v2-text-to-audio",
       name: "MMAudio V2 Text-to-Audio",
       type: "audio",
       icon: "file-music",
@@ -308,7 +308,7 @@ const allmodels = {
       tags: ["synchronized", "realistic"],
     },
     {
-      id: "cassetteai-music-generator",
+      id: "cassattemusic-audio",
       name: "CassetteAI Music Generator",
       type: "audio",
       icon: "music-note-beamed",
@@ -320,7 +320,7 @@ const allmodels = {
       tags: ["music", "fast"],
     },
     {
-      id: "multilingual-tts",
+      id: "multilingual-audio",
       name: "Multilingual TTS",
       type: "audio",
       icon: "soundwave",
@@ -332,7 +332,7 @@ const allmodels = {
       tags: ["multilingual", "tts"],
     },
     {
-      id: "american-english-tts",
+      id: "american-audio",
       name: "American English TTS",
       type: "audio",
       icon: "soundwave",
@@ -344,7 +344,7 @@ const allmodels = {
       tags: ["english", "tts"],
     },
     {
-      id: "cassette-sound-effects",
+      id: "cassetteai-sfx-generator",
       name: "Cassette Sound Effects Generator",
       type: "audio",
       icon: "soundwave",
