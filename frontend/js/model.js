@@ -396,7 +396,7 @@ function renderAllModels() {
                 model.sourceUrl
               }" target="_blank">${model.source}</a></span>
               <div class="model-tags">
-                ${model.tags
+                &nbsp;${model.tags
                   .map((tag) => `<span class="model-tag">${tag}</span>`)
                   .join("")}
               </div>
