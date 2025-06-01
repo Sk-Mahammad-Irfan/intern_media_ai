@@ -294,7 +294,7 @@ async function generateSingleVideo({
       const seedInputAuto = document.getElementById("seedInputAuto");
       const seed = seedInputAuto ? seedInputAuto.value.trim() : "";
       const parsedSeed =
-        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : undefined;
+        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : 1234;
 
       requestBody = {
         prompt,
@@ -365,7 +365,7 @@ async function generateSingleVideo({
       const negativePrompt = negativePromptInput
         ? negativePromptInput.value.trim()
         : "";
-      const seed = seedInput ? Number(seedInput.value) : undefined;
+      const seed = seedInput ? Number(seedInput.value) : 1234;
       const imageNoiseScale = noiseScaleInput
         ? Number(noiseScaleInput.value)
         : undefined;
@@ -380,7 +380,7 @@ async function generateSingleVideo({
         guidance_scale: guidance,
         frame_num: frameNum,
         negative_prompt: negativePrompt,
-        seed,
+        seed: seed || 1234,
         image_noise_scale: imageNoiseScale,
         userId,
       };
