@@ -12,7 +12,6 @@ fal.config({ credentials: process.env.FAL_AI_API });
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
-
 // Constants
 const SUPPORTED_IMAGE_FORMATS = ["jpeg", "png"];
 const SUPPORTED_ASPECT_RATIOS = [
@@ -39,20 +38,18 @@ const validateSafetyTolerance = (level) => {
   const numeric = typeof level === "string" ? parseInt(level) : level;
   return SAFETY_TOLERANCE_LEVELS.includes(numeric) ? numeric : 2;
 };
-
-// ---------------- Unified Image Generation Interface ----------------
 export const generateImageFluxPro = async (body) => {
   const {
     provider,
     prompt,
-    resolution = "16:9", // Used as aspect_ratio
+    resolution = "1024x448",
     outputFormat = "jpeg",
     safetyTolerance = 2,
     enableSafetyInput = true,
     seed,
     rawMode = false,
-    syncMode = true, // Placeholder if needed later
-    numImages = 1, // Placeholder if needed later
+    syncMode = true,
+    numImages = 1,
   } = body;
 
   try {
@@ -60,7 +57,7 @@ export const generateImageFluxPro = async (body) => {
       case "fal": {
         const input = {
           prompt,
-          image_size: "landscape_4_3", // Default unless you're using a specific size mapping
+          image_size: resolution,
           output_format: validateFormat(outputFormat),
           aspect_ratio: validateAspectRatio(resolution),
           safety_tolerance: validateSafetyTolerance(safetyTolerance),
@@ -99,33 +96,64 @@ export const generateImageFluxPro = async (body) => {
         const output = await replicate.run("black-forest-labs/flux-pro", {
           input,
         });
+
         return typeof output?.url === "function" ? await output.url() : output;
       }
 
       case "deepinfra": {
-        const response = await axios.post(
-          "https://api.deepinfra.com/v1/openai/images/generations",
-          {
-            prompt,
-            size: "1024x1024",
-            model: "black-forest-labs/FLUX-1.1-pro",
-            n: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
-              "Content-Type": "application/json",
+        try {
+          const [width, height] = resolution.split("x").map(Number);
+
+          const response = await axios.post(
+            "https://api.deepinfra.com/v1/inference/black-forest-labs/FLUX-pro",
+            {
+              prompt,
+              width,
+              height,
             },
-          }
-        );
-        return response.data;
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          return response.data;
+        } catch (error) {
+          // Extract relevant error info
+          const status = error?.response?.status || "unknown";
+          const detail =
+            error?.response?.data?.detail || error.message || "Unknown error";
+
+          throw new Error(
+            `Image generation failed with provider 'deepinfra': Status ${status}, Detail: ${detail}`
+          );
+        }
       }
 
       default:
-        throw new Error(`Unsupported provider: ${provider}`);
+        throw new Error(
+          `Unsupported provider: '${provider}'. Supported providers are: 'fal', 'replicate', 'deepinfra'.`
+        );
     }
   } catch (error) {
-    console.error(`Error generating image with ${provider}:`, error);
-    throw error;
+    // Enhanced error formatting
+    const errorDetails = {
+      message: error.message,
+      provider,
+      inputPrompt: prompt,
+      response: error.response?.data || null,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    };
+
+    console.error(
+      "Image generation failed:",
+      JSON.stringify(errorDetails, null, 2)
+    );
+
+    throw new Error(
+      `Image generation failed with provider '${provider}': ${error.message}`
+    );
   }
 };

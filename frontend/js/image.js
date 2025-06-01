@@ -239,7 +239,7 @@ const imageModelOptions = {
   },
 
   "black-forest-labs-flux-1-1-pro": {
-    providers: ["auto", "fal", "deepinfra"],
+    providers: ["auto", "fal"],
     aspect_ratios: {
       // Default aspect ratios (used when provider is 'auto')
       square_hd: null,

@@ -187,9 +187,9 @@ export const generateImageForProvider = async (req, res) => {
         if (provider === "fal") {
           rawData = await generateImageFluxPro(body);
         }
-        if (provider === "deepinfra" || provider === "base64") {
-          rawData = await deepFluxProV1_1(body.prompt, body.resolution);
-        }
+        // if (provider === "deepinfra" || provider === "base64") {
+        //   rawData = await generateImageFluxPro(body);
+        // }
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);
