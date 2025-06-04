@@ -622,7 +622,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const isMultiModel = document.getElementById(
       "multiModelModeToggle"
     ).checked;
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId") || "guest";
 
     if (!prompt) {
       alert("Please enter a prompt.");
@@ -637,15 +637,23 @@ window.addEventListener("DOMContentLoaded", () => {
     promptInput.value = "";
 
     if (isMultiModel) {
-      // Generate audio for all selected models
-      for (const modelId of selectedAudioModels) {
-        await generateSingleAudio({
+      // Fire off all model requests in parallel
+      const tasks = selectedAudioModels.map((modelId) => {
+        return generateSingleAudio({
           modelId,
           prompt,
           userId,
           isMultiModel: true,
         });
-      }
+      });
+
+      // Don't await, let them resolve independently
+      tasks.forEach((p) =>
+        p.catch((err) => {
+          console.error("Multi-model error:", err);
+          appendErrorMessage(`Error from a model: ${err.message || err}`);
+        })
+      );
       return;
     }
 
@@ -677,7 +685,19 @@ window.addEventListener("DOMContentLoaded", () => {
     userId,
     isMultiModel,
   }) {
-    const genMsgEl = appendGeneratingMessage();
+    // Create a unique message container for this model
+    const messageId = `generating-audio-${modelId}-${Date.now()}`;
+    const aiDiv = document.createElement("div");
+    aiDiv.id = messageId;
+    aiDiv.className = "d-flex justify-content-start mb-3 generating-audio";
+    aiDiv.innerHTML = `
+      <div class="ai-message p-3 text-muted d-flex align-items-center">
+        <i class="bi bi-music-note-beamed me-2"></i>
+        Generating audio (${modelId})&nbsp;
+        <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
+      </div>`;
+    chat.appendChild(aiDiv);
+    chat.scrollTop = chat.scrollHeight;
 
     const modelMap = {
       "stackadoc-stable-audio": "stackadoc-stable-audio",
@@ -695,7 +715,13 @@ window.addEventListener("DOMContentLoaded", () => {
     const modelConfig = audioModelOptions[modelId];
 
     if (!backendModelId) {
-      replaceWithErrorMessage(genMsgEl, "Unsupported model ID.");
+      const errorDiv = document.getElementById(messageId);
+      if (errorDiv) {
+        errorDiv.innerHTML = `
+          <div class="ai-message p-3 text-danger border border-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>Unsupported model ID (${modelId})
+          </div>`;
+      }
       return;
     }
 
@@ -760,45 +786,51 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok && data.audioUrl) {
-        if (isMultiModel) {
-          // For multi-model, include the model name in the display
-          const modelName = modelId
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l) => l.toUpperCase());
-          genMsgEl.innerHTML = `
-            <div class="d-flex flex-column align-items-start w-100">
-              <div class="mb-2 text-muted small">
-                <i class="bi bi-music-note-beamed me-2"></i>Generated Audio (${modelName})
+        const messageDiv = document.getElementById(messageId);
+        if (messageDiv) {
+          messageDiv.innerHTML = `
+            <div class="ai-message p-3">
+              <div class="d-flex flex-column align-items-start w-100">
+                <div class="mb-2 text-muted small">
+                  <i class="bi bi-music-note-beamed me-2"></i>
+                  ${
+                    isMultiModel
+                      ? `Generated Audio (${modelId})`
+                      : "Generated Audio"
+                  }
+                </div>
+                <audio controls class="audio-player" style="width: 250px;">
+                  <source src="${data.audioUrl}" type="audio/wav" />
+                  Your browser does not support the audio element.
+                </audio>
               </div>
-              <audio controls class="audio-player" style="width: 250px;">
-                <source src="${data.audioUrl}" type="audio/wav" />
-                Your browser does not support the audio element.
-              </audio>
             </div>
           `;
-        } else if (provider === "fal") {
-          replaceWithAudioMessage(genMsgEl, data.audioUrl);
-        } else if (provider === "replicate") {
-          replaceWithAudioMessageRep(genMsgEl, data.audioUrl, duration);
-        } else {
-          replaceWithAudioMessage(genMsgEl, data.audioUrl);
         }
       } else {
-        if (res.status === 402) {
-          replaceWithErrorMessage(genMsgEl, "Insufficient credits.");
-        } else {
-          replaceWithErrorMessage(
-            genMsgEl,
-            `❌ Error generating audio. ${data.error || ""}`
-          );
+        const errorDiv = document.getElementById(messageId);
+        if (errorDiv) {
+          errorDiv.innerHTML = `
+            <div class="ai-message p-3 text-danger border border-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              ${
+                res.status === 402
+                  ? "Insufficient credits"
+                  : `Error generating audio (${modelId})`
+              }
+            </div>`;
         }
       }
     } catch (err) {
       console.error(err);
-      replaceWithErrorMessage(
-        genMsgEl,
-        "Audio generation failed. Please try again later or use a different model."
-      );
+      const errorDiv = document.getElementById(messageId);
+      if (errorDiv) {
+        errorDiv.innerHTML = `
+          <div class="ai-message p-3 text-danger border border-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Audio generation failed (${modelId}). Please try again.
+          </div>`;
+      }
     }
   }
 

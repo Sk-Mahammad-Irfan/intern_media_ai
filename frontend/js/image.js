@@ -986,51 +986,44 @@ async function generateImage() {
   const promptInput = document.getElementById("promptInput");
   const prompt = promptInput.value.trim();
   const isMultiModel = document.getElementById("multiModelModeToggle").checked;
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId") || "guest";
 
   if (!prompt) {
     alert("Please enter a prompt.");
     return;
   }
 
+  if (isMultiModel && selectedModels.length === 0) {
+    return alert("Please select at least one model in multi-model mode.");
+  }
+
   appendUserMessage(prompt);
   promptInput.value = "";
 
-  if (isMultiModel && selectedModels.length === 0) {
-    replaceWithErrorMessage(
-      "Please select at least one model in multi-model mode."
-    );
-    return;
-  }
-
-  // If in multi-model mode, generate for each selected model
   if (isMultiModel) {
-    for (const modelId of selectedModels) {
-      const genMsgId = appendGeneratingMessage();
+    // Fire off all model requests in parallel
+    const tasks = selectedModels.map((modelId) => {
+      return generateSingleImage({
+        modelId,
+        prompt,
+        userId,
+        isMultiModel: true,
+      });
+    });
 
-      try {
-        await generateSingleImage({
-          modelId,
-          prompt,
-          userId,
-          isMultiModel: true,
-          genMsgId,
-        });
-      } catch (error) {
-        console.error(`Error generating image for model ${modelId}:`, error);
-        replaceWithErrorMessage(
-          `Failed to generate image for ${modelId}`,
-          genMsgId
-        );
-      }
-    }
+    // Don't await, let them resolve independently
+    tasks.forEach((p) =>
+      p.catch((err) => {
+        console.error("Multi-model error:", err);
+        appendErrorMessage(`Error from a model: ${err.message || err}`);
+      })
+    );
     return;
   }
 
   // Original single model generation
   const provider = providerSelect.value;
   const modelId = new URLSearchParams(window.location.search).get("id");
-  const genMsgId = appendGeneratingMessage();
 
   await generateSingleImage({
     modelId,
@@ -1038,7 +1031,6 @@ async function generateImage() {
     userId,
     provider,
     isMultiModel: false,
-    genMsgId,
   });
 }
 
@@ -1048,13 +1040,32 @@ async function generateSingleImage({
   userId,
   provider = "auto",
   isMultiModel,
-  genMsgId,
 }) {
+  // Create a unique message container for this model
+  const messageId = `generating-image-${modelId}-${Date.now()}`;
+  const aiDiv = document.createElement("div");
+  aiDiv.id = messageId;
+  aiDiv.className = "d-flex justify-content-start mb-3 generating-image";
+  aiDiv.innerHTML = `
+    <div class="ai-message p-3 text-muted d-flex align-items-center">
+      <i class="bi bi-image-fill me-2"></i>
+      Generating image (${modelId})&nbsp;
+      <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
+    </div>`;
+  chat.appendChild(aiDiv);
+  chat.scrollTop = chat.scrollHeight;
+
   const backendModelId = modelId;
   const modelConfig = imageModelOptions[modelId];
 
   if (!backendModelId || !modelConfig) {
-    replaceWithErrorMessage("Unsupported or missing model ID.", genMsgId);
+    const errorDiv = document.getElementById(messageId);
+    if (errorDiv) {
+      errorDiv.innerHTML = `
+        <div class="ai-message p-3 text-danger border border-danger">
+          <i class="bi bi-exclamation-triangle me-2"></i>Unsupported model ID (${modelId})
+        </div>`;
+    }
     return;
   }
 
@@ -1115,61 +1126,73 @@ async function generateSingleImage({
     const data = await res.json();
 
     if (res.status === 402) {
-      replaceWithErrorMessage("Insufficient credits.", genMsgId);
+      const errorDiv = document.getElementById(messageId);
+      if (errorDiv) {
+        errorDiv.innerHTML = `
+          <div class="ai-message p-3 text-danger border border-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>Insufficient credits (${modelId})
+          </div>`;
+      }
       return;
     }
 
     if (!res.ok) {
-      replaceWithErrorMessage(
-        `Server returned status ${res.status} (${data.error})`,
-        genMsgId
-      );
+      const errorDiv = document.getElementById(messageId);
+      if (errorDiv) {
+        errorDiv.innerHTML = `
+          <div class="ai-message p-3 text-danger border border-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>Server error (${modelId}): ${
+          data.error || "Unknown error"
+        }
+          </div>`;
+      }
       return;
     }
 
-    const genMsg = document.getElementById(genMsgId);
-    if (genMsg) genMsg.remove();
-
     if (data.imageUrl) {
-      const aiDiv = document.createElement("div");
-      aiDiv.className = "d-flex justify-content-start mb-3";
+      const messageDiv = document.getElementById(messageId);
+      if (messageDiv) {
+        const modelLabel = isMultiModel ? ` (${modelId})` : "";
 
-      const modelLabel = isMultiModel ? ` (${modelId})` : "";
-
-      aiDiv.innerHTML = `
-        <div class="ai-message p-2">
-          <div class="d-flex flex-column align-items-start">
-            <div class="mb-2 text-muted small">
-              <i class="bi bi-image-fill me-2"></i>Generated Image${modelLabel} (${
-        aspectRatio || "default"
-      })
+        messageDiv.innerHTML = `
+          <div class="ai-message p-2">
+            <div class="d-flex flex-column align-items-start">
+              <div class="mb-2 text-muted small">
+                <i class="bi bi-image-fill me-2"></i>Generated Image${modelLabel} (${
+          aspectRatio || "default"
+        })
+              </div>
+              <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
+                <img src="${
+                  data.imageUrl
+                }" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+                <a href="${
+                  data.imageUrl
+                }" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+              </div>
             </div>
-            <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-              <img src="${
-                data.imageUrl
-              }" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-              <a href="${
-                data.imageUrl
-              }" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
-                <i class="bi bi-box-arrow-up-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>`;
-      chat.appendChild(aiDiv);
-      chat.scrollTop = chat.scrollHeight;
+          </div>`;
+      }
     } else {
-      replaceWithErrorMessage(
-        "Image generation failed: no image URL returned.",
-        genMsgId
-      );
+      const errorDiv = document.getElementById(messageId);
+      if (errorDiv) {
+        errorDiv.innerHTML = `
+          <div class="ai-message p-3 text-danger border border-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>No image URL returned (${modelId})
+          </div>`;
+      }
     }
   } catch (err) {
     console.error("Network or server error:", err);
-    replaceWithErrorMessage(
-      "Image generation failed. Please try again later.",
-      genMsgId
-    );
+    const errorDiv = document.getElementById(messageId);
+    if (errorDiv) {
+      errorDiv.innerHTML = `
+        <div class="ai-message p-3 text-danger border border-danger">
+          <i class="bi bi-exclamation-triangle me-2"></i>Image generation failed (${modelId}). Please try again.
+        </div>`;
+    }
   }
 }
 

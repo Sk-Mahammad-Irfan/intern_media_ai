@@ -9,9 +9,9 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-// The resolution of the generated image Default value: square_hd
+// Allowed aspect ratios
+const VALID_ASPECT_RATIOS = ["1:1", "16:9", "9:16", "3:4", "4:3"];
 
-// Possible enum values: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9
 export const imageGenFAL = async (
   prompt,
   aspect_ratio = "1:1",
@@ -19,6 +19,14 @@ export const imageGenFAL = async (
   negative_prompt
 ) => {
   try {
+    // Validate aspect ratio, fallback to '4:3' if invalid
+    if (!VALID_ASPECT_RATIOS.includes(aspect_ratio)) {
+      console.warn(
+        `Invalid aspect ratio '${aspect_ratio}' provided. Falling back to '4:3'.`
+      );
+      aspect_ratio = "4:3";
+    }
+
     const result = await fal.subscribe("fal-ai/imagen4/preview", {
       input: { prompt, aspect_ratio, seed, negative_prompt },
       logs: true,

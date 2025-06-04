@@ -241,19 +241,27 @@ async function generateVideo() {
   appendUserMessage(prompt);
 
   if (isMultiModel) {
-    // Generate videos for all selected models
-    for (const modelId of selectedModels) {
-      await generateSingleVideo({
+    // Fire off all model requests in parallel
+    const tasks = selectedModels.map((modelId) => {
+      return generateSingleVideo({
         modelId,
         prompt,
         userId,
         isMultiModel: true,
       });
-    }
+    });
+
+    // Don't await, let them resolve independently
+    tasks.forEach((p) =>
+      p.catch((err) => {
+        console.error("Multi-model error:", err);
+        appendErrorMessage(`Error from a model: ${err.message || err}`);
+      })
+    );
     return;
   }
 
-  // Original single model generation
+  // Single model path
   const resolution = getSelectedValue(resolutionSelect);
   const aspect_ratio = getSelectedValue(aspectRatioSelect);
   const provider = providerSelect.value;
