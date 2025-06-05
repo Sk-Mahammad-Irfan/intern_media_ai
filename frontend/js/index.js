@@ -39,27 +39,38 @@
 
   // Handle prompt submission
   document.getElementById("submitPrompt").addEventListener("click", function () {
-    const prompt = document.querySelector(".model-prompt-box input").value.trim();
+  const prompt = document.querySelector(".model-prompt-box input").value.trim();
 
-    if (!selectedModel) {
-      alert("Please select a model first.");
-      return;
+  if (!selectedModel) {
+    alert("Please select a model first.");
+    return;
+  }
+
+  if (!prompt) {
+    alert("Please enter a prompt.");
+    return;
+  }
+
+  // Determine the correct page based on model type
+  let page = "imagemodel.html"; // Default
+  const selectedCard = document.querySelector(`.model-card[data-model="${selectedModel}"]`);
+  if (selectedCard.classList.contains("video-model")) {
+    page = "videomodel.html";
+  } else if (selectedCard.classList.contains("audio-model")) {
+    page = "audiomodel.html";
+  }
+
+  // Redirect
+  window.location.href = `${page}?id=${selectedModel}&prompt=${encodeURIComponent(prompt)}`;
+});
+
+// Add click listeners to prompt badges (THIS MUST BE OUTSIDE submitPrompt handler)
+document.querySelectorAll('.carousel-item .badge').forEach(badge => {
+  badge.style.cursor = 'pointer';  // Make it clear they are clickable
+  badge.addEventListener('click', () => {
+    const promptInput = document.querySelector(".model-prompt-box input");
+    if (promptInput) {
+      promptInput.value = badge.textContent;
     }
-
-    if (!prompt) {
-      alert("Please enter a prompt.");
-      return;
-    }
-
-    // Determine the correct page based on model type
-    let page = "imagemodel.html"; // Default
-    const selectedCard = document.querySelector(`.model-card[data-model="${selectedModel}"]`);
-    if (selectedCard.classList.contains("video-model")) {
-      page = "videomodel.html";
-    } else if (selectedCard.classList.contains("audio-model")) {
-      page = "audiomodel.html";
-    }
-
-    // Redirect
-    window.location.href = `${page}?id=${selectedModel}&prompt=${encodeURIComponent(prompt)}`;
   });
+});
