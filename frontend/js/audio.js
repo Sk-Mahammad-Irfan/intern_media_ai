@@ -659,12 +659,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Original single model generation
     const durationInput = document.getElementById("durationInput");
-    const duration = Number(durationInput?.value.trim());
+    const duration = Number(durationInput?.value.trim() || 10);
     const provider = document.getElementById("providerSelect")?.value || "auto";
     const modelId = new URLSearchParams(window.location.search).get("id");
 
-    if (!duration) {
-      return alert("Please enter a duration.");
+    if (isNaN(duration) || duration <= 0) {
+      return alert("Please enter a valid duration.");
     }
 
     await generateSingleAudio({
@@ -898,14 +898,6 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
-
-  const promptFromURL = params.get("prompt");
-  const input = document.getElementById("promptInput");
-
-  if (promptFromURL && input) {
-    input.value = decodeURIComponent(promptFromURL);
-    generateAudio();
-  }
 });
 
 window.addEventListener("DOMContentLoaded", () => {
