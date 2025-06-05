@@ -262,14 +262,10 @@ async function generateVideo() {
   }
 
   // Single model path
-  const resolution = getSelectedValue(resolutionSelect);
-  const aspect_ratio = getSelectedValue(aspectRatioSelect);
+  const resolution = getSelectedValue(resolutionSelect) || "480p";
+  const aspect_ratio = getSelectedValue(aspectRatioSelect) || "16:9";
   const provider = providerSelect.value;
   const modelId = getModelIdFromURL() || "wan";
-
-  if (!resolution || !aspect_ratio) {
-    return alert("Please complete all required parameters.");
-  }
 
   await generateSingleVideo({
     modelId,
@@ -549,8 +545,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (prompt) {
     document.getElementById("promptInput").value = decodeURIComponent(prompt);
-    appendUserMessage(prompt);
-    appendGeneratingVideoMessage();
     generateVideo();
   }
 
