@@ -83,12 +83,41 @@ const modelOptions = {
   },
 };
 
+const videoModelCredits = {
+  "wan-ai-wan21-t2v-13b": 10,
+  "lightricks-ltx-video": 60,
+  "pixverse-v4-text-to-video": 12,
+  "pika-text-to-video-v2-1": 40,
+  "luma-ray2-flash": 25,
+  "kling-video-v2-master": 20,
+  "vidu-q1": 18,
+  magi: 22,
+  veo2: 18,
+  "cogvideox-5b": 25,
+};
+
 let selectedModels = [];
 
 function prettifyModelName(modelId) {
   return modelId
     .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function updateTotalCredits() {
+  const creditAmountElement = document.getElementById("creditAmount");
+  const creditDisplay = document.getElementById("creditDisplay");
+
+  if (!creditAmountElement || !creditDisplay) return;
+
+  let totalCredits = 0;
+
+  selectedModels.forEach((model) => {
+    totalCredits += videoModelCredits[model] || 0;
+  });
+
+  creditAmountElement.textContent = totalCredits;
+  creditDisplay.style.display = selectedModels.length > 0 ? "block" : "none";
 }
 
 function populateModelCheckboxes() {
@@ -135,6 +164,7 @@ function updateSelectedModels() {
     .forEach((checkbox) => {
       selectedModels.push(checkbox.value);
     });
+  updateTotalCredits();
 }
 
 function getSelectedValue(select) {

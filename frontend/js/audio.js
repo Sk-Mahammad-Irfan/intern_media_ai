@@ -199,12 +199,42 @@ const audioModelOptions = {
     ],
   },
 };
+
+const audioModelCredits = {
+  "stackadoc-stable-audio": 1,
+  "cassetteai-sfx-generator": 1,
+  "cassattemusic-audio": 2,
+  "multilingual-audio": 9,
+  "american-audio": 2,
+  "fal-ai-kokoro-hindi": 5,
+  "fal-ai-lyria2": 5,
+  "fal-ai-elevenlabs-sound-effects": 5,
+  "fal-ai-mmaudio-v2-text-to-audio": 5,
+};
+
 let selectedAudioModels = [];
 
 function prettifyModelName(modelId) {
   return modelId
     .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function updateTotalCredits() {
+  const creditAmountElement = document.getElementById("creditAmount");
+  const creditDisplay = document.getElementById("creditDisplay");
+
+  if (!creditAmountElement || !creditDisplay) return;
+
+  let totalCredits = 0;
+
+  selectedAudioModels.forEach((model) => {
+    totalCredits += audioModelCredits[model] || 0;
+  });
+
+  creditAmountElement.textContent = totalCredits;
+  creditDisplay.style.display =
+    selectedAudioModels.length > 0 ? "block" : "none";
 }
 
 function populateModelCheckboxes() {
@@ -251,6 +281,7 @@ function updateSelectedModels() {
     .forEach((checkbox) => {
       selectedAudioModels.push(checkbox.value);
     });
+  updateTotalCredits();
 }
 
 function toggleAudioMultiModelMode() {
@@ -268,11 +299,13 @@ function toggleAudioMultiModelMode() {
     providerContainer.style.display = "none";
     durationContainer.style.display = "none";
     populateModelCheckboxes();
+    updateTotalCredits();
   } else {
     multiModelContainer.style.display = "none";
     providerContainer.style.display = "block";
     durationContainer.style.display = "block";
     selectedAudioModels = [];
+    updateTotalCredits();
     // Restore default model options
     const modelId = new URLSearchParams(window.location.search).get("id");
     if (modelId) populateAudioModelOptions(modelId);

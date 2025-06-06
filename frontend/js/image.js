@@ -534,13 +534,41 @@ const imageModelOptions = {
     custom_inputs: [],
   },
 };
+
+const imageModelCredits = {
+  "black-forest-labs-flux-1-1-pro": 5,
+  "recraft-v3": 4,
+  fooocus: 3,
+  "hidream-i1-dev": 4,
+  "ideogram-v3": 7,
+  bagel: 10,
+  "imagen4-preview": 12,
+  "f-lite-standard": 12,
+  "sana-v1.5-4.8b": 12,
+  "minimax-image-01": 12,
+};
+
 let selectedModels = [];
 function prettifyModelName(modelId) {
   return modelId
     .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+function updateTotalCredits() {
+  const creditAmountElement = document.getElementById("creditAmount");
+  const creditDisplay = document.getElementById("creditDisplay");
 
+  if (!creditAmountElement || !creditDisplay) return;
+
+  let totalCredits = 0;
+
+  selectedModels.forEach((model) => {
+    totalCredits += imageModelCredits[model] || 0;
+  });
+
+  creditAmountElement.textContent = totalCredits;
+  creditDisplay.style.display = selectedModels.length > 0 ? "block" : "none";
+}
 function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
@@ -586,7 +614,7 @@ function updateSelectedModels() {
       selectedModels.push(checkbox.value);
     });
 
-  console.log("Selected models:", selectedModels);
+  updateTotalCredits();
 }
 
 document

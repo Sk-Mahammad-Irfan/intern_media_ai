@@ -188,5 +188,6 @@ function toggleMultiModelMode() {
     if (typeof selectedModels !== "undefined") {
       selectedModels = [];
     }
+    updateTotalCredits();
   }
 }
