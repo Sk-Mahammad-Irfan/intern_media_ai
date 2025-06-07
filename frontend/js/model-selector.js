@@ -48,14 +48,15 @@ function populateModelSelector() {
     "Text-to-Audio": [],
   };
 
-  const ignored = getIgnoredProviders();
+  // Removed use of ignored providers
+  // const ignored = getIgnoredProviders();
   let hasUsableModels = false;
 
   for (const key in models) {
     const model = models[key];
 
-    // 🔒 Skip if provider is ignored
-    if (ignored.has(model.provider)) continue;
+    // 🔓 Do NOT skip ignored providers anymore
+    // if (ignored.has(model.provider)) continue;
 
     const page = model.chatPage;
     if (page.includes("image")) grouped["Text-to-Image"].push(model);
@@ -69,7 +70,7 @@ function populateModelSelector() {
     const option = document.createElement("option");
     option.disabled = true;
     option.selected = true;
-    option.textContent = "⚠️ All providers are ignored";
+    option.textContent = "⚠️ No models available";
     selector.appendChild(option);
     return;
   }

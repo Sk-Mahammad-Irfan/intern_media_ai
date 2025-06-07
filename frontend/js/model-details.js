@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "MMAudio V2 is a powerful text-to-audio generation model capable of producing synchronized, realistic audio clips from natural language prompts. Ideal for sound design, multimedia content, and accessibility solutions.",
       chatPage: "audiomodel.html",
       creditPrice: "1 credits/generation",
-      providers: ["huggingface"],
+      providers: ["fal"],
     },
     "cassattemusic-audio": {
       title: "CassetteAI Music Generator",

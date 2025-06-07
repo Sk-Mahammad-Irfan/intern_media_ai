@@ -270,20 +270,38 @@ async function generateVideo() {
 
   appendUserMessage(prompt);
 
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
   if (isMultiModel) {
     // Fire off all model requests in parallel
     const tasks = selectedModels.map((modelId) => {
+      const availableProviders = modelOptions[modelId].providers
+        .filter((provider) => !ignoredProviders.includes(provider))
+        .filter((provider) => provider !== "auto");
+
+      if (availableProviders.length === 0) {
+        appendErrorMessage(`No available providers for model "${modelId}"`);
+        return Promise.resolve(); // skip this one
+      }
+
+      // Use default provider selection logic: prefer 'auto' if available
+      const provider = availableProviders.includes("auto")
+        ? "auto"
+        : availableProviders[0];
+
       return generateSingleVideo({
         modelId,
         prompt,
         userId,
+        provider,
         isMultiModel: true,
       });
     });
 
-    // Don't await, let them resolve independently
+    // Let them resolve independently
     tasks.forEach((p) =>
-      p.catch((err) => {
+      p?.catch((err) => {
         console.error("Multi-model error:", err);
         appendErrorMessage(`Error from a model: ${err.message || err}`);
       })
@@ -292,10 +310,21 @@ async function generateVideo() {
   }
 
   // Single model path
+  const modelId = getModelIdFromURL() || "wan";
+  const availableProviders = modelOptions[modelId].providers
+    .filter((provider) => !ignoredProviders.includes(provider))
+    .filter((provider) => provider !== "auto");
+
+  if (availableProviders.length === 0) {
+    appendErrorMessage(
+      `No available providers for model "${modelId}". Cannot generate video.`
+    );
+    return;
+  }
+
   const resolution = getSelectedValue(resolutionSelect) || "480p";
   const aspect_ratio = getSelectedValue(aspectRatioSelect) || "16:9";
   const provider = providerSelect.value;
-  const modelId = getModelIdFromURL() || "wan";
 
   await generateSingleVideo({
     modelId,
@@ -513,9 +542,16 @@ function populateModelOptions(modelId) {
   if (!config) return;
 
   // Populate providers
-  // Populate providers
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
   providerSelect.innerHTML = "";
-  modelOptions[modelId].providers.forEach((provider) => {
+
+  const availableProviders = modelOptions[modelId].providers.filter(
+    (provider) => !ignoredProviders.includes(provider)
+  );
+
+  availableProviders.forEach((provider) => {
     const option = document.createElement("option");
     option.value = provider;
     option.textContent =
@@ -525,11 +561,11 @@ function populateModelOptions(modelId) {
     providerSelect.appendChild(option);
   });
 
-  // ✅ Always select "auto" if available
-  if (config.providers.includes("auto")) {
+  // ✅ Always select "auto" if available and not ignored
+  if (availableProviders.includes("auto")) {
     providerSelect.value = "auto";
   } else {
-    providerSelect.value = config.providers[0];
+    providerSelect.value = availableProviders[0] || ""; // fallback to empty if none available
   }
 
   // Populate resolutions

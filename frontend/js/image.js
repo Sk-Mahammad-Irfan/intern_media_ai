@@ -988,26 +988,42 @@ function populateImageModelOptions(modelId) {
   const config = imageModelOptions[modelId];
   if (!config) return;
 
-  // Populate provider select
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
   if (providerSelect) {
     providerSelect.innerHTML = "";
-    config.providers.forEach((provider) => {
+
+    const availableProviders = config.providers.filter(
+      (provider) => !ignoredProviders.includes(provider)
+    );
+
+    availableProviders.forEach((provider) => {
       const option = document.createElement("option");
       option.value = provider;
-      option.textContent = provider === "auto" ? "Auto (default)" : provider;
+      option.textContent =
+        provider === "auto"
+          ? "Auto (default)"
+          : provider.charAt(0).toUpperCase() + provider.slice(1);
       providerSelect.appendChild(option);
     });
 
-    // Always select "auto" if available
+    providerSelect.value = availableProviders.includes("auto")
+      ? "auto"
+      : availableProviders[0] || "";
   }
 
-  if (config.providers.includes("auto")) {
-    providerSelect.value = "auto";
-  } else {
-    providerSelect.value = config.providers[0];
-  }
+  // Populate resolution select if needed (left as-is)
+}
 
-  // Populate resolution select
+function appendErrorMessage(message) {
+  const errorDiv = document.createElement("div");
+  errorDiv.className = "ai-message p-3 text-danger border border-danger mb-3";
+  errorDiv.innerHTML = `
+    <i class="bi bi-exclamation-triangle me-2"></i>${message}
+  `;
+  chat.appendChild(errorDiv);
+  chat.scrollTop = chat.scrollHeight;
 }
 
 async function generateImage() {
@@ -1028,20 +1044,35 @@ async function generateImage() {
   appendUserMessage(prompt);
   promptInput.value = "";
 
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
   if (isMultiModel) {
-    // Fire off all model requests in parallel
     const tasks = selectedModels.map((modelId) => {
+      const availableProviders = imageModelOptions[modelId].providers
+        .filter((provider) => !ignoredProviders.includes(provider))
+        .filter((provider) => provider !== "auto");
+
+      if (availableProviders.length === 0) {
+        appendErrorMessage(`No available providers for model "${modelId}"`);
+        return Promise.resolve();
+      }
+
+      const provider = availableProviders.includes("auto")
+        ? "auto"
+        : availableProviders[0];
+
       return generateSingleImage({
         modelId,
         prompt,
         userId,
+        provider,
         isMultiModel: true,
       });
     });
 
-    // Don't await, let them resolve independently
     tasks.forEach((p) =>
-      p.catch((err) => {
+      p?.catch((err) => {
         console.error("Multi-model error:", err);
         appendErrorMessage(`Error from a model: ${err.message || err}`);
       })
@@ -1049,9 +1080,21 @@ async function generateImage() {
     return;
   }
 
-  // Original single model generation
-  const provider = providerSelect.value;
-  const modelId = new URLSearchParams(window.location.search).get("id");
+  const modelId =
+    new URLSearchParams(window.location.search).get("id") || "default";
+  const availableProviders = imageModelOptions[modelId].providers
+    .filter((provider) => !ignoredProviders.includes(provider))
+    .filter((provider) => provider !== "auto");
+
+  if (availableProviders.length === 0) {
+    appendErrorMessage(
+      `No available providers for model "${modelId}". Cannot generate image.`
+    );
+    return;
+  }
+
+  const provider =
+    document.getElementById("providerSelect")?.value || availableProviders[0];
 
   await generateSingleImage({
     modelId,

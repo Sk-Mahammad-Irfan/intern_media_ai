@@ -274,6 +274,14 @@ function populateModelCheckboxes() {
   });
 }
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Updates the list of selected audio models based on the checked checkboxes
+ * in the modelCheckboxes container. Calls updateTotalCredits to refresh the
+ * total credits display according to the selected models.
+ */
+
+/*******  87a88096-5ef1-4718-8379-ca86ced85aae  *******/
 function updateSelectedModels() {
   selectedAudioModels = [];
   document
@@ -449,16 +457,31 @@ function populateAudioModelOptions(modelId) {
   if (!config) return;
 
   const providerSelect = document.getElementById("providerSelect");
+
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
   if (providerSelect) {
     providerSelect.innerHTML = "";
-    config.providers.forEach((provider) => {
+
+    const availableProviders = config.providers.filter(
+      (provider) => !ignoredProviders.includes(provider)
+    );
+
+    availableProviders.forEach((provider) => {
       const option = document.createElement("option");
       option.value = provider;
-      option.textContent = provider === "auto" ? "Auto (default)" : provider;
+      option.textContent =
+        provider === "auto"
+          ? "Auto (default)"
+          : provider.charAt(0).toUpperCase() + provider.slice(1);
       providerSelect.appendChild(option);
     });
 
-    providerSelect.value = "auto"; // Set default to auto
+    // Default to "auto" if available, otherwise first available
+    providerSelect.value = availableProviders.includes("auto")
+      ? "auto"
+      : availableProviders[0] || "";
   }
 }
 
@@ -596,57 +619,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function replaceWithAudioMessageRep(el, audioUrl, durationSeconds) {
-    if (!el) return;
-
-    try {
-      // Fetch and decode the audio
-      const response = await fetch(audioUrl);
-      const arrayBuffer = await response.arrayBuffer();
-
-      const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-      // Calculate number of samples to include
-      const trimmedDuration = Math.min(durationSeconds, audioBuffer.duration);
-      const sampleRate = audioBuffer.sampleRate;
-      const trimmedLength = Math.floor(trimmedDuration * sampleRate);
-
-      // Create a new buffer with the trimmed length
-      const trimmedBuffer = audioContext.createBuffer(
-        audioBuffer.numberOfChannels,
-        trimmedLength,
-        sampleRate
-      );
-
-      // Copy each channel
-      for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
-        const oldData = audioBuffer.getChannelData(i);
-        const newData = trimmedBuffer.getChannelData(i);
-        newData.set(oldData.subarray(0, trimmedLength));
-      }
-
-      // Encode to Blob (WAV format)
-      const wavBlob = bufferToWav(trimmedBuffer);
-      const trimmedAudioUrl = URL.createObjectURL(wavBlob);
-
-      // Inject the audio player with trimmed audio
-      el.innerHTML = `
-        <div class="d-flex flex-column align-items-start w-100" custom-audio-player">
-          <div class="mb-2 text-muted small">
-            <i class="bi bi-music-note-beamed me-2"></i>Trimmed Audio (${trimmedDuration}s)
-          </div>
-          <audio controls class="audio-player" style="width: 250px;">
-            <source src="${trimmedAudioUrl}" type="audio/wav" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      `;
-    } catch (err) {
-      console.error("Error trimming audio:", err);
-      replaceWithErrorMessage(el, "❌ Failed to trim audio.");
-    }
+  function appendErrorMessage(message) {
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "ai-message p-3 text-danger border border-danger mb-3";
+    errorDiv.innerHTML = `
+      <i class="bi bi-exclamation-triangle me-2"></i>${message}
+    `;
+    chat.appendChild(errorDiv);
+    chat.scrollTop = chat.scrollHeight;
   }
 
   window.generateAudio = async function generateAudio() {
@@ -669,20 +649,35 @@ window.addEventListener("DOMContentLoaded", () => {
     appendUserMessage(prompt);
     promptInput.value = "";
 
+    const ignoredProviders =
+      JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
     if (isMultiModel) {
-      // Fire off all model requests in parallel
       const tasks = selectedAudioModels.map((modelId) => {
+        const availableProviders = audioModelOptions[modelId].providers
+          .filter((provider) => !ignoredProviders.includes(provider))
+          .filter((provider) => provider !== "auto");
+
+        if (availableProviders.length === 0) {
+          appendErrorMessage(`No available providers for model "${modelId}"`);
+          return Promise.resolve();
+        }
+
+        const provider = availableProviders.includes("auto")
+          ? "auto"
+          : availableProviders[0];
+
         return generateSingleAudio({
           modelId,
           prompt,
+          provider,
           userId,
           isMultiModel: true,
         });
       });
 
-      // Don't await, let them resolve independently
       tasks.forEach((p) =>
-        p.catch((err) => {
+        p?.catch((err) => {
           console.error("Multi-model error:", err);
           appendErrorMessage(`Error from a model: ${err.message || err}`);
         })
@@ -690,15 +685,27 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Original single model generation
     const durationInput = document.getElementById("durationInput");
     const duration = Number(durationInput?.value.trim() || 10);
-    const provider = document.getElementById("providerSelect")?.value || "auto";
-    const modelId = new URLSearchParams(window.location.search).get("id");
-
     if (isNaN(duration) || duration <= 0) {
       return alert("Please enter a valid duration.");
     }
+
+    const modelId =
+      new URLSearchParams(window.location.search).get("id") || "default";
+    const availableProviders = audioModelOptions[modelId].providers
+      .filter((provider) => !ignoredProviders.includes(provider))
+      .filter((provider) => provider !== "auto");
+
+    if (availableProviders.length === 0) {
+      appendErrorMessage(
+        `No available providers for model "${modelId}". Cannot generate audio.`
+      );
+      return;
+    }
+
+    const provider =
+      document.getElementById("providerSelect")?.value || availableProviders[0];
 
     await generateSingleAudio({
       modelId,
