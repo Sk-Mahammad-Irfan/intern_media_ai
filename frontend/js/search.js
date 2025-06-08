@@ -71,7 +71,17 @@ const models = {
     chatPage: "imagemodel.html",
     provider: "deepinfra",
   },
-
+  "black-forest-labs-flux-schnell": {
+    id: "black-forest-labs-flux-schnell",
+    title: "Black Forest Labs: FLUX.1 [schnell]",
+    description:
+      "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1–4 steps — optimized for both personal and commercial use.",
+    link: "https://deepinfra.com/black-forest-labs/flux-schnell",
+    fullDetails:
+      "Black Forest Labs’ FLUX.1 [schnell] model delivers fast and efficient image generation via a 12-billion parameter flow transformer, balancing speed and output quality across 1–4 inference steps. Perfect for creators seeking top-tier results with minimal latency.",
+    chatPage: "imagemodel.html",
+    provider: "fal",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",
@@ -143,7 +153,7 @@ const models = {
     fullDetails:
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
-    provider: "huggingface",
+    provider: "fal",
   },
   "cassattemusic-audio": {
     id: "cassattemusic-audio",

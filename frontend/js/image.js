@@ -319,6 +319,137 @@ const imageModelOptions = {
     ],
   },
 
+  "black-forest-labs-flux-schnell": {
+    providers: ["auto", "fal", "replicate"],
+    aspect_ratios: {
+      // Default aspect ratios (used when provider is 'auto')
+      square_hd: "1024x1024",
+      square: "768x768",
+      portrait_4_3: "768x1024",
+      portrait_16_9: "576x1024",
+      landscape_4_3: "1024x768",
+      landscape_16_9: "1024x576",
+    },
+    // Provider-specific aspect ratios
+    provider_aspect_ratios: {
+      fal: {
+        square_hd: "1024x1024",
+        square: "768x768",
+        portrait_4_3: "768x1024",
+        portrait_16_9: "576x1024",
+        landscape_4_3: "1024x768",
+        landscape_16_9: "1024x576",
+      },
+      replicate: {
+        "1:1": "1:1",
+        "16:9": "16:9",
+        "21:9": "21:9",
+        "3:2": "3:2",
+        "2:3": "2:3",
+        "4:5": "4:5",
+        "5:4": "5:4",
+        "3:4": "3:4",
+        "4:3": "4:3",
+        "9:16": "9:16",
+        "9:21": "9:21",
+      },
+    },
+    // UI input schema
+    custom_inputs: [
+      {
+        id: "prompt",
+        type: "textarea",
+        label: "Prompt",
+        placeholder: "Describe the image you want to generate",
+        required: true,
+      },
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+        description: "Random seed. Set for reproducible generation",
+      },
+      {
+        id: "syncMode",
+        type: "checkbox",
+        label: "Sync Mode",
+        default: true,
+      },
+      {
+        id: "numImages",
+        type: "number",
+        label: "Number of Images",
+        default: 1,
+        min: 1,
+        max: 4,
+      },
+      {
+        id: "enableSafetyInput",
+        type: "checkbox",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+      {
+        id: "safetyTolerance",
+        type: "select",
+        label: "Safety Tolerance",
+        options: ["1", "2", "3", "4", "5", "6"],
+        default: "2",
+      },
+      {
+        id: "outputFormat",
+        type: "select",
+        label: "Output Format",
+        options: ["webp", "jpg", "png"],
+        default: "webp",
+      },
+      {
+        id: "outputQuality",
+        type: "number",
+        label: "Output Quality",
+        default: 80,
+        min: 0,
+        max: 100,
+        description: "Only relevant for non-PNG outputs",
+      },
+      {
+        id: "megapixels",
+        type: "select",
+        label: "Megapixels",
+        options: ["1", "0.25"],
+        default: "1",
+      },
+      {
+        id: "numInferenceSteps",
+        type: "number",
+        label: "Number of Inference Steps",
+        default: 4,
+        min: 1,
+        max: 4,
+      },
+      {
+        id: "goFast",
+        type: "checkbox",
+        label: "Go Fast Mode",
+        default: true,
+      },
+      {
+        id: "rawMode",
+        type: "checkbox",
+        label: "Raw Image (less processed)",
+        default: false,
+      },
+    ],
+    // Add this configuration to control UI display
+    ui_config: {
+      always_show_output_settings: true, // Always show output settings container
+      show_custom_inputs_for: ["fal", "replicate"], // Show custom inputs for these providers
+      hide_custom_inputs_for: ["auto"], // Hide custom inputs for these providers
+      default_provider: "auto", // Default selected provider
+    },
+  },
+
   bagel: {
     providers: ["fal", "auto"],
     aspect_ratios: {
@@ -729,12 +860,12 @@ providerSelect.addEventListener("change", () => {
   if (selected === "auto") {
     renderAspectRatioOptions(modelId);
     outputSettingsContainer.style.display = "block";
-  } else if (selected === "fal") {
+    displayCustomInputs(modelId, "inputsContainer");
+  } else if (selected === "fal" || selected === "replicate") {
     displayCustomInputs(modelId, "inputsContainer");
     renderAspectRatioOptions(modelId);
     outputSettingsContainer.style.display = "block";
   } else {
-    // No output settings or custom inputs for other providers
     outputSettingsContainer.style.display = "none";
   }
 });
@@ -819,6 +950,11 @@ providerSelect.addEventListener("change", () => {
     customInputsContainer.style.display = "none";
     renderAspectRatioOptions(modelId);
   } else if (selected === "fal") {
+    outputSettingsContainer.style.display = "block";
+    customInputsContainer.style.display = "block";
+    displayCustomInputs(modelId, "inputsContainer");
+    renderAspectRatioOptions(modelId);
+  } else if (selected === "replicate") {
     outputSettingsContainer.style.display = "block";
     customInputsContainer.style.display = "block";
     displayCustomInputs(modelId, "inputsContainer");
@@ -926,6 +1062,11 @@ document.addEventListener("DOMContentLoaded", () => {
       customInputsContainer.style.display = "none";
       renderAspectRatioOptions(modelId);
     } else if (selected === "fal") {
+      outputSettingsContainer.style.display = "block";
+      customInputsContainer.style.display = "block";
+      displayCustomInputs(modelId, "inputsContainer");
+      renderAspectRatioOptions(modelId);
+    } else if (selected === "replicate") {
       outputSettingsContainer.style.display = "block";
       customInputsContainer.style.display = "block";
       displayCustomInputs(modelId, "inputsContainer");
@@ -1294,7 +1435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     displayCustomInputs(modelId, "inputsContainer");
 
     const selected = providerSelect.value;
-    if (selected === "auto" || selected === "fal") {
+    if (selected === "auto" || selected === "fal" || selected === "replicate") {
       renderAspectRatioOptions(modelId);
       document.getElementById("outputSettingsContainer").style.display =
         "block";

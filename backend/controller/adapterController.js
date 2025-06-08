@@ -123,7 +123,7 @@ export const generateImage = async (req, res) => {
           const base64 = rawData?.data?.[0]?.b64_json;
           imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
           break;
-        case "segmind":
+        case "replicate":
           imageUrl = rawData?.output?.[0];
           break;
         default:

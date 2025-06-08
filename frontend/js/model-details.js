@@ -50,7 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "4-5 credits/image",
       providers: ["fal", "deepinfra"],
     },
-
+    "black-forest-labs-flux-schnell": {
+      title: "Black Forest Labs: FLUX.1 [schnell]",
+      description:
+        "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1–4 steps — optimized for both personal and commercial use.",
+      link: "https://deepinfra.com/black-forest-labs/flux-schnell",
+      fullDetails:
+        "Black Forest Labs’ FLUX.1 [schnell] model delivers fast and efficient image generation via a 12-billion parameter flow transformer, balancing speed and output quality across 1–4 inference steps. Ideal for creators, developers, and businesses seeking quality without sacrificing performance.",
+      chatPage: "imagemodel.html",
+      creditPrice: "3-4 credits/image",
+      providers: ["fal", "replicate"],
+    },
     "recraft-v3": {
       title: "Recraft V3: Text-to-Image",
       description:
@@ -84,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
       chatPage: "videomodel.html",
       creditPrice: "10-18 credits/second",
-      providers: ["fal", "replicate", "deepinfra"],
+      providers: ["fal", "replicate"],
     },
 
     "lightricks-ltx-video": {

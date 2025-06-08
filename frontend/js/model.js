@@ -14,6 +14,18 @@ const allmodels = {
       tags: ["pro", "high-quality"],
     },
     {
+      id: "black-forest-labs-flux-schnell",
+      name: "Black Forest Labs: FLUX.1 [schnell]",
+      type: "image",
+      icon: "image",
+      iconColor: "danger",
+      description:
+        "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1–4 steps — optimized for both personal and commercial use.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/flux-schnell",
+      tags: ["fast", "high-quality", "efficient"],
+    },
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",

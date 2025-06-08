@@ -39,6 +39,7 @@ import { generateImageWithMinimax } from "../providers/image/minmaxProvider.js";
 import { generateAudioLyria2 } from "../providers/audio/lyria2Provider.js";
 import { generateAudioEvenLab } from "../providers/audio/evenlabProvider.js";
 import { generateAudioMM } from "../providers/audio/mmaudioProvider.js";
+import { generateImageFluxSchnell } from "../providers/image/flux-schnellProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -138,6 +139,10 @@ export const generateImageForProvider = async (req, res) => {
       fal: 5,
       deepinfra: 4,
     },
+    "black-forest-labs-flux-schnell": {
+      fal: 7,
+      replicate: 5,
+    },
     "recraft-v3": {
       fal: 4,
     },
@@ -190,6 +195,15 @@ export const generateImageForProvider = async (req, res) => {
         // if (provider === "deepinfra" || provider === "base64") {
         //   rawData = await generateImageFluxPro(body);
         // }
+        if (provider === "replicate") {
+          rawData = await generateImageFluxPro(body);
+        }
+        break;
+      case "recraft-v3":
+        rawData = await generateImageRecraftFAL(body);
+        break;
+      case "black-forest-labs-flux-schnell":
+        rawData = await generateImageFluxSchnell(body);
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);

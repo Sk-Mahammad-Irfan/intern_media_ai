@@ -3,6 +3,7 @@ const baseURL = "https://media-ai-backend.vercel.app";
 const modelsinfo = {
   image: {
     "black-forest-labs-flux-1-1-pro": "Black Forest Labs: FLUX-1.1 Pro",
+    "black-forest-labs-flux-schnell": "Black Forest Labs: FLUX 1 [schnell]",
     "recraft-v3": "Recraft V3: Text-to-Image",
     fooocus: "Fooocus: Base Model",
     "hidream-i1-dev": "HiDream I1 (Dev)",

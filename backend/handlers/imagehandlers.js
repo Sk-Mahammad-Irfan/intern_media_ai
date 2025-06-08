@@ -15,6 +15,10 @@ import { imageGenFAL } from "../services/image/imageGen4Service.js";
 import { fLiteStandard } from "../services/image/fliteService.js";
 import { sanaGenerate } from "../services/image/sanaService.js";
 import { minimaxGenerate } from "../services/image/minmaxService.js";
+import {
+  generateImageFluxSchnellFal,
+  generateImageFluxSchnellReplicate,
+} from "../services/image/fluxschnellService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -30,6 +34,24 @@ export const imageGenerationHandlers = [
     type: "fal",
     credits: 5,
   },
+  {
+    model: "black-forest-labs-flux-schnell",
+    handler: wrapHandler(
+      generateImageFluxSchnellReplicate,
+      "black-forest-labs-flux-schnell"
+    ),
+    type: "replicate",
+    credits: 5,
+  },
+  // {
+  //   model: "black-forest-labs-flux-schnell",
+  //   handler: wrapHandler(
+  //     generateImageFluxSchnellFal,
+  //     "black-forest-labs-flux-schnell"
+  //   ),
+  //   type: "fal",
+  //   credits: 7,
+  // },
   // {
   //   model: "black-forest-labs-flux-1-1-pro",
   //   handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
