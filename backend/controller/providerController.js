@@ -40,6 +40,8 @@ import { generateAudioLyria2 } from "../providers/audio/lyria2Provider.js";
 import { generateAudioEvenLab } from "../providers/audio/evenlabProvider.js";
 import { generateAudioMM } from "../providers/audio/mmaudioProvider.js";
 import { generateImageFluxSchnell } from "../providers/image/flux-schnellProvider.js";
+import { generatePixverseVideo } from "../providers/video/pixverse45Provider.js";
+import { generateVeo3Video } from "../providers/video/veo3provider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -75,14 +77,20 @@ export const generateVideoforProvider = async (req, res) => {
       case "pika-text-to-video-v2-1":
         rawData = await generateVideoPika(body);
         break;
-      case "pixverse-v4-text-to-video":
+      case "pixverse-v4":
         rawData = await generateVideoPixverse(body);
+        break;
+      case "pixverse-v4.5":
+        rawData = await generatePixverseVideo(body);
         break;
       case "lightricks-ltx-video":
         rawData = await generateVideoLTX(body);
         break;
       case "kling-video-v2-master":
         rawData = await generateVideoKling(body);
+        break;
+      case "google-veo-3":
+        rawData = await generateVeo3Video(body);
         break;
       case "vidu-q1":
         rawData = await generateVideoVidu(body);
@@ -106,7 +114,7 @@ export const generateVideoforProvider = async (req, res) => {
     if (providerType === "fal") {
       videoUrl = rawData?.video?.url;
     } else if (providerType === "replicate") {
-      videoUrl = rawData?.video?.url || rawData?.url || rawData;
+      videoUrl = rawData?.output || rawData?.url || rawData;
     } else if (providerType === "deepinfra") {
       videoUrl = rawData?.video_url || rawData?.data?.video_url;
     }

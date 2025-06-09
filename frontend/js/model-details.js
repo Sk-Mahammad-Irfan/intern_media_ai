@@ -96,7 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "10-18 credits/second",
       providers: ["fal", "replicate"],
     },
-
+    "google-veo-3": {
+      title: "Google Veo 3",
+      description:
+        "Veo 3 generates high-fidelity videos with sound and cinematic realism. Advanced control over motion, camera, and audio make it perfect for storytelling.",
+      link: "https://deepmind.google/technologies/veo/",
+      fullDetails:
+        "Google Veo 3 is the most advanced text-to-video model developed by Google DeepMind, now with integrated sound. It produces photorealistic, dynamic video sequences with precision camera control, scene composition, and synchronized audio output. Ideal for filmmakers, creators, and visionaries pushing the boundaries of AI-generated content.",
+      chatPage: "videomodel.html",
+      creditPrice: "Varies (based on usage tier)",
+      providers: ["fal", "replicate", "auto"],
+    },
     "lightricks-ltx-video": {
       title: "Lightricks: LTX-Video",
       description:
@@ -163,6 +173,17 @@ document.addEventListener("DOMContentLoaded", function () {
       chatPage: "videomodel.html",
       creditPrice: "27-70 credits/second",
       providers: ["fal"],
+    },
+    "pixverse-v4.5": {
+      title: "PixVerse: Text-to-Video v4.5",
+      description:
+        "Quickly make 5s or 8s videos at 540p, 720p or 1080p using PixVerse v4.5 with enhanced motion and prompt coherence.",
+      link: "https://huggingface.co/pixverse/v4.5/text-to-video",
+      fullDetails:
+        "PixVerse v4.5 enhances video generation with improved motion, better prompt coherence, and strong handling of complex actions. Ideal for dynamic storytelling, short clips, and expressive visuals in creative workflows.",
+      chatPage: "videomodel.html",
+      creditPrice: "27-70 credits/second",
+      providers: ["fal", "replicate"],
     },
 
     // Text-to-Audio

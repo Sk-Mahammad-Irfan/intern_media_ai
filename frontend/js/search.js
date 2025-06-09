@@ -118,7 +118,17 @@ const models = {
     chatPage: "videomodel.html",
     provider: "huggingface",
   },
-
+  "google-veo-3": {
+    id: "google-veo-3",
+    title: "Google Veo 3",
+    description:
+      "Veo 3 generates cinematic videos with synchronized audio and photorealistic motion. Perfect for storytellers and creators.",
+    link: "https://deepmind.google/technologies/veo/",
+    fullDetails:
+      "Google Veo 3 is Google’s flagship AI video model that supports naturalistic video generation with audio. Enhanced cinematic controls, camera movements, and realistic audio syncing make it ideal for producing studio-quality video content.",
+    chatPage: "videomodel.html",
+    provider: "fal",
+  },
   "lightricks-ltx-video": {
     id: "lightricks-ltx-video",
     title: "Lightricks: LTX-Video",
@@ -131,14 +141,25 @@ const models = {
     provider: "huggingface",
   },
 
-  "pixverse-v4-text-to-video": {
-    id: "pixverse-v4-text-to-video",
+  "pixverse-v4": {
+    id: "pixverse-v4",
     title: "PixVerse: Text-to-Video v4",
     description:
       "Generate high-quality video clips from text and image prompts using PixVerse v4.",
     link: "https://huggingface.co/pixverse/v4/text-to-video",
     fullDetails:
       "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation.",
+    chatPage: "videomodel.html",
+    provider: "huggingface",
+  },
+  "pixverse-v4.5": {
+    id: "pixverse-v4.5",
+    title: "PixVerse: Text-to-Video v4.5",
+    description:
+      "Create 5s or 8s video clips with better motion and prompt accuracy using PixVerse v4.5.",
+    link: "https://huggingface.co/pixverse/v4.5/text-to-video",
+    fullDetails:
+      "PixVerse v4.5 supports fast 5-8 second video generation at various resolutions with enhanced motion fidelity and complex action handling.",
     chatPage: "videomodel.html",
     provider: "huggingface",
   },

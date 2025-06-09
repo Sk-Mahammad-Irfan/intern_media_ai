@@ -4,7 +4,15 @@ import { ltxReplicate } from "../services/video/ltxServices.js";
 import { lumaFAL } from "../services/video/lumaServices.js";
 import { MagiFAL } from "../services/video/magiService.js";
 import { pikaFAL } from "../services/video/pikaServices.js";
+import {
+  pixverse45FAL,
+  pixverse45Replicate,
+} from "../services/video/pixverse45Service.js";
 import { pixverseFAL } from "../services/video/pixverseService.js";
+import {
+  generateVeo3WithFAL,
+  generateVeo3WithReplicate,
+} from "../services/video/veo3Service.js";
 import { veoServiceFal } from "../services/video/veoService.js";
 import { viduService } from "../services/video/viduService.js";
 import {
@@ -47,10 +55,34 @@ export const videoGenerationHandlers = [
     credits: 60,
   },
   {
-    model: "pixverse-v4-text-to-video",
-    handler: wrapHandler(pixverseFAL, "pixverse-v4-text-to-video"),
+    model: "google-veo-3",
+    handler: wrapHandler(generateVeo3WithReplicate, "google-veo-3"),
+    type: "replicate",
+    credits: 45,
+  },
+  {
+    model: "google-veo-3",
+    handler: wrapHandler(generateVeo3WithFAL, "google-veo-3"),
+    type: "fal",
+    credits: 50,
+  },
+  {
+    model: "pixverse-v4",
+    handler: wrapHandler(pixverseFAL, "pixverse-v4"),
     type: "fal",
     credits: 12,
+  },
+  {
+    model: "pixverse-v4.5",
+    handler: wrapHandler(pixverse45Replicate, "pixverse-v4"),
+    type: "replicate",
+    credits: 14,
+  },
+  {
+    model: "pixverse-v4.5",
+    handler: wrapHandler(pixverse45FAL, "pixverse-v4"),
+    type: "fal",
+    credits: 15,
   },
   {
     model: "pika-text-to-video-v2-1",

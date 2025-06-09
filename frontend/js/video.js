@@ -39,8 +39,13 @@ const modelOptions = {
     resolutions: { "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
-  "pixverse-v4-text-to-video": {
+  "pixverse-v4": {
     providers: ["fal", "auto"],
+    resolutions: { "540p": null, "720p": null, "1080p": null },
+    aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
+  },
+  "pixverse-v4.5": {
+    providers: ["fal", "replicate", "auto"],
     resolutions: { "540p": null, "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
   },
@@ -48,6 +53,15 @@ const modelOptions = {
     providers: ["fal", "replicate", "deepinfra", "auto"],
     resolutions: { "480p": null },
     aspect_ratios: ["16:9", "9:16"],
+  },
+  "google-veo-3": {
+    providers: ["fal", "replicate", "auto"],
+    resolutions: { "720p": null }, // Not specified, same as Veo 2
+    aspect_ratios: ["16:9", "9:16"],
+    durations: [5, 6, 7, 8], // Based on prior Veo standards
+    seed: true, // Both providers support seed
+    image: true, // Starting from an image is supported
+    audio: true, // New feature: audio support in Veo 3
   },
   "cogvideox-5b": {
     providers: ["fal", "auto"],
@@ -86,13 +100,15 @@ const modelOptions = {
 const videoModelCredits = {
   "wan-ai-wan21-t2v-13b": 10,
   "lightricks-ltx-video": 60,
-  "pixverse-v4-text-to-video": 12,
+  "pixverse-v4": 12,
+  "pixverse-v4.5": 14,
   "pika-text-to-video-v2-1": 40,
   "luma-ray2-flash": 25,
   "kling-video-v2-master": 20,
   "vidu-q1": 18,
   magi: 22,
   veo2: 18,
+  "google-veo-3": 50,
   "cogvideox-5b": 25,
 };
 

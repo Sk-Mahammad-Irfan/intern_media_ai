@@ -52,10 +52,13 @@ export const generateVideo = async (req, res) => {
           videoUrl = rawData?.video?.url;
           break;
         case "replicate":
-          videoUrl = rawData?.video?.url || rawData?.url || rawData;
+          console.log(rawData);
+          videoUrl = rawData?.output || rawData;
+          console.log(videoUrl);
           break;
         case "deepinfra":
-          videoUrl = rawData?.video_url || rawData?.data?.video_url;
+          videoUrl =
+            rawData?.video_url || rawData?.data?.video_url || rawData?.url;
           break;
         default:
           console.warn(`Unknown handler type: ${type}`);
@@ -113,6 +116,7 @@ export const generateImage = async (req, res) => {
       }
 
       const rawData = await handler(prompt, resolution, seed);
+      console.log(rawData);
       let imageUrl = null;
 
       switch (type) {

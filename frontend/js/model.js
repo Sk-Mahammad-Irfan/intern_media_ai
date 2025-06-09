@@ -26,6 +26,18 @@ const allmodels = {
       tags: ["fast", "high-quality", "efficient"],
     },
     {
+      id: "google-veo-3",
+      name: "Google Veo 3",
+      type: "video",
+      icon: "video",
+      iconColor: "primary",
+      description:
+        "A cutting-edge model for generating photorealistic, cinematic video with synchronized audio and advanced control over motion and camera dynamics.",
+      source: "deepmind.google",
+      sourceUrl: "https://deepmind.google/technologies/veo/",
+      tags: ["photorealistic", "cinematic", "audio", "advanced-controls"],
+    },
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",
@@ -158,6 +170,18 @@ const allmodels = {
       source: "huggingface.co",
       sourceUrl: "https://huggingface.co/pixverse/v4/text-to-video",
       tags: ["high-quality", "advanced"],
+    },
+    {
+      id: "pixverse-v4.5",
+      name: "PixVerse: Text-to-Video v4.5",
+      type: "video",
+      icon: "film",
+      iconColor: "info",
+      description:
+        "Quickly make 5s or 8s videos at 540p, 720p or 1080p. Enhanced motion and better handling of complex prompts.",
+      source: "huggingface.co",
+      sourceUrl: "https://huggingface.co/pixverse/v4.5/text-to-video",
+      tags: ["fast-generation", "enhanced-motion", "short-form"],
     },
     {
       id: "lightricks-ltx-video",
