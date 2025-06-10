@@ -245,6 +245,18 @@ const allmodels = {
       tags: ["high-speed", "cinematic"],
     },
     {
+      id: "minimax-video-01",
+      name: "MiniMax Video 01",
+      type: "video",
+      icon: "camera-reels",
+      iconColor: "primary",
+      description:
+        "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
+      source: "MiniMax",
+      sourceUrl: "https://minimax.com/models/video-01/text-to-video",
+      tags: ["fast", "creative"],
+    },
+    {
       id: "magi",
       name: "MAGI-1",
       type: "video",

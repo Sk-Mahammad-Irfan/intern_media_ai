@@ -3,6 +3,10 @@ import { klingService } from "../services/video/klingServices.js";
 import { ltxReplicate } from "../services/video/ltxServices.js";
 import { lumaFAL } from "../services/video/lumaServices.js";
 import { MagiFAL } from "../services/video/magiService.js";
+import {
+  minimaxFAL,
+  minimaxReplicate,
+} from "../services/video/minmax01Service.js";
 import { pikaFAL } from "../services/video/pikaServices.js";
 import {
   pixverse45FAL,
@@ -65,6 +69,18 @@ export const videoGenerationHandlers = [
     handler: wrapHandler(generateVeo3WithFAL, "google-veo-3"),
     type: "fal",
     credits: 50,
+  },
+  {
+    model: "minimax-video-01",
+    handler: wrapHandler(minimaxReplicate, "minimax-video-01"),
+    type: "replicate",
+    credits: 50,
+  },
+  {
+    model: "minimax-video-01",
+    handler: wrapHandler(minimaxFAL, "minimax-video-01"),
+    type: "fal",
+    credits: 45,
   },
   {
     model: "pixverse-v4",

@@ -42,6 +42,7 @@ import { generateAudioMM } from "../providers/audio/mmaudioProvider.js";
 import { generateImageFluxSchnell } from "../providers/image/flux-schnellProvider.js";
 import { generatePixverseVideo } from "../providers/video/pixverse45Provider.js";
 import { generateVeo3Video } from "../providers/video/veo3provider.js";
+import { generateMinimaxVideo } from "../providers/video/minmax01Provider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -91,6 +92,9 @@ export const generateVideoforProvider = async (req, res) => {
         break;
       case "google-veo-3":
         rawData = await generateVeo3Video(body);
+        break;
+      case "minimax-video-01":
+        rawData = await generateMinimaxVideo(body);
         break;
       case "vidu-q1":
         rawData = await generateVideoVidu(body);

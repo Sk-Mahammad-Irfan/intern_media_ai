@@ -80,6 +80,12 @@ const modelOptions = {
     resolutions: { "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "9:16", "1:1"],
   },
+  "minimax-video-01": {
+    providers: ["fal", "replicate", "auto"],
+    resolutions: { "720p": null },
+    aspect_ratios: ["16:9", "9:16", "1:1"],
+  },
+
   magi: {
     providers: ["fal", "auto"],
     resolutions: { "480p": null, "720p": null },
@@ -105,6 +111,7 @@ const videoModelCredits = {
   "pika-text-to-video-v2-1": 40,
   "luma-ray2-flash": 25,
   "kling-video-v2-master": 20,
+  "minimax-video-01": 20,
   "vidu-q1": 18,
   magi: 22,
   veo2: 18,

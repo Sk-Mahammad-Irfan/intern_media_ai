@@ -24,6 +24,19 @@ const models = {
     creditPrice: "40 credits/second",
     providers: ["fal"],
   },
+  "minimax-video-01": {
+    id: "minimax-video-01",
+    title: "MiniMax Video 01",
+    description:
+      "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
+    link: "https://minimax.com/models/video-01/text-to-video",
+    fullDetails:
+      "MiniMax Video 01 transforms text prompts into vivid and coherent video sequences. Designed for efficiency and flexibility, it supports a variety of use cases including storytelling, content ideation, and visual experimentation.",
+    chatPage: "videomodel.html",
+    creditPrice: "30 credits/second",
+    providers: ["fal", "replicate"],
+  },
+
   magi: {
     id: "magi",
     title: "MAGI-1",
