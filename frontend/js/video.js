@@ -85,7 +85,11 @@ const modelOptions = {
     resolutions: { "720p": null },
     aspect_ratios: ["16:9", "9:16", "1:1"],
   },
-
+  "hunyuan-video": {
+    providers: ["fal", "replicate", "auto"],
+    resolutions: { "480p": null, "580p": null, "720p": null },
+    aspect_ratios: ["16:9", "9:16"],
+  },
   magi: {
     providers: ["fal", "auto"],
     resolutions: { "480p": null, "720p": null },
@@ -112,6 +116,7 @@ const videoModelCredits = {
   "luma-ray2-flash": 25,
   "kling-video-v2-master": 20,
   "minimax-video-01": 20,
+  "hunyuan-video": 50,
   "vidu-q1": 18,
   magi: 22,
   veo2: 18,

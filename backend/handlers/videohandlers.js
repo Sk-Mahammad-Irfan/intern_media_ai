@@ -1,4 +1,8 @@
 import { cogvideoFAL } from "../services/video/cogvideoxService.js";
+import {
+  hunyuanFAL,
+  hunyuanReplicate,
+} from "../services/video/hunyuanService.js";
 import { klingService } from "../services/video/klingServices.js";
 import { ltxReplicate } from "../services/video/ltxServices.js";
 import { lumaFAL } from "../services/video/lumaServices.js";
@@ -81,6 +85,18 @@ export const videoGenerationHandlers = [
     handler: wrapHandler(minimaxFAL, "minimax-video-01"),
     type: "fal",
     credits: 45,
+  },
+  {
+    model: "hunyuan-video",
+    handler: wrapHandler(hunyuanFAL, "hunyuan-video"),
+    type: "fal",
+    credits: 45,
+  },
+  {
+    model: "hunyuan-video",
+    handler: wrapHandler(hunyuanReplicate, "hunyuan-video"),
+    type: "replicate",
+    credits: 50,
   },
   {
     model: "pixverse-v4",

@@ -257,6 +257,18 @@ const allmodels = {
       tags: ["fast", "creative"],
     },
     {
+      id: "hunyuan-video",
+      name: "Hunyuan Video",
+      type: "video",
+      icon: "film",
+      iconColor: "info",
+      description:
+        "Generate high-quality videos with realistic motion from text using Tencent’s Hunyuan Video.",
+      source: "Tencent",
+      sourceUrl: "https://open.tencent.com/hunyuan-video",
+      tags: ["realistic", "high-fidelity", "tencent"],
+    },
+    {
       id: "magi",
       name: "MAGI-1",
       type: "video",

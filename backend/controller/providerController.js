@@ -43,6 +43,7 @@ import { generateImageFluxSchnell } from "../providers/image/flux-schnellProvide
 import { generatePixverseVideo } from "../providers/video/pixverse45Provider.js";
 import { generateVeo3Video } from "../providers/video/veo3provider.js";
 import { generateMinimaxVideo } from "../providers/video/minmax01Provider.js";
+import { generateHunyuanVideo } from "../providers/video/hunyuanProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -107,6 +108,9 @@ export const generateVideoforProvider = async (req, res) => {
         break;
       case "cogvideox-5b":
         rawData = await generateVideoCogvideoX(body);
+        break;
+      case "hunyuan-video":
+        rawData = await generateHunyuanVideo(body);
         break;
       default:
         return res

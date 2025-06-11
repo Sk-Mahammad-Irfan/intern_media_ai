@@ -140,6 +140,18 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "30 credits/second",
       providers: ["fal", "replicate"],
     },
+    "hunyuan-video": {
+      id: "hunyuan-video",
+      title: "Hunyuan Video",
+      description:
+        "Generate high-quality videos with realistic motion from text descriptions using Tencent’s state-of-the-art Hunyuan Video model.",
+      link: "https://open.tencent.com/hunyuan-video",
+      fullDetails:
+        "Hunyuan Video is a cutting-edge text-to-video model developed by Tencent. It creates highly realistic, coherent, and detailed videos directly from natural language prompts. Ideal for content creation, advertising, simulation, and storytelling.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal", "replicate"],
+    },
     magi: {
       title: "MAGI-1",
       description:
