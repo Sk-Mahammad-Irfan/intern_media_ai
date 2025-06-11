@@ -25,18 +25,7 @@ const allmodels = {
       sourceUrl: "https://deepinfra.com/black-forest-labs/flux-schnell",
       tags: ["fast", "high-quality", "efficient"],
     },
-    {
-      id: "google-veo-3",
-      name: "Google Veo 3",
-      type: "video",
-      icon: "video",
-      iconColor: "primary",
-      description:
-        "A cutting-edge model for generating photorealistic, cinematic video with synchronized audio and advanced control over motion and camera dynamics.",
-      source: "deepmind.google",
-      sourceUrl: "https://deepmind.google/technologies/veo/",
-      tags: ["photorealistic", "cinematic", "audio", "advanced-controls"],
-    },
+
     {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
@@ -279,6 +268,18 @@ const allmodels = {
       source: "FAL AI",
       sourceUrl: "https://fal.ai/models/fal-ai/magi",
       tags: ["physical-interactions", "cinematic"],
+    },
+    {
+      id: "google-veo-3",
+      name: "Google Veo 3",
+      type: "video",
+      icon: "video",
+      iconColor: "primary",
+      description:
+        "A cutting-edge model for generating photorealistic, cinematic video with synchronized audio and advanced control over motion and camera dynamics.",
+      source: "deepmind.google",
+      sourceUrl: "https://deepmind.google/technologies/veo/",
+      tags: ["photorealistic", "cinematic", "audio", "advanced-controls"],
     },
     {
       id: "vidu-q1",

@@ -86,7 +86,26 @@ export const generateVeo3WithReplicate = async (
       }
     );
 
-    return response.data;
+    let status = response.data.status;
+    let output = response.data.output;
+    const getUrl = response.data.urls?.get;
+
+    while (status !== "succeeded" && status !== "failed") {
+      console.log(`Status: ${status}, Output: ${output}`);
+      const pollRes = await axios.get(getUrl, {
+        headers: {
+          Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
+        },
+      });
+
+      status = pollRes.data.status;
+      output = pollRes.data.output;
+
+      if (status === "succeeded") return pollRes.data;
+      if (status === "failed") throw new Error("Video generation failed");
+
+      await new Promise((res) => setTimeout(res, 3000));
+    }
   } catch (error) {
     console.error("Error generating video with Replicate:", error);
     throw error;
