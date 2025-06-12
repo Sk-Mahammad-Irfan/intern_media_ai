@@ -66,8 +66,6 @@ export const generateVideoVeo = async (
       duration: finalDuration,
     };
 
-    console.log("Veo Input:", input);
-
     const result = await fal.subscribe("fal-ai/veo2", {
       input,
       logs: false,

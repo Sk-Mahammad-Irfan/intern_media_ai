@@ -85,8 +85,6 @@ export const generateVideoLTX = async (body) => {
       image_noise_scale,
     };
 
-    console.log("LTX Input:", input);
-
     const output = await replicate.run(
       "lightricks/ltx-video:8c47da666861d081eeb4d1261853087de23923a268a69b63febdf5dc1dee08e4",
       { input }

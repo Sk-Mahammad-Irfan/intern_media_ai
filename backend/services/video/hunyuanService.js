@@ -46,7 +46,6 @@ export const hunyuanFAL = async (
       },
     });
 
-    console.log(result?.data);
     return result?.data;
   } catch (error) {
     console.error("Error generating video with FAL Hunyuan:", error);
@@ -120,7 +119,6 @@ export const hunyuanReplicate = async (
     const getUrl = response.data.urls?.get;
 
     while (status !== "succeeded" && status !== "failed") {
-      console.log(`Status: ${status}, Output: ${output}`);
       const pollRes = await axios.get(getUrl, {
         headers: {
           Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,

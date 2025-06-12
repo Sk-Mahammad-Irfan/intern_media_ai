@@ -44,7 +44,6 @@ export const generateWithReplicate = async (prompt) => {
       sample_steps: 30,
       sample_guide_scale: 6,
     };
-    console.log("helooo");
     const output = await replicate.run("wan-video/wan-2.1-1.3b", { input });
     return output;
   } catch (error) {
@@ -63,7 +62,6 @@ export const generateWithFAL = async (prompt) => {
         }
       },
     });
-    console.log("fall");
     return result.data;
   } catch (error) {
     console.error("Error generating video with FAL:", error);

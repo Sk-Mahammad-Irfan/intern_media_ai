@@ -50,10 +50,6 @@ export const pikaFAL = async (
       aspect_ratio = mapToClosestSupportedAspectRatio(aspect_ratio);
     }
 
-    console.log("Prompt:", prompt);
-    console.log("Resolution:", resolution);
-    console.log("Aspect Ratio:", aspect_ratio);
-
     const result = await fal.subscribe("fal-ai/pika/v2.1/text-to-video", {
       input: { prompt, resolution, aspect_ratio, seed },
       logs: false,

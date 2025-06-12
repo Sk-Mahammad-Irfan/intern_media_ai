@@ -49,8 +49,6 @@ export const cogvideoFAL = async (
       seed,
     };
 
-    console.log("CogVideoX Input:", input);
-
     const result = await fal.subscribe("fal-ai/cogvideox-5b", {
       input,
       logs: false,

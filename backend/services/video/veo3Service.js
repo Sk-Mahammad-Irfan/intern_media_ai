@@ -46,7 +46,6 @@ export const generateVeo3WithFAL = async (
       },
     });
 
-    console.log(result?.data);
     return result?.data;
   } catch (error) {
     console.error("Error generating video with FAL Veo3:", error);
@@ -91,7 +90,6 @@ export const generateVeo3WithReplicate = async (
     const getUrl = response.data.urls?.get;
 
     while (status !== "succeeded" && status !== "failed") {
-      console.log(`Status: ${status}, Output: ${output}`);
       const pollRes = await axios.get(getUrl, {
         headers: {
           Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,

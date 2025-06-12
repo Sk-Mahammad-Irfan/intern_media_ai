@@ -113,8 +113,6 @@ export const generateImageFluxDevTogether = async (
         },
       }
     );
-
-    console.log("Together.xyz FLUX.1-dev response:", response.data);
     return response.data;
   } catch (error) {
     handleGenerationError(error, "together.xyz-dev", prompt);

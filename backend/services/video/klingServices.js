@@ -75,8 +75,6 @@ export const klingService = async (
       cfg_scale,
     };
 
-    console.log("Kling input:", input);
-
     const result = await fal.subscribe(
       "fal-ai/kling-video/v2/master/text-to-video",
       {

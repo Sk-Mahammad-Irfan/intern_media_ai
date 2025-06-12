@@ -64,7 +64,6 @@ export const generateMinimaxVideo = async (body) => {
         const getUrl = response.data.urls?.get;
 
         while (status !== "succeeded" && status !== "failed") {
-          console.log(`Status: ${status}, Output: ${output}`);
           const pollRes = await axios.get(getUrl, {
             headers: {
               Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,

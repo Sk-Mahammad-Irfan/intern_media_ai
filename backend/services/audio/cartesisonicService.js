@@ -35,7 +35,6 @@ export const generateSpeechTogether = async (prompt) => {
     const outputPath = path.resolve("speech.wav");
     fs.writeFileSync(outputPath, response.data);
 
-    console.log("Audio saved to:", outputPath);
     return outputPath;
   } catch (error) {
     if (axios.isAxiosError(error)) {

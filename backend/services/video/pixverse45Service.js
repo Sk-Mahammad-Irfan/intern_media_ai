@@ -65,7 +65,6 @@ export const pixverse45FAL = async (
         }
       },
     });
-    console.log(result?.data);
     return result?.data;
   } catch (error) {
     console.error("Error generating video with FAL Pixverse:", error);
@@ -109,7 +108,6 @@ export const pixverse45Replicate = async (
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error generating video with Replicate Pixverse:", error);

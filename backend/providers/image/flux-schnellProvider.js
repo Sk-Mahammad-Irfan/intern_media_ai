@@ -221,7 +221,6 @@ export const generateImageFluxSchnellTogether = async (
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     handleGenerationError(error, "together.xyz", prompt);

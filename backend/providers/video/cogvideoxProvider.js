@@ -68,8 +68,6 @@ export const generateVideoCogvideoX = async (body) => {
 
     if (seed !== null) input.seed = seed;
 
-    console.log("CogVideoX Input:", input);
-
     const result = await fal.subscribe("fal-ai/cogvideox-5b", {
       input,
       logs: false,

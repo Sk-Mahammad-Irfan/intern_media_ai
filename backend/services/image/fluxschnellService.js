@@ -128,7 +128,6 @@ export const generateImageFluxSchnellReplicate = async (
     );
 
     const data = response.data;
-    console.log("Replicate response:", data);
     return data;
   } catch (error) {
     handleGenerationError(error, "replicate", prompt);
@@ -207,7 +206,6 @@ export const generateImageFluxSchnellTogether = async (
     );
 
     const data = response.data;
-    console.log("Together.xyz response:", data);
 
     return data;
   } catch (error) {

@@ -52,9 +52,7 @@ export const generateVideo = async (req, res) => {
           videoUrl = rawData?.video?.url;
           break;
         case "replicate":
-          console.log(rawData);
           videoUrl = rawData?.output || rawData;
-          console.log(videoUrl);
           break;
         case "deepinfra":
           videoUrl =

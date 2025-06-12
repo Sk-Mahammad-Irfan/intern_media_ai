@@ -80,8 +80,6 @@ export const generateVideoMagi = async (body) => {
 
     if (seed !== null) input.seed = seed;
 
-    console.log("Magi Input:", input);
-
     const result = await fal.subscribe("fal-ai/magi", {
       input,
       logs: false,

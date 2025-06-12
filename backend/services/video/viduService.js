@@ -82,8 +82,6 @@ export const viduService = async (
       input.seed = seed;
     }
 
-    console.log("Vidu Input:", input);
-
     const result = await fal.subscribe("fal-ai/vidu/q1/text-to-video", {
       input,
       logs: false,

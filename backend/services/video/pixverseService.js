@@ -97,8 +97,6 @@ export const pixverseFAL = async (
       input.seed = seed;
     }
 
-    console.log("Pixverse Input:", input);
-
     const result = await fal.subscribe("fal-ai/pixverse/v4/text-to-video", {
       input,
       logs: false,
