@@ -108,14 +108,14 @@ const modelOptions = {
 };
 
 const videoModelCredits = {
-  "wan-ai-wan21-t2v-13b": 10,
+  "wan-ai-wan21-t2v-13b": 18,
   "lightricks-ltx-video": 60,
-  "pixverse-v4": 12,
-  "pixverse-v4.5": 14,
+  "pixverse-v4": 15,
+  "pixverse-v4.5": 15,
   "pika-text-to-video-v2-1": 40,
   "luma-ray2-flash": 25,
   "kling-video-v2-master": 20,
-  "minimax-video-01": 20,
+  "minimax-video-01": 50,
   "hunyuan-video": 50,
   "vidu-q1": 18,
   magi: 22,

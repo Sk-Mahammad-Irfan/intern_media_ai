@@ -3,7 +3,8 @@ const baseURL = "https://media-ai-backend.vercel.app";
 const modelsinfo = {
   image: {
     "black-forest-labs-flux-1-1-pro": "Black Forest Labs: FLUX-1.1 Pro",
-    "black-forest-labs-flux-schnell": "Black Forest Labs: FLUX 1 [schnell]",
+    "black-forest-labs-flux-schnell": "Black Forest Labs: FLUX.1 [schnell]",
+    "black-forest-labs-flux-1-dev": "Black Forest Labs: FLUX.1 [dev]",
     "recraft-v3": "Recraft V3: Text-to-Image",
     fooocus: "Fooocus: Base Model",
     "hidream-i1-dev": "HiDream I1 (Dev)",
@@ -17,6 +18,7 @@ const modelsinfo = {
   video: {
     "wan-ai-wan21-t2v-13b": "Wan-AI: Wan2.1-T2V-1.3B",
     "pixverse-v4": "PixVerse: Text-to-Video v4",
+    "pixverse-v4.5": "PixVerse: Text-to-Video v4.5",
     "lightricks-ltx-video": "Lightricks: LTX-Video",
     "pika-text-to-video-v2-1": "Pika Text to Video v2.1",
     "luma-ray2-flash": "Luma Dream Machine: Ray 2 Flash",
@@ -25,6 +27,9 @@ const modelsinfo = {
     magi: "MAGI-1",
     "vidu-q1": "Vidu Q1",
     veo2: "Veo 2",
+    "google-veo-3": "Google Veo 3",
+    "minimax-video-01": "MiniMax Video 01",
+    "hunyuan-video": "Hunyuan Video",
   },
   audio: {
     "stackadoc-stable-audio": "Stable Audio Open 1.0",
@@ -36,6 +41,7 @@ const modelsinfo = {
     "fal-ai-kokoro-hindi": "Kokoro Hindi TTS",
     "fal-ai-elevenlabs-sound-effects": "ElevenLabs Sound Effects",
     "fal-ai-mmaudio-v2-text-to-audio": "MMAudio V2 Text-to-Audio",
+    "cartesia-sonic-2": "Cartesia Sonic 2",
   },
 };
 

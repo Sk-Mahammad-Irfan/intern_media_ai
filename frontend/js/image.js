@@ -812,8 +812,8 @@ const imageModelOptions = {
 
 const imageModelCredits = {
   "black-forest-labs-flux-1-1-pro": 5,
-  "black-forest-labs-flux-schnell": 5,
-  "black-forest-labs-flux-1-dev": 7,
+  "black-forest-labs-flux-schnell": 7,
+  "black-forest-labs-flux-1-dev": 4,
   "recraft-v3": 4,
   fooocus: 3,
   "hidream-i1-dev": 4,

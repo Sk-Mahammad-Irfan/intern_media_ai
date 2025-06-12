@@ -254,7 +254,7 @@ const audioModelOptions = {
 };
 
 const audioModelCredits = {
-  "stackadoc-stable-audio": 1,
+  "stackadoc-stable-audio": 2,
   "cassetteai-sfx-generator": 1,
   "cassattemusic-audio": 2,
   "multilingual-audio": 9,
