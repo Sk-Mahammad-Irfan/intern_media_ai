@@ -45,6 +45,7 @@ import { generateVeo3Video } from "../providers/video/veo3provider.js";
 import { generateMinimaxVideo } from "../providers/video/minmax01Provider.js";
 import { generateHunyuanVideo } from "../providers/video/hunyuanProvider.js";
 import { generateSpeechTogetherProvider } from "../providers/audio/cartesisonicProvider.js";
+import { generateImageFluxDev } from "../providers/image/fluxdevProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -161,6 +162,9 @@ export const generateImageForProvider = async (req, res) => {
       replicate: 5,
       together: 4,
     },
+    "black-forest-labs-flux-1-dev": {
+      together: 7,
+    },
     "recraft-v3": {
       fal: 4,
     },
@@ -222,6 +226,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "black-forest-labs-flux-schnell":
         rawData = await generateImageFluxSchnell(body);
+        break;
+      case "black-forest-labs-flux-1-dev":
+        rawData = await generateImageFluxDev(body);
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);

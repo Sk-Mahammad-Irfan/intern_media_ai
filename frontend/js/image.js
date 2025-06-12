@@ -319,6 +319,143 @@ const imageModelOptions = {
     ],
   },
 
+  "black-forest-labs-flux-1-dev": {
+    providers: ["auto", "together"],
+    aspect_ratios: {
+      // Default aspect ratios (used when provider is 'auto')
+      square_hd: "1024x1024",
+      square: "768x768",
+      portrait_4_3: "768x1024",
+      portrait_16_9: "576x1024",
+      landscape_4_3: "1024x768",
+      landscape_16_9: "1024x576",
+    },
+    // Provider-specific aspect ratios
+    provider_aspect_ratios: {
+      fal: {
+        square_hd: "1024x1024",
+        square: "768x768",
+        portrait_4_3: "768x1024",
+        portrait_16_9: "576x1024",
+        landscape_4_3: "1024x768",
+        landscape_16_9: "1024x576",
+      },
+      replicate: {
+        "1:1": "1:1",
+        "16:9": "16:9",
+        "21:9": "21:9",
+        "3:2": "3:2",
+        "2:3": "2:3",
+        "4:5": "4:5",
+        "5:4": "5:4",
+        "3:4": "3:4",
+        "4:3": "4:3",
+        "9:16": "9:16",
+        "9:21": "9:21",
+      },
+      together: {
+        "1:1": "1:1",
+        "16:9": "16:9",
+        "21:9": "21:9",
+        "4:3": "4:3",
+        "9:16": "9:16",
+      },
+    },
+    // UI input schema
+    custom_inputs: [
+      {
+        id: "prompt",
+        type: "textarea",
+        label: "Prompt",
+        placeholder: "Describe the image you want to generate",
+        required: true,
+      },
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 777888",
+        description: "Random seed. Set for reproducible generation",
+      },
+      {
+        id: "syncMode",
+        type: "checkbox",
+        label: "Sync Mode",
+        default: true,
+      },
+      {
+        id: "numImages",
+        type: "number",
+        label: "Number of Images",
+        default: 1,
+        min: 1,
+        max: 4,
+      },
+      {
+        id: "enableSafetyInput",
+        type: "checkbox",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+      {
+        id: "safetyTolerance",
+        type: "select",
+        label: "Safety Tolerance",
+        options: ["1", "2", "3", "4", "5", "6"],
+        default: "2",
+      },
+      {
+        id: "outputFormat",
+        type: "select",
+        label: "Output Format",
+        options: ["webp", "jpg", "png"],
+        default: "webp",
+      },
+      {
+        id: "outputQuality",
+        type: "number",
+        label: "Output Quality",
+        default: 80,
+        min: 0,
+        max: 100,
+        description: "Only relevant for non-PNG outputs",
+      },
+      {
+        id: "megapixels",
+        type: "select",
+        label: "Megapixels",
+        options: ["1", "0.25"],
+        default: "1",
+      },
+      {
+        id: "numInferenceSteps",
+        type: "number",
+        label: "Number of Inference Steps",
+        default: 4,
+        min: 1,
+        max: 4,
+      },
+      {
+        id: "goFast",
+        type: "checkbox",
+        label: "Go Fast Mode",
+        default: true,
+      },
+      {
+        id: "rawMode",
+        type: "checkbox",
+        label: "Raw Image (less processed)",
+        default: false,
+      },
+    ],
+    // Add this configuration to control UI display
+    ui_config: {
+      always_show_output_settings: true, // Always show output settings container
+      show_custom_inputs_for: ["fal", "replicate"], // Show custom inputs for these providers
+      hide_custom_inputs_for: ["auto"], // Hide custom inputs for these providers
+      default_provider: "auto", // Default selected provider
+    },
+  },
   "black-forest-labs-flux-schnell": {
     providers: ["auto", "fal", "replicate", "together"],
     aspect_ratios: {
@@ -675,6 +812,8 @@ const imageModelOptions = {
 
 const imageModelCredits = {
   "black-forest-labs-flux-1-1-pro": 5,
+  "black-forest-labs-flux-schnell": 5,
+  "black-forest-labs-flux-1-dev": 7,
   "recraft-v3": 4,
   fooocus: 3,
   "hidream-i1-dev": 4,

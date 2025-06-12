@@ -107,6 +107,18 @@ const models = {
     chatPage: "imagemodel.html",
     provider: "fal",
   },
+  "black-forest-labs-flux-1-dev": {
+    id: "black-forest-labs-flux-1-dev",
+    title: "Black Forest Labs: FLUX.1 [dev]",
+    description:
+      "12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
+    link: "https://deepinfra.com/black-forest-labs/FLUX-1-dev",
+    fullDetails:
+      "FLUX.1 [dev] is a 12 billion parameter rectified flow transformer model designed for high-quality, prompt-faithful text-to-image synthesis. It excels in generating diverse, detailed images across a range of styles, purely from textual descriptions without requiring input images.",
+    chatPage: "imagemodel.html",
+    creditPrice: "4-5 credits/image",
+    providers: "together",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",

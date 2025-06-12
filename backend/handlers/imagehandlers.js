@@ -20,6 +20,7 @@ import {
   generateImageFluxSchnellReplicate,
   generateImageFluxSchnellTogether,
 } from "../services/image/fluxschnellService.js";
+import { generateImageFluxDevTogether } from "../services/image/flux1devService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -57,6 +58,15 @@ export const imageGenerationHandlers = [
     model: "black-forest-labs-flux-schnell",
     handler: wrapHandler(
       generateImageFluxSchnellTogether,
+      "black-forest-labs-flux-schnell"
+    ),
+    type: "together",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-1-dev",
+    handler: wrapHandler(
+      generateImageFluxDevTogether,
       "black-forest-labs-flux-schnell"
     ),
     type: "together",

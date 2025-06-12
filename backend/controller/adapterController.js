@@ -116,7 +116,6 @@ export const generateImage = async (req, res) => {
       }
 
       const rawData = await handler(prompt, resolution, seed);
-      console.log(rawData);
       let imageUrl = null;
 
       switch (type) {

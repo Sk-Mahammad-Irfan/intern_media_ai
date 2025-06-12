@@ -27,6 +27,19 @@ const allmodels = {
     },
 
     {
+      id: "black-forest-labs-flux-1-dev",
+      name: "Black Forest Labs: FLUX.1 [dev]",
+      type: "image",
+      icon: "image",
+      iconColor: "warning",
+      description:
+        "12B parameter transformer for prompt-driven high-quality image generation.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-1-dev",
+      tags: ["text-to-image", "high-quality", "experimental"],
+    },
+
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",
