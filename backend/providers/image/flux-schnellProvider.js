@@ -5,8 +5,10 @@ import Replicate from "replicate";
 
 dotenv.config();
 
+// Configure FAL client
 fal.config({ credentials: process.env.FAL_AI_API });
 
+// Initialize Replicate client
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
@@ -14,7 +16,7 @@ const replicate = new Replicate({
 // Constants
 const SUPPORTED_IMAGE_FORMATS = ["jpeg", "png", "webp"];
 
-const REPLICATE_ASPECT_RATIOS = [
+const STANDARD_ASPECT_RATIOS = [
   "1:1",
   "16:9",
   "21:9",
@@ -60,122 +62,198 @@ const standardToFalAspectRatio = {
   "9:21": "portrait_16_9",
 };
 
+const getRandom4DigitSeed = () => Math.floor(1000 + Math.random() * 9000);
+
+// Helpers
 const validateFormat = (format) =>
   SUPPORTED_IMAGE_FORMATS.includes(format) ? format : "webp";
 
 const validateReplicateAspectRatio = (ratio) =>
-  REPLICATE_ASPECT_RATIOS.includes(ratio)
-    ? ratio
-    : falToStandardAspectRatio[ratio] || "1:1";
+  STANDARD_ASPECT_RATIOS.includes(ratio) ? ratio : "1:1";
 
 const validateFalAspectRatio = (ratio) =>
   FAL_ASPECT_RATIOS.includes(ratio)
     ? ratio
     : standardToFalAspectRatio[ratio] || "square";
 
+const normalizeToStandardAspectRatio = (resolution) => {
+  if (STANDARD_ASPECT_RATIOS.includes(resolution)) return resolution;
+  return falToStandardAspectRatio[resolution] || "1:1";
+};
+
+const getDimensionsFromAspectRatio = (aspectRatio, targetHeight = 768) => {
+  const [w, h] = aspectRatio.split(":").map(Number);
+  if (!w || !h) throw new Error("Invalid aspect ratio format.");
+  const ratio = w / h;
+  const width = Math.round(targetHeight * ratio);
+  return { width, height: targetHeight };
+};
+
+// 🔸 Shared Error Handler
 const handleGenerationError = (error, provider, prompt) => {
   const errorDetails = {
-    provider,
-    prompt,
     message: error.message,
-    status: error.response?.status,
-    statusText: error.response?.statusText,
-    url: error.response?.config?.url,
-    responseData: error.response?.data,
+    provider,
+    inputPrompt: prompt,
+    response: error.response?.data || null,
     stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
   };
 
   console.error(
-    "🚨 Image Generation Error:\n",
+    "Image generation failed:",
     JSON.stringify(errorDetails, null, 2)
   );
   throw new Error(
-    `❌ [${provider.toUpperCase()}] Generation failed: ${error.message}`
+    `Image generation failed with provider '${provider}': ${error.message}`
   );
 };
 
-// 🔄 Unified Image Generation Handler
+// 🔹 Replicate Handler
+export const generateImageFluxSchnellReplicate = async (
+  prompt,
+  resolution = "1:1",
+  seed = 1234
+) => {
+  if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+    throw new Error("Prompt is required for image generation.");
+  }
+
+  const normalizedRatio = normalizeToStandardAspectRatio(resolution);
+
+  const input = {
+    prompt,
+    go_fast: true,
+    megapixels: "1",
+    num_outputs: 1,
+    aspect_ratio: validateReplicateAspectRatio(normalizedRatio),
+    output_format: validateFormat("webp"),
+    output_quality: 80,
+    num_inference_steps: 4,
+    seed,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions",
+      { input },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
+          "Content-Type": "application/json",
+          Prefer: "wait",
+        },
+      }
+    );
+
+    return response.data?.output;
+  } catch (error) {
+    handleGenerationError(error, "replicate", prompt);
+  }
+};
+
+// 🔹 FAL Handler
+export const generateImageFluxSchnellFal = async (
+  prompt,
+  resolution = "square",
+  seed = 1234
+) => {
+  if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+    throw new Error("Prompt is required for image generation.");
+  }
+
+  const input = {
+    prompt,
+    image_size: validateFalAspectRatio(resolution),
+    num_inference_steps: 4,
+    num_images: 1,
+    enable_safety_checker: true,
+    seed,
+  };
+
+  try {
+    const result = await fal.subscribe("fal-ai/flux/schnell", {
+      input,
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
+          update.logs.map((log) => console.log(log.message));
+        }
+      },
+    });
+
+    return result?.data;
+  } catch (error) {
+    handleGenerationError(error, "fal", prompt);
+  }
+};
+
+// 🔹 Together.xyz Handler
+export const generateImageFluxSchnellTogether = async (
+  prompt,
+  resolution = "square_hd",
+  steps = 22,
+  seed = 42
+) => {
+  if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+    throw new Error("Prompt is required for image generation.");
+  }
+
+  const normalizedRatio = normalizeToStandardAspectRatio(resolution);
+  const { width, height } = getDimensionsFromAspectRatio(normalizedRatio);
+
+  const input = {
+    model: "black-forest-labs/FLUX.1-schnell",
+    prompt,
+    width,
+    height,
+    steps,
+    seed,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.together.xyz/v1/images/generations",
+      input,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    handleGenerationError(error, "together.xyz", prompt);
+  }
+};
+
+// 🔄 Unified Handler
 export const generateImageFluxSchnell = async ({
   provider,
   prompt,
   resolution = "1:1",
-  outputFormat = "webp",
-  seed = 1234,
-  numInferenceSteps = 4,
-  numImages = 1,
-  outputQuality = 80,
-  enableSafetyChecker = true,
-  goFast = true,
-  megapixels = "1",
+  seed,
+  steps = 6,
 }) => {
-  if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
-    throw new Error("❗ Prompt is required for image generation.");
-  }
-
-  try {
-    switch (provider) {
-      case "replicate": {
-        const input = {
-          prompt,
-          go_fast: goFast,
-          megapixels,
-          num_outputs: numImages,
-          aspect_ratio: validateReplicateAspectRatio(resolution),
-          output_format: validateFormat(outputFormat),
-          output_quality: outputQuality,
-          num_inference_steps: numInferenceSteps,
-          seed,
-        };
-
-        const response = await axios.post(
-          "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions",
-          { input },
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
-              "Content-Type": "application/json",
-              Prefer: "wait",
-            },
-          }
-        );
-
-        const output = response.data?.output;
-        if (!output || !Array.isArray(output)) {
-          throw new Error("No valid output received from Replicate.");
-        }
-
-        return output;
-      }
-
-      case "fal": {
-        const input = {
-          prompt,
-          image_size: validateFalAspectRatio(resolution),
-          num_inference_steps: numInferenceSteps,
-          num_images: numImages,
-          enable_safety_checker: enableSafetyChecker,
-          seed,
-        };
-
-        const result = await fal.subscribe("fal-ai/flux/schnell", {
-          input,
-          logs: true,
-          onQueueUpdate: (update) => {
-            if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
-              update.logs.forEach((log) => console.log(log.message));
-            }
-          },
-        });
-
-        return result?.data;
-      }
-
-      default:
-        throw new Error(
-          `Unsupported provider '${provider}'. Supported: 'replicate', 'fal'.`
-        );
-    }
-  } catch (error) {
-    handleGenerationError(error, provider, prompt);
+  const effectiveSeed = typeof seed === "number" ? seed : getRandom4DigitSeed();
+  switch (provider) {
+    case "replicate":
+      return generateImageFluxSchnellReplicate(
+        prompt,
+        resolution,
+        effectiveSeed
+      );
+    case "fal":
+      return generateImageFluxSchnellFal(prompt, resolution, effectiveSeed);
+    case "together":
+      return generateImageFluxSchnellTogether(
+        prompt,
+        resolution,
+        steps,
+        effectiveSeed
+      );
+    default:
+      throw new Error(`Unsupported provider '${provider}'.`);
   }
 };

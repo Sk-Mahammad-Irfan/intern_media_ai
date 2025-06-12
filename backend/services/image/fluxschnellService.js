@@ -16,7 +16,7 @@ const replicate = new Replicate({
 // Constants
 const SUPPORTED_IMAGE_FORMATS = ["jpeg", "png", "webp"];
 
-const REPLICATE_ASPECT_RATIOS = [
+const STANDARD_ASPECT_RATIOS = [
   "1:1",
   "16:9",
   "21:9",
@@ -55,7 +55,6 @@ const standardToFalAspectRatio = {
   "9:16": "portrait_16_9",
   "4:3": "landscape_4_3",
   "16:9": "landscape_16_9",
-  // Defaults for unsupported mappings:
   "21:9": "landscape_16_9",
   "3:2": "landscape_4_3",
   "2:3": "portrait_4_3",
@@ -68,21 +67,27 @@ const standardToFalAspectRatio = {
 const validateFormat = (format) =>
   SUPPORTED_IMAGE_FORMATS.includes(format) ? format : "webp";
 
-const validateReplicateAspectRatio = (ratio) => {
-  if (REPLICATE_ASPECT_RATIOS.includes(ratio)) return ratio;
-  const mapped = falToStandardAspectRatio[ratio];
-  return REPLICATE_ASPECT_RATIOS.includes(mapped) ? mapped : "1:1";
+const validateReplicateAspectRatio = (ratio) =>
+  STANDARD_ASPECT_RATIOS.includes(ratio) ? ratio : "1:1";
+
+const validateFalAspectRatio = (ratio) =>
+  FAL_ASPECT_RATIOS.includes(ratio)
+    ? ratio
+    : standardToFalAspectRatio[ratio] || "square";
+
+// Normalize FAL-specific resolution to standard format like "4:3"
+const normalizeToStandardAspectRatio = (resolution) => {
+  if (STANDARD_ASPECT_RATIOS.includes(resolution)) return resolution;
+  return falToStandardAspectRatio[resolution] || "1:1";
 };
 
-const validateFalAspectRatio = (ratio) => {
-  if (FAL_ASPECT_RATIOS.includes(ratio)) return ratio;
-  const mapped = standardToFalAspectRatio[ratio];
-  return FAL_ASPECT_RATIOS.includes(mapped) ? mapped : "square";
-};
-
-const validateSafetyTolerance = (level) => {
-  const numeric = typeof level === "string" ? parseInt(level) : level;
-  return SAFETY_TOLERANCE_LEVELS.includes(numeric) ? numeric : 2;
+// Convert standard aspect ratio to width/height
+const getDimensionsFromAspectRatio = (aspectRatio, targetHeight = 768) => {
+  const [w, h] = aspectRatio.split(":").map(Number);
+  if (!w || !h) throw new Error("Invalid aspect ratio format.");
+  const ratio = w / h;
+  const width = Math.round(targetHeight * ratio);
+  return { width, height: targetHeight };
 };
 
 // 🔹 Replicate Handler
@@ -95,12 +100,14 @@ export const generateImageFluxSchnellReplicate = async (
     throw new Error("Prompt is required for image generation.");
   }
 
+  const normalizedRatio = normalizeToStandardAspectRatio(resolution);
+
   const input = {
     prompt,
     go_fast: true,
     megapixels: "1",
     num_outputs: 1,
-    aspect_ratio: validateReplicateAspectRatio(resolution),
+    aspect_ratio: validateReplicateAspectRatio(normalizedRatio),
     output_format: validateFormat("webp"),
     output_quality: 80,
     num_inference_steps: 4,
@@ -115,15 +122,13 @@ export const generateImageFluxSchnellReplicate = async (
         headers: {
           Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
           "Content-Type": "application/json",
-          Prefer: "wait", // Wait for prediction completion
+          Prefer: "wait",
         },
       }
     );
 
     const data = response.data;
-
     console.log("Replicate response:", data);
-
     return data;
   } catch (error) {
     handleGenerationError(error, "replicate", prompt);
@@ -140,20 +145,16 @@ export const generateImageFluxSchnellFal = async (
     throw new Error("Prompt is required for image generation.");
   }
 
-  const numInferenceSteps = 4;
-  const numImages = 1;
-  const enableSafetyChecker = true;
+  const input = {
+    prompt,
+    image_size: validateFalAspectRatio(resolution),
+    num_inference_steps: 4,
+    num_images: 1,
+    enable_safety_checker: true,
+    seed,
+  };
 
   try {
-    const input = {
-      prompt,
-      image_size: validateFalAspectRatio(resolution),
-      num_inference_steps: numInferenceSteps,
-      num_images: numImages,
-      enable_safety_checker: enableSafetyChecker,
-      seed,
-    };
-
     const result = await fal.subscribe("fal-ai/flux/schnell", {
       input,
       logs: true,
@@ -167,6 +168,50 @@ export const generateImageFluxSchnellFal = async (
     return result?.data;
   } catch (error) {
     handleGenerationError(error, "fal", prompt);
+  }
+};
+
+// 🔹 Together.xyz Handler
+export const generateImageFluxSchnellTogether = async (
+  prompt,
+  resolution = "square_hd",
+  steps = 10,
+  seed = 42
+) => {
+  if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+    throw new Error("Prompt is required for image generation.");
+  }
+
+  const normalizedRatio = normalizeToStandardAspectRatio(resolution);
+  const { width, height } = getDimensionsFromAspectRatio(normalizedRatio);
+
+  const input = {
+    model: "black-forest-labs/FLUX.1-schnell",
+    prompt,
+    width,
+    height,
+    steps,
+    seed,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.together.xyz/v1/images/generations",
+      input,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = response.data;
+    console.log("Together.xyz response:", data);
+
+    return data;
+  } catch (error) {
+    handleGenerationError(error, "together.xyz", prompt);
   }
 };
 

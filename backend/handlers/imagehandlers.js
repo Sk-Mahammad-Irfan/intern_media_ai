@@ -18,6 +18,7 @@ import { minimaxGenerate } from "../services/image/minmaxService.js";
 import {
   generateImageFluxSchnellFal,
   generateImageFluxSchnellReplicate,
+  generateImageFluxSchnellTogether,
 } from "../services/image/fluxschnellService.js";
 
 const wrapHandler = (handler, model) => {
@@ -43,15 +44,24 @@ export const imageGenerationHandlers = [
     type: "replicate",
     credits: 5,
   },
-  // {
-  //   model: "black-forest-labs-flux-schnell",
-  //   handler: wrapHandler(
-  //     generateImageFluxSchnellFal,
-  //     "black-forest-labs-flux-schnell"
-  //   ),
-  //   type: "fal",
-  //   credits: 7,
-  // },
+  {
+    model: "black-forest-labs-flux-schnell",
+    handler: wrapHandler(
+      generateImageFluxSchnellFal,
+      "black-forest-labs-flux-schnell"
+    ),
+    type: "fal",
+    credits: 7,
+  },
+  {
+    model: "black-forest-labs-flux-schnell",
+    handler: wrapHandler(
+      generateImageFluxSchnellTogether,
+      "black-forest-labs-flux-schnell"
+    ),
+    type: "together",
+    credits: 4,
+  },
   // {
   //   model: "black-forest-labs-flux-1-1-pro",
   //   handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),

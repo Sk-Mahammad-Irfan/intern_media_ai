@@ -130,6 +130,9 @@ export const generateImage = async (req, res) => {
         case "replicate":
           imageUrl = rawData?.output?.[0];
           break;
+        case "together":
+          imageUrl = rawData?.data?.[0]?.url;
+          break;
         default:
           console.warn(`Unknown handler type: ${type}`);
           break;

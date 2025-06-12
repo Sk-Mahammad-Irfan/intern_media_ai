@@ -320,7 +320,7 @@ const imageModelOptions = {
   },
 
   "black-forest-labs-flux-schnell": {
-    providers: ["auto", "fal", "replicate"],
+    providers: ["auto", "fal", "replicate", "together"],
     aspect_ratios: {
       // Default aspect ratios (used when provider is 'auto')
       square_hd: "1024x1024",
@@ -352,6 +352,13 @@ const imageModelOptions = {
         "4:3": "4:3",
         "9:16": "9:16",
         "9:21": "9:21",
+      },
+      together: {
+        "1:1": "1:1",
+        "16:9": "16:9",
+        "21:9": "21:9",
+        "4:3": "4:3",
+        "9:16": "9:16",
       },
     },
     // UI input schema
@@ -861,7 +868,12 @@ providerSelect.addEventListener("change", () => {
     renderAspectRatioOptions(modelId);
     outputSettingsContainer.style.display = "block";
     displayCustomInputs(modelId, "inputsContainer");
-  } else if (selected === "fal" || selected === "replicate") {
+  } else if (
+    selected === "fal" ||
+    selected === "replicate" ||
+    selected === "deepinfra" ||
+    selected === "together"
+  ) {
     displayCustomInputs(modelId, "inputsContainer");
     renderAspectRatioOptions(modelId);
     outputSettingsContainer.style.display = "block";
@@ -954,7 +966,7 @@ providerSelect.addEventListener("change", () => {
     customInputsContainer.style.display = "block";
     displayCustomInputs(modelId, "inputsContainer");
     renderAspectRatioOptions(modelId);
-  } else if (selected === "replicate") {
+  } else if (selected === "replicate" || selected === "together") {
     outputSettingsContainer.style.display = "block";
     customInputsContainer.style.display = "block";
     displayCustomInputs(modelId, "inputsContainer");
@@ -1046,7 +1058,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const customInputsContainer = document.getElementById("inputsContainer");
     const seedInputAuto = document.getElementById("seedInputAuto");
     seedInputAuto.style.display =
-      selected === "replicate" || "fal" ? "none" : "block";
+      selected === "replicate" || "fal" || "together" ? "none" : "block";
 
     seedInputAuto.style.display = selected === "auto" ? "block" : "none";
 
@@ -1066,7 +1078,7 @@ document.addEventListener("DOMContentLoaded", () => {
       customInputsContainer.style.display = "block";
       displayCustomInputs(modelId, "inputsContainer");
       renderAspectRatioOptions(modelId);
-    } else if (selected === "replicate") {
+    } else if (selected === "replicate" || selected === "together") {
       outputSettingsContainer.style.display = "block";
       customInputsContainer.style.display = "block";
       displayCustomInputs(modelId, "inputsContainer");
@@ -1435,7 +1447,12 @@ document.addEventListener("DOMContentLoaded", () => {
     displayCustomInputs(modelId, "inputsContainer");
 
     const selected = providerSelect.value;
-    if (selected === "auto" || selected === "fal" || selected === "replicate") {
+    if (
+      selected === "auto" ||
+      selected === "fal" ||
+      selected === "replicate" ||
+      selected === "together"
+    ) {
       renderAspectRatioOptions(modelId);
       document.getElementById("outputSettingsContainer").style.display =
         "block";

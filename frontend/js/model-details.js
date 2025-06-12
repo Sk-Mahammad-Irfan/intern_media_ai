@@ -36,6 +36,17 @@ document.addEventListener("DOMContentLoaded", function () {
       latency: "1.00s",
       throughput: "40.95 tps",
     },
+    together: {
+      name: "Together",
+      location: "US",
+      precision: "fp8",
+      context: "23K",
+      maxOutput: "23K",
+      inputCost: "$0.12",
+      outputCost: "$0.35",
+      latency: "1.27s",
+      throughput: "29.12 tps",
+    },
   };
 
   const modelData = {
@@ -59,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Black Forest Labs’ FLUX.1 [schnell] model delivers fast and efficient image generation via a 12-billion parameter flow transformer, balancing speed and output quality across 1–4 inference steps. Ideal for creators, developers, and businesses seeking quality without sacrificing performance.",
       chatPage: "imagemodel.html",
       creditPrice: "3-4 credits/image",
-      providers: ["fal", "replicate"],
+      providers: ["fal", "replicate", "together"],
     },
     "recraft-v3": {
       title: "Recraft V3: Text-to-Image",

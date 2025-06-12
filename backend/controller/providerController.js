@@ -159,6 +159,7 @@ export const generateImageForProvider = async (req, res) => {
     "black-forest-labs-flux-schnell": {
       fal: 7,
       replicate: 5,
+      together: 4,
     },
     "recraft-v3": {
       fal: 4,
@@ -260,6 +261,12 @@ export const generateImageForProvider = async (req, res) => {
       imageUrl = rawData?.images?.[0]?.url;
     } else if (providerType === "replicate") {
       imageUrl = rawData?.image?.url || rawData?.url || rawData;
+    } else if (providerType === "together") {
+      imageUrl =
+        rawData?.data?.[0]?.url ||
+        rawData?.image?.url ||
+        rawData?.url ||
+        rawData;
     } else if (providerType === "deepinfra" || providerType === "base64") {
       const base64 = rawData?.data?.[0]?.b64_json;
       imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
