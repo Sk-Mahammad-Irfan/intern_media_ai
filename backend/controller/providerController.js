@@ -7,7 +7,10 @@ import { generateImageFluxPro } from "../providers/image/fluxProvider.js";
 import { generateImageFooocus } from "../providers/image/fooocusProvider.js";
 import { generateImageHidream } from "../providers/image/hidreamprovider.js";
 import { generateImageIdeogram } from "../providers/image/ideogramProvider.js";
-import { generateImageRecraftFAL } from "../providers/image/recraftv3Provider.js";
+import {
+  generateImageRecraftFAL,
+  generateImageRecraftV3Replicate,
+} from "../providers/image/recraftv3Provider.js";
 import { generateAudioCassatteMusic } from "../providers/audio/cassettemusicProvider.js";
 import { generateAudioCassetteFAL } from "../providers/audio/cassetteProvider.js";
 import { generateAudioMultilingualTtsFAL } from "../providers/audio/multilingualTtsProvider.js";
@@ -167,6 +170,7 @@ export const generateImageForProvider = async (req, res) => {
     },
     "recraft-v3": {
       fal: 4,
+      replicate: 2,
     },
     fooocus: {
       fal: 3,
@@ -221,9 +225,6 @@ export const generateImageForProvider = async (req, res) => {
           rawData = await generateImageFluxPro(body);
         }
         break;
-      case "recraft-v3":
-        rawData = await generateImageRecraftFAL(body);
-        break;
       case "black-forest-labs-flux-schnell":
         rawData = await generateImageFluxSchnell(body);
         break;
@@ -240,7 +241,13 @@ export const generateImageForProvider = async (req, res) => {
         rawData = await generateImageIdeogram(body);
         break;
       case "recraft-v3":
-        rawData = await generateImageRecraftFAL(body);
+        if (providerType === "fal") {
+          console.log("fal");
+          rawData = await generateImageRecraftFAL(body);
+        } else if (providerType === "replicate") {
+          console.log("replicate");
+          rawData = await generateImageRecraftV3Replicate(body);
+        }
         break;
       case "imagen4-preview":
         rawData = await generateImageImageGen(body);
@@ -267,7 +274,7 @@ export const generateImageForProvider = async (req, res) => {
     if (providerType === "fal") {
       imageUrl = rawData?.images?.[0]?.url;
     } else if (providerType === "replicate") {
-      imageUrl = rawData?.image?.url || rawData?.url || rawData;
+      imageUrl = rawData?.image?.url || rawData?.output || rawData;
     } else if (providerType === "together") {
       imageUrl =
         rawData?.data?.[0]?.url ||

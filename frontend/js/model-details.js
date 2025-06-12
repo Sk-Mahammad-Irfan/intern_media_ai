@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs. It is recognized as one of the best performing models in the industry, delivering consistent results that meet the demands of creative professionals.",
       chatPage: "imagemodel.html",
       creditPrice: "4 credits/image",
-      providers: ["fal"],
+      providers: ["fal", "replicate"],
     },
     fooocus: {
       title: "Fooocus: Base Model",

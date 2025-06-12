@@ -125,7 +125,7 @@ export const generateImage = async (req, res) => {
           imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
           break;
         case "replicate":
-          imageUrl = rawData?.output?.[0];
+          imageUrl = rawData?.output || rawData?.output?.[0];
           break;
         case "together":
           imageUrl = rawData?.data?.[0]?.url;

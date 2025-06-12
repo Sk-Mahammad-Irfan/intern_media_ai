@@ -5,7 +5,7 @@ import {
 import { falFooocus } from "../services/image/fooocusService.js";
 import {
   falRecraftV3,
-  segmindRecraftV3,
+  replicateRecraftV3,
 } from "../services/image/recraftv3Service.js";
 import { hidreamFAL } from "../services/image/hidreamServices.js";
 import { ideogramFAL } from "../services/image/ideogramServices.js";
@@ -83,6 +83,12 @@ export const imageGenerationHandlers = [
     handler: wrapHandler(falRecraftV3, "recraft-v3"),
     type: "fal",
     credits: 4,
+  },
+  {
+    model: "recraft-v3",
+    handler: wrapHandler(replicateRecraftV3, "recraft-v3"),
+    type: "replicate",
+    credits: 2,
   },
   {
     model: "fooocus",
