@@ -118,3 +118,22 @@ export const generateImageFluxDevTogether = async (
     handleGenerationError(error, "together.xyz-dev", prompt);
   }
 };
+
+const handleGenerationError = (error, provider, prompt) => {
+  const errorDetails = {
+    message: error.message,
+    provider,
+    inputPrompt: prompt,
+    response: error.response?.data || null,
+    stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+  };
+
+  console.error(
+    "Image generation failed:",
+    JSON.stringify(errorDetails, null, 2)
+  );
+
+  throw new Error(
+    `Image generation failed with provider '${provider}': ${error.message}`
+  );
+};
