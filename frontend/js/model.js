@@ -345,6 +345,18 @@ const allmodels = {
       tags: ["hindi", "tts"],
     },
     {
+      id: "cartesia-sonic-2",
+      name: "Cartesia Sonic 2",
+      type: "audio",
+      icon: "soundwave",
+      iconColor: "primary",
+      description:
+        "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
+      source: "Cartesia",
+      sourceUrl: "https://cartesia.ai/models/sonic-2/text-to-audio",
+      tags: ["fast", "creative"],
+    },
+    {
       id: "fal-ai-elevenlabs-sound-effects",
       name: "ElevenLabs Sound Effects",
       type: "audio",

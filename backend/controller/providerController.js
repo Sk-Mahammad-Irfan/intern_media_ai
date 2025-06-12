@@ -44,6 +44,7 @@ import { generatePixverseVideo } from "../providers/video/pixverse45Provider.js"
 import { generateVeo3Video } from "../providers/video/veo3provider.js";
 import { generateMinimaxVideo } from "../providers/video/minmax01Provider.js";
 import { generateHunyuanVideo } from "../providers/video/hunyuanProvider.js";
+import { generateSpeechTogetherProvider } from "../providers/audio/cartesisonicProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -335,6 +336,9 @@ export const generateAudioForProvider = async (req, res) => {
         break;
       case "fal-ai-mmaudio-v2-text-to-audio":
         audioUrl = await generateAudioMM(body);
+        break;
+      case "cartesia-sonic-2":
+        audioUrl = await generateSpeechTogetherProvider(body);
         break;
       default:
         return res

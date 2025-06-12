@@ -232,6 +232,18 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "1 credits/generation",
       providers: ["fal"],
     },
+    "cartesia-sonic-2": {
+      title: "Cartesia Sonic 2",
+      description:
+        "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
+      link: "https://cartesia.ai/models/sonic-2/text-to-audio",
+      fullDetails:
+        "Cartesia Sonic 2 transforms text prompts into vivid and coherent audio clips. Designed for efficiency and expressiveness, it supports a variety of use cases including storytelling, ambient sound design, music ideation, and audio branding.",
+      chatPage: "audiomodel.html",
+      creditPrice: "20 credits/second",
+      providers: ["fal", "replicate"],
+    },
+
     "fal-ai-lyria2": {
       title: "Lyria 2 by Google DeepMind",
       description:

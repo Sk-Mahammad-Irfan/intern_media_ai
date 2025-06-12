@@ -198,6 +198,59 @@ const audioModelOptions = {
       },
     ],
   },
+  "cartesia-sonic-2": {
+    providers: ["auto", "together"],
+    custom_inputs: [
+      {
+        id: "voice",
+        type: "select",
+        label: "Voice",
+        help: "Choose the desired voice for the generated audio",
+        default: "sweet lady",
+        options: [
+          "sweet lady",
+          "friendly sidekick",
+          "french narrator lady",
+          "german reporter woman",
+          "indian lady",
+          "british reading lady",
+          "british narration lady",
+          "hindi calm man",
+          "hindi narrator man",
+          "polish narrator man",
+          "polish young man",
+          "alabama male",
+          "australian male",
+          "anime girl",
+          "japanese man book",
+        ],
+      },
+      {
+        id: "sample_rate",
+        type: "select",
+        label: "Sample Rate",
+        help: "Select the sample rate for output audio",
+        default: 44100,
+        options: [16000, 24000, 44100, 48000],
+      },
+      {
+        id: "response_format",
+        type: "select",
+        label: "Response Format",
+        help: "Choose the audio file format for the result",
+        default: "wav",
+        options: ["wav", "mp3"],
+      },
+      {
+        id: "language",
+        type: "select",
+        label: "Language",
+        help: "Select the language for speech synthesis",
+        default: "en",
+        options: ["en", "hi"],
+      },
+    ],
+  },
 };
 
 const audioModelCredits = {
@@ -206,6 +259,7 @@ const audioModelCredits = {
   "cassattemusic-audio": 2,
   "multilingual-audio": 9,
   "american-audio": 2,
+  "cartesia-sonic-2": 7,
   "fal-ai-kokoro-hindi": 5,
   "fal-ai-lyria2": 5,
   "fal-ai-elevenlabs-sound-effects": 5,
@@ -274,14 +328,12 @@ function populateModelCheckboxes() {
   });
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
 /**
  * Updates the list of selected audio models based on the checked checkboxes
  * in the modelCheckboxes container. Calls updateTotalCredits to refresh the
  * total credits display according to the selected models.
  */
 
-/*******  87a88096-5ef1-4718-8379-ca86ced85aae  *******/
 function updateSelectedModels() {
   selectedAudioModels = [];
   document
@@ -335,8 +387,8 @@ function copyToClipboard(icon) {
 }
 
 function displayCustomInputs(modelId, containerId) {
-  const provider = document.getElementById("providerSelect").value;
-  let model = audioModelOptions[modelId];
+  const provider = document.getElementById("providerSelect")?.value || "auto";
+  const model = audioModelOptions[modelId];
 
   if (!model) {
     console.error("Model not found.");
@@ -346,13 +398,10 @@ function displayCustomInputs(modelId, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  // Special handling for stackadoc-stable-audio with provider-specific inputs
   let inputsToDisplay = [];
 
-  if (
-    modelId === "stackadoc-stable-audio" &&
-    model.provider_custom_inputs?.[provider]
-  ) {
+  // Prefer provider-specific custom inputs if available
+  if (model.provider_custom_inputs?.[provider]) {
     inputsToDisplay = model.provider_custom_inputs[provider];
   } else if (model.custom_inputs) {
     inputsToDisplay = model.custom_inputs;
@@ -374,7 +423,10 @@ function displayCustomInputs(modelId, containerId) {
     label.className = "form-label";
     label.style.display = "block";
     label.style.marginBottom = "5px";
-    wrapper.appendChild(label);
+
+    if (input.help || input.description) {
+      label.title = input.help || input.description;
+    }
 
     let inputEl;
 
@@ -395,14 +447,11 @@ function displayCustomInputs(modelId, containerId) {
         inputEl = document.createElement("input");
         inputEl.type = "number";
         inputEl.className = "form-control";
-        inputEl.min = input.min || "";
-        inputEl.max = input.max || "";
-        if (input.default !== undefined) {
-          inputEl.value = input.default;
-        }
-        if (input.placeholder) {
-          inputEl.placeholder = input.placeholder;
-        }
+        if (input.min !== undefined) inputEl.min = input.min;
+        if (input.max !== undefined) inputEl.max = input.max;
+        if (input.step !== undefined) inputEl.step = input.step;
+        if (input.default !== undefined) inputEl.value = input.default;
+        if (input.placeholder) inputEl.placeholder = input.placeholder;
         break;
 
       case "checkbox":
@@ -422,12 +471,8 @@ function displayCustomInputs(modelId, containerId) {
         inputEl = document.createElement("input");
         inputEl.type = "text";
         inputEl.className = "form-control";
-        if (input.default !== undefined) {
-          inputEl.value = input.default;
-        }
-        if (input.placeholder) {
-          inputEl.placeholder = input.placeholder;
-        }
+        if (input.default !== undefined) inputEl.value = input.default;
+        if (input.placeholder) inputEl.placeholder = input.placeholder;
         break;
 
       default:
@@ -438,11 +483,12 @@ function displayCustomInputs(modelId, containerId) {
     if (input.type !== "checkbox") {
       inputEl.id = input.id;
       inputEl.name = input.id;
+      wrapper.appendChild(label);
       wrapper.appendChild(inputEl);
     }
 
-    // Add description if available
-    if (input.description) {
+    // Optional description shown below input
+    if (input.description && input.type !== "checkbox") {
       const desc = document.createElement("small");
       desc.className = "form-text text-muted";
       desc.textContent = input.description;
@@ -452,6 +498,7 @@ function displayCustomInputs(modelId, containerId) {
     container.appendChild(wrapper);
   });
 }
+
 function populateAudioModelOptions(modelId) {
   const config = audioModelOptions[modelId];
   if (!config) return;
@@ -747,6 +794,7 @@ window.addEventListener("DOMContentLoaded", () => {
       "american-audio": "american-audio",
       "fal-ai-kokoro-hindi": "fal-ai-kokoro-hindi",
       "fal-ai-lyria2": "fal-ai-lyria2",
+      "cartesia-sonic-2": "cartesia-sonic-2",
       "fal-ai-elevenlabs-sound-effects": "fal-ai-elevenlabs-sound-effects",
       "fal-ai-mmaudio-v2-text-to-audio": "fal-ai-mmaudio-v2-text-to-audio",
     };
@@ -889,7 +937,11 @@ window.addEventListener("DOMContentLoaded", () => {
         displayCustomInputs(modelId, "inputsContainer");
       }
 
-      if (selected === "fal" || selected === "replicate") {
+      if (
+        selected === "fal" ||
+        selected === "replicate" ||
+        selected === "together"
+      ) {
         customInputsContainer.style.display = "block";
         outputSettingsContainer.style.display = "block";
         stepsInputAuto.style.display = "none";
@@ -975,7 +1027,11 @@ window.addEventListener("DOMContentLoaded", () => {
   );
   const stepsInputAuto = document.getElementById("stepsInputAuto");
 
-  if (selected === "fal" || selected === "replicate") {
+  if (
+    selected === "fal" ||
+    selected === "replicate" ||
+    selected === "together"
+  ) {
     if (falOptions) falOptions.style.display = "block";
     if (outputSettingsContainer)
       outputSettingsContainer.style.display = "block";
@@ -1014,7 +1070,11 @@ document.getElementById("providerSelect")?.addEventListener("change", () => {
     displayCustomInputs(modelId, "inputsContainer");
   }
 
-  if (selected === "fal" || selected === "replicate") {
+  if (
+    selected === "fal" ||
+    selected === "replicate" ||
+    selected === "together"
+  ) {
     customInputsContainer.style.display = "block";
     outputSettingsContainer.style.display = "block";
     if (stepsInputAuto) stepsInputAuto.style.display = "none";

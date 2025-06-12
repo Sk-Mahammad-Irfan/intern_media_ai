@@ -9,6 +9,7 @@ import { KokoroServiceFAL } from "../services/audio/kokoroService.js";
 import { lyria2Audio } from "../services/audio/lyria2Services.js";
 import { evenlabAudio } from "../services/audio/evenlabService.js";
 import { generateMMAudio } from "../services/audio/mmaudioServices.js";
+import { generateSpeechTogether } from "../services/audio/cartesisonicService.js";
 // import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 
 const wrapHandler = (handler, model) => {
@@ -30,6 +31,12 @@ export const audioGenerationHandlers = [
     handler: wrapHandler(stableFal, "stackadoc-stable-audio"),
     credits: 2,
     type: "fal",
+  },
+  {
+    model: "cartesia-sonic-2",
+    handler: wrapHandler(generateSpeechTogether, "cartesia-sonic-2"),
+    credits: 7,
+    type: "together",
   },
   {
     model: "cassetteai-sfx-generator",

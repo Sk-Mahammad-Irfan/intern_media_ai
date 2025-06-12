@@ -224,6 +224,18 @@ const models = {
     chatPage: "audiomodel.html",
     provider: "fal",
   },
+  "cartesia-sonic-2": {
+    id: "cartesia-sonic-2",
+    title: "Cartesia Sonic 2",
+    description:
+      "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
+    link: "https://cartesia.ai/models/sonic-2/text-to-audio",
+    fullDetails:
+      "Cartesia Sonic 2 transforms text prompts into vivid and coherent audio clips. Designed for efficiency and expressiveness, it supports a variety of use cases including storytelling, ambient sound design, music ideation, and audio branding.",
+    chatPage: "audiomodel.html",
+    providers: "fal",
+  },
+
   bagel: {
     id: "bagel",
     title: "Bagel",
