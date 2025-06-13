@@ -63,6 +63,23 @@ const allmodels = {
       tags: ["text-to-image", "stable-diffusion", "professional"],
     },
     {
+      id: "stabilityai-sd3-5-medium",
+      name: "Stability AI: SD 3.5 Medium",
+      type: "image",
+      icon: "image",
+      iconColor: "success",
+      description:
+        "2.5B parameter MMDiT-X model for lightweight, high-quality text-to-image generation.",
+      source: "stability.ai",
+      sourceUrl: "https://stability.ai/blog/stable-diffusion-3-5",
+      tags: [
+        "text-to-image",
+        "stable-diffusion",
+        "efficient",
+        "consumer-friendly",
+      ],
+    },
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",

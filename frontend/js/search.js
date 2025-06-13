@@ -143,6 +143,18 @@ const models = {
     creditPrice: "4-5 credits/image",
     providers: "deepinfra",
   },
+  "stabilityai-sd3-5-medium": {
+    id: "stabilityai-sd3-5-medium",
+    title: "Stability AI: SD 3.5 Medium",
+    description:
+      "At 2.5 billion parameters, with improved MMDiT-X architecture and training methods, this model is designed to run “out of the box” on consumer hardware, striking a balance between quality and ease of customization.",
+    link: "https://stability.ai/blog/stable-diffusion-3-5",
+    fullDetails:
+      "SD 3.5 Medium is a 2.5B parameter model based on the improved MMDiT-X architecture. Designed for efficient performance and customization, it runs well on consumer hardware while generating high-quality images up to 2 megapixels. Ideal for lightweight yet capable applications.",
+    chatPage: "imagemodel.html",
+    creditPrice: "2-4 credits/image",
+    providers: "deepinfra",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",

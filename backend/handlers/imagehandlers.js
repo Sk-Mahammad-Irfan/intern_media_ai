@@ -23,6 +23,7 @@ import {
 import { generateImageFluxDevTogether } from "../services/image/flux1devService.js";
 import { deepFluxPro } from "../services/image/fluxProService.js";
 import { stabilitySD3_5 } from "../services/image/stability35Service.js";
+import { stability35Mid } from "../services/image/stability35midService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -89,6 +90,12 @@ export const imageGenerationHandlers = [
   {
     model: "stabilityai-sd3-5",
     handler: wrapHandler(stabilitySD3_5, "stabilityai-sd3-5"),
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "stabilityai-sd3-5-medium",
+    handler: wrapHandler(stability35Mid, "stabilityai-sd3-5-medium"),
     type: "base64",
     credits: 4,
   },
