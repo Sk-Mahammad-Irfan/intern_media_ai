@@ -119,6 +119,18 @@ const models = {
     creditPrice: "4-5 credits/image",
     providers: "together",
   },
+  "black-forest-labs-flux-pro": {
+    id: "black-forest-labs-flux-pro",
+    title: "Black Forest Labs: FLUX.pro",
+    description:
+      "Black Forest Labs' first flagship model based on Flux latent rectified flow transformers.",
+    link: "https://deepinfra.com/black-forest-labs/FLUX-pro",
+    fullDetails:
+      "FLUX.pro is Black Forest Labs' flagship model featuring a powerful rectified flow transformer architecture optimized for photorealism, creative coherence, and precision in text-to-image synthesis. It builds on the FLUX family to deliver higher fidelity and semantic alignment in image generation.",
+    chatPage: "imagemodel.html",
+    creditPrice: "5-6 credits/image",
+    providers: "deepinfra",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",

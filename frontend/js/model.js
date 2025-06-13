@@ -38,7 +38,18 @@ const allmodels = {
       sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-1-dev",
       tags: ["text-to-image", "high-quality", "experimental"],
     },
-
+    {
+      id: "black-forest-labs-flux-pro",
+      name: "Black Forest Labs: FLUX.pro",
+      type: "image",
+      icon: "image",
+      iconColor: "warning",
+      description:
+        "Flagship latent flow transformer for photorealistic text-to-image synthesis.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-pro",
+      tags: ["text-to-image", "flagship", "high-quality"],
+    },
     {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",

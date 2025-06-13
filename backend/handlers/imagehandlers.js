@@ -21,6 +21,7 @@ import {
   generateImageFluxSchnellTogether,
 } from "../services/image/fluxschnellService.js";
 import { generateImageFluxDevTogether } from "../services/image/flux1devService.js";
+import { deepFluxPro } from "../services/image/fluxProService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -75,6 +76,12 @@ export const imageGenerationHandlers = [
   {
     model: "black-forest-labs-flux-1-1-pro",
     handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-pro",
+    handler: wrapHandler(deepFluxPro, "black-forest-labs-flux-pro"),
     type: "base64",
     credits: 4,
   },

@@ -3,7 +3,7 @@ import { generateVideoLuma } from "../providers/video/lumaProviders.js";
 import { generateVideoPika } from "../providers/video/pikaProviders.js";
 import { generateVideoPixverse } from "../providers/video/pixverseProviders.js";
 import { generateVideoLTX } from "../providers/video/ltxProvidrs.js";
-import { generateImageFluxPro } from "../providers/image/fluxProvider.js";
+import { generateImageFlux11Pro } from "../providers/image/fluxProvider.js";
 import { generateImageFooocus } from "../providers/image/fooocusProvider.js";
 import { generateImageHidream } from "../providers/image/hidreamprovider.js";
 import { generateImageIdeogram } from "../providers/image/ideogramProvider.js";
@@ -49,6 +49,7 @@ import { generateMinimaxVideo } from "../providers/video/minmax01Provider.js";
 import { generateHunyuanVideo } from "../providers/video/hunyuanProvider.js";
 import { generateSpeechTogetherProvider } from "../providers/audio/cartesisonicProvider.js";
 import { generateImageFluxDev } from "../providers/image/fluxdevProvider.js";
+import { generateImageFluxPro } from "../providers/image/fluxProProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -168,6 +169,9 @@ export const generateImageForProvider = async (req, res) => {
     "black-forest-labs-flux-1-dev": {
       together: 7,
     },
+    "black-forest-labs-flux-pro": {
+      deepinfra: 5,
+    },
     "recraft-v3": {
       fal: 4,
       replicate: 2,
@@ -216,13 +220,13 @@ export const generateImageForProvider = async (req, res) => {
     switch (id.toLowerCase()) {
       case "black-forest-labs-flux-1-1-pro":
         if (provider === "fal") {
-          rawData = await generateImageFluxPro(body);
+          rawData = await generateImageFlux11Pro(body);
         }
         if (provider === "deepinfra" || provider === "base64") {
-          rawData = await generateImageFluxPro(body);
+          rawData = await generateImageFlux11Pro(body);
         }
         if (provider === "replicate") {
-          rawData = await generateImageFluxPro(body);
+          rawData = await generateImageFlux11Pro(body);
         }
         break;
       case "black-forest-labs-flux-schnell":
@@ -230,6 +234,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "black-forest-labs-flux-1-dev":
         rawData = await generateImageFluxDev(body);
+        break;
+      case "black-forest-labs-flux-pro":
+        rawData = await generateImageFluxPro(body);
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);

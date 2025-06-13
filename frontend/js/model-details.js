@@ -81,6 +81,17 @@ document.addEventListener("DOMContentLoaded", function () {
         "FLUX.1 [dev] is a 12 billion parameter rectified flow transformer model designed for high-quality, prompt-faithful text-to-image synthesis. It excels in generating diverse, detailed images across a range of styles, purely from textual descriptions without requiring input images.",
       chatPage: "imagemodel.html",
       creditPrice: "4-5 credits/image",
+      providers: ["together"],
+    },
+    "black-forest-labs-flux-pro": {
+      title: "Black Forest Labs: FLUX.pro",
+      description:
+        "Black Forest Labs' first flagship model based on Flux latent rectified flow transformers.",
+      link: "https://deepinfra.com/black-forest-labs/FLUX-pro",
+      fullDetails:
+        "FLUX.pro is Black Forest Labs' flagship model featuring a powerful rectified flow transformer architecture optimized for photorealism, creative coherence, and precision in text-to-image synthesis. It builds on the FLUX family to deliver higher fidelity and semantic alignment in image generation.",
+      chatPage: "imagemodel.html",
+      creditPrice: "5-6 credits/image",
       providers: ["deepinfra"],
     },
     "recraft-v3": {

@@ -38,7 +38,7 @@ const validateSafetyTolerance = (level) => {
   const numeric = typeof level === "string" ? parseInt(level) : level;
   return SAFETY_TOLERANCE_LEVELS.includes(numeric) ? numeric : 2;
 };
-export const generateImageFluxPro = async (body) => {
+export const generateImageFlux11Pro = async (body) => {
   const {
     provider,
     prompt,
