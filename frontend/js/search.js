@@ -155,6 +155,18 @@ const models = {
     creditPrice: "2-4 credits/image",
     providers: "deepinfra",
   },
+  "stabilityai-sdxl-turbo": {
+    id: "stabilityai-sdxl-turbo",
+    title: "Stability AI: SDXL Turbo",
+    description:
+      "The SDXL Turbo model, developed by Stability AI, is an optimized, fast text-to-image generative model. It is a distilled version of SDXL 1.0, leveraging Adversarial Diffusion Distillation (ADD) to generate high-quality images in less steps.",
+    link: "https://stability.ai/news/stability-ai-sdxl-turbo",
+    fullDetails:
+      "SDXL Turbo is a distilled, high-speed version of SDXL 1.0 developed by Stability AI. It leverages Adversarial Diffusion Distillation (ADD) to generate high-quality images in significantly fewer steps, ideal for fast image generation workflows while maintaining visual fidelity.",
+    chatPage: "imagemodel.html",
+    creditPrice: "2-4 credits/image",
+    providers: "deepinfra",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",

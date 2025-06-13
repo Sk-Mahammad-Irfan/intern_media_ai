@@ -52,6 +52,7 @@ import { generateImageFluxDev } from "../providers/image/fluxdevProvider.js";
 import { generateImageFluxPro } from "../providers/image/fluxProProvider.js";
 import { generateImageStability35 } from "../providers/image/stability35Provider.js";
 import { generateImageStability35Mid } from "../providers/image/stability35midProvider.js";
+import { generateImageStability35SDXL } from "../providers/image/stabilitySdxlProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -180,6 +181,9 @@ export const generateImageForProvider = async (req, res) => {
     "stabilityai-sd3-5-medium": {
       deepinfra: 5,
     },
+    "stabilityai-sdxl-turbo": {
+      deepinfra: 5,
+    },
     "recraft-v3": {
       fal: 4,
       replicate: 2,
@@ -251,6 +255,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "stabilityai-sd3-5-medium":
         rawData = await generateImageStability35Mid(body);
+        break;
+      case "stabilityai-sdxl-turbo":
+        rawData = await generateImageStability35SDXL(body);
         break;
       case "fooocus":
         rawData = await generateImageFooocus(body);

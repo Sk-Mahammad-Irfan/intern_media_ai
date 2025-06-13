@@ -80,6 +80,18 @@ const allmodels = {
       ],
     },
     {
+      id: "stabilityai-sdxl-turbo",
+      name: "Stability AI: SDXL Turbo",
+      type: "image",
+      icon: "image",
+      iconColor: "info",
+      description:
+        "Distilled, fast SDXL model with ADD for low-latency high-fidelity generation.",
+      source: "stability.ai",
+      sourceUrl: "https://stability.ai/news/stability-ai-sdxl-turbo",
+      tags: ["text-to-image", "stable-diffusion", "fast", "turbo", "ADD"],
+    },
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",

@@ -116,6 +116,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "2-4 credits/image",
       providers: ["deepinfra"],
     },
+    "stabilityai-sdxl-turbo": {
+      title: "Stability AI: SDXL Turbo",
+      description:
+        "Optimized and accelerated version of SDXL 1.0 using Adversarial Diffusion Distillation (ADD).",
+      link: "https://stability.ai/news/stability-ai-sdxl-turbo",
+      fullDetails:
+        "SDXL Turbo is a distilled, high-speed version of SDXL 1.0 developed by Stability AI. It leverages Adversarial Diffusion Distillation (ADD) to generate high-quality images in significantly fewer steps, ideal for fast image generation workflows while maintaining visual fidelity.",
+      chatPage: "imagemodel.html",
+      creditPrice: "2-4 credits/image",
+      providers: ["deepinfra"],
+    },
     "recraft-v3": {
       title: "Recraft V3: Text-to-Image",
       description:
