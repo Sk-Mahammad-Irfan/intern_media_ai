@@ -115,6 +115,7 @@ const modelOptions = {
 
 const videoModelCredits = {
   "wan-ai-wan21-t2v-13b": 18,
+  "wan-ai-wan21-t2v-14b": 10,
   "lightricks-ltx-video": 60,
   "pixverse-v4": 15,
   "pixverse-v4.5": 15,

@@ -1266,6 +1266,7 @@ const imageModelCredits = {
   "black-forest-labs-flux-pro": 5,
   "recraft-v3": 4,
   "stabilityai-sd3-5": 4,
+
   fooocus: 3,
   "hidream-i1-dev": 4,
   "ideogram-v3": 7,
@@ -1274,6 +1275,8 @@ const imageModelCredits = {
   "f-lite-standard": 12,
   "sana-v1.5-4.8b": 12,
   "minimax-image-01": 12,
+  "stabilityai-sd3-5-medium": 4,
+  "stabilityai-sdxl-turbo": 4,
 };
 
 let selectedModels = [];
