@@ -101,27 +101,41 @@ export const generateImageFluxPro = async (body) => {
       }
 
       case "deepinfra": {
+        const resolutionMap = {
+          square_hd: "1024x1024",
+          square: "1024x1024",
+          portrait_4_3: "768x1024",
+          portrait_16_9: "576x1024",
+          landscape_4_3: "1024x768",
+          landscape_16_9: "1024x576",
+        };
         try {
-          const [width, height] = resolution.split("x").map(Number);
+          // Ensure resolution is valid and parse width/height
+          const size = resolutionMap[resolution] || "1024x1024";
 
+          // POST request to DeepInfra model-specific endpoint
+          const payload = {
+            prompt,
+            size,
+            model: "black-forest-labs/FLUX-1.1-pro",
+            n: 1,
+          };
+
+          // Send POST request using axios (same as curl)
           const response = await axios.post(
-            "https://api.deepinfra.com/v1/inference/black-forest-labs/FLUX-pro",
-            {
-              prompt,
-              width,
-              height,
-            },
+            "https://api.deepinfra.com/v1/openai/images/generations",
+            payload,
             {
               headers: {
-                Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
               },
             }
           );
 
           return response.data;
         } catch (error) {
-          // Extract relevant error info
+          // Extract useful error details
           const status = error?.response?.status || "unknown";
           const detail =
             error?.response?.data?.detail || error.message || "Unknown error";

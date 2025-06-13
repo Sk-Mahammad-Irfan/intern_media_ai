@@ -72,12 +72,12 @@ export const imageGenerationHandlers = [
     type: "together",
     credits: 4,
   },
-  // {
-  //   model: "black-forest-labs-flux-1-1-pro",
-  //   handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
-  //   type: "base64",
-  //   credits: 4,
-  // },
+  {
+    model: "black-forest-labs-flux-1-1-pro",
+    handler: wrapHandler(deepFluxProV1_1, "black-forest-labs-flux-1-1-pro"),
+    type: "base64",
+    credits: 4,
+  },
   {
     model: "recraft-v3",
     handler: wrapHandler(falRecraftV3, "recraft-v3"),

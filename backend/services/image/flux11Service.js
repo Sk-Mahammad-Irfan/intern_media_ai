@@ -46,22 +46,31 @@ export const falFluxProV1_1 = async (
 };
 
 // DeepInfra API wrapper
-export const deepFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
+export const deepFluxProV1_1 = async (
+  prompt = "A photo of an astronaut riding a horse on Mars.",
+  resolution = "square_hd",
+  seed
+) => {
   try {
-    const mappedResolution = resolutionMap[resolution] || "1024x768"; // default if unknown
+    // Use the resolution map to get the correct size string
+    const size = resolutionMap[resolution] || "1024x1024";
 
+    // Build the POST payload to match the curl -d JSON
+    const payload = {
+      prompt,
+      size,
+      model: "black-forest-labs/FLUX-1.1-pro",
+      n: 1,
+    };
+
+    // Send POST request using axios (same as curl)
     const response = await axios.post(
       "https://api.deepinfra.com/v1/openai/images/generations",
-      {
-        prompt,
-        size: mappedResolution,
-        model: "black-forest-labs/FLUX-1.1-pro",
-        n: 1,
-      },
+      payload,
       {
         headers: {
-          Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
           "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.DEEPINFRA_API}`,
         },
       }
     );
@@ -70,7 +79,7 @@ export const deepFluxProV1_1 = async (prompt, resolution = "landscape_4_3") => {
   } catch (error) {
     console.error(
       "Error generating image with DeepInfra Flux Pro v1.1:",
-      error.message || error
+      error?.response?.data || error.message || error
     );
   }
 };

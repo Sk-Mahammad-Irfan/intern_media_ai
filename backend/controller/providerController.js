@@ -218,9 +218,9 @@ export const generateImageForProvider = async (req, res) => {
         if (provider === "fal") {
           rawData = await generateImageFluxPro(body);
         }
-        // if (provider === "deepinfra" || provider === "base64") {
-        //   rawData = await generateImageFluxPro(body);
-        // }
+        if (provider === "deepinfra" || provider === "base64") {
+          rawData = await generateImageFluxPro(body);
+        }
         if (provider === "replicate") {
           rawData = await generateImageFluxPro(body);
         }
@@ -282,7 +282,7 @@ export const generateImageForProvider = async (req, res) => {
         rawData?.url ||
         rawData;
     } else if (providerType === "deepinfra" || providerType === "base64") {
-      const base64 = rawData?.data?.[0]?.b64_json;
+      const base64 = rawData?.data?.[0]?.b64_json || rawData?.image_url;
       imageUrl = base64 ? `data:image/jpeg;base64,${base64}` : null;
     }
 
