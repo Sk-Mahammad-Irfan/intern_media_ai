@@ -51,6 +51,18 @@ const allmodels = {
       tags: ["text-to-image", "flagship", "high-quality"],
     },
     {
+      id: "stabilityai-sd3-5",
+      name: "Stability AI: SD 3.5",
+      type: "image",
+      icon: "image",
+      iconColor: "primary",
+      description:
+        "8B parameter base model for photorealistic text-to-image generation.",
+      source: "stability.ai",
+      sourceUrl: "https://stability.ai/blog/stable-diffusion-3-5",
+      tags: ["text-to-image", "stable-diffusion", "professional"],
+    },
+    {
       id: "recraft-v3",
       name: "Recraft V3: Text-to-Image",
       type: "image",

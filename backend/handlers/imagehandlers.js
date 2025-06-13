@@ -22,6 +22,7 @@ import {
 } from "../services/image/fluxschnellService.js";
 import { generateImageFluxDevTogether } from "../services/image/flux1devService.js";
 import { deepFluxPro } from "../services/image/fluxProService.js";
+import { stabilitySD3_5 } from "../services/image/stability35Service.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -82,6 +83,12 @@ export const imageGenerationHandlers = [
   {
     model: "black-forest-labs-flux-pro",
     handler: wrapHandler(deepFluxPro, "black-forest-labs-flux-pro"),
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "stabilityai-sd3-5",
+    handler: wrapHandler(stabilitySD3_5, "stabilityai-sd3-5"),
     type: "base64",
     credits: 4,
   },

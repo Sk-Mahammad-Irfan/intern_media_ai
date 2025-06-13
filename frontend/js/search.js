@@ -131,6 +131,18 @@ const models = {
     creditPrice: "5-6 credits/image",
     providers: "deepinfra",
   },
+  "stabilityai-sd3-5": {
+    id: "stabilityai-sd3-5",
+    title: "Stability AI: SD 3.5",
+    description:
+      "At 8 billion parameters, with superior quality and prompt adherence, this base model is the most powerful in the Stable Diffusion family.",
+    link: "https://stability.ai/blog/stable-diffusion-3-5",
+    fullDetails:
+      "SD 3.5 is Stability AI’s 8 billion parameter base model offering unmatched quality, coherence, and faithfulness to prompts. It excels at detailed text-to-image synthesis, ideal for professional and production-grade generation tasks at 1 megapixel resolution.",
+    chatPage: "imagemodel.html",
+    creditPrice: "4-5 credits/image",
+    providers: "deepinfra",
+  },
   "recraft-v3": {
     id: "recraft-v3",
     title: "Recraft V3: Text-to-Image",
