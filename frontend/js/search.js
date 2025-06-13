@@ -203,6 +203,18 @@ const models = {
     chatPage: "videomodel.html",
     provider: "huggingface",
   },
+  "wan-ai-wan21-t2v-14b": {
+    id: "wan-ai-wan21-t2v-14b",
+    title: "Wan-AI: Wan2.1-T2V-14B",
+    description:
+      "A high-capacity and advanced text-to-video model generating high-quality 480P and 720P videos from complex prompts.",
+    link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
+    fullDetails:
+      "Wan2.1-T2V-14B is designed for visually rich, detailed, and expressive text-to-video synthesis from high-complexity prompts.",
+    chatPage: "videomodel.html",
+    provider: "huggingface",
+  },
+
   "google-veo-3": {
     id: "google-veo-3",
     title: "Google Veo 3",

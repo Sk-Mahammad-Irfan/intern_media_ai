@@ -54,6 +54,12 @@ const modelOptions = {
     resolutions: { "480p": null },
     aspect_ratios: ["16:9", "9:16"],
   },
+  "wan-ai-wan21-t2v-14b": {
+    providers: ["deepinfra", "auto"],
+    resolutions: { "480p": null, "720p": null },
+    aspect_ratios: ["16:9", "9:16"],
+  },
+
   "google-veo-3": {
     providers: ["fal", "replicate", "auto"],
     resolutions: { "720p": null }, // Not specified, same as Veo 2

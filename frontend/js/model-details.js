@@ -160,8 +160,20 @@ document.addEventListener("DOMContentLoaded", function () {
         "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis. Ideal for developers, creators, and researchers seeking scalable video generation with high fidelity and speed.",
       chatPage: "videomodel.html",
       creditPrice: "10-18 credits/second",
-      providers: ["fal", "replicate"],
+      providers: ["fal", "replicate", "deepinfra"],
     },
+    "wan-ai-wan21-t2v-14b": {
+      title: "Wan-AI: Wan2.1-T2V-14B",
+      description:
+        "A high-capacity, state-of-the-art text-to-video model that generates visually rich 480P and 720P videos with 14B parameters.",
+      link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
+      fullDetails:
+        "Wan2.1-T2V-14B is built for high-fidelity video synthesis from complex prompts. Its large 14B parameter architecture delivers advanced generation capabilities, making it ideal for high-end creative and research workflows.",
+      chatPage: "videomodel.html",
+      creditPrice: "20-35 credits/second",
+      providers: ["deepinfra"],
+    },
+
     "google-veo-3": {
       title: "Google Veo 3",
       description:

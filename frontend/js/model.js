@@ -214,6 +214,19 @@ const allmodels = {
       tags: ["lightweight", "480p"],
     },
     {
+      id: "wan-ai-wan21-t2v-14b",
+      name: "Wan-AI: Wan2.1-T2V-14B",
+      type: "video",
+      icon: "film",
+      iconColor: "info",
+      description:
+        "The Wan2.1 14B model is a powerful text-to-video generator that produces high-quality 480P and 720P videos. Designed for complex prompts and detailed scene synthesis.",
+      source: "huggingface.co",
+      sourceUrl: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
+      tags: ["high-capacity", "480p", "720p", "detailed"],
+    },
+
+    {
       id: "pixverse-v4",
       name: "PixVerse: Text-to-Video v4",
       type: "video",

@@ -23,6 +23,7 @@ import {
 } from "../services/video/veo3Service.js";
 import { veoServiceFal } from "../services/video/veoService.js";
 import { viduService } from "../services/video/viduService.js";
+import { wan14B } from "../services/video/wan14bService.js";
 import {
   wanDeepinfra,
   wanFAL,
@@ -53,6 +54,12 @@ export const videoGenerationHandlers = [
   {
     model: "wan-ai-wan21-t2v-13b",
     handler: wrapHandler(wanDeepinfra, "wan-ai-wan21-t2v-13b"),
+    type: "deepinfra",
+    credits: 10,
+  },
+  {
+    model: "wan-ai-wan21-t2v-14b",
+    handler: wrapHandler(wan14B, "wan-ai-wan21-t2v-14b"),
     type: "deepinfra",
     credits: 10,
   },

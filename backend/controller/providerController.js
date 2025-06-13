@@ -53,6 +53,7 @@ import { generateImageFluxPro } from "../providers/image/fluxProProvider.js";
 import { generateImageStability35 } from "../providers/image/stability35Provider.js";
 import { generateImageStability35Mid } from "../providers/image/stability35midProvider.js";
 import { generateImageStability35SDXL } from "../providers/image/stabilitySdxlProvider.js";
+import { generateVideoWan14B } from "../providers/video/wan14bProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -81,6 +82,9 @@ export const generateVideoforProvider = async (req, res) => {
     switch (id.toLowerCase()) {
       case "wan-ai-wan21-t2v-13b":
         rawData = await generateVideoWan(body);
+        break;
+      case "wan-ai-wan21-t2v-14b":
+        rawData = await generateVideoWan14B(body);
         break;
       case "luma-ray2-flash":
         rawData = await generateVideoLuma(body);
