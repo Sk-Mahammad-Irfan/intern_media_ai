@@ -62,6 +62,8 @@ import { generateWan720Video } from "../providers/video/wavespeedWan720Provider.
 import { generateWan480Video } from "../providers/video/wavespeedWan480Provider.js";
 import { generateAudioAceStep } from "../providers/audio/aceStepProvider.js";
 import { generateAudioAceStepPrompt } from "../providers/audio/aceStepPromptProvider.js";
+import { generateImageHidreamFull } from "../providers/image/hidreamFullProvider.js";
+import { generateImageHidreamFast } from "../providers/image/hidreamFastProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -224,6 +226,12 @@ export const generateImageForProvider = async (req, res) => {
     "hidream-i1-dev": {
       fal: 4,
     },
+    "hidream-i1-full": {
+      fal: 6,
+    },
+    "hidream-i1-fast": {
+      fal: 8,
+    },
     "ideogram-v3": {
       fal: 7,
     },
@@ -306,6 +314,12 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "hidream-i1-dev":
         rawData = await generateImageHidream(body);
+        break;
+      case "hidream-i1-full":
+        rawData = await generateImageHidreamFull(body);
+        break;
+      case "hidream-i1-fast":
+        rawData = await generateImageHidreamFast(body);
         break;
       case "ideogram-v3":
         rawData = await generateImageIdeogram(body);

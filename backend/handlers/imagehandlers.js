@@ -29,6 +29,8 @@ import { replicateFluxKontext } from "../services/image/fluxKontextProService.js
 import { replicateFluxKontextMax } from "../services/image/fluxKontextMaxService.js";
 import { replicateFluxUltra } from "../services/image/fluxUltraService.js";
 import { SDXLLightningImage } from "../services/image/bytedanceSDXLService.js";
+import { hidreamFullFAL } from "../services/image/hidreamFullService.js";
+import { hidreamFastFAL } from "../services/image/hidreamFastService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -166,6 +168,18 @@ export const imageGenerationHandlers = [
     handler: wrapHandler(hidreamFAL, "hidream-i1-dev"),
     type: "fal",
     credits: 4,
+  },
+  {
+    model: "hidream-i1-full",
+    handler: wrapHandler(hidreamFullFAL, "hidream-i1-full"),
+    type: "fal",
+    credits: 6,
+  },
+  {
+    model: "hidream-i1-fast",
+    handler: wrapHandler(hidreamFastFAL, "hidream-i1-full"),
+    type: "fal",
+    credits: 6,
   },
   {
     model: "ideogram-v3",

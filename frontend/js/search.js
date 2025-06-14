@@ -565,6 +565,28 @@ const models = {
     chatPage: "imagemodel.html",
     provider: "fal",
   },
+  "hidream-i1-full": {
+    id: "hidream-i1-full",
+    title: "HiDream I1 Full",
+    description:
+      "HiDream I1 Full is a high-performance open-source image generation model with 17B parameters, delivering state-of-the-art visuals in seconds.",
+    link: "https://fal.ai/models/fal-ai/hidream-i1-full",
+    fullDetails:
+      "HiDream I1 Full is a powerful 17B parameter text-to-image foundation model, open-sourced for creatives and developers. It provides best-in-class image quality and speed, making it ideal for high-fidelity concept art, product mockups, and creative exploration.",
+    chatPage: "imagemodel.html",
+    provider: "fal",
+  },
+  "hidream-i1-fast": {
+    id: "hidream-i1-fast",
+    title: "HiDream I1 Fast",
+    description:
+      "HiDream I1 Fast is an open-source, high-speed image generation model with 17B parameters – optimized for rapid inference in just 16 steps.",
+    link: "https://fal.ai/models/fal-ai/hidream-i1-fast",
+    fullDetails:
+      "HiDream I1 Fast is a cutting-edge, 17B parameter text-to-image foundation model from FAL AI, purpose-built for ultra-fast generation while maintaining high visual fidelity. With only 16 inference steps, it's ideal for interactive creative workflows, rapid design iteration, and real-time concept visualization.",
+    chatPage: "imagemodel.html",
+    provider: "fal",
+  },
   "ideogram-v3": {
     id: "ideogram-v3",
     title: "Ideogram V3",

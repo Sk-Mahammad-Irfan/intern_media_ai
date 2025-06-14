@@ -45,12 +45,6 @@ const imageModelOptions = {
         default: true,
       },
       {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-      },
-      {
         id: "seedInput",
         type: "number",
         label: "Seed",
@@ -101,10 +95,105 @@ const imageModelOptions = {
         default: true,
       },
       {
-        id: "numImages",
+        id: "enableSafetyInput",
+        type: "checkbox",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+      {
+        id: "outputFormat",
+        type: "select",
+        label: "Output Format",
+        options: ["jpeg", "png"],
+        default: "jpeg",
+      },
+    ],
+  },
+  "hidream-i1-full": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    custom_inputs: [
+      {
+        id: "negativePromptInput",
+        type: "text",
+        label: "Negative Prompt",
+        placeholder: "e.g. blurry, low quality",
+      },
+      {
+        id: "numInferenceSteps",
         type: "number",
-        label: "Number of Images",
-        default: 1,
+        label: "Inference Steps",
+        default: 30,
+      },
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 42",
+      },
+      {
+        id: "syncMode",
+        type: "checkbox",
+        label: "Sync Mode (Wait for response)",
+        default: true,
+      },
+
+      {
+        id: "enableSafetyInput",
+        type: "checkbox",
+        label: "Enable Safety Checker",
+        default: true,
+      },
+      {
+        id: "outputFormat",
+        type: "select",
+        label: "Output Format",
+        options: ["jpeg", "png"],
+        default: "jpeg",
+      },
+    ],
+  },
+  "hidream-i1-fast": {
+    providers: ["auto", "fal"],
+    aspect_ratios: {
+      square_hd: null,
+      square: null,
+      portrait_4_3: null,
+      portrait_16_9: null,
+      landscape_4_3: null,
+      landscape_16_9: null,
+    },
+    custom_inputs: [
+      {
+        id: "negativePromptInput",
+        type: "text",
+        label: "Negative Prompt",
+        placeholder: "e.g. blurry, low quality",
+      },
+      {
+        id: "numInferenceSteps",
+        type: "number",
+        label: "Inference Steps",
+        default: 16, // Optimized for speed
+      },
+      {
+        id: "seedInput",
+        type: "number",
+        label: "Seed",
+        placeholder: "e.g. 42",
+      },
+      {
+        id: "syncMode",
+        type: "checkbox",
+        label: "Sync Mode (Wait for response)",
+        default: true,
       },
       {
         id: "enableSafetyInput",
@@ -121,7 +210,6 @@ const imageModelOptions = {
       },
     ],
   },
-
   "recraft-v3": {
     providers: ["auto", "fal", "replicate"],
     aspect_ratios: {
@@ -303,12 +391,6 @@ const imageModelOptions = {
         type: "checkbox",
         label: "Sync Mode",
         default: true,
-      },
-      {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
       },
       {
         id: "enableSafetyInput",
@@ -699,14 +781,6 @@ const imageModelOptions = {
         default: true,
       },
       {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
-      },
-      {
         id: "enableSafetyInput",
         type: "checkbox",
         label: "Enable Safety Checker",
@@ -805,14 +879,6 @@ const imageModelOptions = {
         default: true,
       },
       {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
-      },
-      {
         id: "enableSafetyInput",
         type: "checkbox",
         label: "Enable Safety Checker",
@@ -909,14 +975,6 @@ const imageModelOptions = {
         type: "checkbox",
         label: "Sync Mode",
         default: true,
-      },
-      {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
       },
       {
         id: "enableSafetyInput",
@@ -1046,14 +1104,7 @@ const imageModelOptions = {
         label: "Sync Mode",
         default: true,
       },
-      {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
-      },
+
       {
         id: "enableSafetyInput",
         type: "checkbox",
@@ -1184,14 +1235,6 @@ const imageModelOptions = {
         default: true,
       },
       {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
-      },
-      {
         id: "enableSafetyInput",
         type: "checkbox",
         label: "Enable Safety Checker",
@@ -1296,14 +1339,6 @@ const imageModelOptions = {
         type: "checkbox",
         label: "Sync Mode",
         default: true,
-      },
-      {
-        id: "numImages",
-        type: "number",
-        label: "Number of Images",
-        default: 1,
-        min: 1,
-        max: 4,
       },
       {
         id: "enableSafetyInput",

@@ -201,6 +201,30 @@ const allmodels = {
       tags: ["fast", "concept-art"],
     },
     {
+      id: "hidream-i1-full",
+      name: "HiDream I1 Full",
+      type: "image",
+      icon: "image",
+      iconColor: "info",
+      description:
+        "HiDream I1 Full is a powerful 17B parameter model for top-tier, imaginative image generation in seconds.",
+      source: "FAL AI",
+      sourceUrl: "https://fal.ai/models/fal-ai/hidream-i1-full",
+      tags: ["foundation-model", "high-quality", "open-source"],
+    },
+    {
+      id: "hidream-i1-fast",
+      name: "HiDream I1 Fast",
+      type: "image",
+      icon: "image",
+      iconColor: "success",
+      description:
+        "HiDream I1 Fast is a high-speed 17B parameter model that delivers stunning images in just 16 steps.",
+      source: "FAL AI",
+      sourceUrl: "https://fal.ai/models/fal-ai/hidream-i1-fast",
+      tags: ["fast", "foundation-model", "open-source"],
+    },
+    {
       id: "bagel",
       name: "Bagel",
       type: "image",

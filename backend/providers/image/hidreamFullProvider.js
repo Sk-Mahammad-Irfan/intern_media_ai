@@ -7,7 +7,6 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-// === Supported HiDream Configuration ===
 const SUPPORTED_IMAGE_SIZES = [
   "square_hd",
   "square",
@@ -17,8 +16,7 @@ const SUPPORTED_IMAGE_SIZES = [
   "landscape_16_9",
 ];
 
-// === Unified HiDream Image Generator ===
-export const generateImageHidream = async (body) => {
+export const generateImageHidreamFull = async (body) => {
   const {
     prompt,
     resolution = "square_hd",
@@ -34,7 +32,6 @@ export const generateImageHidream = async (body) => {
       throw new Error("Prompt is required and must be a string.");
     }
 
-    // Validate resolution
     const finalResolution = SUPPORTED_IMAGE_SIZES.includes(resolution)
       ? resolution
       : "square_hd";
@@ -45,7 +42,6 @@ export const generateImageHidream = async (body) => {
       );
     }
 
-    // Validate num_inference_steps (1–100)
     let finalSteps = parseInt(numInferenceSteps);
     if (isNaN(finalSteps) || finalSteps < 1 || finalSteps > 100) {
       console.warn(
@@ -54,18 +50,15 @@ export const generateImageHidream = async (body) => {
       finalSteps = 28;
     }
 
-    // Validate safety checker
     const finalSafetyChecker =
       typeof enableSafetyInput === "boolean" ? enableSafetyInput : true;
 
-    // Validate negative_prompt
     const finalNegativePrompt =
       typeof negative_prompt === "string" ? negative_prompt : "";
 
-    // Validate seed
     const finalSeed = typeof seed === "number" && seed >= 0 ? seed : undefined;
 
-    const result = await fal.subscribe("fal-ai/hidream-i1-dev", {
+    const result = await fal.subscribe("fal-ai/hidream-i1-full", {
       input: {
         prompt,
         image_size: finalResolution,
@@ -86,7 +79,7 @@ export const generateImageHidream = async (body) => {
     return result?.data;
   } catch (error) {
     console.error(
-      "Error generating image with HiDream I1:",
+      "Error generating image with HiDream I1 FULL:",
       error.message || error
     );
     throw error;
