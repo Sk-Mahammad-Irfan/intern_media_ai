@@ -185,9 +185,15 @@ export const generateAudio = async (req, res) => {
         return res.status(402).json({ error: "Not enough credits." });
       }
 
-      let audioUrl = null;
+      let audioUrl;
+      let lyrics;
+
       if (id === "multilingual-audio") {
         audioUrl = await handler(prompt);
+      } else if (id === "fal-ai-ace-step-prompt-to-audio") {
+        const result = await generateAudioAceStepPrompt(body);
+        audioUrl = result.audioUrl;
+        lyrics = result.lyrics;
       } else {
         audioUrl = await handler(prompt, duration, step);
       }
@@ -202,8 +208,12 @@ export const generateAudio = async (req, res) => {
       } catch (creditError) {
         return res.status(402).json({ error: creditError.message });
       }
+      const response = { audioUrl };
+      if (id.toLowerCase() === "fal-ai-ace-step-prompt-to-audio") {
+        response.lyrics = lyrics;
+      }
 
-      return res.status(200).json({ audioUrl });
+      return res.status(200).json(response);
     } catch (error) {
       console.error("Audio handler failed:", error.message || error);
     }

@@ -198,6 +198,189 @@ const audioModelOptions = {
       },
     ],
   },
+  "fal-ai-ace-step-lyrics-to-audio": {
+    providers: ["auto", "fal"],
+    custom_inputs: [
+      {
+        id: "tags",
+        type: "text",
+        label: "Tags",
+        placeholder: "Comma-separated list of genre tags",
+      },
+      {
+        id: "number_of_steps",
+        type: "number",
+        label: "Number of Steps",
+        default: 27,
+      },
+      {
+        id: "seed",
+        type: "number",
+        label: "Seed",
+        placeholder: "Leave empty for random",
+      },
+      {
+        id: "scheduler",
+        type: "select",
+        label: "Scheduler",
+        options: ["euler", "heun"],
+        default: "euler",
+      },
+      {
+        id: "guidance_type",
+        type: "select",
+        label: "Guidance Type",
+        options: ["cfg", "apg", "cfg_star"],
+        default: "apg",
+      },
+      {
+        id: "granularity_scale",
+        type: "number",
+        label: "Granularity Scale",
+        default: 10,
+      },
+      {
+        id: "guidance_interval",
+        type: "number",
+        label: "Guidance Interval",
+        default: 0.5,
+        step: 0.1,
+      },
+      {
+        id: "guidance_interval_decay",
+        type: "number",
+        label: "Guidance Interval Decay",
+        default: 0.0,
+        step: 0.1,
+      },
+      {
+        id: "guidance_scale",
+        type: "number",
+        label: "Guidance Scale",
+        default: 15,
+        step: 1,
+      },
+      {
+        id: "minimum_guidance_scale",
+        type: "number",
+        label: "Minimum Guidance Scale",
+        default: 3,
+        step: 1,
+      },
+      {
+        id: "tag_guidance_scale",
+        type: "number",
+        label: "Tag Guidance Scale",
+        default: 5,
+        step: 1,
+      },
+      {
+        id: "lyric_guidance_scale",
+        type: "number",
+        label: "Lyric Guidance Scale",
+        default: 1.5,
+        step: 0.1,
+      },
+    ],
+  },
+  "fal-ai-ace-step-prompt-to-audio": {
+    providers: ["auto", "fal"],
+    custom_inputs: [
+      {
+        id: "number_of_steps",
+        type: "number",
+        label: "Number of steps",
+        default: 27,
+        description: "Number of steps to generate the audio. Default value: 27",
+      },
+      {
+        id: "seed",
+        type: "number",
+        label: "Seed",
+        placeholder: "Leave empty for random",
+        description:
+          "Random seed for reproducibility. If not provided, a random seed will be used.",
+      },
+      {
+        id: "scheduler",
+        type: "select",
+        label: "Scheduler",
+        options: ["euler", "heun"],
+        default: "euler",
+        description:
+          "Scheduler to use for the generation process. Default value: 'euler'",
+      },
+      {
+        id: "guidance_type",
+        type: "select",
+        label: "Guidance Type",
+        options: ["cfg", "apg", "cfg_star"],
+        default: "apg",
+        description:
+          "Type of CFG to use for the generation process. Default value: 'apg'",
+      },
+      {
+        id: "granularity_scale",
+        type: "number",
+        label: "Granularity Scale",
+        default: 10,
+        description:
+          "Granularity scale for the generation process. Higher values can reduce artifacts. Default value: 10",
+      },
+      {
+        id: "guidance_interval",
+        type: "number",
+        label: "Guidance Interval",
+        default: 0.5,
+        step: 0.1,
+        description:
+          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps) Default value: 0.5",
+      },
+      {
+        id: "guidance_interval_decay",
+        type: "number",
+        label: "Guidance Interval Decay",
+        default: 0.0,
+        step: 0.1,
+        description:
+          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+      },
+      {
+        id: "guidance_scale",
+        type: "number",
+        label: "Guidance Scale",
+        default: 15,
+        step: 1,
+        description: "Guidance scale for the generation. Default value: 15",
+      },
+      {
+        id: "minimum_guidance_scale",
+        type: "number",
+        label: "Minimum Guidance Scale",
+        default: 3,
+        step: 1,
+        description:
+          "Minimum guidance scale for the generation after the decay. Default value: 3",
+      },
+      {
+        id: "tag_guidance_scale",
+        type: "number",
+        label: "Tag Guidance Scale",
+        default: 5,
+        step: 1,
+        description: "Tag guidance scale for the generation. Default value: 5",
+      },
+      {
+        id: "lyric_guidance_scale",
+        type: "number",
+        label: "Lyric Guidance Scale",
+        default: 1.5,
+        step: 0.1,
+        description:
+          "Lyric guidance scale for the generation. Default value: 1.5",
+      },
+    ],
+  },
   "cartesia-sonic-2": {
     providers: ["auto", "together"],
     custom_inputs: [
@@ -795,6 +978,8 @@ window.addEventListener("DOMContentLoaded", () => {
       "fal-ai-kokoro-hindi": "fal-ai-kokoro-hindi",
       "fal-ai-lyria2": "fal-ai-lyria2",
       "cartesia-sonic-2": "cartesia-sonic-2",
+      "fal-ai-ace-step-lyrics-to-audio": "fal-ai-ace-step-lyrics-to-audio",
+      "fal-ai-ace-step-prompt-to-audio": "fal-ai-ace-step-prompt-to-audio",
       "fal-ai-elevenlabs-sound-effects": "fal-ai-elevenlabs-sound-effects",
       "fal-ai-mmaudio-v2-text-to-audio": "fal-ai-mmaudio-v2-text-to-audio",
     };
@@ -876,6 +1061,24 @@ window.addEventListener("DOMContentLoaded", () => {
       if (res.ok && data.audioUrl) {
         const messageDiv = document.getElementById(messageId);
         if (messageDiv) {
+          let lyricsHtml = "";
+
+          if (modelId === "fal-ai-ace-step-prompt-to-audio" && data.lyrics) {
+            const formattedLyrics = data.lyrics
+              .split("\n")
+              .map((line) =>
+                line.trim() === "" ? "<br>" : `<div>${line}</div>`
+              )
+              .join("");
+
+            lyricsHtml = `
+              <div class="mt-3 p-2 bg-light border rounded lyrics-container" style="max-width: 500px;">
+                <div class="fw-bold mb-2"><i class="bi bi-music-note-list me-2"></i>Lyrics</div>
+                ${formattedLyrics}
+              </div>
+            `;
+          }
+
           messageDiv.innerHTML = `
             <div class="ai-message p-3">
               <div class="d-flex flex-column align-items-start w-100">
@@ -891,6 +1094,7 @@ window.addEventListener("DOMContentLoaded", () => {
                   <source src="${data.audioUrl}" type="audio/wav" />
                   Your browser does not support the audio element.
                 </audio>
+                ${lyricsHtml}
               </div>
             </div>
           `;

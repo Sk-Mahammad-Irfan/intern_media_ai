@@ -10,6 +10,8 @@ import { lyria2Audio } from "../services/audio/lyria2Services.js";
 import { evenlabAudio } from "../services/audio/evenlabService.js";
 import { generateMMAudio } from "../services/audio/mmaudioServices.js";
 import { generateSpeechTogether } from "../services/audio/cartesisonicService.js";
+import { aceStepService } from "../services/audio/aceStepService.js";
+import { aceStepPromptService } from "../services/audio/aceStepPromptService.js";
 // import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 
 const wrapHandler = (handler, model) => {
@@ -84,6 +86,21 @@ export const audioGenerationHandlers = [
     model: "fal-ai-mmaudio-v2-text-to-audio",
     handler: wrapHandler(generateMMAudio, "fal-ai-mmaudio-v2-text-to-audio"),
     credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-ace-step-lyrics-to-audio",
+    handler: wrapHandler(aceStepService, "fal-ai-ace-step-lyrics-to-audio"),
+    credits: 60,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-ace-step-prompt-to-audio",
+    handler: wrapHandler(
+      aceStepPromptService,
+      "fal-ai-ace-step-prompt-to-audio"
+    ),
+    credits: 3,
     type: "fal",
   },
 ];

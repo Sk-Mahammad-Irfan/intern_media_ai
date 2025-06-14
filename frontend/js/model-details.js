@@ -432,6 +432,28 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "1 credits/generation",
       providers: ["fal"],
     },
+    "fal-ai-ace-step-lyrics-to-audio": {
+      title: "ACE-Step Lyrics-to-Audio",
+      description:
+        "Generate full musical tracks from lyrics using ACE-Step, blending singing and music based on text input.",
+      link: "https://huggingface.co/fal-ai/ace-step",
+      fullDetails:
+        "ACE-Step transforms lyrics into synchronized singing and instrumental music using advanced text-to-audio modeling. It’s ideal for music generation, songwriting, and AI-assisted audio production.",
+      chatPage: "audiomodel.html",
+      creditPrice: "60 credits/generation",
+      providers: ["fal"],
+    },
+    "fal-ai-ace-step-prompt-to-audio": {
+      title: "ACE-Step Prompt-to-Audio",
+      description:
+        "Generate instrumental music from descriptive text using ACE-Step's prompt-based audio synthesis.",
+      link: "https://huggingface.co/fal-ai/ace-step",
+      fullDetails:
+        "ACE-Step Prompt-to-Audio allows users to create high-quality instrumental music directly from natural language descriptions. Perfect for composers, creators, and developers in need of instant music assets.",
+      chatPage: "audiomodel.html",
+      creditPrice: "1 credits/generation",
+      providers: ["fal"],
+    },
     "cassattemusic-audio": {
       title: "CassetteAI Music Generator",
       description:

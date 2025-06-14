@@ -1,3 +1,4 @@
+// audioService.js
 import { fal } from "@fal-ai/client";
 import dotenv from "dotenv";
 
@@ -7,16 +8,15 @@ fal.config({
   credentials: process.env.FAL_AI_AUDIO_API,
 });
 
-export const generateAudioAceStep = async (body) => {
+export const generateAudioAceStepPrompt = async (body) => {
   const {
     prompt,
+    instrumental = false,
     duration = 60,
     number_of_steps = 27,
-    tags = "",
-    lyrics = "",
     seed,
-    scheduler = "euler",
-    guidance_type = "apg",
+    scheduler = "euler", // "euler" | "heun"
+    guidance_type = "apg", // "cfg" | "apg" | "cfg_star"
     granularity_scale = 10,
     guidance_interval = 0.5,
     guidance_interval_decay = 0.0,
@@ -27,10 +27,10 @@ export const generateAudioAceStep = async (body) => {
   } = body;
 
   try {
-    const result = await fal.subscribe("fal-ai/ace-step", {
+    const result = await fal.subscribe("fal-ai/ace-step/prompt-to-audio", {
       input: {
-        tags,
-        lyrics: prompt,
+        prompt,
+        instrumental,
         duration,
         number_of_steps,
         seed,
@@ -44,7 +44,7 @@ export const generateAudioAceStep = async (body) => {
         tag_guidance_scale,
         lyric_guidance_scale,
       },
-      logs: false,
+      logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
           update.logs.map((log) => log.message).forEach(console.log);
@@ -53,14 +53,14 @@ export const generateAudioAceStep = async (body) => {
     });
 
     console.log(result.data);
+    console.log("Request ID:", result.requestId);
 
     const audioUrl = result.data.audio_file?.url || result.data.audio?.url;
-    if (!audioUrl) {
-      throw new Error("FAL did not return a valid audio URL");
-    }
-    return audioUrl;
+    const lyrics = result.data?.lyrics;
+    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+
+    return { audioUrl, lyrics };
   } catch (error) {
-    // Safely extract detailed error info
     const detail =
       error?.response?.data?.detail ||
       error?.body?.detail ||

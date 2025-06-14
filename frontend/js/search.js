@@ -486,6 +486,30 @@ const models = {
     creditPrice: "1 credits/generation",
     providers: "fal",
   },
+  "fal-ai-ace-step-lyrics-to-audio": {
+    id: "fal-ai-ace-step-lyrics-to-audio",
+    title: "ACE-Step Lyrics-to-Audio",
+    description:
+      "Generate full music with vocals from lyrics using ACE-Step's text-to-audio capabilities.",
+    link: "https://huggingface.co/fal-ai/ace-step",
+    fullDetails:
+      "ACE-Step is a cutting-edge model that generates complete musical pieces including vocals and instrumentation directly from written lyrics and genre/style prompts.",
+    chatPage: "audiomodel.html",
+    creditPrice: "1 credits/generation",
+    providers: "fal",
+  },
+  "fal-ai-ace-step-prompt-to-audio": {
+    id: "fal-ai-ace-step-prompt-to-audio",
+    title: "ACE-Step Prompt-to-Audio",
+    description:
+      "Generate instrumental audio tracks from descriptive text prompts using ACE-Step.",
+    link: "https://huggingface.co/fal-ai/ace-step",
+    fullDetails:
+      "ACE-Step Prompt-to-Audio generates rich, genre-aware instrumental music from plain text prompts. It simplifies music creation for sound designers, content creators, and app developers.",
+    chatPage: "audiomodel.html",
+    creditPrice: "1 credits/generation",
+    providers: "fal",
+  },
   "american-audio": {
     id: "american-audio",
     title: "American English TTS",

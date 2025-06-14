@@ -60,6 +60,8 @@ import { generateImageFluxUltra } from "../providers/image/fluxUltraProvider.js"
 import { generateImageBytedanceProvider } from "../providers/image/bytedanceSDXLProvider.js";
 import { generateWan720Video } from "../providers/video/wavespeedWan720Provider.js";
 import { generateWan480Video } from "../providers/video/wavespeedWan480Provider.js";
+import { generateAudioAceStep } from "../providers/audio/aceStepProvider.js";
+import { generateAudioAceStepPrompt } from "../providers/audio/aceStepPromptProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -383,6 +385,7 @@ export const generateAudioForProvider = async (req, res) => {
       id,
       providerType
     );
+
     if (!credits) {
       return res
         .status(400)
@@ -395,40 +398,63 @@ export const generateAudioForProvider = async (req, res) => {
     }
 
     let audioUrl;
+    let lyrics;
+
     switch (id.toLowerCase()) {
       case "cassattemusic-audio":
         audioUrl = await generateAudioCassatteMusic(body);
         break;
+
       case "cassetteai-sfx-generator":
         audioUrl = await generateAudioCassetteFAL(body);
         break;
+
       case "multilingual-audio":
         audioUrl = await generateAudioMultilingualTtsFAL(body);
         break;
+
       case "stackadoc-stable-audio":
         audioUrl =
           provider === "fal"
             ? await generateAudioStableFal(body)
             : await generateAudioStableReplicate(body);
         break;
+
       case "american-audio":
         audioUrl = await generateAudioaAmericanEnglishFAL(body);
         break;
+
       case "fal-ai-kokoro-hindi":
         audioUrl = await generateAudioKokoroHindiFAL(body);
         break;
+
       case "fal-ai-lyria2":
         audioUrl = await generateAudioLyria2(body);
         break;
+
       case "fal-ai-elevenlabs-sound-effects":
         audioUrl = await generateAudioEvenLab(body);
         break;
+
       case "fal-ai-mmaudio-v2-text-to-audio":
         audioUrl = await generateAudioMM(body);
         break;
+
+      case "fal-ai-ace-step-lyrics-to-audio":
+        audioUrl = await generateAudioAceStep(body);
+        break;
+
+      case "fal-ai-ace-step-prompt-to-audio": {
+        const result = await generateAudioAceStepPrompt(body);
+        audioUrl = result.audioUrl;
+        lyrics = result.lyrics;
+        break;
+      }
+
       case "cartesia-sonic-2":
         audioUrl = await generateSpeechTogetherProvider(body);
         break;
+
       default:
         return res
           .status(400)
@@ -440,7 +466,14 @@ export const generateAudioForProvider = async (req, res) => {
     }
 
     await decreaseCredits(userId, credits);
-    res.status(200).json({ audioUrl });
+
+    // Return with or without lyrics
+    const response = { audioUrl };
+    if (id.toLowerCase() === "fal-ai-ace-step-prompt-to-audio") {
+      response.lyrics = lyrics;
+    }
+
+    res.status(200).json(response);
   } catch (err) {
     console.error(`Error in /audio/${id}:`, err);
     res.status(500).json({

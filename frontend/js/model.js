@@ -556,6 +556,30 @@ const allmodels = {
       tags: ["synchronized", "realistic"],
     },
     {
+      id: "fal-ai-ace-step-lyrics-to-audio",
+      name: "ACE-Step Lyrics-to-Audio",
+      type: "audio",
+      icon: "music",
+      iconColor: "primary",
+      description:
+        "Generate singing and music from lyrics using ACE-Step, combining voice and instrumental generation from text.",
+      source: "Hugging Face",
+      sourceUrl: "https://huggingface.co/fal-ai/ace-step",
+      tags: ["music", "lyrics", "singing", "text-to-audio"],
+    },
+    {
+      id: "fal-ai-ace-step-prompt-to-audio",
+      name: "ACE-Step Prompt-to-Audio",
+      type: "audio",
+      icon: "music",
+      iconColor: "success",
+      description:
+        "Generate instrumental music from descriptive prompts using ACE-Step's text-to-audio engine.",
+      source: "Hugging Face",
+      sourceUrl: "https://huggingface.co/fal-ai/ace-step",
+      tags: ["music", "instrumental", "text-to-audio", "generative"],
+    },
+    {
       id: "cassattemusic-audio",
       name: "CassetteAI Music Generator",
       type: "audio",
