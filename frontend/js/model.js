@@ -86,6 +86,25 @@ const allmodels = {
       ],
     },
     {
+      id: "black-forest-labs-flux-1.1-pro-ultra",
+      name: "Black Forest Labs: FLUX 1.1 Pro Ultra",
+      type: "image",
+      icon: "image",
+      iconColor: "warning",
+      description:
+        "High-resolution image generation (up to 4MP) with realism-focused 'raw' mode and visually enhanced 'ultra' mode.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/flux-1.1-pro-ultra",
+      tags: [
+        "image-generation",
+        "high-resolution",
+        "realism",
+        "raw-mode",
+        "ultra-mode",
+        "photorealism",
+      ],
+    },
+    {
       id: "stabilityai-sd3-5",
       name: "Stability AI: SD 3.5",
       type: "image",

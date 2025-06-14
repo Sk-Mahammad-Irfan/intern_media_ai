@@ -56,6 +56,7 @@ import { generateImageStability35SDXL } from "../providers/image/stabilitySdxlPr
 import { generateVideoWan14B } from "../providers/video/wan14bProvider.js";
 import { generateImageFluxKontextPro } from "../providers/image/fluxKontextProProvider.js";
 import { generateImageFluxKontextMax } from "../providers/image/fluxKontextMaxProvider.js";
+import { generateImageFluxUltra } from "../providers/image/fluxUltraProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -187,6 +188,9 @@ export const generateImageForProvider = async (req, res) => {
     "black-forest-labs-flux-kontext-max": {
       replicate: 7,
     },
+    "black-forest-labs-flux-1.1-pro-ultra": {
+      replicate: 7,
+    },
     "stabilityai-sd3-5": {
       deepinfra: 4,
     },
@@ -267,6 +271,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "black-forest-labs-flux-kontext-max":
         rawData = await generateImageFluxKontextMax(body);
+        break;
+      case "black-forest-labs-flux-1.1-pro-ultra":
+        rawData = await generateImageFluxUltra(body);
         break;
       case "stabilityai-sd3-5":
         rawData = await generateImageStability35(body);

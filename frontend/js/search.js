@@ -155,6 +155,18 @@ const models = {
     creditPrice: "7-8 credits/image",
     providers: ["replicate"],
   },
+  "black-forest-labs-flux-1.1-pro-ultra": {
+    id: "black-forest-labs-flux-1.1-pro-ultra",
+    title: "Black Forest Labs: FLUX 1.1 Pro Ultra",
+    description:
+      "FLUX 1.1 Pro in Ultra and Raw modes for high-resolution (up to 4MP) image generation with enhanced realism.",
+    link: "https://deepinfra.com/black-forest-labs/flux-1.1-pro-ultra",
+    fullDetails:
+      "FLUX 1.1 Pro Ultra is a high-resolution image generation model from Black Forest Labs. Supporting both 'Ultra' and 'Raw' modes, it allows generation of images up to 4 megapixels with impressive clarity and detail. Raw mode prioritizes photorealism, while Ultra mode boosts visual fidelity for creative tasks. Ideal for detailed compositions, realism-based edits, and fine-grain prompt adherence.",
+    chatPage: "imagemodel.html",
+    creditPrice: "8-10 credits/image",
+    providers: ["replicate"],
+  },
 
   "stabilityai-sd3-5": {
     id: "stabilityai-sd3-5",
