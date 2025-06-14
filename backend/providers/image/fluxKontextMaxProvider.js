@@ -2,7 +2,8 @@ import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
-const replicateFluxKontextProProvider = async (
+
+const replicateFluxKontextMaxProvider = async (
   prompt = "Make this a 90s cartoon",
   resolution,
   seed,
@@ -27,7 +28,7 @@ const replicateFluxKontextProProvider = async (
     };
 
     const response = await axios.post(
-      "https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions",
+      "https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-max/predictions",
       payload,
       { headers }
     );
@@ -37,37 +38,32 @@ const replicateFluxKontextProProvider = async (
     const status = error?.response?.status || "unknown";
     const detail = error?.response?.data || error.message || "Unknown error";
     console.error(
-      `Replicate Flux-Kontext generation failed [${status}]:`,
+      `Replicate Flux-Kontext-Max generation failed [${status}]:`,
       detail
     );
     throw new Error(
-      `Replicate Flux-Kontext generation failed [${status}]: ${JSON.stringify(
+      `Replicate Flux-Kontext-Max generation failed [${status}]: ${JSON.stringify(
         detail
       )}`
     );
   }
 };
 
-export const generateImageFluxKontextPro = async (body) => {
+export const generateImageFluxKontextMax = async (body) => {
   const {
     provider,
-    model = "fluxpro",
     prompt,
-    resolution = "square_hd",
-    outputFormat = "jpeg",
+    resolution = "1:1",
+    outputFormat = "jpg",
     safetyTolerance = 2,
-    enableSafetyInput = true,
     seed,
-    rawMode = false,
-    syncMode = true,
-    numImages = 1,
   } = body;
 
   try {
     switch (provider) {
       case "replicate":
-        const parsedSafetyTolerance = parseInt(safetyTolerance, 10); // 👈 Parse to integer
-        const data = await replicateFluxKontextProProvider(
+        const parsedSafetyTolerance = parseInt(safetyTolerance, 10);
+        const data = await replicateFluxKontextMaxProvider(
           prompt,
           resolution,
           seed,

@@ -68,6 +68,24 @@ const allmodels = {
       ],
     },
     {
+      id: "black-forest-labs-flux-kontext-max",
+      name: "Black Forest Labs: FLUX.kontext.max",
+      type: "image",
+      icon: "image",
+      iconColor: "warning",
+      description:
+        "Premium text-based image editing with enhanced prompt fidelity and improved typography generation.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-kontext-max",
+      tags: [
+        "image-editing",
+        "text-to-image",
+        "premium",
+        "typography",
+        "natural-language",
+      ],
+    },
+    {
       id: "stabilityai-sd3-5",
       name: "Stability AI: SD 3.5",
       type: "image",

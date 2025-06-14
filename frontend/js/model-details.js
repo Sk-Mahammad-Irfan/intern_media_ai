@@ -105,6 +105,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "5-6 credits/image",
       providers: ["replicate"],
     },
+    "black-forest-labs-flux-kontext-max": {
+      title: "Black Forest Labs: FLUX.kontext.max",
+      description:
+        "Black Forest Labs' premium image editing model with enhanced natural language control and improved typography generation.",
+      link: "https://deepinfra.com/black-forest-labs/FLUX-kontext-max",
+      fullDetails:
+        "FLUX.kontext.max is a premium, high-performance image editing model by Black Forest Labs, designed to offer enhanced natural language-based transformations with improved typography generation. Built on an evolved FLUX transformer framework, it delivers top-tier prompt fidelity, semantic precision, and aesthetic refinement. Ideal for tasks involving advanced object editing, style modification, or layout-sensitive transformations via intuitive text prompts.",
+      chatPage: "imagemodel.html",
+      creditPrice: "7-8 credits/image",
+      providers: ["replicate"],
+    },
     "stabilityai-sd3-5": {
       title: "Stability AI: SD 3.5",
       description:

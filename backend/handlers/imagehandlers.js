@@ -26,6 +26,7 @@ import { stabilitySD3_5 } from "../services/image/stability35Service.js";
 import { stability35Mid } from "../services/image/stability35midService.js";
 import { stability35SDXL } from "../services/image/stabilitySdxlService.js";
 import { replicateFluxKontext } from "../services/image/fluxKontextProService.js";
+import { replicateFluxKontextMax } from "../services/image/fluxKontextMaxService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -97,6 +98,15 @@ export const imageGenerationHandlers = [
     ),
     type: "replicate",
     credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-kontext-max",
+    handler: wrapHandler(
+      replicateFluxKontextMax,
+      "black-forest-labs-flux-kontext-max"
+    ),
+    type: "replicate",
+    credits: 7,
   },
   {
     model: "stabilityai-sd3-5",
