@@ -105,6 +105,25 @@ const allmodels = {
       ],
     },
     {
+      id: "bytedance-sdxl-lightning-4step",
+      name: "ByteDance: SDXL-Lightning (4-Step)",
+      type: "image",
+      icon: "image",
+      iconColor: "info",
+      description:
+        "Fast and high-quality text-to-image generation using SDXL-Lightning in just four steps.",
+      source: "bytedance.com",
+      sourceUrl: "https://deepinfra.com/bytedance/sdxl-lightning-4step",
+      tags: [
+        "text-to-image",
+        "lightning",
+        "fast-generation",
+        "sdxl",
+        "4-step",
+        "high-quality",
+      ],
+    },
+    {
       id: "stabilityai-sd3-5",
       name: "Stability AI: SD 3.5",
       type: "image",

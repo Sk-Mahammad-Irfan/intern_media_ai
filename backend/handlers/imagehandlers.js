@@ -28,6 +28,7 @@ import { stability35SDXL } from "../services/image/stabilitySdxlService.js";
 import { replicateFluxKontext } from "../services/image/fluxKontextProService.js";
 import { replicateFluxKontextMax } from "../services/image/fluxKontextMaxService.js";
 import { replicateFluxUltra } from "../services/image/fluxUltraService.js";
+import { SDXLLightningImage } from "../services/image/bytedanceSDXLService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -115,6 +116,12 @@ export const imageGenerationHandlers = [
       replicateFluxUltra,
       "black-forest-labs-flux-1.1-pro-ultra"
     ),
+    type: "replicate",
+    credits: 7,
+  },
+  {
+    model: "bytedance-sdxl-lightning-4step",
+    handler: wrapHandler(SDXLLightningImage, "bytedance-sdxl-lightning-4step"),
     type: "replicate",
     credits: 7,
   },

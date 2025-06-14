@@ -127,6 +127,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "8-10 credits/image",
       providers: ["replicate"],
     },
+    "bytedance-sdxl-lightning-4step": {
+      title: "ByteDance: SDXL-Lightning (4-Step)",
+      description:
+        "SDXL-Lightning by ByteDance: a fast text-to-image model generating high-quality images in just 4 steps.",
+      link: "https://deepinfra.com/bytedance/sdxl-lightning-4step",
+      fullDetails:
+        "SDXL-Lightning (4-Step) is a lightning-fast diffusion model developed by ByteDance, built on the Stable Diffusion XL architecture. It generates high-quality images in only four inference steps, making it ideal for real-time generation, prototyping, and creative workflows that require speed without compromising visual fidelity.",
+      chatPage: "imagemodel.html",
+      creditPrice: "2-4 credits/image",
+      providers: ["replicate"],
+    },
 
     "stabilityai-sd3-5": {
       title: "Stability AI: SD 3.5",

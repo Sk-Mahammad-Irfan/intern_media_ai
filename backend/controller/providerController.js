@@ -57,6 +57,7 @@ import { generateVideoWan14B } from "../providers/video/wan14bProvider.js";
 import { generateImageFluxKontextPro } from "../providers/image/fluxKontextProProvider.js";
 import { generateImageFluxKontextMax } from "../providers/image/fluxKontextMaxProvider.js";
 import { generateImageFluxUltra } from "../providers/image/fluxUltraProvider.js";
+import { generateImageBytedanceProvider } from "../providers/image/bytedanceSDXLProvider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -191,6 +192,9 @@ export const generateImageForProvider = async (req, res) => {
     "black-forest-labs-flux-1.1-pro-ultra": {
       replicate: 7,
     },
+    "bytedance-sdxl-lightning-4step": {
+      replicate: 7,
+    },
     "stabilityai-sd3-5": {
       deepinfra: 4,
     },
@@ -274,6 +278,9 @@ export const generateImageForProvider = async (req, res) => {
         break;
       case "black-forest-labs-flux-1.1-pro-ultra":
         rawData = await generateImageFluxUltra(body);
+        break;
+      case "bytedance-sdxl-lightning-4step":
+        rawData = await generateImageBytedanceProvider(body);
         break;
       case "stabilityai-sd3-5":
         rawData = await generateImageStability35(body);
