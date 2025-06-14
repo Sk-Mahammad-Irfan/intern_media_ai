@@ -59,7 +59,16 @@ const modelOptions = {
     resolutions: { "480p": null, "720p": null },
     aspect_ratios: ["16:9", "9:16"],
   },
-
+  "wavespeedai-wan21-t2v-720p": {
+    providers: ["replicate", "auto"],
+    resolutions: { "720p": null },
+    aspect_ratios: ["16:9", "9:16", "1:1"],
+  },
+  "wavespeedai-wan21-t2v-480p": {
+    providers: ["replicate", "auto"],
+    resolutions: { "480p": null },
+    aspect_ratios: ["16:9", "9:16"],
+  },
   "google-veo-3": {
     providers: ["fal", "replicate", "auto"],
     resolutions: { "720p": null }, // Not specified, same as Veo 2
@@ -117,6 +126,8 @@ const videoModelCredits = {
   "wan-ai-wan21-t2v-13b": 18,
   "wan-ai-wan21-t2v-14b": 10,
   "lightricks-ltx-video": 60,
+  "wavespeedai-wan21-t2v-480p": 20,
+  "wavespeedai-wan21-t2v-720p": 22,
   "pixverse-v4": 15,
   "pixverse-v4.5": 15,
   "pika-text-to-video-v2-1": 40,

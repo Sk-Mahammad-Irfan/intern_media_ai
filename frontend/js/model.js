@@ -298,7 +298,31 @@ const allmodels = {
       sourceUrl: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
       tags: ["high-capacity", "480p", "720p", "detailed"],
     },
+    {
+      id: "wavespeedai-wan21-t2v-720p",
+      name: "WaveSpeedAI: Wan 2.1-T2V-720P",
+      type: "video",
+      icon: "film",
+      iconColor: "info",
+      description:
+        "High-performance 720P video generation with accelerated inference, built on the 14B Wan 2.1 architecture. Ideal for complex prompts and detailed scene creation.",
+      source: "huggingface.co",
+      sourceUrl: "https://huggingface.co/wavespeedai/wan-2.1-t2v-720p",
+      tags: ["accelerated", "720p", "high-resolution", "open-model"],
+    },
 
+    {
+      id: "wavespeedai-wan21-t2v-480p",
+      name: "WaveSpeedAI: Wan 2.1-T2V-480P",
+      type: "video",
+      icon: "film",
+      iconColor: "info",
+      description:
+        "Accelerated 480P video generation with the Wan 2.1 14B model. Optimized for fast, detailed, and expressive video synthesis from complex prompts.",
+      source: "huggingface.co",
+      sourceUrl: "https://huggingface.co/wavespeedai/wan-2.1-t2v-480p",
+      tags: ["accelerated", "480p", "high-capacity", "open-model"],
+    },
     {
       id: "pixverse-v4",
       name: "PixVerse: Text-to-Video v4",

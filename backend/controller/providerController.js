@@ -58,6 +58,8 @@ import { generateImageFluxKontextPro } from "../providers/image/fluxKontextProPr
 import { generateImageFluxKontextMax } from "../providers/image/fluxKontextMaxProvider.js";
 import { generateImageFluxUltra } from "../providers/image/fluxUltraProvider.js";
 import { generateImageBytedanceProvider } from "../providers/image/bytedanceSDXLProvider.js";
+import { generateWan720Video } from "../providers/video/wavespeedWan720Provider.js";
+import { generateWan480Video } from "../providers/video/wavespeedWan480Provider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -89,6 +91,12 @@ export const generateVideoforProvider = async (req, res) => {
         break;
       case "wan-ai-wan21-t2v-14b":
         rawData = await generateVideoWan14B(body);
+        break;
+      case "wavespeedai-wan21-t2v-720p":
+        rawData = await generateWan720Video(body);
+        break;
+      case "wavespeedai-wan21-t2v-480p":
+        rawData = await generateWan480Video(body);
         break;
       case "luma-ray2-flash":
         rawData = await generateVideoLuma(body);

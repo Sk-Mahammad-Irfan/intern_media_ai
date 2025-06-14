@@ -263,7 +263,28 @@ const models = {
     chatPage: "videomodel.html",
     provider: "huggingface",
   },
-
+  "wavespeedai-wan21-t2v-720p": {
+    id: "wavespeedai-wan21-t2v-720p",
+    title: "WaveSpeedAI: Wan 2.1-T2V-720P",
+    description:
+      "A high-resolution, accelerated text-to-video model built on Wan 2.1 with 14B parameters for expressive and complex video synthesis.",
+    link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-720p",
+    fullDetails:
+      "WaveSpeedAI’s Wan 2.1-T2V-720P delivers fast and detailed video generation in 720P resolution. As part of an open, next-generation suite of video foundation models, it excels in translating intricate prompts into rich, coherent video outputs.",
+    chatPage: "videomodel.html",
+    provider: "huggingface",
+  },
+  "wavespeedai-wan21-t2v-480p": {
+    id: "wavespeedai-wan21-t2v-480p",
+    title: "WaveSpeedAI: Wan 2.1-T2V-480P",
+    description:
+      "A 480P text-to-video model built for fast and detailed video generation using the Wan 2.1 14B architecture.",
+    link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-480p",
+    fullDetails:
+      "Part of WaveSpeedAI's open suite of video foundation models, Wan 2.1-T2V-480P offers accelerated inference and high-quality video output from complex text prompts, making it ideal for creative and research workflows.",
+    chatPage: "videomodel.html",
+    provider: "huggingface",
+  },
   "google-veo-3": {
     id: "google-veo-3",
     title: "Google Veo 3",

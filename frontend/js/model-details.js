@@ -218,7 +218,28 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "20-35 credits/second",
       providers: ["deepinfra"],
     },
-
+    "wavespeedai-wan21-t2v-720p": {
+      title: "WaveSpeedAI: Wan 2.1-T2V-720P",
+      description:
+        "Accelerated text-to-video model for generating high-resolution 720P videos using the Wan 2.1 14B architecture.",
+      link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-720p",
+      fullDetails:
+        "WaveSpeedAI's Wan 2.1-T2V-720P offers fast, high-fidelity video synthesis powered by the 14B parameter Wan architecture. Designed as part of a comprehensive and open suite of video foundation models, it supports rich, complex prompt handling and efficient inference for creative and research use cases.",
+      chatPage: "videomodel.html",
+      creditPrice: "20-35 credits/second",
+      providers: ["replicate"],
+    },
+    "wavespeedai-wan21-t2v-480p": {
+      title: "WaveSpeedAI: Wan 2.1-T2V-480P",
+      description:
+        "Accelerated text-to-video model for generating high-quality 480P videos using the Wan 2.1 14B architecture.",
+      link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-480p",
+      fullDetails:
+        "WaveSpeedAI's Wan 2.1-T2V-480P delivers efficient, high-fidelity video generation powered by the 14B parameter Wan model. As part of an open and comprehensive suite of video foundation models, it enables expressive and rich video synthesis from complex prompts with fast inference times.",
+      chatPage: "videomodel.html",
+      creditPrice: "20-35 credits/second",
+      providers: ["replicate"],
+    },
     "google-veo-3": {
       title: "Google Veo 3",
       description:

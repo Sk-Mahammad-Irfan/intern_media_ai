@@ -29,6 +29,8 @@ import {
   wanFAL,
   wanReplicate,
 } from "../services/video/wanServices.js";
+import { wan480Replicate } from "../services/video/wavespeedWan480.js";
+import { wan720Replicate } from "../services/video/wavespeedWan720.js";
 import { incrementModelUsage } from "../utils/incrementModelUsage.js";
 
 const wrapHandler = (handler, model) => {
@@ -62,6 +64,18 @@ export const videoGenerationHandlers = [
     handler: wrapHandler(wan14B, "wan-ai-wan21-t2v-14b"),
     type: "deepinfra",
     credits: 10,
+  },
+  {
+    model: "wavespeedai-wan21-t2v-720p",
+    handler: wrapHandler(wan720Replicate, "wavespeedai-wan21-t2v-720p"),
+    type: "replicate",
+    credits: 10,
+  },
+  {
+    model: "wavespeedai-wan21-t2v-480p",
+    handler: wrapHandler(wan480Replicate, "wavespeedai-wan21-t2v-480p"),
+    type: "replicate",
+    credits: 12,
   },
   {
     model: "lightricks-ltx-video",
