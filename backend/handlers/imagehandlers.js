@@ -25,6 +25,7 @@ import { deepFluxPro } from "../services/image/fluxProService.js";
 import { stabilitySD3_5 } from "../services/image/stability35Service.js";
 import { stability35Mid } from "../services/image/stability35midService.js";
 import { stability35SDXL } from "../services/image/stabilitySdxlService.js";
+import { replicateFluxKontext } from "../services/image/fluxKontextProService.js";
 
 const wrapHandler = (handler, model) => {
   return async (...args) => {
@@ -86,6 +87,15 @@ export const imageGenerationHandlers = [
     model: "black-forest-labs-flux-pro",
     handler: wrapHandler(deepFluxPro, "black-forest-labs-flux-pro"),
     type: "base64",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-kontext-pro",
+    handler: wrapHandler(
+      replicateFluxKontext,
+      "black-forest-labs-flux-kontext-pro"
+    ),
+    type: "replicate",
     credits: 4,
   },
   {

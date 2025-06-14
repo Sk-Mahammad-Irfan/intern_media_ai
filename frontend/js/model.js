@@ -51,6 +51,23 @@ const allmodels = {
       tags: ["text-to-image", "flagship", "high-quality"],
     },
     {
+      id: "black-forest-labs-flux-kontext-pro",
+      name: "Black Forest Labs: FLUX.kontext.pro",
+      type: "image",
+      icon: "image",
+      iconColor: "warning",
+      description:
+        "Text-based image editing using natural language with high consistency and control.",
+      source: "blackforestlabs.ai",
+      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-kontext-pro",
+      tags: [
+        "image-editing",
+        "text-to-image",
+        "high-quality",
+        "natural-language",
+      ],
+    },
+    {
       id: "stabilityai-sd3-5",
       name: "Stability AI: SD 3.5",
       type: "image",

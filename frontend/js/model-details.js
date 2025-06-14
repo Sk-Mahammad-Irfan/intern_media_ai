@@ -94,6 +94,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "5-6 credits/image",
       providers: ["deepinfra"],
     },
+    "black-forest-labs-flux-kontext-pro": {
+      title: "Black Forest Labs: FLUX.kontext.pro",
+      description:
+        "Black Forest Labs' state-of-the-art image editing model with natural language control and precise transformations.",
+      link: "https://deepinfra.com/black-forest-labs/FLUX-kontext-pro",
+      fullDetails:
+        "FLUX.kontext.pro is a next-generation image editing model by Black Forest Labs, built on the FLUX latent rectified flow transformer architecture. It enables natural language-based transformations of existing images with exceptional prompt adherence, consistency, and high visual fidelity. Ideal for tasks such as style alteration, object modification, or semantic refinement using intuitive text prompts.",
+      chatPage: "imagemodel.html",
+      creditPrice: "5-6 credits/image",
+      providers: ["replicate"],
+    },
     "stabilityai-sd3-5": {
       title: "Stability AI: SD 3.5",
       description:
