@@ -499,6 +499,17 @@ document.addEventListener("DOMContentLoaded", function () {
       creditPrice: "40 credits/second",
       providers: ["fal"],
     },
+    "pika-text-to-video-v2-2": {
+      title: "Pika Text to Video v2.2",
+      description:
+        "Create cinematic, high-quality videos from text prompts with Pika’s updated v2.2 model – enhanced for storytelling and visual content creation.",
+      link: "https://fal.ai/models/fal-ai/pika/v2.2/text-to-video",
+      fullDetails:
+        "Pika v2.2 transforms text prompts into vivid, high-quality video clips with smoother motion and improved detail. Ideal for storytelling, concept development, and rapid visual ideation, this version builds on the cinematic power of v2.1 with upgraded output fidelity and creative flexibility.",
+      chatPage: "videomodel.html",
+      creditPrice: "40 credits/second",
+      providers: ["fal"],
+    },
     "cogvideox-5b": {
       title: "CogVideoX-5B",
       description:

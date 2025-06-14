@@ -39,6 +39,11 @@ const modelOptions = {
     resolutions: { "720p": null, "1080p": null },
     aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
   },
+  "pika-text-to-video-v2-2": {
+    providers: ["fal", "auto"],
+    resolutions: { "720p": null, "1080p": null },
+    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
+  },
   "pixverse-v4": {
     providers: ["fal", "auto"],
     resolutions: { "540p": null, "720p": null, "1080p": null },

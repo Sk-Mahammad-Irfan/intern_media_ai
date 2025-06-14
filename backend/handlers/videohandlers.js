@@ -11,6 +11,7 @@ import {
   minimaxFAL,
   minimaxReplicate,
 } from "../services/video/minmax01Service.js";
+import { pikaFAL22 } from "../services/video/pika22Service.js";
 import { pikaFAL } from "../services/video/pikaServices.js";
 import {
   pixverse45FAL,
@@ -142,6 +143,12 @@ export const videoGenerationHandlers = [
     handler: wrapHandler(pikaFAL, "pika-text-to-video-v2-1"),
     type: "fal",
     credits: 40,
+  },
+  {
+    model: "pika-text-to-video-v2-2",
+    handler: wrapHandler(pikaFAL22, "pika-text-to-video-v2-2"),
+    type: "fal",
+    credits: 45,
   },
   {
     model: "luma-ray2-flash",

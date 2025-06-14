@@ -396,6 +396,18 @@ const allmodels = {
       tags: ["cinematic", "storytelling"],
     },
     {
+      id: "pika-text-to-video-v2-2",
+      name: "Pika Text to Video v2.2",
+      type: "video",
+      icon: "camera-reels",
+      iconColor: "primary",
+      description:
+        "Create cinematic, high-quality videos from text prompts with Pika’s updated v2.2 model – enhanced for storytelling and visual content creation.",
+      source: "FAL AI",
+      sourceUrl: "https://fal.ai/models/fal-ai/pika/v2.2/text-to-video",
+      tags: ["cinematic", "storytelling"],
+    },
+    {
       id: "luma-ray2-flash",
       name: "Luma Dream Machine: Ray 2 Flash",
       type: "video",

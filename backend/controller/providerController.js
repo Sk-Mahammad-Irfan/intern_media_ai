@@ -64,6 +64,7 @@ import { generateAudioAceStep } from "../providers/audio/aceStepProvider.js";
 import { generateAudioAceStepPrompt } from "../providers/audio/aceStepPromptProvider.js";
 import { generateImageHidreamFull } from "../providers/image/hidreamFullProvider.js";
 import { generateImageHidreamFast } from "../providers/image/hidreamFastProvider.js";
+import { generateVideoPika22 } from "../providers/video/pika22Provider.js";
 
 export const generateVideoforProvider = async (req, res) => {
   const { id } = req.params;
@@ -107,6 +108,9 @@ export const generateVideoforProvider = async (req, res) => {
         break;
       case "pika-text-to-video-v2-1":
         rawData = await generateVideoPika(body);
+        break;
+      case "pika-text-to-video-v2-2":
+        rawData = await generateVideoPika22(body);
         break;
       case "pixverse-v4":
         rawData = await generateVideoPixverse(body);
