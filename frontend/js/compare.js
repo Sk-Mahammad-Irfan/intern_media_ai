@@ -739,70 +739,89 @@ function renderModel(id, containerId) {
   }
 
   container.innerHTML = `
-        <div class="model-column">
-        <div class="model-header">
-            <h4>${model.name}</h4>
-            <div>${model.icons
-              .map((icon) => `<i class="bi ${icon} me-1"></i>`)
-              .join("")}</div>
-        </div>
-        <p class="text-muted mb-1"><strong>Type:</strong> ${model.type}</p>
-        <p>${model.description}</p>
-        <p class="mb-1 model-price"><i class="bi bi-coin"></i> ${
-          model.price
-        } credits per request</p>
-        <p class="text-muted"><strong>Source:</strong> <a href="${
-          model.source
-        }" target="_blank">${model.source}</a></p>
+        <div class="model-column border rounded-4 p-4 shadow-sm bg-white h-100">
+            <!-- Model Header -->
+            <div class="model-header d-flex justify-content-between align-items-start mb-3">
+              <h4 class="fw-semibold mb-0 text-primary">${model.name}</h4>
+              <div class="text-muted fs-5">${model.icons.map(icon => `<i class="bi ${icon} me-2"></i>`).join("")}</div>
+            </div>
 
-        <div class="performance-metrics mb-4">
-        <div class="metric">
-            <span><strong>Latency:</strong></span> <span>150ms</span>
-        </div>
-        <div class="metric">
-            <span><strong>Resolution:</strong></span> <span>1024x1024</span>
-        </div>
-        <div class="metric">
-            <span><strong>Output Quality:</strong></span> <span>High</span>
-        </div>
-        </div>
+            <!-- Type and Description -->
+            <p class="text-muted mb-2"><strong>Type:</strong> ${model.type}</p>
+            <p class="mb-3">${model.description}</p>
 
-        <a href="model-details.html?id=${id}" class="btn btn-outline-primary">View Details</a>
+            <!-- Price -->
+            <p class="mb-2 model-price fw-medium">
+              <i class="bi bi-coin text-warning me-1"></i> ${model.price} credits per request
+            </p>
 
-      
+            <!-- Source -->
+            <p class="text-muted mb-3">
+              <strong>Source:</strong>
+              <a href="${model.source}" target="_blank" class="text-decoration-none">${model.source}</a>
+            </p>
+
+            <!-- Performance Metrics -->
+            <div class="performance-metrics border-top pt-3 mb-4">
+              <div class="metric mb-2 d-flex justify-content-between">
+                <span><strong>Latency:</strong></span> <span>150ms</span>
+              </div>
+              <div class="metric mb-2 d-flex justify-content-between">
+                <span><strong>Resolution:</strong></span> <span>1024x1024</span>
+              </div>
+              <div class="metric d-flex justify-content-between">
+                <span><strong>Output Quality:</strong></span> <span>High</span>
+              </div>
+            </div>
+
+            <!-- View Details Button -->
+            <a href="model-details.html?id=${id}" class="btn btn-outline-primary w-100">View Details</a>
+          </div>
+     
     `;
 }
 
 // Load model1 from URL
+// Get model ID from URL
 const urlParams = new URLSearchParams(window.location.search);
 const model1Id = urlParams.get("id");
-if (model1Id) renderModel(model1Id, "model1");
 
-// Filter models by category based on first model's type
+// DOM references
 const dropdown = document.getElementById("secondModelSelect");
+const categoryHeading = document.getElementById("categoryHeading");
 
+// Render first model if ID exists
+if (model1Id) {
+  renderModel(model1Id, "model1");
+
+  const model1Type = modelData[model1Id]?.type;
+  if (model1Type) populateDropdown(model1Type);
+}
+
+// Populate dropdown with models of the same category
 function populateDropdown(modelType) {
   dropdown.innerHTML = "<option value=''>Select Another Model</option>";
+
   for (const key in modelData) {
-    if (modelData[key].type === modelType && key !== model1Id) {
+    const model = modelData[key];
+    if (model.type === modelType && key !== model1Id) {
       const option = document.createElement("option");
       option.value = key;
-      option.textContent = modelData[key].name;
+      option.textContent = model.name;
       dropdown.appendChild(option);
     }
   }
-  const categoryHeading = document.getElementById("categoryHeading");
-  categoryHeading.textContent = `Category: ${modelType}`;
+
+  // Update category heading
+  categoryHeading.innerHTML = `<strong>Category:</strong> <span class="text-dark">${modelType}</span>`;
 }
 
-// On model1 load, populate dropdown with same category models
-if (model1Id) {
-  const model1Type = modelData[model1Id].type;
-  populateDropdown(model1Type);
-}
-
-// Show second model on change
+// On dropdown selection, render second model
 dropdown.addEventListener("change", function () {
   const selectedId = this.value;
-  if (selectedId) renderModel(selectedId, "model2");
+  if (selectedId) {
+    renderModel(selectedId, "model2");
+  } else {
+    document.getElementById("model2").innerHTML = ""; // Clear if nothing selected
+  }
 });

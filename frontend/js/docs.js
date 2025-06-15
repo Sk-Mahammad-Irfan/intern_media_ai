@@ -14,6 +14,16 @@ const modelsinfo = {
     "f-lite-standard": "F Lite (Standard)",
     "sana-v1.5-4.8b": "Sana V1.5 (4.8B)",
     "minimax-image-01": "MiniMax Image-01",
+    "black-forest-labs-flux-pro": "Black Forest Labs: FLUX.pro",
+    "black-forest-labs-flux-kontext-pro": "Black Forest Labs: FLUX.kontext.pro",
+    "black-forest-labs-flux-kontext-max": "Black Forest Labs: FLUX.kontext.max",
+    "black-forest-labs-flux-1.1-pro-ultra": "Black Forest Labs: FLUX 1.1 Pro Ultra",
+    "bytedance-sdxl-lightning-4step": "ByteDance: SDXL-Lightning (4-Step)",
+    "stabilityai-sd3-5": "Stability AI: SD 3.5",
+    "stabilityai-sd3-5-medium": "Stability AI: SD 3.5 Medium",
+    "stabilityai-sdxl-turbo": "Stability AI: SDXL Turbo",
+    "hidream-i1-full": "HiDream I1 Full",
+    "hidream-i1-fast": "HiDream I1 Fast"
   },
   video: {
     "wan-ai-wan21-t2v-13b": "Wan-AI: Wan2.1-T2V-1.3B",
@@ -30,6 +40,10 @@ const modelsinfo = {
     "google-veo-3": "Google Veo 3",
     "minimax-video-01": "MiniMax Video 01",
     "hunyuan-video": "Hunyuan Video",
+    "wan-ai-wan21-t2v-14b": "Wan-AI: Wan2.1-T2V-14B",
+    "wavespeedai-wan21-t2v-720p": "WaveSpeedAI: Wan 2.1-T2V-720P",
+    "wavespeedai-wan21-t2v-480p": "WaveSpeedAI: Wan 2.1-T2V-480P",
+    "pika-text-to-video-v2-2": "Pika Text to Video v2.2",
   },
   audio: {
     "stackadoc-stable-audio": "Stable Audio Open 1.0",
@@ -42,6 +56,8 @@ const modelsinfo = {
     "fal-ai-elevenlabs-sound-effects": "ElevenLabs Sound Effects",
     "fal-ai-mmaudio-v2-text-to-audio": "MMAudio V2 Text-to-Audio",
     "cartesia-sonic-2": "Cartesia Sonic 2",
+    "fal-ai-ace-step-lyrics-to-audio": "ACE-Step Lyrics-to-Audio",
+    "fal-ai-ace-step-prompt-to-audio": "ACE-Step Prompt-to-Audio"
   },
 };
 

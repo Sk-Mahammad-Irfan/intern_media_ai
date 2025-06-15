@@ -226,12 +226,12 @@ const allmodels = {
     },
     {
       id: "bagel",
-      name: "Bagel",
+      name: "Bagel Text-to-Image",
       type: "image",
       icon: "image",
       iconColor: "info",
       description:
-        "Bagel is a 7B parameter multimodal model by Bytedance-Seed that generates both text and high-quality images from prompts.",
+        "Bagel is a powerful 7B parameter multimodal model developed by Bytedance-Seed. It is capable of generating both high-quality images and coherent text from user prompts.s",
       source: "FAL AI",
       sourceUrl: "https://fal.ai/models/fal-ai/bagel",
       tags: ["multimodal", "7B"],
@@ -1158,39 +1158,34 @@ function renderAllModels() {
         const card = document.createElement("div");
         card.className = "col";
         card.innerHTML = `
-          <div class="card h-100 model-card shadow-sm" data-id="${model.id}">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title mb-1">${model.name}</h5>
-                <div class="model-icons">
-                  <i class="bi bi-${model.icon} text-${model.iconColor}"></i>
+          <div class="card h-100 d-flex flex-column model-card shadow-sm" data-id="${model.id}">
+            <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
+              <!-- Top part -->
+              <div>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title mb-1">${model.name}</h5>
+                  <div class="model-icons">
+                    <i class="bi bi-${model.icon} text-${model.iconColor}"></i>
+                  </div>
                 </div>
+                <p class="card-text text-muted small">${model.description}</p>
               </div>
-              <p class="card-text text-muted small mb-3">${
-                model.description
-              }</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-light text-dark">
+
+              <!-- Bottom info row -->
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge bg-light text-dark border rounded-pill">
                   <i class="bi bi-coin me-1"></i>
                   ${model.price} credits
                 </span>
-                <a href="${
-                  model.sourceUrl
-                }" target="_blank" class="text-decoration-none small" onclick="event.stopPropagation()">
+                <a href="${model.sourceUrl}" target="_blank" class="text-decoration-none small" onclick="event.stopPropagation()">
                   <i class="bi bi-box-arrow-up-right"></i> ${model.source}
                 </a>
               </div>
             </div>
+
             <div class="card-footer bg-transparent border-top-0 pt-0">
-              <div class="model-tags-container">
-                <div class="model-tags flex-wrap">
-                  ${model.tags
-                    .map(
-                      (tag) =>
-                        `<span class="badge bg-secondary me-1 mb-1">${tag}</span>`
-                    )
-                    .join("")}
-                </div>
+              <div class="model-tags d-flex flex-wrap gap-1">
+                ${model.tags.map(tag => `<span class="badge bg-secondary">${tag}</span>`).join("")}
               </div>
             </div>
           </div>
