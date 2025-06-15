@@ -862,6 +862,12 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   window.generateAudio = async function generateAudio() {
+    if (!checkLogin()) {
+      alert("You must be logged in to generate Audio.");
+      window.location.href = "auth.html";
+      return;
+    }
+
     const promptInput = document.getElementById("promptInput");
     const prompt = promptInput?.value.trim();
     const isMultiModel = document.getElementById(

@@ -308,6 +308,12 @@ function appendGeneratedVideo(videoUrl) {
 }
 
 async function generateVideo() {
+  if (!checkLogin()) {
+    alert("You must be logged in to generate video.");
+    window.location.href = "auth.html";
+    return;
+  }
+
   const prompt = document.getElementById("promptInput").value.trim();
   const isMultiModel = document.getElementById("multiModelModeToggle").checked;
   const userId = localStorage.getItem("userId") || "guest";

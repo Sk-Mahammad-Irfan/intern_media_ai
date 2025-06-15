@@ -34,22 +34,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (usernameMobile) usernameMobile.textContent = user.username || "User";
     if (emailMobile) emailMobile.textContent = user.email || "";
 
-    if (authOnlyMobile) authOnlyMobile.forEach(el => el.classList.remove("d-none"));
-
+    if (authOnlyMobile)
+      authOnlyMobile.forEach((el) => el.classList.remove("d-none"));
   } else {
     if (signInDesktop) signInDesktop.classList.remove("d-none");
     if (signInMobile) signInMobile.classList.remove("d-none");
     if (avatarDropdownDesktop) avatarDropdownDesktop.classList.add("d-none");
 
-    if (authOnlyMobile) authOnlyMobile.forEach(el => el.classList.add("d-none"));
+    if (authOnlyMobile)
+      authOnlyMobile.forEach((el) => el.classList.add("d-none"));
   }
-
 
   // --- SIDEBAR ACTIVE LINK HIGHLIGHT ---
   const path = window.location.pathname.split("/").pop();
   const links = document.querySelectorAll(".sidebar .nav-link");
 
-  links.forEach(link => {
+  links.forEach((link) => {
     const href = link.getAttribute("href");
     if (href === path) {
       link.classList.add("active");
@@ -63,10 +63,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- LOGOUT FUNCTION ---
 function logout() {
+  // Remove specific cookies
+  const removeCookie = (name) => {
+    document.cookie =
+      name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  };
+
+  // Clear cookies
+  removeCookie("auth_token");
+  removeCookie("token"); // original token name in your script
+
+  // Clear localStorage items
+  localStorage.removeItem("auth_token");
   localStorage.removeItem("user_data");
   localStorage.removeItem("userId");
-  document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  window.location.href = "auth.html";
+  localStorage.removeItem("ignoredProviders");
+
+  // Redirect to homepage
+  window.location.href = "index.html";
+}
+
+function checkLogin() {
+  const cookieName = "auth_token";
+  const cookieExists = document.cookie
+    .split("; ")
+    .some((row) => row.startsWith(`${cookieName}=`));
+
+  if (!cookieExists) {
+    return false;
+  }
+  return true;
 }
 
 // --- MOBILE SEARCH SIDEBAR TOGGLE ---

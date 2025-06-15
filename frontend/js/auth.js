@@ -242,10 +242,23 @@ function updateSidebarActiveState() {
 
 // Logout function
 function logout() {
-  document.cookie =
-    "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // Remove specific cookies
+  const removeCookie = (name) => {
+    document.cookie =
+      name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  };
+
+  // Clear cookies
+  removeCookie("auth_token");
+  removeCookie("token"); // original token name in your script
+
+  // Clear localStorage items
+  localStorage.removeItem("auth_token");
   localStorage.removeItem("user_data");
   localStorage.removeItem("userId");
+  localStorage.removeItem("ignoredProviders");
+
+  // Redirect to homepage
   window.location.href = "index.html";
 }
 

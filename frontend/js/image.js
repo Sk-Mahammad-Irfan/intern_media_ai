@@ -2139,6 +2139,12 @@ function appendErrorMessage(message) {
 }
 
 async function generateImage() {
+  if (!checkLogin()) {
+    alert("You must be logged in to generate images.");
+    window.location.href = "auth.html";
+    return;
+  }
+
   const promptInput = document.getElementById("promptInput");
   const prompt = promptInput.value.trim();
   const isMultiModel = document.getElementById("multiModelModeToggle").checked;
