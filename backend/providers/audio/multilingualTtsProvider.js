@@ -21,7 +21,7 @@ fal.config({
 export const generateAudioMultilingualTtsFAL = async (input) => {
   try {
     const {
-      text,
+      prompt,
       voice = "Rachel",
       stability = 0.5,
       similarity_boost = 0.75,
@@ -29,24 +29,10 @@ export const generateAudioMultilingualTtsFAL = async (input) => {
       speed = 1,
     } = input;
 
-    if (!text) throw new Error("Text is required for TTS");
-
-    const ttsInput = {
-      text,
-      voice,
-      stability,
-      similarity_boost,
-      speed,
-    };
-
-    if (style !== undefined) {
-      ttsInput.style = style;
-    }
-
     const result = await fal.subscribe(
       "fal-ai/elevenlabs/tts/multilingual-v2",
       {
-        input: ttsInput,
+        input: { text: prompt, voice, stability, similarity_boost, speed },
         logs: false,
         onQueueUpdate: (update) => {
           if (update.status === "IN_PROGRESS") {

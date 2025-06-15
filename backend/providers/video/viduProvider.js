@@ -48,13 +48,16 @@ export const generateVideoVidu = async (body) => {
     aspect_ratio = "16:9",
     style = null,
     movement_amplitude = "auto",
-    seed = null,
+    seed = 1234,
+    negative_prompt,
   } = body;
 
   try {
     if (!prompt || typeof prompt !== "string") {
       throw new Error("Prompt is required and must be a string.");
     }
+
+    let finalDuration = 10;
 
     // Final validated values
     const finalAspectRatio = SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)

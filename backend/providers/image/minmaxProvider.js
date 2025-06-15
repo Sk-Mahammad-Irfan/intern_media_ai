@@ -7,10 +7,13 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const generateImageWithMinimax = async (
-  prompt,
-  { aspect_ratio = "1:1", num_images = 1, prompt_optimizer = false } = {}
-) => {
+export const generateImageWithMinimax = async (body) => {
+  const {
+    prompt,
+    aspect_ratio = "1:1",
+    num_images = 1,
+    prompt_optimizer = false,
+  } = body;
   try {
     const result = await fal.subscribe("fal-ai/minimax/image-01", {
       input: {
@@ -27,10 +30,7 @@ export const generateImageWithMinimax = async (
       },
     });
 
-    return {
-      data: result.data,
-      requestId: result.requestId,
-    };
+    return result.data;
   } catch (error) {
     console.error("Error generating image with minimax model:", error);
   }

@@ -32,12 +32,12 @@ const VALID_RATIOS = new Set([
 
 export const minimaxGenerate = async (
   prompt,
-  { aspect_ratio = "1:1", num_images = 1, prompt_optimizer = false } = {}
+  resolution = "square_hd",
+  seed
 ) => {
   try {
     // Normalize aspect ratio: convert keywords, or allow direct ratios
-    const normalizedAspectRatio =
-      ASPECT_RATIO_MAP[aspect_ratio] || aspect_ratio;
+    const normalizedAspectRatio = ASPECT_RATIO_MAP[resolution] || aspect_ratio;
 
     if (!VALID_RATIOS.has(normalizedAspectRatio)) {
       throw new Error(
@@ -50,7 +50,7 @@ export const minimaxGenerate = async (
     const result = await fal.subscribe("fal-ai/minimax/image-01", {
       input: {
         prompt,
-        aspect_ratio: normalizedAspectRatio,
+        aspect_ratio: resolution,
         num_images,
         prompt_optimizer,
       },
@@ -61,7 +61,7 @@ export const minimaxGenerate = async (
         }
       },
     });
-
+    console.log(result.data);
     return result?.data;
   } catch (error) {
     if (error?.body?.detail) {

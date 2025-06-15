@@ -40,13 +40,7 @@ const mapToClosestSupportedAspectRatio = (input) => {
   return closest;
 };
 
-export const viduService = async (
-  prompt,
-  aspect_ratio = "16:9",
-  style = null,
-  movement_amplitude = "auto",
-  seed = null
-) => {
+export const viduService = async (prompt, resolution, aspect_ratio, seed) => {
   try {
     // Validate aspect ratio
     if (!SUPPORTED_ASPECT_RATIOS.includes(aspect_ratio)) {
@@ -58,23 +52,12 @@ export const viduService = async (
       console.warn(`Invalid style "${style}", ignoring it.`);
       style = null;
     }
-    // Validate movement amplitude
-    if (
-      movement_amplitude &&
-      !MOVEMENT_AMPLITUDE.includes(movement_amplitude)
-    ) {
-      console.warn(
-        `Invalid movement amplitude "${movement_amplitude}", defaulting to "auto"`
-      );
-      movement_amplitude = "auto";
-    }
 
     // Prepare input
     const input = {
       prompt,
       aspect_ratio,
-      style: style || "general", // Default to "general" if no style provided
-      movement_amplitude,
+      style: style || "general",
     };
 
     if (style) input.style = style;

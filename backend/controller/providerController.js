@@ -251,6 +251,9 @@ export const generateImageForProvider = async (req, res) => {
     "sana-v1.5-4.8b": {
       fal: 15,
     },
+    "minimax-image-01": {
+      fal: 15,
+    },
   };
 
   try {

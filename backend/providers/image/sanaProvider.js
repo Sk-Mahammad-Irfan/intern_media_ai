@@ -7,9 +7,9 @@ fal.config({
   credentials: process.env.FAL_AI_API,
 });
 
-export const generateImageSana = async (
-  prompt,
-  {
+export const generateImageSana = async (body) => {
+  const {
+    prompt,
     negative_prompt = "",
     num_inference_steps = 18,
     seed,
@@ -19,8 +19,7 @@ export const generateImageSana = async (
     enable_safety_checker = true,
     output_format = "jpeg",
     style_name = "(No style)",
-  } = {}
-) => {
+  } = body;
   try {
     const result = await fal.subscribe("fal-ai/sana/v1.5/4.8b", {
       input: {
@@ -43,10 +42,7 @@ export const generateImageSana = async (
       },
     });
 
-    return {
-      data: result.data,
-      requestId: result.requestId,
-    };
+    return result.data;
   } catch (error) {
     console.error("Error generating image with sana model:", error);
   }
