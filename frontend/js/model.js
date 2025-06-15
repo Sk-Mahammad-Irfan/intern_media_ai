@@ -1025,7 +1025,7 @@ function renderAllModels() {
 
   // Create filter controls with Bootstrap styling
   const filterControls = document.createElement("div");
-  filterControls.className = "filter-controls mb-4 p-3 bg-light rounded";
+  filterControls.className = "filter-controls mb-5 p-3 rounded";
   filterControls.innerHTML = `
     <div class="container-fluid px-0">
       <div class="row g-3 align-items-end">
@@ -1141,7 +1141,10 @@ function renderAllModels() {
               category
             )} me-2 text-primary"></i>
             <span>${categoryTitle} Models</span>
-            <span class="badge bg-primary ms-2">${modelList.length}</span>
+            <span class="d-inline-flex justify-content-center align-items-center"
+                  style="width: 30px; height: 30px; border-radius: 50%; font-size: 0.9rem; background-color: #0d6efd; color: white;">
+              ${modelList.length}
+            </span>
           </h4>
         </div>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="${category}-models"></div>
@@ -1250,7 +1253,7 @@ function getCategoryIcon(category) {
   const icons = {
     image: "images",
     video: "film",
-    audio: "music-note-beamed",
+    audio: "podcast",
   };
   return icons[category] || "box";
 }
