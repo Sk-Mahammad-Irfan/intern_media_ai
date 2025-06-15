@@ -87,7 +87,7 @@ const modelData = {
     name: "Imagen 4 (Preview)",
     type: "Text-to-Image",
     description:
-      "Imagen 4 is Google’s latest image generation model, known for extreme photorealism and prompt precision. It creates visually stunning and highly detailed outputs with exceptional prompt interpretation. Ideal for professional and artistic projects, it delivers reliable realism and high consistency across generations.",
+      "Imagen 4 is Google's latest image generation model, known for extreme photorealism and prompt precision. It creates visually stunning and highly detailed outputs with exceptional prompt interpretation. Ideal for professional and artistic projects, it delivers reliable realism and high consistency across generations.",
     source: "https://fal.ai/models/fal-ai/imagen4/preview",
     price: 7,
     icons: ["bi-camera-fill"],
@@ -139,7 +139,6 @@ const modelData = {
       generationQuality: "Prompt-Sensitive",
     },
   },
-
   "wan-ai-wan21-t2v-13b": {
     name: "Wan-AI T2V",
     type: "Text-to-Video",
@@ -280,8 +279,6 @@ const modelData = {
       generationQuality: "Realistic Motion",
     },
   },
-
-  // audio models
   "stackadoc-stable-audio": {
     name: "Stable Audio",
     type: "Text-to-Audio",
@@ -342,7 +339,7 @@ const modelData = {
     name: "Cassette Sound Effects Generator",
     type: "Text-to-Audio",
     description:
-      "Cassette AI’s Sound Effects Generator is an open-source model built to create ambient sounds and dynamic SFX from prompt input. From nature atmospheres to sci-fi transitions, this tool is ideal for indie games, films, and podcasts that need quick, creative sound design without manual recording.",
+      "Cassette AI's Sound Effects Generator is an open-source model built to create ambient sounds and dynamic SFX from prompt input. From nature atmospheres to sci-fi transitions, this tool is ideal for indie games, films, and podcasts that need quick, creative sound design without manual recording.",
     source: "https://fal.ai/models/cassetteai/sound-effects-generator",
     price: 5,
     icons: ["bi-soundwave"],
@@ -394,18 +391,341 @@ const modelData = {
       outputType: "Ambient / FX",
     },
   },
-  "multilingual-audio": {
-    name: "Multilingual TTS",
+  // New models from modelAllData
+  "black-forest-labs-flux-schnell": {
+    name: "FLUX.1 [schnell]",
+    type: "Text-to-Image",
+    description:
+      "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1-4 steps — optimized for both personal and commercial use.",
+    source: "https://fal.ai/models/fal-ai/flux/schnell",
+    price: 4,
+    icons: ["bi-lightning-fill"],
+    performance: {
+      latency: "100ms",
+      resolution: "1024x1024",
+      generationQuality: "Fast Generation",
+    },
+  },
+  "black-forest-labs-flux-1-dev": {
+    name: "FLUX.1 [dev]",
+    type: "Text-to-Image",
+    description:
+      "12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
+    source: "https://fal.ai/models/fal-ai/flux/dev",
+    price: 5,
+    icons: ["bi-lightning-fill"],
+    performance: {
+      latency: "150ms",
+      resolution: "1024x1024",
+      generationQuality: "High",
+    },
+  },
+  "black-forest-labs-flux-pro": {
+    name: "FLUX.pro",
+    type: "Text-to-Image",
+    description:
+      "Black Forest Labs' first flagship model based on Flux latent rectified flow transformers.",
+    source: "https://bfl.ai/models/flux-pro",
+    price: 6,
+    icons: ["bi-lightning-fill"],
+    performance: {
+      latency: "180ms",
+      resolution: "1024x1024",
+      generationQuality: "High",
+    },
+  },
+  "black-forest-labs-flux-kontext-pro": {
+    name: "FLUX.kontext.pro",
+    type: "Text-to-Image",
+    description:
+      "Black Forest Labs' state-of-the-art image editing model with natural language control and precise transformations.",
+    source: "https://bfl.ai/models/flux-kontext",
+    price: 6,
+    icons: ["bi-pencil"],
+    performance: {
+      latency: "200ms",
+      resolution: "1024x1024",
+      generationQuality: "Editing",
+    },
+  },
+  "black-forest-labs-flux-kontext-max": {
+    name: "FLUX.kontext.max",
+    type: "Text-to-Image",
+    description:
+      "Black Forest Labs' premium image editing model with enhanced natural language control and improved typography generation.",
+    source: "https://replicate.com/black-forest-labs/flux-kontext-max",
+    price: 8,
+    icons: ["bi-pencil"],
+    performance: {
+      latency: "220ms",
+      resolution: "1024x1024",
+      generationQuality: "Advanced Editing",
+    },
+  },
+  "black-forest-labs-flux-1.1-pro-ultra": {
+    name: "FLUX 1.1 Pro Ultra",
+    type: "Text-to-Image",
+    description:
+      "FLUX 1.1 Pro in Ultra and Raw modes for high-resolution (up to 4MP) image generation with enhanced realism.",
+    source: "https://replicate.com/black-forest-labs/flux-1.1-pro-ultra",
+    price: 10,
+    icons: ["bi-lightning-fill"],
+    performance: {
+      latency: "250ms",
+      resolution: "2048x2048",
+      generationQuality: "Ultra High",
+    },
+  },
+  "bytedance-sdxl-lightning-4step": {
+    name: "SDXL-Lightning (4-Step)",
+    type: "Text-to-Image",
+    description:
+      "SDXL-Lightning by ByteDance: a fast text-to-image model generating high-quality images in just 4 steps.",
+    source: "https://replicate.com/bytedance/sdxl-lightning-4step",
+    price: 3,
+    icons: ["bi-lightning"],
+    performance: {
+      latency: "80ms",
+      resolution: "1024x1024",
+      generationQuality: "Fast Generation",
+    },
+  },
+  "stabilityai-sd3-5": {
+    name: "SD 3.5",
+    type: "Text-to-Image",
+    description:
+      "At 8 billion parameters, with superior quality and prompt adherence, this base model is the most powerful in the Stable Diffusion family.",
+    source: "https://deepinfra.com/stabilityai/sd3.5",
+    price: 5,
+    icons: ["bi-image"],
+    performance: {
+      latency: "200ms",
+      resolution: "1024x1024",
+      generationQuality: "High",
+    },
+  },
+  "stabilityai-sd3-5-medium": {
+    name: "SD 3.5 Medium",
+    type: "Text-to-Image",
+    description:
+      "2.5 billion parameter MMDiT-X model for efficient, high-quality image generation on consumer hardware.",
+    source: "https://deepinfra.com/stabilityai/sd3.5-medium",
+    price: 4,
+    icons: ["bi-image"],
+    performance: {
+      latency: "150ms",
+      resolution: "1024x1024",
+      generationQuality: "Medium",
+    },
+  },
+  "stabilityai-sdxl-turbo": {
+    name: "SDXL Turbo",
+    type: "Text-to-Image",
+    description:
+      "Optimized and accelerated version of SDXL 1.0 using Adversarial Diffusion Distillation (ADD).",
+    source: "https://stability.ai/news/stability-ai-sdxl-turbo",
+    price: 3,
+    icons: ["bi-lightning"],
+    performance: {
+      latency: "100ms",
+      resolution: "1024x1024",
+      generationQuality: "Fast Generation",
+    },
+  },
+  "wan-ai-wan21-t2v-14b": {
+    name: "Wan-AI T2V 14B",
+    type: "Text-to-Video",
+    description:
+      "A high-capacity, state-of-the-art text-to-video model that generates visually rich 480P and 720P videos with 14B parameters.",
+    source: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-14B",
+    price: 12,
+    icons: ["bi-film"],
+    performance: {
+      latency: "700ms",
+      resolution: "720p",
+      generationQuality: "High",
+    },
+  },
+  "wavespeedai-wan21-t2v-720p": {
+    name: "WaveSpeedAI Wan 2.1-T2V-720P",
+    type: "Text-to-Video",
+    description:
+      "Accelerated text-to-video model for generating high-resolution 720P videos using the Wan 2.1 14B architecture.",
+    source: "https://replicate.com/wavespeedai/wan-2.1-t2v-720p",
+    price: 12,
+    icons: ["bi-film"],
+    performance: {
+      latency: "700ms",
+      resolution: "720p",
+      generationQuality: "High",
+    },
+  },
+  "wavespeedai-wan21-t2v-480p": {
+    name: "WaveSpeedAI Wan 2.1-T2V-480P",
+    type: "Text-to-Video",
+    description:
+      "Accelerated text-to-video model for generating high-quality 480P videos using the Wan 2.1 14B architecture.",
+    source: "https://replicate.com/wavespeedai/wan-2.1-t2v-480p",
+    price: 10,
+    icons: ["bi-film"],
+    performance: {
+      latency: "600ms",
+      resolution: "480p",
+      generationQuality: "Medium",
+    },
+  },
+  "google-veo-3": {
+    name: "Google Veo 3",
+    type: "Text-to-Video",
+    description:
+      "Veo 3 generates high-fidelity videos with sound and cinematic realism. Advanced control over motion, camera, and audio make it perfect for storytelling.",
+    source: "https://deepmind.google/technologies/veo/",
+    price: 15,
+    icons: ["bi-camera-reels"],
+    performance: {
+      latency: "800ms",
+      resolution: "1080p",
+      generationQuality: "Cinematic",
+    },
+  },
+  "minimax-video-01": {
+    name: "MiniMax Video 01",
+    type: "Text-to-Video",
+    description:
+      "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
+    source: "https://replicate.com/minimax/video-01",
+    price: 8,
+    icons: ["bi-film"],
+    performance: {
+      latency: "650ms",
+      resolution: "720p",
+      generationQuality: "Medium",
+    },
+  },
+  "hunyuan-video": {
+    name: "Hunyuan Video",
+    type: "Text-to-Video",
+    description:
+      "Generate high-quality videos with realistic motion from text descriptions using Tencent's state-of-the-art Hunyuan Video model.",
+    source: "https://replicate.com/tencent/hunyuan-video",
+    price: 10,
+    icons: ["bi-film"],
+    performance: {
+      latency: "750ms",
+      resolution: "1080p",
+      generationQuality: "High",
+    },
+  },
+  "pika-text-to-video-v2-2": {
+    name: "Pika V2.2",
+    type: "Text-to-Video",
+    description:
+      "Create cinematic, high-quality videos from text prompts with Pika's updated v2.2 model – enhanced for storytelling and visual content creation.",
+    source: "https://fal.ai/models/fal-ai/pika/v2.2/text-to-video",
+    price: 12,
+    icons: ["bi-film"],
+    performance: {
+      latency: "850ms",
+      resolution: "1080p",
+      generationQuality: "High",
+    },
+  },
+  "pixverse-v4.5": {
+    name: "PixVerse V4.5",
+    type: "Text-to-Video",
+    description:
+      "Quickly make 5s or 8s videos at 540p, 720p or 1080p using PixVerse v4.5 with enhanced motion and prompt coherence.",
+    source: "https://fal.ai/models/fal-ai/pixverse/v4.5/text-to-video",
+    price: 11,
+    icons: ["bi-film"],
+    performance: {
+      latency: "750ms",
+      resolution: "1080p",
+      generationQuality: "High",
+    },
+  },
+  "cartesia-sonic-2": {
+    name: "Cartesia Sonic 2",
     type: "Text-to-Audio",
     description:
-      "Multilingual TTS by ElevenLabs (via FAL AI) offers high-quality voice synthesis in multiple languages. It supports natural, expressive speech generation with a variety of voice profiles suitable for narration, accessibility, and content localization. Ideal for developers and creators working with global audiences.",
-    source: "https://fal.ai/models/fal-ai/elevenlabs/tts/multilingual-v2",
-    price: 4,
-    icons: ["bi-translate"],
+      "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
+    source: "https://www.together.ai/models/cartesia-sonic",
+    price: 5,
+    icons: ["bi-soundwave"],
     performance: {
-      latency: "120ms",
-      audioQuality: "Natural",
-      outputType: "Multilingual Voice",
+      latency: "200ms",
+      audioQuality: "High",
+      outputType: "General Audio",
+    },
+  },
+  "fal-ai-elevenlabs-sound-effects": {
+    name: "ElevenLabs Sound Effects",
+    type: "Text-to-Audio",
+    description:
+      "Generate sound effects using ElevenLabs' advanced sound effects model.",
+    source: "https://fal.ai/models/fal-ai/elevenlabs/sound-effects",
+    price: 4,
+    icons: ["bi-soundwave"],
+    performance: {
+      latency: "250ms",
+      audioQuality: "High",
+      outputType: "Sound Effects",
+    },
+  },
+  "fal-ai-ace-step-lyrics-to-audio": {
+    name: "ACE-Step Lyrics-to-Audio",
+    type: "Text-to-Audio",
+    description:
+      "Generate full musical tracks from lyrics using ACE-Step, blending singing and music based on text input.",
+    source: "https://fal.ai/models/fal-ai/ace-step",
+    price: 7,
+    icons: ["bi-music-note"],
+    performance: {
+      latency: "400ms",
+      audioQuality: "High",
+      outputType: "Music with Lyrics",
+    },
+  },
+  "fal-ai-ace-step-prompt-to-audio": {
+    name: "ACE-Step Prompt-to-Audio",
+    type: "Text-to-Audio",
+    description:
+      "Generate instrumental music from descriptive text using ACE-Step's prompt-based audio synthesis.",
+    source: "https://fal.ai/models/fal-ai/ace-step/prompt-to-audio",
+    price: 6,
+    icons: ["bi-music-note"],
+    performance: {
+      latency: "350ms",
+      audioQuality: "High",
+      outputType: "Instrumental Music",
+    },
+  },
+  "hidream-i1-full": {
+    name: "HiDream I1 Full",
+    type: "Text-to-Image",
+    description:
+      "HiDream I1 Full is a high-performance open-source image generation model with 17B parameters, delivering state-of-the-art visuals in seconds.",
+    source: "https://fal.ai/models/fal-ai/hidream-i1-full",
+    price: 7,
+    icons: ["bi-image"],
+    performance: {
+      latency: "220ms",
+      resolution: "1024x1024",
+      generationQuality: "High",
+    },
+  },
+  "hidream-i1-fast": {
+    name: "HiDream I1 Fast",
+    type: "Text-to-Image",
+    description:
+      "HiDream I1 Fast is an open-source, high-speed image generation model with 17B parameters – optimized for rapid inference in just 16 steps.",
+    source: "https://fal.ai/models/fal-ai/hidream-i1-fast",
+    price: 5,
+    icons: ["bi-lightning"],
+    performance: {
+      latency: "150ms",
+      resolution: "1024x1024",
+      generationQuality: "Fast Generation",
     },
   },
 };

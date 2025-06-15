@@ -437,16 +437,18 @@ const audioModelOptions = {
 };
 
 const audioModelCredits = {
-  "stackadoc-stable-audio": 2, // replicate: 1, fal: 2 → use 2
-  "cassetteai-sfx-generator": 1,
-  "cassattemusic-audio": 2,
-  "multilingual-audio": 9,
-  "american-audio": 2,
-  "cartesia-sonic-2": 7,
-  "fal-ai-kokoro-hindi": 5,
-  "fal-ai-lyria2": 5,
-  "fal-ai-elevenlabs-sound-effects": 5,
-  "fal-ai-mmaudio-v2-text-to-audio": 5,
+  "stackadoc-stable-audio": 2, // fal: 2 (highest)
+  "cartesia-sonic-2": 7, // together: 7
+  "cassetteai-sfx-generator": 1, // fal: 1
+  "cassattemusic-audio": 2, // fal: 2
+  "multilingual-audio": 9, // fal: 9
+  "american-audio": 2, // fal: 2
+  "fal-ai-kokoro-hindi": 5, // fal: 5
+  "fal-ai-lyria2": 5, // fal: 5
+  "fal-ai-elevenlabs-sound-effects": 5, // fal: 5
+  "fal-ai-mmaudio-v2-text-to-audio": 5, // fal: 5
+  "fal-ai-ace-step-lyrics-to-audio": 60, // fal: 60
+  "fal-ai-ace-step-prompt-to-audio": 3, // fal: 3
 };
 
 let selectedAudioModels = [];

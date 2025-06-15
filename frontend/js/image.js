@@ -1621,26 +1621,28 @@ const imageModelOptions = {
 };
 
 const imageModelCredits = {
-  "black-forest-labs-flux-1-1-pro": 5,
-  "black-forest-labs-flux-schnell": 7,
-  "black-forest-labs-flux-1-dev": 4,
-  "black-forest-labs-flux-pro": 5,
-  "recraft-v3": 4,
-  "bytedance-sdxl-lightning-4step": 7,
-  "stabilityai-sd3-5": 4,
-  "black-forest-labs-flux-kontext-pro": 5,
-  "black-forest-labs-flux-kontext-max": 5,
-  "black-forest-labs-flux-1.1-pro-ultra": 7,
-  fooocus: 3,
-  "hidream-i1-dev": 4,
-  "ideogram-v3": 7,
-  bagel: 10,
-  "imagen4-preview": 12,
-  "f-lite-standard": 12,
-  "sana-v1.5-4.8b": 12,
-  "minimax-image-01": 12,
-  "stabilityai-sd3-5-medium": 4,
-  "stabilityai-sdxl-turbo": 4,
+  "black-forest-labs-flux-1-1-pro": 5, // fal: 5
+  "black-forest-labs-flux-schnell": 7, // fal: 7
+  "black-forest-labs-flux-1-dev": 4, // together: 4
+  "black-forest-labs-flux-pro": 5, // base64: 4 (but you had 5 in your example)
+  "black-forest-labs-flux-kontext-pro": 4, // replicate: 4
+  "black-forest-labs-flux-kontext-max": 7, // replicate: 7
+  "black-forest-labs-flux-1.1-pro-ultra": 7, // replicate: 7
+  "bytedance-sdxl-lightning-4step": 7, // replicate: 7
+  "stabilityai-sd3-5": 4, // base64: 4
+  "stabilityai-sd3-5-medium": 4, // base64: 4
+  "stabilityai-sdxl-turbo": 4, // base64: 4
+  "recraft-v3": 4, // fal: 4
+  fooocus: 3, // fal: 3
+  "hidream-i1-dev": 4, // fal: 4
+  "hidream-i1-full": 6, // fal: 6
+  "hidream-i1-fast": 6, // fal: 6
+  "ideogram-v3": 7, // fal: 7
+  bagel: 10, // fal: 10
+  "imagen4-preview": 12, // fal: 12
+  "f-lite-standard": 12, // fal: 12
+  "sana-v1.5-4.8b": 12, // fal: 12
+  "minimax-image-01": 12, // fal: 12
 };
 
 let selectedModels = [];
@@ -1673,7 +1675,7 @@ function populateModelCheckboxes() {
     col.className = "col";
 
     const card = document.createElement("div");
-    card.className = "model-card";
+    card.className = "model-card ";
     card.setAttribute("data-id", modelId);
 
     const checkbox = document.createElement("input");

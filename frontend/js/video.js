@@ -128,23 +128,24 @@ const modelOptions = {
 };
 
 const videoModelCredits = {
-  "wan-ai-wan21-t2v-13b": 18,
-  "wan-ai-wan21-t2v-14b": 10,
-  "lightricks-ltx-video": 60,
-  "wavespeedai-wan21-t2v-480p": 20,
-  "wavespeedai-wan21-t2v-720p": 22,
-  "pixverse-v4": 15,
-  "pixverse-v4.5": 15,
-  "pika-text-to-video-v2-1": 40,
-  "luma-ray2-flash": 25,
-  "kling-video-v2-master": 20,
-  "minimax-video-01": 50,
-  "hunyuan-video": 50,
-  "vidu-q1": 18,
-  magi: 22,
-  veo2: 18,
-  "google-veo-3": 50,
-  "cogvideox-5b": 25,
+  "wan-ai-wan21-t2v-13b": 18, // fal: 18
+  "wan-ai-wan21-t2v-14b": 10, // deepinfra: 10
+  "wavespeedai-wan21-t2v-720p": 22, // Not in handlers, using your value
+  "wavespeedai-wan21-t2v-480p": 12, // replicate: 12
+  "lightricks-ltx-video": 60, // replicate: 60
+  "google-veo-3": 50, // fal: 50
+  "minimax-video-01": 50, // replicate: 50
+  "hunyuan-video": 50, // replicate: 50
+  "pixverse-v4": 15, // fal: 15 (your value)
+  "pixverse-v4.5": 15, // fal: 15
+  "pika-text-to-video-v2-1": 40, // fal: 40
+  "pika-text-to-video-v2-2": 45, // fal: 45
+  "luma-ray2-flash": 25, // fal: 25
+  "kling-video-v2-master": 20, // fal: 20
+  "vidu-q1": 18, // fal: 18
+  magi: 22, // fal: 22
+  veo2: 18, // fal: 18
+  "cogvideox-5b": 25, // fal: 25
 };
 
 let selectedModels = [];

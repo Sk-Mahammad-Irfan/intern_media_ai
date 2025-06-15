@@ -665,65 +665,592 @@ const allmodels = {
   ],
 };
 
+const videoGenerationHandlers = [
+  {
+    model: "wan-ai-wan21-t2v-13b",
+    type: "fal",
+    credits: 18,
+  },
+  {
+    model: "wan-ai-wan21-t2v-13b",
+    type: "replicate",
+    credits: 17,
+  },
+  {
+    model: "wan-ai-wan21-t2v-13b",
+    type: "deepinfra",
+    credits: 10,
+  },
+  {
+    model: "wan-ai-wan21-t2v-14b",
+    type: "deepinfra",
+    credits: 10,
+  },
+  {
+    model: "wavespeedai-wan21-t2v-720p",
+    type: "replicate",
+    credits: 10,
+  },
+  {
+    model: "wavespeedai-wan21-t2v-480p",
+    type: "replicate",
+    credits: 12,
+  },
+  {
+    model: "lightricks-ltx-video",
+    type: "replicate",
+    credits: 60,
+  },
+  {
+    model: "google-veo-3",
+    type: "replicate",
+    credits: 45,
+  },
+  {
+    model: "google-veo-3",
+    type: "fal",
+    credits: 50,
+  },
+  {
+    model: "minimax-video-01",
+    type: "replicate",
+    credits: 50,
+  },
+  {
+    model: "minimax-video-01",
+    type: "fal",
+    credits: 45,
+  },
+  {
+    model: "hunyuan-video",
+    type: "fal",
+    credits: 45,
+  },
+  {
+    model: "hunyuan-video",
+    type: "replicate",
+    credits: 50,
+  },
+  {
+    model: "pixverse-v4",
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "pixverse-v4.5",
+    type: "replicate",
+    credits: 14,
+  },
+  {
+    model: "pixverse-v4.5",
+    type: "fal",
+    credits: 15,
+  },
+  {
+    model: "pika-text-to-video-v2-1",
+    type: "fal",
+    credits: 40,
+  },
+  {
+    model: "pika-text-to-video-v2-2",
+    type: "fal",
+    credits: 45,
+  },
+  {
+    model: "luma-ray2-flash",
+    type: "fal",
+    credits: 25,
+  },
+  {
+    model: "kling-video-v2-master",
+    type: "fal",
+    credits: 20,
+  },
+  {
+    model: "vidu-q1",
+    type: "fal",
+    credits: 18,
+  },
+  {
+    model: "magi",
+    type: "fal",
+    credits: 22,
+  },
+  {
+    model: "veo2",
+    type: "fal",
+    credits: 18,
+  },
+  {
+    model: "cogvideox-5b",
+    type: "fal",
+    credits: 25,
+  },
+];
+
+const imageGenerationHandlers = [
+  {
+    model: "black-forest-labs-flux-1-1-pro",
+    type: "fal",
+    credits: 5,
+  },
+  {
+    model: "black-forest-labs-flux-schnell",
+    type: "replicate",
+    credits: 5,
+  },
+  {
+    model: "black-forest-labs-flux-schnell",
+    type: "fal",
+    credits: 7,
+  },
+  {
+    model: "black-forest-labs-flux-schnell",
+    type: "together",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-1-dev",
+    type: "together",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-1-1-pro",
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-pro",
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-kontext-pro",
+    type: "replicate",
+    credits: 4,
+  },
+  {
+    model: "black-forest-labs-flux-kontext-max",
+    type: "replicate",
+    credits: 7,
+  },
+  {
+    model: "black-forest-labs-flux-1.1-pro-ultra",
+    type: "replicate",
+    credits: 7,
+  },
+  {
+    model: "bytedance-sdxl-lightning-4step",
+    type: "replicate",
+    credits: 7,
+  },
+  {
+    model: "stabilityai-sd3-5",
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "stabilityai-sd3-5-medium",
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "stabilityai-sdxl-turbo",
+    type: "base64",
+    credits: 4,
+  },
+  {
+    model: "recraft-v3",
+    type: "fal",
+    credits: 4,
+  },
+  {
+    model: "recraft-v3",
+    type: "replicate",
+    credits: 2,
+  },
+  {
+    model: "fooocus",
+    type: "fal",
+    credits: 3,
+  },
+  {
+    model: "hidream-i1-dev",
+    type: "fal",
+    credits: 4,
+  },
+  {
+    model: "hidream-i1-full",
+    type: "fal",
+    credits: 6,
+  },
+  {
+    model: "hidream-i1-fast",
+    type: "fal",
+    credits: 6,
+  },
+  {
+    model: "ideogram-v3",
+    type: "fal",
+    credits: 7,
+  },
+  {
+    model: "bagel",
+    type: "fal",
+    credits: 10,
+  },
+  {
+    model: "imagen4-preview",
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "f-lite-standard",
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "sana-v1.5-4.8b",
+    type: "fal",
+    credits: 12,
+  },
+  {
+    model: "minimax-image-01",
+    type: "fal",
+    credits: 12,
+  },
+];
+const audioGenerationHandlers = [
+  {
+    model: "stackadoc-stable-audio", // Matches your modelData key
+    credits: 1,
+    type: "replicate",
+  },
+  {
+    model: "stackadoc-stable-audio",
+    credits: 2,
+    type: "fal",
+  },
+  {
+    model: "cartesia-sonic-2",
+    credits: 7,
+    type: "together",
+  },
+  {
+    model: "cassetteai-sfx-generator",
+    credits: 1,
+    type: "fal",
+  },
+  {
+    model: "cassattemusic-audio",
+    credits: 2,
+    type: "fal",
+  },
+  {
+    model: "multilingual-audio",
+    credits: 9,
+    type: "fal",
+  },
+  {
+    model: "american-audio",
+    credits: 2,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-kokoro-hindi",
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-lyria2",
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-elevenlabs-sound-effects",
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-mmaudio-v2-text-to-audio",
+    credits: 5,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-ace-step-lyrics-to-audio",
+    credits: 60,
+    type: "fal",
+  },
+  {
+    model: "fal-ai-ace-step-prompt-to-audio",
+    credits: 3,
+    type: "fal",
+  },
+];
+
+function addPricesToModels() {
+  // Create a map of all handlers with their maximum prices
+  const priceMap = {};
+
+  // Process all handler arrays
+  [
+    audioGenerationHandlers,
+    imageGenerationHandlers,
+    videoGenerationHandlers,
+  ].forEach((handlers) => {
+    handlers.forEach((handler) => {
+      if (
+        !priceMap[handler.model] ||
+        handler.credits > priceMap[handler.model]
+      ) {
+        priceMap[handler.model] = handler.credits;
+      }
+    });
+  });
+
+  // Apply prices to all models
+  Object.keys(allmodels).forEach((category) => {
+    allmodels[category].forEach((model) => {
+      model.price = priceMap[model.id] || 0; // Default to 0 if no price found
+    });
+  });
+}
+
+// Call this function to add prices before rendering
+addPricesToModels();
+
 function renderAllModels() {
   const container = document.querySelector(".main-content");
+  container.innerHTML = ""; // Clear existing content
 
-  Object.entries(allmodels).forEach(([category, modelList]) => {
-    const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+  // Create filter controls with Bootstrap styling
+  const filterControls = document.createElement("div");
+  filterControls.className = "filter-controls mb-4 p-3 bg-light rounded";
+  filterControls.innerHTML = `
+    <div class="container-fluid px-0">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="model-search" class="form-label fw-bold">Search Models</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input 
+              type="text" 
+              id="model-search" 
+              class="form-control" 
+              placeholder="Search by name, description or tags..."
+            >
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label for="category-filter" class="form-label fw-bold">Category</label>
+          <select id="category-filter" class="form-select">
+            <option value="all">All Categories</option>
+            <option value="image">Image Models</option>
+            <option value="video">Video Models</option>
+            <option value="audio">Audio Models</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="sort-by" class="form-label fw-bold">Sort By</label>
+          <select id="sort-by" class="form-select">
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="price-asc">Price (Low to High)</option>
+            <option value="price-desc">Price (High to Low)</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button id="reset-filters" class="btn btn-outline-secondary w-100">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(filterControls);
 
-    const section = document.createElement("section");
-    section.className = "model-section";
-    section.innerHTML = `
-          <h4 class="section-title">
-            <i class="fa-solid fa-${getCategoryIcon(category)}"></i>
-            <span>${categoryTitle} Models</span>
-          </h4>
-          <div class="model-grid" id="${category}-models"></div>
-          <hr class="model-divider">
-        `;
+  // Models container
+  const modelsContainer = document.createElement("div");
+  modelsContainer.id = "models-container";
+  container.appendChild(modelsContainer);
 
-    container.appendChild(section);
+  // Create a pop up for mobile search and filters
 
-    const grid = document.getElementById(`${category}-models`);
-    modelList.forEach((model) => {
-      const card = document.createElement("div");
-      card.className = "model-card";
-      card.dataset.id = model.id;
-      card.innerHTML = `
-            <div class="model-header">
-              <h5 class="model-name">${model.name}</h5>
-              <div class="model-icons">&nbsp;
-                <i class="bi bi-${model.icon} text-${model.iconColor}"></i>
-                <i class="bi bi-box-arrow-up-right text-secondary"></i>
-              </div>
-            </div>
-            <p class="model-description">${model.description}</p>
-            <div class="model-footer">
-              <span class="model-source">Source: <a href="${
-                model.sourceUrl
-              }" target="_blank">${model.source}</a></span>
-              <div class="model-tags">
-                &nbsp;${model.tags
-                  .map((tag) => `<span class="model-tag">${tag}</span>`)
-                  .join("")}
-              </div>
-            </div>
-          `;
+  // Toggle search and filters on mobile
+  const mobileSearchToggle = document.createElement("button");
+  mobileSearchToggle.className = "btn btn-secondary d-md-none";
+  mobileSearchToggle.innerHTML = `<i class="bi bi-search"></i> Search and Filter`;
+  mobileSearchToggle.addEventListener("click", () => {
+    mobileSearchFilters.classList.toggle("d-none");
+  });
+  container.appendChild(mobileSearchToggle);
 
-      card.addEventListener("click", () => {
-        window.location.href = `model-details.html?id=${model.id}`;
+  function filterAndRenderModels() {
+    const searchTerm = document
+      .getElementById("model-search")
+      .value.toLowerCase();
+    const categoryFilter = document.getElementById("category-filter").value;
+    const sortBy = document.getElementById("sort-by").value;
+
+    modelsContainer.innerHTML = "";
+
+    const filteredCategories = {};
+
+    Object.entries(allmodels).forEach(([category, modelList]) => {
+      if (categoryFilter !== "all" && category !== categoryFilter) return;
+
+      const filteredModels = modelList.filter((model) => {
+        const matchesSearch =
+          model.name.toLowerCase().includes(searchTerm) ||
+          model.description.toLowerCase().includes(searchTerm) ||
+          model.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
+
+        return matchesSearch;
       });
 
-      grid.appendChild(card);
+      if (filteredModels.length > 0) {
+        filteredModels.sort((a, b) => {
+          switch (sortBy) {
+            case "name-asc":
+              return a.name.localeCompare(b.name);
+            case "name-desc":
+              return b.name.localeCompare(a.name);
+            case "price-asc":
+              return a.price - b.price;
+            case "price-desc":
+              return b.price - a.price;
+            default:
+              return 0;
+          }
+        });
+
+        filteredCategories[category] = filteredModels;
+      }
     });
+
+    // Render filtered and sorted models
+    Object.entries(filteredCategories).forEach(([category, modelList]) => {
+      const categoryTitle =
+        category.charAt(0).toUpperCase() + category.slice(1);
+      const section = document.createElement("section");
+      section.className = "model-section mb-5";
+      section.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="section-title m-0">
+            <i class="fa-solid fa-${getCategoryIcon(
+              category
+            )} me-2 text-primary"></i>
+            <span>${categoryTitle} Models</span>
+            <span class="badge bg-primary ms-2">${modelList.length}</span>
+          </h4>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="${category}-models"></div>
+        <hr class="my-4">
+      `;
+
+      modelsContainer.appendChild(section);
+
+      const grid = document.getElementById(`${category}-models`);
+      modelList.forEach((model) => {
+        const card = document.createElement("div");
+        card.className = "col";
+        card.innerHTML = `
+          <div class="card h-100 model-card shadow-sm" data-id="${model.id}">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-1">${model.name}</h5>
+                <div class="model-icons">
+                  <i class="bi bi-${model.icon} text-${model.iconColor}"></i>
+                </div>
+              </div>
+              <p class="card-text text-muted small mb-3">${
+                model.description
+              }</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-light text-dark">
+                  <i class="bi bi-coin me-1"></i>
+                  ${model.price} credits
+                </span>
+                <a href="${
+                  model.sourceUrl
+                }" target="_blank" class="text-decoration-none small" onclick="event.stopPropagation()">
+                  <i class="bi bi-box-arrow-up-right"></i> ${model.source}
+                </a>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 pt-0">
+              <div class="model-tags-container">
+                <div class="model-tags flex-wrap">
+                  ${model.tags
+                    .map(
+                      (tag) =>
+                        `<span class="badge bg-secondary me-1 mb-1">${tag}</span>`
+                    )
+                    .join("")}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.querySelector(".model-card").addEventListener("click", () => {
+          window.location.href = `model-details.html?id=${model.id}`;
+        });
+
+        grid.appendChild(card);
+      });
+    });
+
+    // Show message if no models found
+    if (Object.keys(filteredCategories).length === 0) {
+      modelsContainer.innerHTML = `
+        <div class="text-center py-5">
+          <i class="bi bi-search display-5 text-muted mb-3"></i>
+          <h4 class="text-muted">No models found</h4>
+          <p class="text-muted">Try adjusting your search or filters</p>
+          <button id="reset-all-filters" class="btn btn-primary mt-3">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset all filters
+          </button>
+        </div>
+      `;
+
+      document
+        .getElementById("reset-all-filters")
+        .addEventListener("click", () => {
+          document.getElementById("model-search").value = "";
+          document.getElementById("category-filter").value = "all";
+          document.getElementById("sort-by").value = "name-asc";
+          filterAndRenderModels();
+        });
+    }
+  }
+
+  // Initial render
+  filterAndRenderModels();
+
+  // Event listeners for filters
+  document
+    .getElementById("model-search")
+    .addEventListener("input", filterAndRenderModels);
+  document
+    .getElementById("category-filter")
+    .addEventListener("change", filterAndRenderModels);
+  document
+    .getElementById("sort-by")
+    .addEventListener("change", filterAndRenderModels);
+  document.getElementById("reset-filters").addEventListener("click", () => {
+    document.getElementById("model-search").value = "";
+    document.getElementById("category-filter").value = "all";
+    document.getElementById("sort-by").value = "name-asc";
+    filterAndRenderModels();
   });
 }
 
 function getCategoryIcon(category) {
   const icons = {
     image: "images",
-    video: "video",
-    audio: "podcast",
+    video: "film",
+    audio: "music-note-beamed",
   };
   return icons[category] || "box";
 }
