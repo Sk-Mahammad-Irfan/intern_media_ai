@@ -29,7 +29,7 @@ const models = {
     title: "MiniMax Video 01",
     description:
       "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
-    link: "https://minimax.com/models/video-01/text-to-video",
+    link: "https://replicate.com/minimax/video-01",
     fullDetails:
       "MiniMax Video 01 transforms text prompts into vivid and coherent video sequences. Designed for efficiency and flexibility, it supports a variety of use cases including storytelling, content ideation, and visual experimentation.",
     chatPage: "videomodel.html",
@@ -41,7 +41,7 @@ const models = {
     title: "Hunyuan Video",
     description:
       "Generate high-quality videos with realistic motion from text descriptions using Tencent’s state-of-the-art Hunyuan Video model.",
-    link: "https://open.tencent.com/hunyuan-video",
+    link: "https://replicate.com/tencent/hunyuan-video",
     fullDetails:
       "Hunyuan Video is a cutting-edge text-to-video model developed by Tencent. It creates highly realistic, coherent, and detailed videos directly from natural language prompts. Ideal for content creation, advertising, simulation, and storytelling.",
     chatPage: "videomodel.html",
@@ -101,7 +101,7 @@ const models = {
     title: "Black Forest Labs: FLUX.1 [schnell]",
     description:
       "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1–4 steps — optimized for both personal and commercial use.",
-    link: "https://deepinfra.com/black-forest-labs/flux-schnell",
+    link: "https://fal.ai/models/fal-ai/flux/schnell",
     fullDetails:
       "Black Forest Labs’ FLUX.1 [schnell] model delivers fast and efficient image generation via a 12-billion parameter flow transformer, balancing speed and output quality across 1–4 inference steps. Perfect for creators seeking top-tier results with minimal latency.",
     chatPage: "imagemodel.html",
@@ -112,7 +112,7 @@ const models = {
     title: "Black Forest Labs: FLUX.1 [dev]",
     description:
       "12 billion parameter rectified flow transformer capable of generating images from text descriptions.",
-    link: "https://deepinfra.com/black-forest-labs/FLUX-1-dev",
+    link: "https://fal.ai/models/fal-ai/flux/dev",
     fullDetails:
       "FLUX.1 [dev] is a 12 billion parameter rectified flow transformer model designed for high-quality, prompt-faithful text-to-image synthesis. It excels in generating diverse, detailed images across a range of styles, purely from textual descriptions without requiring input images.",
     chatPage: "imagemodel.html",
@@ -124,7 +124,7 @@ const models = {
     title: "Black Forest Labs: FLUX.pro",
     description:
       "Black Forest Labs' first flagship model based on Flux latent rectified flow transformers.",
-    link: "https://deepinfra.com/black-forest-labs/FLUX-pro",
+    link: "https://bfl.ai/models/flux-pro",
     fullDetails:
       "FLUX.pro is Black Forest Labs' flagship model featuring a powerful rectified flow transformer architecture optimized for photorealism, creative coherence, and precision in text-to-image synthesis. It builds on the FLUX family to deliver higher fidelity and semantic alignment in image generation.",
     chatPage: "imagemodel.html",
@@ -136,7 +136,7 @@ const models = {
     title: "Black Forest Labs: FLUX.kontext.pro",
     description:
       "Black Forest Labs' state-of-the-art image editing model with natural language control and precise transformations.",
-    link: "https://deepinfra.com/black-forest-labs/FLUX-kontext-pro",
+    link: "https://bfl.ai/models/flux-kontext",
     fullDetails:
       "FLUX.kontext.pro is a next-generation image editing model by Black Forest Labs, built on the FLUX latent rectified flow transformer architecture. It enables natural language-based transformations of existing images with exceptional prompt adherence, consistency, and high visual fidelity. Ideal for tasks such as style alteration, object modification, or semantic refinement using intuitive text prompts.",
     chatPage: "imagemodel.html",
@@ -148,7 +148,7 @@ const models = {
     title: "Black Forest Labs: FLUX.kontext.max",
     description:
       "Black Forest Labs' premium image editing model with enhanced natural language control and improved typography generation.",
-    link: "https://deepinfra.com/black-forest-labs/FLUX-kontext-max",
+    link: "https://replicate.com/black-forest-labs/flux-kontext-max",
     fullDetails:
       "FLUX.kontext.max is a premium, high-performance image editing model by Black Forest Labs, designed to offer enhanced natural language-based transformations with improved typography generation. Built on an evolved FLUX transformer framework, it delivers top-tier prompt fidelity, semantic precision, and aesthetic refinement. Ideal for tasks involving advanced object editing, style modification, or layout-sensitive transformations via intuitive text prompts.",
     chatPage: "imagemodel.html",
@@ -160,7 +160,7 @@ const models = {
     title: "Black Forest Labs: FLUX 1.1 Pro Ultra",
     description:
       "FLUX 1.1 Pro in Ultra and Raw modes for high-resolution (up to 4MP) image generation with enhanced realism.",
-    link: "https://deepinfra.com/black-forest-labs/flux-1.1-pro-ultra",
+    link: "https://replicate.com/black-forest-labs/flux-1.1-pro-ultra",
     fullDetails:
       "FLUX 1.1 Pro Ultra is a high-resolution image generation model from Black Forest Labs. Supporting both 'Ultra' and 'Raw' modes, it allows generation of images up to 4 megapixels with impressive clarity and detail. Raw mode prioritizes photorealism, while Ultra mode boosts visual fidelity for creative tasks. Ideal for detailed compositions, realism-based edits, and fine-grain prompt adherence.",
     chatPage: "imagemodel.html",
@@ -172,7 +172,7 @@ const models = {
     title: "ByteDance: SDXL-Lightning (4-Step)",
     description:
       "SDXL-Lightning by ByteDance: a fast text-to-image model generating high-quality images in just 4 steps.",
-    link: "https://deepinfra.com/bytedance/sdxl-lightning-4step",
+    link: "https://replicate.com/bytedance/sdxl-lightning-4step",
     fullDetails:
       "SDXL-Lightning (4-Step) is a lightning-fast diffusion model developed by ByteDance, built on the Stable Diffusion XL architecture. It generates high-quality images in only four inference steps, making it ideal for real-time generation, prototyping, and creative workflows that require speed without compromising visual fidelity.",
     chatPage: "imagemodel.html",
@@ -185,7 +185,7 @@ const models = {
     title: "Stability AI: SD 3.5",
     description:
       "At 8 billion parameters, with superior quality and prompt adherence, this base model is the most powerful in the Stable Diffusion family.",
-    link: "https://stability.ai/blog/stable-diffusion-3-5",
+    link: "https://deepinfra.com/stabilityai/sd3.5",
     fullDetails:
       "SD 3.5 is Stability AI’s 8 billion parameter base model offering unmatched quality, coherence, and faithfulness to prompts. It excels at detailed text-to-image synthesis, ideal for professional and production-grade generation tasks at 1 megapixel resolution.",
     chatPage: "imagemodel.html",
@@ -197,7 +197,7 @@ const models = {
     title: "Stability AI: SD 3.5 Medium",
     description:
       "At 2.5 billion parameters, with improved MMDiT-X architecture and training methods, this model is designed to run “out of the box” on consumer hardware, striking a balance between quality and ease of customization.",
-    link: "https://stability.ai/blog/stable-diffusion-3-5",
+    link: "https://deepinfra.com/stabilityai/sd3.5-medium",
     fullDetails:
       "SD 3.5 Medium is a 2.5B parameter model based on the improved MMDiT-X architecture. Designed for efficient performance and customization, it runs well on consumer hardware while generating high-quality images up to 2 megapixels. Ideal for lightweight yet capable applications.",
     chatPage: "imagemodel.html",
@@ -221,7 +221,7 @@ const models = {
     title: "Recraft V3: Text-to-Image",
     description:
       "Recraft V3 is a state-of-the-art text-to-image model capable of generating long texts, vector art, images in brand styles, and much more.",
-    link: "https://huggingface.co",
+    link: "https://replicate.com/recraft-ai/recraft-v3",
     fullDetails:
       "Recraft V3 offers unparalleled quality in text-to-image generation, excelling in creating detailed visuals across various styles and artistic outputs.",
     chatPage: "imagemodel.html",
@@ -233,7 +233,7 @@ const models = {
     title: "Fooocus: Base Model",
     description:
       "Fooocus is a powerful text-to-image model offering base parameters with automated optimizations and quality improvements for rapid and high-quality image generation.",
-    link: "https://fal.ai",
+    link: "https://fal.ai/models/fal-ai/fooocus",
     fullDetails:
       "Fooocus provides an optimized framework for rapid image generation, ensuring high visual quality with automated enhancements.",
     chatPage: "imagemodel.html",
@@ -246,7 +246,7 @@ const models = {
     title: "Wan-AI: Wan2.1-T2V-1.3B",
     description:
       "A lightweight and efficient text-to-video model that delivers high-quality 480P video generation despite its compact 1.3B parameter size.",
-    link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
+    link: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B",
     fullDetails:
       "Wan2.1-T2V-1.3B is designed for fast, resource-efficient text-to-video synthesis.",
     chatPage: "videomodel.html",
@@ -257,7 +257,7 @@ const models = {
     title: "Wan-AI: Wan2.1-T2V-14B",
     description:
       "A high-capacity and advanced text-to-video model generating high-quality 480P and 720P videos from complex prompts.",
-    link: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
+    link: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-14B",
     fullDetails:
       "Wan2.1-T2V-14B is designed for visually rich, detailed, and expressive text-to-video synthesis from high-complexity prompts.",
     chatPage: "videomodel.html",
@@ -268,7 +268,7 @@ const models = {
     title: "WaveSpeedAI: Wan 2.1-T2V-720P",
     description:
       "A high-resolution, accelerated text-to-video model built on Wan 2.1 with 14B parameters for expressive and complex video synthesis.",
-    link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-720p",
+    link: "https://replicate.com/wavespeedai/wan-2.1-t2v-720p",
     fullDetails:
       "WaveSpeedAI’s Wan 2.1-T2V-720P delivers fast and detailed video generation in 720P resolution. As part of an open, next-generation suite of video foundation models, it excels in translating intricate prompts into rich, coherent video outputs.",
     chatPage: "videomodel.html",
@@ -279,7 +279,7 @@ const models = {
     title: "WaveSpeedAI: Wan 2.1-T2V-480P",
     description:
       "A 480P text-to-video model built for fast and detailed video generation using the Wan 2.1 14B architecture.",
-    link: "https://huggingface.co/wavespeedai/wan-2.1-t2v-480p",
+    link: "https://replicate.com/wavespeedai/wan-2.1-t2v-480p",
     fullDetails:
       "Part of WaveSpeedAI's open suite of video foundation models, Wan 2.1-T2V-480P offers accelerated inference and high-quality video output from complex text prompts, making it ideal for creative and research workflows.",
     chatPage: "videomodel.html",
@@ -301,7 +301,7 @@ const models = {
     title: "Lightricks: LTX-Video",
     description:
       "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
-    link: "https://huggingface.co/lightricks/ltx-video",
+    link: "https://replicate.com/lightricks/ltx-video",
     fullDetails:
       "Developed by Lightricks, LTX-Video leverages DiT to deliver ultra-fast, high-resolution video generation.",
     chatPage: "videomodel.html",
@@ -313,7 +313,7 @@ const models = {
     title: "PixVerse: Text-to-Video v4",
     description:
       "Generate high-quality video clips from text and image prompts using PixVerse v4.",
-    link: "https://huggingface.co/pixverse/v4/text-to-video",
+    link: "https://fal.ai/models/fal-ai/pixverse/v4/text-to-video",
     fullDetails:
       "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation.",
     chatPage: "videomodel.html",
@@ -324,7 +324,7 @@ const models = {
     title: "PixVerse: Text-to-Video v4.5",
     description:
       "Create 5s or 8s video clips with better motion and prompt accuracy using PixVerse v4.5.",
-    link: "https://huggingface.co/pixverse/v4.5/text-to-video",
+    link: "https://fal.ai/models/fal-ai/pixverse/v4.5/text-to-video",
     fullDetails:
       "PixVerse v4.5 supports fast 5-8 second video generation at various resolutions with enhanced motion fidelity and complex action handling.",
     chatPage: "videomodel.html",
@@ -337,7 +337,7 @@ const models = {
     title: "Stable Audio Open 1.0",
     description:
       "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
-    link: "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
+    link: "https://fal.ai/models/fal-ai/stable-audio",
     fullDetails:
       "Stable Audio Open 1.0 is designed for generating short-form audio like sound effects and musical elements.",
     chatPage: "audiomodel.html",
@@ -371,7 +371,7 @@ const models = {
     title: "Cartesia Sonic 2",
     description:
       "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
-    link: "https://cartesia.ai/models/sonic-2/text-to-audio",
+    link: "https://www.together.ai/models/cartesia-sonic",
     fullDetails:
       "Cartesia Sonic 2 transforms text prompts into vivid and coherent audio clips. Designed for efficiency and expressiveness, it supports a variety of use cases including storytelling, ambient sound design, music ideation, and audio branding.",
     chatPage: "audiomodel.html",
@@ -443,7 +443,7 @@ const models = {
     title: "Lyria 2 by Google DeepMind",
     description:
       "Advanced AI model for generating a wide range of music genres using natural language prompts.",
-    link: "https://huggingface.co/fal-ai/lyria2",
+    link: "https://fal.ai/models/fal-ai/lyria2",
     fullDetails:
       "Lyria 2 is Google DeepMind’s latest music generation model, offering high-fidelity, versatile musical compositions with natural instrument simulation and multi-track support. Ideal for artists, developers, and creatives seeking AI-generated music.",
     chatPage: "audiomodel.html",
@@ -455,7 +455,7 @@ const models = {
     title: "Kokoro Hindi TTS",
     description:
       "A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.",
-    link: "https://huggingface.co/fal-ai/kokoro/hindi",
+    link: "https://fal.ai/models/fal-ai/kokoro/hindi",
     fullDetails:
       "Kokoro Hindi is an advanced TTS model from fal.ai designed to deliver expressive and natural-sounding Hindi speech. Optimized for clarity, prosody, and speed, it's ideal for voice apps, narration, and accessibility tools.",
     chatPage: "audiomodel.html",
@@ -467,7 +467,7 @@ const models = {
     title: "ElevenLabs Sound Effects",
     description:
       "Generate sound effects using ElevenLabs' advanced sound effects model.",
-    link: "https://huggingface.co/fal-ai/elevenlabs/sound-effects",
+    link: "https://fal.ai/models/fal-ai/elevenlabs/sound-effects",
     fullDetails:
       "This sound effects generator from ElevenLabs enables high-quality, AI-generated audio snippets across a variety of themes and use cases. Perfect for games, films, and multimedia projects needing immersive sound design.",
     chatPage: "audiomodel.html",
@@ -479,7 +479,7 @@ const models = {
     title: "MMAudio V2 Text-to-Audio",
     description:
       "MMAudio generates synchronized audio from text inputs, creating sounds directly from descriptive prompts.",
-    link: "https://huggingface.co/fal-ai/mmaudio-v2/text-to-audio",
+    link: "https://fal.ai/models/fal-ai/mmaudio-v2/text-to-audio",
     fullDetails:
       "MMAudio V2 is a powerful text-to-audio generation model capable of producing synchronized, realistic audio clips from natural language prompts. Ideal for sound design, multimedia content, and accessibility solutions.",
     chatPage: "audiomodel.html",
@@ -491,7 +491,7 @@ const models = {
     title: "ACE-Step Lyrics-to-Audio",
     description:
       "Generate full music with vocals from lyrics using ACE-Step's text-to-audio capabilities.",
-    link: "https://huggingface.co/fal-ai/ace-step",
+    link: "https://fal.ai/models/fal-ai/ace-step",
     fullDetails:
       "ACE-Step is a cutting-edge model that generates complete musical pieces including vocals and instrumentation directly from written lyrics and genre/style prompts.",
     chatPage: "audiomodel.html",
@@ -503,7 +503,7 @@ const models = {
     title: "ACE-Step Prompt-to-Audio",
     description:
       "Generate instrumental audio tracks from descriptive text prompts using ACE-Step.",
-    link: "https://huggingface.co/fal-ai/ace-step",
+    link: "https://fal.ai/models/fal-ai/ace-step/prompt-to-audio",
     fullDetails:
       "ACE-Step Prompt-to-Audio generates rich, genre-aware instrumental music from plain text prompts. It simplifies music creation for sound designers, content creators, and app developers.",
     chatPage: "audiomodel.html",

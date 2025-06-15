@@ -22,7 +22,7 @@ const allmodels = {
       description:
         "FLUX.1 [schnell] is a 12B-parameter flow transformer for rapid, high-quality text-to-image generation in just 1–4 steps — optimized for both personal and commercial use.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/flux-schnell",
+      sourceUrl: "https://fal.ai/models/fal-ai/flux/schnell",
       tags: ["fast", "high-quality", "efficient"],
     },
 
@@ -35,7 +35,7 @@ const allmodels = {
       description:
         "12B parameter transformer for prompt-driven high-quality image generation.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-1-dev",
+      sourceUrl: "https://fal.ai/models/fal-ai/flux/dev",
       tags: ["text-to-image", "high-quality", "experimental"],
     },
     {
@@ -47,7 +47,7 @@ const allmodels = {
       description:
         "Flagship latent flow transformer for photorealistic text-to-image synthesis.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-pro",
+      sourceUrl: "https://bfl.ai/models/flux-pro",
       tags: ["text-to-image", "flagship", "high-quality"],
     },
     {
@@ -59,7 +59,7 @@ const allmodels = {
       description:
         "Text-based image editing using natural language with high consistency and control.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-kontext-pro",
+      sourceUrl: "https://bfl.ai/models/flux-kontext",
       tags: [
         "image-editing",
         "text-to-image",
@@ -76,7 +76,7 @@ const allmodels = {
       description:
         "Premium text-based image editing with enhanced prompt fidelity and improved typography generation.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/FLUX-kontext-max",
+      sourceUrl: "https://replicate.com/black-forest-labs/flux-kontext-max",
       tags: [
         "image-editing",
         "text-to-image",
@@ -94,7 +94,7 @@ const allmodels = {
       description:
         "High-resolution image generation (up to 4MP) with realism-focused 'raw' mode and visually enhanced 'ultra' mode.",
       source: "blackforestlabs.ai",
-      sourceUrl: "https://deepinfra.com/black-forest-labs/flux-1.1-pro-ultra",
+      sourceUrl: "https://replicate.com/black-forest-labs/flux-1.1-pro-ultra",
       tags: [
         "image-generation",
         "high-resolution",
@@ -113,7 +113,7 @@ const allmodels = {
       description:
         "Fast and high-quality text-to-image generation using SDXL-Lightning in just four steps.",
       source: "bytedance.com",
-      sourceUrl: "https://deepinfra.com/bytedance/sdxl-lightning-4step",
+      sourceUrl: "https://replicate.com/bytedance/sdxl-lightning-4step",
       tags: [
         "text-to-image",
         "lightning",
@@ -132,7 +132,7 @@ const allmodels = {
       description:
         "8B parameter base model for photorealistic text-to-image generation.",
       source: "stability.ai",
-      sourceUrl: "https://stability.ai/blog/stable-diffusion-3-5",
+      sourceUrl: "https://deepinfra.com/stabilityai/sd3.5",
       tags: ["text-to-image", "stable-diffusion", "professional"],
     },
     {
@@ -144,7 +144,7 @@ const allmodels = {
       description:
         "2.5B parameter MMDiT-X model for lightweight, high-quality text-to-image generation.",
       source: "stability.ai",
-      sourceUrl: "https://stability.ai/blog/stable-diffusion-3-5",
+      sourceUrl: "https://deepinfra.com/stabilityai/sd3.5-medium",
       tags: [
         "text-to-image",
         "stable-diffusion",
@@ -173,7 +173,7 @@ const allmodels = {
       description:
         "Recraft V3 is a text-to-image model with the ability to generate long texts, vector art, images in brand style, and much more. It is SOTA in image generation, proven by Hugging Face's industry-leading benchmark.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co",
+      sourceUrl: "https://replicate.com/recraft-ai/recraft-v3",
       tags: ["vector", "brand-style"],
     },
     {
@@ -185,7 +185,7 @@ const allmodels = {
       description:
         "Fooocus is a text-to-image model offering base parameters with automated optimizations and quality improvements, providing a solid foundation for various creative outputs.",
       source: "FAL AI",
-      sourceUrl: "https://fal.ai",
+      sourceUrl: "https://fal.ai/models/fal-ai/fooocus",
       tags: ["base-model", "optimized"],
     },
     {
@@ -307,7 +307,7 @@ const allmodels = {
       description:
         "The Wan2.1 1.3B model is a lightweight, efficient text-to-video generator. Despite its compact size, it delivers impressive performance across benchmarks and generates high-quality 480P videos.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
+      sourceUrl: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-1.3B",
       tags: ["lightweight", "480p"],
     },
     {
@@ -319,7 +319,7 @@ const allmodels = {
       description:
         "The Wan2.1 14B model is a powerful text-to-video generator that produces high-quality 480P and 720P videos. Designed for complex prompts and detailed scene synthesis.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/Wan-AI/Wan2.1-T2V-14B",
+      sourceUrl: "https://deepinfra.com/Wan-AI/Wan2.1-T2V-14B",
       tags: ["high-capacity", "480p", "720p", "detailed"],
     },
     {
@@ -331,7 +331,7 @@ const allmodels = {
       description:
         "High-performance 720P video generation with accelerated inference, built on the 14B Wan 2.1 architecture. Ideal for complex prompts and detailed scene creation.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/wavespeedai/wan-2.1-t2v-720p",
+      sourceUrl: "https://replicate.com/wavespeedai/wan-2.1-t2v-720p",
       tags: ["accelerated", "720p", "high-resolution", "open-model"],
     },
 
@@ -344,7 +344,7 @@ const allmodels = {
       description:
         "Accelerated 480P video generation with the Wan 2.1 14B model. Optimized for fast, detailed, and expressive video synthesis from complex prompts.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/wavespeedai/wan-2.1-t2v-480p",
+      sourceUrl: "https://replicate.com/wavespeedai/wan-2.1-t2v-480p",
       tags: ["accelerated", "480p", "high-capacity", "open-model"],
     },
     {
@@ -356,7 +356,7 @@ const allmodels = {
       description:
         "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/pixverse/v4/text-to-video",
+      sourceUrl: "https://fal.ai/models/fal-ai/pixverse/v4/text-to-video",
       tags: ["high-quality", "advanced"],
     },
     {
@@ -368,7 +368,7 @@ const allmodels = {
       description:
         "Quickly make 5s or 8s videos at 540p, 720p or 1080p. Enhanced motion and better handling of complex prompts.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/pixverse/v4.5/text-to-video",
+      sourceUrl: "https://fal.ai/models/fal-ai/pixverse/v4.5/text-to-video",
       tags: ["fast-generation", "enhanced-motion", "short-form"],
     },
     {
@@ -380,7 +380,7 @@ const allmodels = {
       description:
         "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
       source: "huggingface.co",
-      sourceUrl: "https://huggingface.co/lightricks/ltx-video",
+      sourceUrl: "https://replicate.com/lightricks/ltx-video",
       tags: ["real-time", "DiT"],
     },
     {
@@ -453,7 +453,7 @@ const allmodels = {
       description:
         "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
       source: "MiniMax",
-      sourceUrl: "https://minimax.com/models/video-01/text-to-video",
+      sourceUrl: "https://replicate.com/minimax/video-01",
       tags: ["fast", "creative"],
     },
     {
@@ -465,7 +465,7 @@ const allmodels = {
       description:
         "Generate high-quality videos with realistic motion from text using Tencent’s Hunyuan Video.",
       source: "Tencent",
-      sourceUrl: "https://open.tencent.com/hunyuan-video",
+      sourceUrl: "https://replicate.com/tencent/hunyuan-video",
       tags: ["realistic", "high-fidelity", "tencent"],
     },
     {
@@ -527,8 +527,7 @@ const allmodels = {
       description:
         "An open-source model for generating short audio samples, sound effects, and production elements using text prompts.",
       source: "Hugging Face",
-      sourceUrl:
-        "https://huggingface.co/spaces/stackadoc/stable-audio-open-1.0",
+      sourceUrl: "https://fal.ai/models/fal-ai/stable-audio",
       tags: ["open-source", "sound-effects"],
     },
     {
@@ -540,7 +539,7 @@ const allmodels = {
       description:
         "Google's latest state-of-the-art music generation model capable of producing diverse, high-quality music tracks from text prompts.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/lyria2",
+      sourceUrl: "https://fal.ai/models/fal-ai/lyria2",
       tags: ["music", "high-quality"],
     },
     {
@@ -552,7 +551,7 @@ const allmodels = {
       description:
         "A fast and expressive Hindi text-to-speech model with clear pronunciation and accurate intonation.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/kokoro/hindi",
+      sourceUrl: "https://fal.ai/models/fal-ai/kokoro/hindi",
       tags: ["hindi", "tts"],
     },
     {
@@ -564,7 +563,7 @@ const allmodels = {
       description:
         "Generate audio from your prompts using Cartesia Sonic 2 – fast and creative text-to-audio generation with high sound fidelity.",
       source: "Cartesia",
-      sourceUrl: "https://cartesia.ai/models/sonic-2/text-to-audio",
+      sourceUrl: "https://www.together.ai/models/cartesia-sonic",
       tags: ["fast", "creative"],
     },
     {
@@ -576,7 +575,7 @@ const allmodels = {
       description:
         "Generate sound effects using ElevenLabs' advanced sound effects model.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/elevenlabs/sound-effects",
+      sourceUrl: "https://fal.ai/models/fal-ai/elevenlabs/sound-effects",
       tags: ["sound-effects", "elevenlabs"],
     },
     {
@@ -588,7 +587,7 @@ const allmodels = {
       description:
         "MMAudio generates synchronized audio from text prompts, enabling realistic sound creation based on descriptions.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/mmaudio-v2/text-to-audio",
+      sourceUrl: "https://fal.ai/models/fal-ai/mmaudio-v2/text-to-audio",
       tags: ["synchronized", "realistic"],
     },
     {
@@ -600,7 +599,7 @@ const allmodels = {
       description:
         "Generate singing and music from lyrics using ACE-Step, combining voice and instrumental generation from text.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/ace-step",
+      sourceUrl: "https://fal.ai/models/fal-ai/ace-step",
       tags: ["music", "lyrics", "singing", "text-to-audio"],
     },
     {
@@ -612,7 +611,7 @@ const allmodels = {
       description:
         "Generate instrumental music from descriptive prompts using ACE-Step's text-to-audio engine.",
       source: "Hugging Face",
-      sourceUrl: "https://huggingface.co/fal-ai/ace-step",
+      sourceUrl: "https://fal.ai/models/fal-ai/ace-step/prompt-to-audio",
       tags: ["music", "instrumental", "text-to-audio", "generative"],
     },
     {
