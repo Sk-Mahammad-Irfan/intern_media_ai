@@ -13,7 +13,6 @@ export const aceStepService = async (prompt, duration, step) => {
     const result = await fal.subscribe("fal-ai/ace-step", {
       input: {
         lyrics: prompt,
-        duration,
         tags: "lofi, hiphop, drum and bass, trap, chill",
         number_of_steps: step,
       },
@@ -26,8 +25,13 @@ export const aceStepService = async (prompt, duration, step) => {
         }
       },
     });
-    const audioUrl = result.data.audio_file.url || result?.data?.audio?.url;
-    if (!audioUrl) throw new Error("FAL did not return a valid audio URL");
+    console.log(result.data);
+    const audioUrl = result.data.audio?.url;
+    if (!audioUrl)
+      throw new Error(
+        "FAL did not return a valid audio URL: " +
+          JSON.stringify(result.data, null, 2)
+      );
     return audioUrl;
   } catch (error) {
     console.error("Error generating audio with aceStepService:", error);

@@ -31,7 +31,6 @@ export const generateAudioAceStepPrompt = async (body) => {
       input: {
         prompt,
         instrumental,
-        duration,
         number_of_steps,
         seed,
         scheduler,

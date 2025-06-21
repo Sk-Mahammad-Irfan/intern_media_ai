@@ -6,6 +6,7 @@ import { checkCredits, decreaseCredits } from "./creditController.js";
 import { videoGenerationHandlers } from "../handlers/videohandlers.js";
 import { imageGenerationHandlers } from "../handlers/imagehandlers.js";
 import { audioGenerationHandlers } from "../handlers/audiohandlers.js";
+import { generateAudioAceStepPrompt } from "../providers/audio/aceStepPromptProvider.js";
 
 dotenv.config();
 
@@ -191,7 +192,7 @@ export const generateAudio = async (req, res) => {
       if (id === "multilingual-audio") {
         audioUrl = await handler(prompt);
       } else if (id === "fal-ai-ace-step-prompt-to-audio") {
-        const result = await generateAudioAceStepPrompt(body);
+        const result = await generateAudioAceStepPrompt(req.body);
         audioUrl = result.audioUrl;
         lyrics = result.lyrics;
       } else {
