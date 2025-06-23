@@ -4,8 +4,7 @@ import {
   generateAudio,
   generateImage,
   generateVideo,
-} from "../controller/adapterController.js";
-import { requireSignIn } from "../middlewares/authMiddleware.js";
+} from "../controller/adapter.js";
 
 router.post("/generate-video/:id", generateVideo);
 router.post("/generate-image/:id", generateImage);

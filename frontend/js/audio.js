@@ -1,457 +1,37 @@
-const audioModelOptions = {
-  "stackadoc-stable-audio": {
-    providers: ["auto", "fal", "replicate"],
-    // Default custom inputs (used when provider is 'auto')
-    custom_inputs: [
-      {
-        id: "steps",
-        type: "number",
-        label: "Steps",
-        default: 100,
-        description:
-          "The number of steps to denoise the audio for. Default value: 100",
-      },
-    ],
-    // Provider-specific custom inputs
-    provider_custom_inputs: {
-      fal: [
-        {
-          id: "steps",
-          type: "number",
-          label: "Steps",
-          default: 100,
-          description:
-            "The number of steps to denoise the audio for. Default value: 100",
-        },
-      ],
-      replicate: [
-        {
-          id: "seed",
-          type: "number",
-          label: "Seed",
-          default: -1,
-        },
-        {
-          id: "steps",
-          type: "number",
-          label: "Steps",
-          default: 100,
-        },
-        {
-          id: "cfg_scale",
-          type: "number",
-          label: "CFG Scale",
-          default: 6,
-        },
-        {
-          id: "sigma_max",
-          type: "number",
-          label: "Sigma Max",
-          default: 500,
-        },
-        {
-          id: "sigma_min",
-          type: "number",
-          label: "Sigma Min",
-          default: 0.03,
-        },
-        {
-          id: "batch_size",
-          type: "number",
-          label: "Batch Size",
-          default: 1,
-        },
-        {
-          id: "sampler_type",
-          type: "select",
-          label: "Sampler Type",
-          default: "dpmpp-3m-sde",
-          options: [
-            "dpmpp-3m-sde",
-            "euler",
-            "heun",
-            "lms",
-            "dpm2",
-            "dpm2-a",
-            "dpm++-2m",
-            "dpm++-2m-sde",
-          ],
-        },
-        {
-          id: "seconds_start",
-          type: "number",
-          label: "Seconds Start",
-          default: 0,
-        },
-        {
-          id: "seconds_total",
-          type: "number",
-          label: "Seconds Total",
-          default: 8,
-        },
-        {
-          id: "negative_prompt",
-          type: "text",
-          label: "Negative Prompt",
-          default: "",
-        },
-        {
-          id: "init_noise_level",
-          type: "number",
-          label: "Init Noise Level",
-          default: 1,
-        },
-      ],
-    },
-  },
-  "cassetteai-sfx-generator": {
-    providers: ["auto", "fal"],
-    custom_inputs: [],
-  },
-  "cassattemusic-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [],
-  },
-  "multilingual-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [
-      {
-        id: "steps",
-        type: "number",
-        label: "Steps",
-        default: 100,
-      },
-      {
-        id: "language",
-        type: "select",
-        label: "Language",
-        options: ["en", "es", "fr", "de", "ja"],
-        default: "en",
-      },
-    ],
-  },
-  "american-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [
-      {
-        id: "voice",
-        type: "select",
-        label: "Voice",
-        options: ["af_heart"],
-        default: "af_heart",
-      },
-      {
-        id: "speed",
-        type: "number",
-        label: "Speed",
-        default: 1.0,
-        min: 0.5,
-        max: 2,
-      },
-    ],
-  },
-  "fal-ai-lyria2": {
-    providers: ["auto", "fal"],
-    custom_inputs: [],
-  },
-  "fal-ai-kokoro-hindi": {
-    providers: ["auto", "fal"],
-    custom_inputs: [],
-  },
-  "fal-ai-elevenlabs-sound-effects": {
-    providers: ["auto", "fal"],
-    custom_inputs: [],
-  },
-  "fal-ai-mmaudio-v2-text-to-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [
-      {
-        id: "negative_prompt",
-        type: "text",
-        label: "Negative Prompt",
-        default: "",
-      },
-      {
-        id: "seed",
-        type: "number",
-        label: "Seed",
-        placeholder: "Leave empty for random",
-      },
-      {
-        id: "num_steps",
-        type: "number",
-        label: "Steps",
-        default: 25,
-      },
-      {
-        id: "cfg_strength",
-        type: "number",
-        label: "CFG Strength",
-        default: 4.5,
-        step: 0.1,
-      },
-      {
-        id: "mask_away_clip",
-        type: "boolean",
-        label: "Mask Away Clip",
-        default: false,
-      },
-    ],
-  },
-  "fal-ai-ace-step-lyrics-to-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [
-      {
-        id: "tags",
-        type: "text",
-        label: "Tags",
-        placeholder: "Comma-separated list of genre tags",
-      },
-      {
-        id: "number_of_steps",
-        type: "number",
-        label: "Number of Steps",
-        default: 27,
-      },
-      {
-        id: "seed",
-        type: "number",
-        label: "Seed",
-        placeholder: "Leave empty for random",
-      },
-      {
-        id: "scheduler",
-        type: "select",
-        label: "Scheduler",
-        options: ["euler", "heun"],
-        default: "euler",
-      },
-      {
-        id: "guidance_type",
-        type: "select",
-        label: "Guidance Type",
-        options: ["cfg", "apg", "cfg_star"],
-        default: "apg",
-      },
-      {
-        id: "granularity_scale",
-        type: "number",
-        label: "Granularity Scale",
-        default: 10,
-      },
-      {
-        id: "guidance_interval",
-        type: "number",
-        label: "Guidance Interval",
-        default: 0.5,
-        step: 0.1,
-      },
-      {
-        id: "guidance_interval_decay",
-        type: "number",
-        label: "Guidance Interval Decay",
-        default: 0.0,
-        step: 0.1,
-      },
-      {
-        id: "guidance_scale",
-        type: "number",
-        label: "Guidance Scale",
-        default: 15,
-        step: 1,
-      },
-      {
-        id: "minimum_guidance_scale",
-        type: "number",
-        label: "Minimum Guidance Scale",
-        default: 3,
-        step: 1,
-      },
-      {
-        id: "tag_guidance_scale",
-        type: "number",
-        label: "Tag Guidance Scale",
-        default: 5,
-        step: 1,
-      },
-      {
-        id: "lyric_guidance_scale",
-        type: "number",
-        label: "Lyric Guidance Scale",
-        default: 1.5,
-        step: 0.1,
-      },
-    ],
-  },
-  "fal-ai-ace-step-prompt-to-audio": {
-    providers: ["auto", "fal"],
-    custom_inputs: [
-      {
-        id: "number_of_steps",
-        type: "number",
-        label: "Number of steps",
-        default: 27,
-        description: "Number of steps to generate the audio. Default value: 27",
-      },
-      {
-        id: "seed",
-        type: "number",
-        label: "Seed",
-        placeholder: "Leave empty for random",
-        description:
-          "Random seed for reproducibility. If not provided, a random seed will be used.",
-      },
-      {
-        id: "scheduler",
-        type: "select",
-        label: "Scheduler",
-        options: ["euler", "heun"],
-        default: "euler",
-        description:
-          "Scheduler to use for the generation process. Default value: 'euler'",
-      },
-      {
-        id: "guidance_type",
-        type: "select",
-        label: "Guidance Type",
-        options: ["cfg", "apg", "cfg_star"],
-        default: "apg",
-        description:
-          "Type of CFG to use for the generation process. Default value: 'apg'",
-      },
-      {
-        id: "granularity_scale",
-        type: "number",
-        label: "Granularity Scale",
-        default: 10,
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts. Default value: 10",
-      },
-      {
-        id: "guidance_interval",
-        type: "number",
-        label: "Guidance Interval",
-        default: 0.5,
-        step: 0.1,
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps) Default value: 0.5",
-      },
-      {
-        id: "guidance_interval_decay",
-        type: "number",
-        label: "Guidance Interval Decay",
-        default: 0.0,
-        step: 0.1,
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      },
-      {
-        id: "guidance_scale",
-        type: "number",
-        label: "Guidance Scale",
-        default: 15,
-        step: 1,
-        description: "Guidance scale for the generation. Default value: 15",
-      },
-      {
-        id: "minimum_guidance_scale",
-        type: "number",
-        label: "Minimum Guidance Scale",
-        default: 3,
-        step: 1,
-        description:
-          "Minimum guidance scale for the generation after the decay. Default value: 3",
-      },
-      {
-        id: "tag_guidance_scale",
-        type: "number",
-        label: "Tag Guidance Scale",
-        default: 5,
-        step: 1,
-        description: "Tag guidance scale for the generation. Default value: 5",
-      },
-      {
-        id: "lyric_guidance_scale",
-        type: "number",
-        label: "Lyric Guidance Scale",
-        default: 1.5,
-        step: 0.1,
-        description:
-          "Lyric guidance scale for the generation. Default value: 1.5",
-      },
-    ],
-  },
-  "cartesia-sonic-2": {
-    providers: ["auto", "together"],
-    custom_inputs: [
-      {
-        id: "voice",
-        type: "select",
-        label: "Voice",
-        help: "Choose the desired voice for the generated audio",
-        default: "sweet lady",
-        options: [
-          "sweet lady",
-          "friendly sidekick",
-          "french narrator lady",
-          "german reporter woman",
-          "indian lady",
-          "british reading lady",
-          "british narration lady",
-          "hindi calm man",
-          "hindi narrator man",
-          "polish narrator man",
-          "polish young man",
-          "alabama male",
-          "australian male",
-          "anime girl",
-          "japanese man book",
-        ],
-      },
-      {
-        id: "sample_rate",
-        type: "select",
-        label: "Sample Rate",
-        help: "Select the sample rate for output audio",
-        default: 44100,
-        options: [16000, 24000, 44100, 48000],
-      },
-      {
-        id: "response_format",
-        type: "select",
-        label: "Response Format",
-        help: "Choose the audio file format for the result",
-        default: "wav",
-        options: ["wav", "mp3"],
-      },
-      {
-        id: "language",
-        type: "select",
-        label: "Language",
-        help: "Select the language for speech synthesis",
-        default: "en",
-        options: ["en", "hi"],
-      },
-    ],
-  },
-};
-
-const audioModelCredits = {
-  "stackadoc-stable-audio": 2, // fal: 2 (highest)
-  "cartesia-sonic-2": 7, // together: 7
-  "cassetteai-sfx-generator": 1, // fal: 1
-  "cassattemusic-audio": 2, // fal: 2
-  "multilingual-audio": 9, // fal: 9
-  "american-audio": 2, // fal: 2
-  "fal-ai-kokoro-hindi": 5, // fal: 5
-  "fal-ai-lyria2": 5, // fal: 5
-  "fal-ai-elevenlabs-sound-effects": 5, // fal: 5
-  "fal-ai-mmaudio-v2-text-to-audio": 5, // fal: 5
-  "fal-ai-ace-step-lyrics-to-audio": 60, // fal: 60
-  "fal-ai-ace-step-prompt-to-audio": 3, // fal: 3
-};
-
 let selectedAudioModels = [];
+let audioModelOptions = {}; // This will be populated from the backend
+let audioModelCredits = {}; // This will store credit costs per model
+
+// Fetch audio model options from backend
+async function fetchAudioModelOptions() {
+  try {
+    const response = await fetch("http://localhost:5000/api/model/audio");
+    const models = await response.json();
+
+    // Transform the backend data into the format expected by the frontend
+    models.forEach((model) => {
+      audioModelOptions[model.modelId] = {
+        name: model.name,
+        providers: model.provider,
+        custom_inputs: model.custom_inputs || [],
+        provider_custom_inputs: {}, // Can be populated if needed
+        description: model.description,
+        tags: model.tags || [],
+      };
+
+      // Create credits mapping (assuming credits array matches provider order)
+      model.provider.forEach((provider, index) => {
+        audioModelCredits[`${model.modelId}-${provider}`] =
+          model.credits[index] || 0;
+      });
+    });
+
+    return audioModelOptions;
+  } catch (error) {
+    console.error("Failed to fetch audio model options:", error);
+    return {};
+  }
+}
 
 function prettifyModelName(modelId) {
   return modelId
@@ -468,7 +48,12 @@ function updateTotalCredits() {
   let totalCredits = 0;
 
   selectedAudioModels.forEach((model) => {
-    totalCredits += audioModelCredits[model] || 0;
+    const config = audioModelOptions[model];
+    if (config) {
+      config.providers.forEach((provider) => {
+        totalCredits += audioModelCredits[`${model}-${provider}`] || 0;
+      });
+    }
   });
 
   creditAmountElement.textContent = totalCredits;
@@ -476,9 +61,14 @@ function updateTotalCredits() {
     selectedAudioModels.length > 0 ? "block" : "none";
 }
 
-function populateModelCheckboxes() {
+async function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
+
+  // Ensure model options are loaded
+  if (Object.keys(audioModelOptions).length === 0) {
+    await fetchAudioModelOptions();
+  }
 
   Object.keys(audioModelOptions).forEach((modelId) => {
     const col = document.createElement("div");
@@ -498,7 +88,8 @@ function populateModelCheckboxes() {
     const label = document.createElement("label");
     label.className = "model-label";
     label.htmlFor = `model-${modelId}`;
-    label.textContent = prettifyModelName(modelId);
+    label.textContent =
+      audioModelOptions[modelId].name || prettifyModelName(modelId);
 
     card.appendChild(checkbox);
     card.appendChild(label);
@@ -512,12 +103,6 @@ function populateModelCheckboxes() {
     container.appendChild(col);
   });
 }
-
-/**
- * Updates the list of selected audio models based on the checked checkboxes
- * in the modelCheckboxes container. Calls updateTotalCredits to refresh the
- * total credits display according to the selected models.
- */
 
 function updateSelectedModels() {
   selectedAudioModels = [];
@@ -556,6 +141,7 @@ function toggleAudioMultiModelMode() {
     if (modelId) populateAudioModelOptions(modelId);
   }
 }
+
 function copyToClipboard(icon) {
   const messageText = icon.previousElementSibling.innerText.trim();
   navigator.clipboard
@@ -684,7 +270,12 @@ function displayCustomInputs(modelId, containerId) {
   });
 }
 
-function populateAudioModelOptions(modelId) {
+async function populateAudioModelOptions(modelId) {
+  // Ensure model options are loaded
+  if (Object.keys(audioModelOptions).length === 0) {
+    await fetchAudioModelOptions();
+  }
+
   const config = audioModelOptions[modelId];
   if (!config) return;
 
@@ -717,11 +308,109 @@ function populateAudioModelOptions(modelId) {
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM fully loaded and parsed");
-
+// Initialize the application
+window.addEventListener("DOMContentLoaded", async () => {
+  // Initialize DOM elements
   const chat = document.getElementById("chat");
+  const providerSelect = document.getElementById("providerSelect");
 
+  // Fetch audio model options first
+  await fetchAudioModelOptions();
+
+  const params = new URLSearchParams(window.location.search);
+  const prompt = params.get("prompt");
+  const modelId = params.get("id");
+
+  // Initialize multi-model mode
+  document
+    .getElementById("multiModelModeToggle")
+    .addEventListener("change", toggleAudioMultiModelMode);
+  document.getElementById("multiModelModeToggle").checked = false;
+  toggleAudioMultiModelMode();
+
+  if (modelId) {
+    await populateAudioModelOptions(modelId);
+    displayCustomInputs(modelId, "inputsContainer");
+  }
+
+  if (prompt) {
+    const input = document.getElementById("promptInput");
+    if (input) {
+      input.value = decodeURIComponent(prompt);
+      generateAudio();
+    }
+  }
+
+  // Populate model checkboxes
+  await populateModelCheckboxes();
+
+  // Show/hide extra options based on initial provider selection
+  const selected = providerSelect?.value || "auto";
+  const falOptions = document.getElementById("inputsContainer");
+  const outputSettingsContainer = document.getElementById(
+    "outputSettingsContainer"
+  );
+  const stepsInputAuto = document.getElementById("stepsInputAuto");
+
+  if (
+    selected === "fal" ||
+    selected === "replicate" ||
+    selected === "together"
+  ) {
+    if (falOptions) falOptions.style.display = "block";
+    if (outputSettingsContainer)
+      outputSettingsContainer.style.display = "block";
+    if (stepsInputAuto) stepsInputAuto.style.display = "none";
+  } else {
+    if (falOptions) falOptions.style.display = "none";
+    if (outputSettingsContainer)
+      outputSettingsContainer.style.display = "block";
+  }
+
+  // Provider change handler
+  if (providerSelect) {
+    providerSelect.addEventListener("change", () => {
+      const selected = providerSelect.value;
+      const modelId = params.get("id");
+      const customInputsContainer = document.getElementById("inputsContainer");
+      const stepsInputAuto = document.getElementById("stepsInputAuto");
+
+      if (modelId) {
+        displayCustomInputs(modelId, "inputsContainer");
+      }
+
+      if (
+        selected === "fal" ||
+        selected === "replicate" ||
+        selected === "together"
+      ) {
+        if (customInputsContainer)
+          customInputsContainer.style.display = "block";
+        if (stepsInputAuto) stepsInputAuto.style.display = "none";
+      } else {
+        if (customInputsContainer) customInputsContainer.style.display = "none";
+        if (stepsInputAuto) stepsInputAuto.style.display = "block";
+      }
+    });
+  }
+
+  // Apply options button handler
+  document
+    .getElementById("applyOptionsBtn")
+    .addEventListener("click", async () => {
+      const modalElement = document.getElementById("modelOptionsModal");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+
+      // Manually remove backdrop just in case
+      document
+        .querySelectorAll(".modal-backdrop")
+        .forEach((backdrop) => backdrop.remove());
+      document.body.classList.remove("modal-open");
+      document.body.style = ""; // clear
+    });
+
+  // Chat message functions
   function appendUserMessage(prompt) {
     const userWrapper = document.createElement("div");
     userWrapper.className =
@@ -737,7 +426,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function appendGeneratingMessage() {
-    const chat = document.getElementById("chat");
     const wrapper = document.createElement("div");
     wrapper.className = "d-flex justify-content-start mb-3";
 
@@ -750,7 +438,7 @@ window.addEventListener("DOMContentLoaded", () => {
     chat.appendChild(wrapper);
     chat.scrollTop = chat.scrollHeight;
 
-    return inner; // return reference to the specific message
+    return inner;
   }
 
   function replaceWithErrorMessage(el, msg) {
@@ -833,7 +521,6 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!el) return;
 
     try {
-      // Directly inject the audio URL without re-decoding and encoding it
       el.innerHTML = `
         <div class="d-flex flex-column align-items-start w-100" custom-audio-player>
           <div class="mb-2 text-muted small">
@@ -958,7 +645,7 @@ window.addEventListener("DOMContentLoaded", () => {
   async function generateSingleAudio({
     modelId,
     prompt,
-    duration = 10, // Default duration if not provided
+    duration = 10,
     provider = "auto",
     userId,
     isMultiModel,
@@ -977,25 +664,9 @@ window.addEventListener("DOMContentLoaded", () => {
     chat.appendChild(aiDiv);
     chat.scrollTop = chat.scrollHeight;
 
-    const modelMap = {
-      "stackadoc-stable-audio": "stackadoc-stable-audio",
-      "cassetteai-sfx-generator": "cassetteai-sfx-generator",
-      "cassattemusic-audio": "cassattemusic-audio",
-      "multilingual-audio": "multilingual-audio",
-      "american-audio": "american-audio",
-      "fal-ai-kokoro-hindi": "fal-ai-kokoro-hindi",
-      "fal-ai-lyria2": "fal-ai-lyria2",
-      "cartesia-sonic-2": "cartesia-sonic-2",
-      "fal-ai-ace-step-lyrics-to-audio": "fal-ai-ace-step-lyrics-to-audio",
-      "fal-ai-ace-step-prompt-to-audio": "fal-ai-ace-step-prompt-to-audio",
-      "fal-ai-elevenlabs-sound-effects": "fal-ai-elevenlabs-sound-effects",
-      "fal-ai-mmaudio-v2-text-to-audio": "fal-ai-mmaudio-v2-text-to-audio",
-    };
-
-    const backendModelId = modelMap[modelId];
     const modelConfig = audioModelOptions[modelId];
 
-    if (!backendModelId) {
+    if (!modelConfig) {
       const errorDiv = document.getElementById(messageId);
       if (errorDiv) {
         errorDiv.innerHTML = `
@@ -1014,10 +685,7 @@ window.addEventListener("DOMContentLoaded", () => {
       };
 
       let inputsToProcess = [];
-      if (
-        modelId === "stackadoc-stable-audio" &&
-        modelConfig.provider_custom_inputs?.[provider]
-      ) {
+      if (modelConfig.provider_custom_inputs?.[provider]) {
         inputsToProcess = modelConfig.provider_custom_inputs[provider];
       } else if (modelConfig.custom_inputs) {
         inputsToProcess = modelConfig.custom_inputs;
@@ -1047,14 +715,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
       let endpoint;
       if (provider === "auto") {
-        endpoint = `${BACKEND_URL}/api/ai/generate-audio/${backendModelId}`;
+        endpoint = `${BACKEND_URL}/api/ai/generate-audio/${modelId}`;
         const stepsInputAuto = document.getElementById("stepsInputAuto");
         const step = stepsInputAuto ? stepsInputAuto.value.trim() : "";
         const parsedStep =
           step !== "" && !isNaN(step) ? parseInt(step, 10) : undefined;
         requestBody.step = parsedStep;
       } else {
-        endpoint = `${BACKEND_URL}/api/provider/audio/${backendModelId}`;
+        endpoint = `${BACKEND_URL}/api/provider/audio/${modelId}`;
         requestBody.provider = provider;
       }
 
@@ -1132,167 +800,5 @@ window.addEventListener("DOMContentLoaded", () => {
           </div>`;
       }
     }
-  }
-
-  const providerSelect = document.getElementById("providerSelect");
-  if (providerSelect) {
-    providerSelect.addEventListener("change", () => {
-      const selected = providerSelect.value;
-      const modelId = new URLSearchParams(window.location.search).get("id");
-      const customInputsContainer = document.getElementById("inputsContainer");
-      const outputSettingsContainer = document.getElementById(
-        "outputSettingsContainer"
-      );
-      const stepsInputAuto = document.getElementById("stepsInputAuto");
-
-      if (modelId) {
-        displayCustomInputs(modelId, "inputsContainer");
-      }
-
-      if (
-        selected === "fal" ||
-        selected === "replicate" ||
-        selected === "together"
-      ) {
-        customInputsContainer.style.display = "block";
-        outputSettingsContainer.style.display = "block";
-        stepsInputAuto.style.display = "none";
-      } else {
-        customInputsContainer.style.display = "none";
-        outputSettingsContainer.style.display = "block";
-      }
-    });
-
-    providerSelect.value = "auto"; // Default value
-  }
-
-  const modelId = new URLSearchParams(window.location.search).get("id");
-  if (modelId) {
-    populateAudioModelOptions(modelId);
-    displayCustomInputs(modelId, "inputsContainer");
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const roomCreatedAt = params.get("room");
-
-  if (roomCreatedAt) {
-    const date = new Date(roomCreatedAt);
-    const formatted = date.toLocaleString(undefined, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    document.getElementById("roomTitle").textContent = "Room created";
-    document.getElementById("roomTimestamp").textContent = formatted;
-  }
-
-  ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const createdAt = new Date().toISOString();
-        const url = `${window.location.origin}${
-          window.location.pathname
-        }?room=${encodeURIComponent(createdAt)}`;
-        window.open(url, "_blank");
-      });
-    }
-  });
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  // Initialize multi-model mode
-  document
-    .getElementById("multiModelModeToggle")
-    .addEventListener("change", toggleAudioMultiModelMode);
-  document.getElementById("multiModelModeToggle").checked = false;
-
-  const params = new URLSearchParams(window.location.search);
-  const prompt = params.get("prompt");
-  const modelId = params.get("id");
-
-  if (modelId) {
-    populateAudioModelOptions(modelId);
-    displayCustomInputs(modelId, "inputsContainer");
-  }
-
-  if (prompt) {
-    const input = document.getElementById("promptInput");
-    if (input) {
-      input.value = decodeURIComponent(prompt);
-      generateAudio();
-    }
-  }
-
-  // Populate model checkboxes (hidden until multi-model mode is enabled)
-  populateModelCheckboxes();
-
-  // Show/hide extra options based on initial provider selection
-  const selected = document.getElementById("providerSelect")?.value || "auto";
-  const falOptions = document.getElementById("inputsContainer");
-  const outputSettingsContainer = document.getElementById(
-    "outputSettingsContainer"
-  );
-  const stepsInputAuto = document.getElementById("stepsInputAuto");
-
-  if (
-    selected === "fal" ||
-    selected === "replicate" ||
-    selected === "together"
-  ) {
-    if (falOptions) falOptions.style.display = "block";
-    if (outputSettingsContainer)
-      outputSettingsContainer.style.display = "block";
-    if (stepsInputAuto) stepsInputAuto.style.display = "none";
-  } else {
-    if (falOptions) falOptions.style.display = "none";
-    if (outputSettingsContainer)
-      outputSettingsContainer.style.display = "block";
-  }
-});
-document
-  .getElementById("applyOptionsBtn")
-  .addEventListener("click", async () => {
-    const modalElement = document.getElementById("modelOptionsModal");
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
-
-    // Manually remove backdrop just in case
-    document
-      .querySelectorAll(".modal-backdrop")
-      .forEach((backdrop) => backdrop.remove());
-    document.body.classList.remove("modal-open");
-    document.body.style = ""; // clear
-  });
-
-document.getElementById("providerSelect")?.addEventListener("change", () => {
-  const selected = document.getElementById("providerSelect").value;
-  const modelId = new URLSearchParams(window.location.search).get("id");
-  const customInputsContainer = document.getElementById("inputsContainer");
-  const outputSettingsContainer = document.getElementById(
-    "outputSettingsContainer"
-  );
-  const stepsInputAuto = document.getElementById("stepsInputAuto");
-
-  if (modelId) {
-    displayCustomInputs(modelId, "inputsContainer");
-  }
-
-  if (
-    selected === "fal" ||
-    selected === "replicate" ||
-    selected === "together"
-  ) {
-    customInputsContainer.style.display = "block";
-    outputSettingsContainer.style.display = "block";
-    if (stepsInputAuto) stepsInputAuto.style.display = "none";
-  } else {
-    customInputsContainer.style.display = "none";
-    outputSettingsContainer.style.display = "block";
-    if (stepsInputAuto) stepsInputAuto.style.display = "block";
   }
 });

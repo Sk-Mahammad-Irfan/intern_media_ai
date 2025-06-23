@@ -1,0 +1,902 @@
+[
+  {
+    "modelId": "wavespeedai-wan21-t2v-720p",
+    "name": "WaveSpeedAI: Wan 2.1-T2V-720P",
+    "assetType": "video",
+    "provider": ["replicate", "auto"],
+    "credits": [22, 0],
+    "endpoint": "https://api.replicate.com/v1/models/wavespeedai/wan-2.1-t2v-720p/predictions",
+    "isActive": true,
+    "falid": "",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "placeholder": "e.g. 123456",
+        "default": 2435,
+        "options": []
+      },
+      {
+        "id": "fast_mode",
+        "type": "select",
+        "label": "fast_mode",
+        "description": "Speed up generation with different levels of acceleration. Faster modes may degrade quality somewhat. The speedup is dependent on the content, so different videos may see different speedups.",
+        "options": ["Off", "Balanced", "Fast"],
+        "default": "Balanced"
+      },
+      {
+        "id": "lora_scale",
+        "type": "number",
+        "label": "Lora Scale",
+        "description": "Determines how strongly the main LoRA should be applied. Sane results between 0 and 1 for base inference. For go_fast we apply a 1.5x multiplier to this value; we've generally seen good performance when scaling the base value by that amount. You may still need to experiment to find the best value for your particular lora.",
+        "default": 1
+      },
+      {
+        "id": "num_frames",
+        "type": "number",
+        "label": "Num Frames",
+        "description": "Number of video frames. 81 frames give the best results",
+        "default": 81,
+        "minimum": 81,
+        "maximum": 100
+      },
+      {
+        "id": "aspect_ratio",
+        "type": "select",
+        "label": "aspect_ratio",
+        "description": "Aspect ratio of video. 16:9 corresponds to 1280x720px, 9:16 is 720x1280px, and 1:1 is 1024x1024px",
+        "options": ["16:9", "9:16", "1:1"],
+        "default": "16:9"
+      },
+      {
+        "id": "lora_weights",
+        "type": "text",
+        "label": "Lora Weights",
+        "description": "Load LoRA weights. Supports Replicate models in the format <owner>/<username> or <owner>/<username>/<version>, HuggingFace URLs in the format huggingface.co/<owner>/<model-name>, CivitAI URLs in the format civitai.com/models/<id>[/<model-name>], or arbitrary .safetensors URLs from the Internet. For example, 'fofr/flux-pixar-cars'."
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1"],
+    "resolutions": ["720p"],
+    "provider_aspect_ratios": {
+      "replicate": ["16:9", "9:16", "1:1"]
+    },
+    "description": "Accelerated text-to-video model for generating high-resolution 720P videos using the Wan 2.1 14B architecture.",
+    "link": "https://replicate.com/wavespeedai/wan-2.1-t2v-720p",
+    "fullDetails": "WaveSpeedAI's Wan 2.1-T2V-720P offers fast, high-fidelity video synthesis powered by the 14B parameter Wan architecture. Designed as part of a comprehensive and open suite of video foundation models, it supports rich, complex prompt handling and efficient inference for creative and research use cases.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "20-35 credits/second",
+    "tags": ["accelerated", "720p", "high-resolution", "open-model"]
+  },
+  {
+    "modelId": "wavespeedai-wan21-t2v-480p",
+    "name": "WaveSpeedAI: Wan 2.1-T2V-480P",
+    "assetType": "video",
+    "provider": ["replicate", "auto"],
+    "credits": [12, 0],
+    "endpoint": "https://api.replicate.com/v1/models/wavespeedai/wan-2.1-t2v-480p/predictions",
+    "isActive": true,
+    "falid": "",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "placeholder": "e.g. 123456",
+        "default": null,
+        "options": []
+      },
+      {
+        "id": "fast_mode",
+        "type": "select",
+        "label": "fast_mode",
+        "description": "Speed up generation with different levels of acceleration. Faster modes may degrade quality somewhat. The speedup is dependent on the content, so different videos may see different speedups.",
+        "options": ["Off", "Balanced", "Fast"],
+        "default": "Balanced"
+      },
+      {
+        "id": "lora_scale",
+        "type": "number",
+        "label": "Lora Scale",
+        "description": "Determines how strongly the main LoRA should be applied. Sane results between 0 and 1 for base inference. For go_fast we apply a 1.5x multiplier to this value; we've generally seen good performance when scaling the base value by that amount. You may still need to experiment to find the best value for your particular lora.",
+        "default": 1
+      },
+      {
+        "id": "num_frames",
+        "type": "number",
+        "label": "Num Frames",
+        "description": "Number of video frames. 81 frames give the best results",
+        "default": 81,
+        "minimum": 81,
+        "maximum": 100
+      },
+      {
+        "id": "aspect_ratio",
+        "type": "select",
+        "label": "aspect_ratio",
+        "description": "Aspect ratio of video. 16:9 corresponds to 1280x720px, 9:16 is 720x1280px, and 1:1 is 1024x1024px",
+        "options": ["16:9", "9:16"],
+        "default": "16:9"
+      },
+      {
+        "id": "lora_weights",
+        "type": "text",
+        "label": "Lora Weights",
+        "description": "Load LoRA weights. Supports Replicate models in the format <owner>/<username> or <owner>/<username>/<version>, HuggingFace URLs in the format huggingface.co/<owner>/<model-name>, CivitAI URLs in the format civitai.com/models/<id>[/<model-name>], or arbitrary .safetensors URLs from the Internet. For example, 'fofr/flux-pixar-cars'."
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16"],
+    "resolutions": ["480p"],
+    "provider_aspect_ratios": {
+      "replicate": ["16:9", "9:16"]
+    },
+    "description": "Accelerated text-to-video model for generating high-quality 480P videos using the Wan 2.1 14B architecture.",
+    "link": "https://replicate.com/wavespeedai/wan-2.1-t2v-480p",
+    "fullDetails": "WaveSpeedAI's Wan 2.1-T2V-480P delivers efficient, high-fidelity video generation powered by the 14B parameter Wan model. As part of an open and comprehensive suite of video foundation models, it enables expressive and rich video synthesis from complex prompts with fast inference times.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "20-35 credits/second",
+    "tags": ["accelerated", "480p", "high-capacity", "open-model"]
+  },
+  {
+    "modelId": "lightricks-ltx-video",
+    "name": "Lightricks: LTX-Video",
+    "assetType": "video",
+    "provider": ["replicate", "auto"],
+    "credits": [60, 0],
+    "endpoint": "https://api.replicate.com/v1/models/lightricks/ltx-video/predictions",
+    "isActive": true,
+    "falid": "",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "placeholder": "e.g. 123456",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": [
+      "1:1",
+      "1:2",
+      "2:1",
+      "2:3",
+      "3:2",
+      "3:4",
+      "4:3",
+      "4:5",
+      "5:4",
+      "9:16",
+      "16:9",
+      "9:21",
+      "21:9"
+    ],
+    "resolutions": ["360p", "540p", "720p", "768p", "1080p"],
+    "provider_aspect_ratios": {
+      "replicate": [
+        "1:1",
+        "1:2",
+        "2:1",
+        "2:3",
+        "3:2",
+        "3:4",
+        "4:3",
+        "4:5",
+        "5:4",
+        "9:16",
+        "16:9",
+        "9:21",
+        "21:9"
+      ]
+    },
+    "description": "LTX-Video is the first DiT-based video generation model capable of producing high-quality 24 FPS videos at 768x512 resolution in real time.",
+    "link": "https://replicate.com/lightricks/ltx-video",
+    "fullDetails": "Developed by Lightricks, LTX-Video leverages DiT (Denoising Diffusion Transformer) to deliver ultra-fast, high-resolution video generation. It enables real-time rendering, making it ideal for content creators, developers, and media applications requiring fast turnaround.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "5 credits/second",
+    "tags": ["real-time", "DiT"]
+  },
+  {
+    "modelId": "google-veo-3",
+    "name": "Google Veo 3",
+    "assetType": "video",
+    "provider": ["fal", "replicate", "auto"],
+    "credits": [55, 50, 0],
+    "endpoint": "https://api.replicate.com/v1/models/google/veo-3/predictions",
+    "isActive": true,
+    "falid": "fal-ai/veo3",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed ",
+        "type": "number",
+        "label": "Seed",
+        "placeholder": "e.g. 123456",
+        "default": null,
+        "options": []
+      },
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "default": "8s",
+        "options": ["8s"],
+        "placeholder": "Select duration in seconds"
+      },
+      {
+        "id": "generate_audio",
+        "type": "checkbox",
+        "label": "Enable Audio",
+        "default": true,
+        "options": []
+      },
+      {
+        "id": "aspect_ratio",
+        "type": "select",
+        "label": "Aspect Ratio",
+        "description": "The aspect ratio of the generated video. If it is not set to 16:9, the video will be outpainted with Luma Ray 2 Reframe functionality.",
+        "default": "16:9",
+        "options": ["16:9", "9:16", "1:1"]
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1"],
+    "resolutions": ["720p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "1:1"],
+      "replicate": ["16:9", "9:16", "1:1"]
+    },
+    "description": "Veo 3 generates high-fidelity videos with sound and cinematic realism. Advanced control over motion, camera, and audio make it perfect for storytelling.",
+    "link": "https://deepmind.google/technologies/veo/",
+    "fullDetails": "Google Veo 3 is the most advanced text-to-video model developed by Google DeepMind, now with integrated sound. It produces photorealistic, dynamic video sequences with precision camera control, scene composition, and synchronized audio output. Ideal for filmmakers, creators, and visionaries pushing the boundaries of AI-generated content.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "Varies (based on usage tier)",
+    "tags": ["photorealistic", "cinematic", "audio", "advanced-controls"]
+  },
+  {
+    "modelId": "kling-video-v2-master",
+    "name": "Kling 2.0 Master",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [20, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/kling-video/v2/master/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds",
+        "default": "5",
+        "options": ["5", "10"]
+      },
+      {
+        "id": "aspect_ratio",
+        "type": "select",
+        "label": "Aspect Ratio",
+        "description": "The aspect ratio of the generated video frame",
+        "default": "16:9",
+        "options": ["16:9", "9:16", "1:1"]
+      },
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "default": "blur, distort, and low quality"
+      },
+      {
+        "id": "cfg_scale",
+        "type": "number",
+        "label": "CFG Scale",
+        "description": "The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt.",
+        "default": 0.5
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1"],
+    "resolutions": ["720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "1:1"]
+    },
+    "description": "Generate video clips from your prompts using Kling 2.0 Master – high-speed, cinematic text-to-video generation with exceptional motion quality.",
+    "link": "https://fal.ai/models/fal-ai/kling-video/v2/master/text-to-video",
+    "fullDetails": "Kling 2.0 Master delivers ultra-fast and visually compelling video generation from natural language prompts. Optimized for storytelling, content creation, and idea visualization, this model offers smooth motion, cinematic aesthetics, and creative flexibility.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["high-speed", "cinematic"]
+  },
+  {
+    "modelId": "minimax-video-01",
+    "name": "MiniMax Video 01",
+    "assetType": "video",
+    "provider": ["fal", "replicate", "auto"],
+    "credits": [55, 50, 0],
+    "endpoint": "https://api.replicate.com/v1/models/minimax/video-01/predictions",
+    "isActive": true,
+    "falid": "fal-ai/minimax/video-01",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "prompt_optimizer",
+        "type": "boolean",
+        "label": "Use Prompt Optimizer",
+        "description": "Whether to use the model's prompt optimizer",
+        "default": true
+      }
+    ],
+    "aspect_ratios": ["1:1"],
+    "resolutions": ["720p"],
+    "provider_aspect_ratios": {
+      "fal": ["1:1"],
+      "replicate": ["1:1"]
+    },
+    "description": "Generate video clips from your prompts using MiniMax model – fast and creative text-to-video generation with solid visual fidelity.",
+    "link": "https://replicate.com/minimax/video-01",
+    "fullDetails": "MiniMax Video 01 transforms text prompts into vivid and coherent video sequences. Designed for efficiency and flexibility, it supports a variety of use cases including storytelling, content ideation, and visual experimentation.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "30 credits/second",
+    "tags": ["fast", "creative"]
+  },
+  {
+    "modelId": "hunyuan-video",
+    "name": "Hunyuan Video",
+    "assetType": "video",
+    "provider": ["fal", "replicate", "auto"],
+    "credits": [55, 50, 0],
+    "endpoint": "https://api.replicate.com/v1/models/tencent/hunyuan-video/predictions",
+    "isActive": true,
+    "falid": "fal-ai/hunyuan-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seedInput",
+        "type": "number",
+        "label": "Seed",
+        "placeholder": "e.g. 123456",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16"],
+    "resolutions": ["480p", "580p", "720p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16"],
+      "replicate": ["16:9", "9:16"]
+    },
+    "description": "Generate high-quality videos with realistic motion from text descriptions using Tencent's state-of-the-art Hunyuan Video model.",
+    "link": "https://replicate.com/tencent/hunyuan-video",
+    "fullDetails": "Hunyuan Video is a cutting-edge text-to-video model developed by Tencent. It creates highly realistic, coherent, and detailed videos directly from natural language prompts. Ideal for content creation, advertising, simulation, and storytelling.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["realistic", "high-fidelity", "tencent"]
+  },
+  {
+    "modelId": "pixverse-v4",
+    "name": "PixVerse: Text-to-Video v4",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [15, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/pixverse/v4/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds",
+        "default": "5",
+        "options": ["5", "8"]
+      },
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "Negative prompt to be used for the generation",
+        "default": ""
+      },
+      {
+        "id": "style",
+        "type": "select",
+        "label": "Style",
+        "description": "The style of the generated video",
+        "default": "anime",
+        "options": ["anime", "3d_animation", "clay", "comic", "cyberpunk"]
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "The same seed and the same prompt given to the same version of the model will output the same video every time.",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "4:3", "1:1", "3:4", "9:16"],
+    "resolutions": ["540p", "720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "4:3", "1:1", "3:4", "9:16"]
+    },
+    "description": "Generate high-quality video clips from text and image prompts using PixVerse v4, designed for advanced creative workflows.",
+    "link": "https://fal.ai/models/fal-ai/pixverse/v4/text-to-video",
+    "fullDetails": "PixVerse v4 enables state-of-the-art text-to-video and image-to-video generation, offering creators the ability to produce cinematic, high-resolution video content from simple prompts. It's ideal for storytellers, designers, and multimedia developers.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "27-70 credits/second",
+    "tags": ["high-quality", "advanced"]
+  },
+  {
+    "modelId": "pixverse-v4.5",
+    "name": "PixVerse: Text-to-Video v4.5",
+    "assetType": "video",
+    "provider": ["fal", "replicate", "auto"],
+    "credits": [20, 15, 0],
+    "endpoint": "https://api.replicate.com/v1/models/pixverse/pixverse-v4.5/predictions",
+    "isActive": true,
+    "falid": "fal-ai/pixverse/v4.5/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds. 8s videos cost double. 1080p videos are limited to 5 seconds",
+        "default": "5",
+        "options": ["5", "8"]
+      },
+      {
+        "id": "negativePrompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "Negative prompt to be used for the generation",
+        "default": "",
+        "options": []
+      },
+      {
+        "id": "style",
+        "type": "select",
+        "label": "Style",
+        "description": "The style of the generated video",
+        "default": "anime",
+        "options": ["anime", "3d_animation", "clay", "comic", "cyberpunk"]
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "The same seed and the same prompt given to the same version of the model will output the same video every time.",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "4:3", "1:1", "3:4", "9:16"],
+    "resolutions": ["540p", "720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "4:3", "1:1", "3:4", "9:16"],
+      "replicate": ["16:9", "4:3", "1:1", "3:4", "9:16"]
+    },
+    "description": "Quickly make 5s or 8s videos at 540p, 720p or 1080p using PixVerse v4.5 with enhanced motion and prompt coherence.",
+    "link": "https://fal.ai/models/fal-ai/pixverse/v4.5/text-to-video",
+    "fullDetails": "PixVerse v4.5 enhances video generation with improved motion, better prompt coherence, and strong handling of complex actions. Ideal for dynamic storytelling, short clips, and expressive visuals in creative workflows.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "27-70 credits/second",
+    "tags": ["fast-generation", "enhanced-motion", "short-form"]
+  },
+  {
+    "modelId": "pika-text-to-video-v2-1",
+    "name": "Pika Text to Video v2.1",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [40, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/pika/v2.1/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "The seed for the random number generator",
+        "default": null,
+        "options": []
+      },
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "A negative prompt to guide the model",
+        "default": ""
+      },
+      {
+        "id": "duration",
+        "type": "number",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds. Default value: 5",
+        "default": 5,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1", "4:5", "5:4", "3:2", "2:3"],
+    "resolutions": ["720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "1:1", "4:5", "5:4", "3:2", "2:3"]
+    },
+    "description": "Generate high-quality, cinematic videos from text prompts with Pika's advanced v2.1 model – ideal for storytelling and visual ideation.",
+    "link": "https://fal.ai/models/fal-ai/pika/v2.1/text-to-video",
+    "fullDetails": "Pika v2.1 transforms written prompts into cinematic video clips with impressive realism and motion dynamics. Optimized for storytelling, concept art, and idea prototyping, this model delivers fast, visually engaging outputs directly from text.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["cinematic", "storytelling"]
+  },
+  {
+    "modelId": "pika-text-to-video-v2-2",
+    "name": "Pika Text to Video v2.2",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [45, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/pika/v2.2/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "The seed for the random number generator",
+        "default": null,
+        "options": []
+      },
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "A negative prompt to guide the model",
+        "default": ""
+      },
+      {
+        "id": "duration",
+        "type": "number",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds. Default value: 5",
+        "default": 5,
+        "options": []
+      }
+    ],
+    "aspect_ratios": [
+      "16:9",
+      "9:16",
+      "1:1",
+      "4:5",
+      "5:4",
+      "3:2",
+      "2:3",
+      "4:3",
+      "3:4",
+      "21:9",
+      "9:21"
+    ],
+    "resolutions": ["720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": [
+        "16:9",
+        "9:16",
+        "1:1",
+        "4:5",
+        "5:4",
+        "3:2",
+        "2:3",
+        "4:3",
+        "3:4",
+        "21:9",
+        "9:21"
+      ]
+    },
+    "description": "Create cinematic, high-quality videos from text prompts with Pika's updated v2.2 model – enhanced for storytelling and visual content creation.",
+    "link": "https://fal.ai/models/fal-ai/pika/v2.2/text-to-video",
+    "fullDetails": "Pika v2.2 transforms text prompts into vivid, high-quality video clips with smoother motion and improved detail. Ideal for storytelling, concept development, and rapid visual ideation, this version builds on the cinematic power of v2.1 with upgraded output fidelity and creative flexibility.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["cinematic", "storytelling"]
+  },
+  {
+    "modelId": "luma-ray2-flash",
+    "name": "Luma Dream Machine: Ray 2 Flash",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [25, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/luma-dream-machine/ray-2-flash",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "loop",
+        "type": "boolean",
+        "label": "Loop Video",
+        "description": "Whether the video should loop (end of video is blended with the beginning)",
+        "default": false
+      },
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "description": "The duration of the generated video (9s costs 2x more) Default value: \"5s\"",
+        "default": "5s",
+        "options": ["5s", "9s"]
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
+    "resolutions": ["540p", "720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"]
+    },
+    "description": "Ray 2 Flash generates realistic, coherent video scenes from text prompts with high speed and cinematic motion quality.",
+    "link": "https://fal.ai/models/fal-ai/luma-dream-machine/ray-2-flash",
+    "fullDetails": "Luma's Dream Machine: Ray 2 Flash is a high-performance text-to-video model designed for speed and realism. It excels at generating vivid visuals with smooth, natural motion, making it ideal for creative storytelling, concept videos, and prototyping cinematic scenes.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "25 credits/second",
+    "tags": ["realistic", "fast"]
+  },
+  {
+    "modelId": "cogvideox-5b",
+    "name": "CogVideoX-5B",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [25, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/cogvideox-5b",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "The negative prompt to generate video from",
+        "default": "",
+        "options": []
+      },
+      {
+        "id": "loras",
+        "type": "number",
+        "label": "LoRAs",
+        "description": "The LoRAs to use for the image generation. We currently support one lora.",
+        "default": [],
+        "options": []
+      },
+      {
+        "id": "num_inference_steps",
+        "type": "number",
+        "label": "Inference Steps",
+        "description": "The number of inference steps to perform.",
+        "default": 50,
+        "options": []
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "The same seed and the same prompt given to the same version of the model will output the same video every time.",
+        "default": null,
+        "options": []
+      },
+      {
+        "id": "guidance_scale",
+        "type": "number",
+        "label": "Guidance Scale",
+        "description": "The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related video to show you.",
+        "default": 7.0,
+        "options": []
+      },
+      {
+        "id": "video_size",
+        "type": "select",
+        "label": "Video Size",
+        "default": "square_hd",
+        "options": [
+          "square_hd",
+          "square",
+          "portrait_4_3",
+          "portrait_16_9",
+          "landscape_4_3",
+          "landscape_16_9"
+        ]
+      }
+    ],
+    "aspect_ratios": [
+      "square_hd",
+      "square",
+      "portrait_4_3",
+      "portrait_16_9",
+      "landscape_4_3",
+      "landscape_16_9"
+    ],
+    "resolutions": ["720p", "1080p"],
+    "provider_aspect_ratios": {
+      "fal": [
+        "square_hd",
+        "square",
+        "portrait_4_3",
+        "portrait_16_9",
+        "landscape_4_3",
+        "landscape_16_9"
+      ]
+    },
+    "description": "Generate videos from prompts using CogVideoX-5B – a powerful model designed for text-to-video synthesis with detailed visuals and smooth motion.",
+    "link": "https://fal.ai/models/fal-ai/cogvideox-5b",
+    "fullDetails": "CogVideoX-5B leverages advanced generative architecture to produce dynamic video content from natural language prompts. Designed for creative applications such as concept development, visualization, and storytelling, it delivers rich detail and temporal consistency.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["detailed", "smooth-motion"]
+  },
+  {
+    "modelId": "magi",
+    "name": "MAGI-1",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [22, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/magi",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "num_frames",
+        "type": "number",
+        "label": "Number of Frames",
+        "description": "Number of frames to generate. Must be between 96 and 192 (inclusive). Each additional 24 frames beyond 96 incurs an additional billing unit.",
+        "default": 96,
+        "minimum": 96,
+        "maximum": 192
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "Random seed for reproducibility. If None, a random seed is chosen.",
+        "default": 2637
+      },
+      {
+        "id": "num_inference_steps",
+        "type": "select",
+        "label": "Number of Inference Steps",
+        "description": "Number of inference steps for sampling. Higher values give better quality but take longer.",
+        "default": 16,
+        "options": [4, 8, 16, 32, 64]
+      },
+      {
+        "id": "enable_safety_checker",
+        "type": "boolean",
+        "label": "Enable Safety Checker",
+        "description": "If set to true, the safety checker will be enabled.",
+        "default": true
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1"],
+    "resolutions": ["480p", "720p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "1:1"]
+    },
+    "description": "MAGI-1 is a video generation model with exceptional understanding of physical interactions and cinematic prompts.",
+    "link": "https://fal.ai/models/fal-ai/magi",
+    "fullDetails": "MAGI-1 stands out for its advanced reasoning around physics, spatial dynamics, and cinematic structure. From simple text prompts, it creates visually rich video clips that excel in realism and motion logic. Ideal for simulations, storytelling, and creative ideation.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["physical-interactions", "cinematic"]
+  },
+  {
+    "modelId": "vidu-q1",
+    "name": "Vidu Q1",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [18, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/vidu/q1/text-to-video",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "style",
+        "type": "select",
+        "label": "Style",
+        "description": "The style of output video",
+        "default": "general",
+        "options": ["general", "anime"]
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "Seed for the random number generator",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16", "1:1"],
+    "resolutions": ["480p", "720p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16", "1:1"]
+    },
+    "description": "Vidu Q1 Text to Video generates high-quality 1080p videos with exceptional visual quality and motion diversity.",
+    "link": "https://fal.ai/models/fal-ai/vidu/q1/text-to-video",
+    "fullDetails": "Vidu Q1 is engineered for producing crisp 1080p video from natural language prompts. With outstanding clarity, diverse motion, and cinematic realism, it's tailored for creators seeking professional results in visual storytelling, ideation, and content production.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["1080p", "high-quality"]
+  },
+  {
+    "modelId": "veo2",
+    "name": "Veo 2",
+    "assetType": "video",
+    "provider": ["fal", "auto"],
+    "credits": [18, 0],
+    "endpoint": "",
+    "isActive": true,
+    "falid": "fal-ai/veo2",
+    "togetherid": "",
+    "deepid": "",
+    "custom_inputs": [
+      {
+        "id": "duration",
+        "type": "select",
+        "label": "Duration",
+        "description": "The duration of the generated video in seconds. Default value: 5s",
+        "default": "5s",
+        "options": ["5s", "6s", "7s", "8s"]
+      },
+      {
+        "id": "negative_prompt",
+        "type": "text",
+        "label": "Negative Prompt",
+        "description": "A negative prompt to guide the video generation",
+        "default": ""
+      },
+      {
+        "id": "enhance_prompt",
+        "type": "boolean",
+        "label": "Enhance Prompt",
+        "description": "Whether to enhance the video generation",
+        "default": true
+      },
+      {
+        "id": "seed",
+        "type": "number",
+        "label": "Seed",
+        "description": "A seed to use for the video generation",
+        "default": null,
+        "options": []
+      }
+    ],
+    "aspect_ratios": ["16:9", "9:16"],
+    "resolutions": ["480p", "720p"],
+    "provider_aspect_ratios": {
+      "fal": ["16:9", "9:16"]
+    },
+    "description": "Veo 2 creates videos with realistic motion and high quality output. Explore different styles and find your own with extensive camera controls.",
+    "link": "https://fal.ai/models/fal-ai/veo2",
+    "fullDetails": "Veo 2 is a powerful text-to-video model that emphasizes stylistic flexibility, cinematic quality, and precise motion control. With advanced camera options and support for a range of visual aesthetics, it's ideal for creators looking to produce polished, professional-grade video content directly from text.",
+    "chatPage": "videomodel.html",
+    "creditPrice": "40 credits/second",
+    "tags": ["realistic", "camera-controls"]
+  }
+]

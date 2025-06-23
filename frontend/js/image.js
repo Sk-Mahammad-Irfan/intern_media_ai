@@ -1,1656 +1,101 @@
 const chat = document.getElementById("chat");
 const providerSelect = document.getElementById("providerSelect");
-
-const imageModelOptions = {
-  "ideogram-v3": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    custom_inputs: [
-      {
-        id: "renderingSpeed",
-        type: "select",
-        label: "Rendering Speed",
-        options: ["TURBO", "BALANCED", "QUALITY"],
-        default: "BALANCED",
-      },
-      {
-        id: "colorPalette",
-        type: "text",
-        label: "Color Palette Name",
-        placeholder: "e.g. vibrant",
-      },
-      {
-        id: "styleCodes",
-        type: "text",
-        label: "Style Codes (comma-separated)",
-        placeholder: "e.g. abcd1234, efgh5678",
-      },
-      {
-        id: "style",
-        type: "select",
-        label: "Style",
-        options: ["AUTO", "GENERAL", "REALISTIC", "DESIGN"],
-      },
-      {
-        id: "expandPrompt",
-        type: "checkbox",
-        label: "Use MagicPrompt (Expand Prompt)",
-        default: true,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 12345",
-      },
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. blurry, low quality",
-      },
-    ],
-  },
-
-  "hidream-i1-dev": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    custom_inputs: [
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. blurry, low quality",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Inference Steps",
-        default: 28,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 42",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode (Wait for response)",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpeg", "png"],
-        default: "jpeg",
-      },
-    ],
-  },
-  "hidream-i1-full": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    custom_inputs: [
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. blurry, low quality",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Inference Steps",
-        default: 30,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 42",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode (Wait for response)",
-        default: true,
-      },
-
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpeg", "png"],
-        default: "jpeg",
-      },
-    ],
-  },
-  "hidream-i1-fast": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    custom_inputs: [
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. blurry, low quality",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Inference Steps",
-        default: 16, // Optimized for speed
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 42",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode (Wait for response)",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpeg", "png"],
-        default: "jpeg",
-      },
-    ],
-  },
-  "recraft-v3": {
-    providers: ["auto", "fal", "replicate"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    custom_inputs: [
-      {
-        id: "style",
-        type: "select",
-        label: "Style",
-        options: [
-          "any",
-          "realistic_image",
-          "digital_illustration",
-          "digital_illustration/pixel_art",
-          "digital_illustration/hand_drawn",
-          "digital_illustration/grain",
-          "digital_illustration/infantile_sketch",
-          "digital_illustration/2d_art_poster",
-          "digital_illustration/handmade_3d",
-          "digital_illustration/hand_drawn_outline",
-          "digital_illustration/engraving_color",
-          "digital_illustration/2d_art_poster_2",
-          "realistic_image/b_and_w",
-          "realistic_image/hard_flash",
-          "realistic_image/hdr",
-          "realistic_image/natural_light",
-          "realistic_image/studio_portrait",
-          "realistic_image/enterprise",
-          "realistic_image/motion_blur",
-        ],
-        default: "realistic_image/studio_portrait",
-      },
-      {
-        id: "styleId",
-        type: "text",
-        label: "Style ID",
-        default: "",
-        placeholder: "Optional",
-      },
-      {
-        id: "colors",
-        type: "text",
-        label: "Colors (comma-separated RGB)",
-        placeholder: "e.g. 255,0,0; 0,255,0",
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-    ],
-  },
-
-  fooocus: {
-    providers: ["auto", "fal"],
-    aspect_ratios: ["1024x1024", "1280x720", "1920x1080"],
-    custom_inputs: [
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. blurry, bad anatomy",
-      },
-      {
-        id: "styles",
-        type: "text",
-        label: "Styles (comma-separated)",
-        placeholder: "e.g. Fooocus Enhance,Fooocus Sharp",
-      },
-      {
-        id: "performance",
-        type: "select",
-        label: "Performance",
-        options: ["Speed", "Quality", "Extreme Speed", "Lightning"],
-        default: "Extreme Speed",
-      },
-      {
-        id: "guidanceScale",
-        type: "number",
-        label: "Guidance Scale",
-        default: 4.0,
-      },
-      {
-        id: "sharpness",
-        type: "number",
-        label: "Sharpness",
-        default: 2.0,
-      },
-      {
-        id: "refinerModel",
-        type: "select",
-        label: "Refiner Model",
-        options: ["None", "realisticVisionV60B1_v51VAE.safetensors"],
-        default: "None",
-      },
-      {
-        id: "refinerSwitch",
-        type: "number",
-        label: "Refiner Switch Point",
-        default: 0.8,
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpeg", "png", "webp"],
-        default: "jpeg",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-    ],
-  },
-
-  "black-forest-labs-flux-1-1-pro": {
-    providers: ["auto", "fal", "deepinfra"],
-    aspect_ratios: {
-      // Default aspect ratios (used when provider is 'auto')
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    // Provider-specific aspect ratios
-    provider_aspect_ratios: {
-      fal: {
-        square_hd: null,
-        square: null,
-        portrait_4_3: null,
-        portrait_16_9: null,
-        landscape_4_3: null,
-        landscape_16_9: null,
-      },
-      deepinfra: [
-        "1024x448",
-        "1024x576",
-        "1024x768",
-        "1024x688",
-        "1024x1024",
-        "688x1024",
-        "768x1024",
-        "576x1024",
-        "448x1024",
-      ],
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpeg", "png"],
-        default: "jpeg",
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-  },
-  "black-forest-labs-flux-kontext-pro": {
-    providers: ["auto", "replicate"],
-    aspect_ratios: {
-      "1:1": "1:1",
-      "16:9": "16:9",
-      "9:16": "9:16",
-      "4:3": "4:3",
-      "3:4": "3:4",
-      "3:2": "3:2",
-      "2:3": "2:3",
-      "4:5": "4:5",
-      "5:4": "5:4",
-      "21:9": "21:9",
-      "9:21": "9:21",
-      "2:1": "2:1",
-      "1:2": "1:2",
-    },
-    provider_aspect_ratios: {
-      replicate: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "9:16": "9:16",
-        "4:3": "4:3",
-        "3:4": "3:4",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "4:5": "4:5",
-        "5:4": "5:4",
-        "21:9": "21:9",
-        "9:21": "9:21",
-        "2:1": "2:1",
-        "1:2": "1:2",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpg", "png"],
-        default: "jpg",
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["replicate"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "replicate",
-    },
-  },
-  "black-forest-labs-flux-kontext-max": {
-    providers: ["auto", "replicate"],
-    aspect_ratios: {
-      "1:1": "1:1",
-      "16:9": "16:9",
-      "9:16": "9:16",
-      "4:3": "4:3",
-      "3:4": "3:4",
-      "3:2": "3:2",
-      "2:3": "2:3",
-      "4:5": "4:5",
-      "5:4": "5:4",
-      "21:9": "21:9",
-      "9:21": "9:21",
-      "2:1": "2:1",
-      "1:2": "1:2",
-    },
-    provider_aspect_ratios: {
-      replicate: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "9:16": "9:16",
-        "4:3": "4:3",
-        "3:4": "3:4",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "4:5": "4:5",
-        "5:4": "5:4",
-        "21:9": "21:9",
-        "9:21": "9:21",
-        "2:1": "2:1",
-        "1:2": "1:2",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpg", "png"],
-        default: "jpg",
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["replicate"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "replicate",
-    },
-  },
-  "black-forest-labs-flux-1.1-pro-ultra": {
-    providers: ["auto", "replicate"],
-    aspect_ratios: {
-      "21:9": "21:9",
-      "16:9": "16:9",
-      "3:2": "3:2",
-      "4:3": "4:3",
-      "5:4": "5:4",
-      "1:1": "1:1",
-      "4:5": "4:5",
-      "3:4": "3:4",
-      "2:3": "2:3",
-      "9:16": "9:16",
-      "9:21": "9:21",
-    },
-    provider_aspect_ratios: {
-      replicate: {
-        "21:9": "21:9",
-        "16:9": "16:9",
-        "3:2": "3:2",
-        "4:3": "4:3",
-        "5:4": "5:4",
-        "1:1": "1:1",
-        "4:5": "4:5",
-        "3:4": "3:4",
-        "2:3": "2:3",
-        "9:16": "9:16",
-        "9:21": "9:21",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 987654",
-        description: "Random seed for reproducibility",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpg", "png"],
-        default: "jpg",
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Mode",
-        default: false,
-        description: "Choose 'raw' for realism, 'ultra' for enhanced visuals",
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["replicate"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "replicate",
-    },
-  },
-  "bytedance-sdxl-lightning-4step": {
-    providers: ["auto", "replicate"],
-    aspect_ratios: {
-      "1:1": "1:1",
-      "16:9": "16:9",
-      "9:16": "9:16",
-      "4:3": "4:3",
-      "3:4": "3:4",
-      "3:2": "3:2",
-      "2:3": "2:3",
-      "4:5": "4:5",
-      "5:4": "5:4",
-      "21:9": "21:9",
-      "9:21": "9:21",
-      "2:1": "2:1",
-      "1:2": "1:2",
-    },
-    provider_aspect_ratios: {
-      replicate: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "9:16": "9:16",
-        "4:3": "4:3",
-        "3:4": "3:4",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "4:5": "4:5",
-        "5:4": "5:4",
-        "21:9": "21:9",
-        "9:21": "9:21",
-        "2:1": "2:1",
-        "1:2": "1:2",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Set a random seed for reproducibility",
-      },
-      {
-        id: "guidanceScale",
-        type: "number",
-        label: "Guidance Scale",
-        placeholder: "e.g. 0",
-        default: 0,
-      },
-      {
-        id: "negativePrompt",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "e.g. worst quality, low quality",
-        default: "worst quality, low quality",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Inference Steps",
-        placeholder: "e.g. 4",
-        default: 4,
-      },
-      {
-        id: "scheduler",
-        type: "select",
-        label: "Scheduler",
-        options: [
-          "DDIM",
-          "DPMSolverMultistep",
-          "HeunDiscrete",
-          "KarrasDPM",
-          "K_EULER_ANCESTRAL",
-          "K_EULER",
-          "PNDM",
-          "DPM++2MSDE",
-        ],
-        default: "K_EULER",
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["jpg", "png"],
-        default: "jpg",
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["replicate"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "replicate",
-    },
-  },
-
-  "stabilityai-sd3-5": {
-    providers: ["deepinfra", "auto"],
-    aspect_ratios: {
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    provider_aspect_ratios: {
-      deepinfra: {
-        square_hd: "1024x1024",
-        square: "768x768",
-        portrait_4_3: "768x1024",
-        portrait_16_9: "576x1024",
-        landscape_4_3: "1024x768",
-        landscape_16_9: "1024x576",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["1", "0.25"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 4,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["deepinfra"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "deepinfra",
-    },
-  },
-  "stabilityai-sd3-5-medium": {
-    providers: ["auto", "deepinfra"],
-    aspect_ratios: {
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    provider_aspect_ratios: {
-      deepinfra: {
-        square_hd: "1024x1024",
-        square: "768x768",
-        portrait_4_3: "768x1024",
-        portrait_16_9: "576x1024",
-        landscape_4_3: "1024x768",
-        landscape_16_9: "1024x576",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 987654",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["2", "1", "0.25"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 4,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["deepinfra"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "deepinfra",
-    },
-  },
-  "stabilityai-sdxl-turbo": {
-    providers: ["auto", "deepinfra"],
-    aspect_ratios: {
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    provider_aspect_ratios: {
-      deepinfra: {
-        square_hd: "1024x1024",
-        square: "768x768",
-        portrait_4_3: "768x1024",
-        portrait_16_9: "576x1024",
-        landscape_4_3: "1024x768",
-        landscape_16_9: "1024x576",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["1", "0.5"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 2,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["deepinfra"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "deepinfra",
-    },
-  },
-  "black-forest-labs-flux-1-dev": {
-    providers: ["auto", "together"],
-    aspect_ratios: {
-      // Default aspect ratios (used when provider is 'auto')
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    // Provider-specific aspect ratios
-    provider_aspect_ratios: {
-      fal: {
-        square_hd: "1024x1024",
-        square: "768x768",
-        portrait_4_3: "768x1024",
-        portrait_16_9: "576x1024",
-        landscape_4_3: "1024x768",
-        landscape_16_9: "1024x576",
-      },
-      replicate: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "21:9": "21:9",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "4:5": "4:5",
-        "5:4": "5:4",
-        "3:4": "3:4",
-        "4:3": "4:3",
-        "9:16": "9:16",
-        "9:21": "9:21",
-      },
-      together: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "21:9": "21:9",
-        "4:3": "4:3",
-        "9:16": "9:16",
-      },
-    },
-    // UI input schema
-    custom_inputs: [
-      {
-        id: "prompt",
-        type: "textarea",
-        label: "Prompt",
-        placeholder: "Describe the image you want to generate",
-        required: true,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["1", "0.25"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 4,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    // Add this configuration to control UI display
-    ui_config: {
-      always_show_output_settings: true, // Always show output settings container
-      show_custom_inputs_for: ["fal", "replicate"], // Show custom inputs for these providers
-      hide_custom_inputs_for: ["auto"], // Hide custom inputs for these providers
-      default_provider: "auto", // Default selected provider
-    },
-  },
-  "black-forest-labs-flux-schnell": {
-    providers: ["auto", "fal", "replicate", "together"],
-    aspect_ratios: {
-      // Default aspect ratios (used when provider is 'auto')
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    // Provider-specific aspect ratios
-    provider_aspect_ratios: {
-      fal: {
-        square_hd: "1024x1024",
-        square: "768x768",
-        portrait_4_3: "768x1024",
-        portrait_16_9: "576x1024",
-        landscape_4_3: "1024x768",
-        landscape_16_9: "1024x576",
-      },
-      replicate: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "21:9": "21:9",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "4:5": "4:5",
-        "5:4": "5:4",
-        "3:4": "3:4",
-        "4:3": "4:3",
-        "9:16": "9:16",
-        "9:21": "9:21",
-      },
-      together: {
-        "1:1": "1:1",
-        "16:9": "16:9",
-        "21:9": "21:9",
-        "4:3": "4:3",
-        "9:16": "9:16",
-      },
-    },
-    // UI input schema
-    custom_inputs: [
-      {
-        id: "prompt",
-        type: "textarea",
-        label: "Prompt",
-        placeholder: "Describe the image you want to generate",
-        required: true,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["1", "0.25"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 4,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    // Add this configuration to control UI display
-    ui_config: {
-      always_show_output_settings: true, // Always show output settings container
-      show_custom_inputs_for: ["fal", "replicate"], // Show custom inputs for these providers
-      hide_custom_inputs_for: ["auto"], // Hide custom inputs for these providers
-      default_provider: "auto", // Default selected provider
-    },
-  },
-  "black-forest-labs-flux-pro": {
-    providers: ["auto", "deepinfra"],
-    aspect_ratios: {
-      square_hd: "1024x1024",
-      square: "768x768",
-      portrait_4_3: "768x1024",
-      portrait_16_9: "576x1024",
-      landscape_4_3: "1024x768",
-      landscape_16_9: "1024x576",
-    },
-    provider_aspect_ratios: {
-      deepinfra: {
-        "1:1": "1:1",
-        "4:3": "4:3",
-        "16:9": "16:9",
-        "3:2": "3:2",
-        "2:3": "2:3",
-        "9:16": "9:16",
-      },
-    },
-    custom_inputs: [
-      {
-        id: "prompt",
-        type: "textarea",
-        label: "Prompt",
-        placeholder: "Describe the image you want to generate",
-        required: true,
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 123456",
-        description: "Random seed. Set for reproducible generation",
-      },
-      {
-        id: "syncMode",
-        type: "checkbox",
-        label: "Sync Mode",
-        default: true,
-      },
-      {
-        id: "enableSafetyInput",
-        type: "checkbox",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "safetyTolerance",
-        type: "select",
-        label: "Safety Tolerance",
-        options: ["1", "2", "3", "4", "5", "6"],
-        default: "2",
-      },
-      {
-        id: "outputFormat",
-        type: "select",
-        label: "Output Format",
-        options: ["webp", "jpg", "png"],
-        default: "webp",
-      },
-      {
-        id: "outputQuality",
-        type: "number",
-        label: "Output Quality",
-        default: 80,
-        min: 0,
-        max: 100,
-        description: "Only relevant for non-PNG outputs",
-      },
-      {
-        id: "megapixels",
-        type: "select",
-        label: "Megapixels",
-        options: ["1", "0.25"],
-        default: "1",
-      },
-      {
-        id: "numInferenceSteps",
-        type: "number",
-        label: "Number of Inference Steps",
-        default: 4,
-        min: 1,
-        max: 4,
-      },
-      {
-        id: "goFast",
-        type: "checkbox",
-        label: "Go Fast Mode",
-        default: true,
-      },
-      {
-        id: "rawMode",
-        type: "checkbox",
-        label: "Raw Image (less processed)",
-        default: false,
-      },
-    ],
-    ui_config: {
-      always_show_output_settings: true,
-      show_custom_inputs_for: ["deepinfra"],
-      hide_custom_inputs_for: ["auto"],
-      default_provider: "deepinfra",
-    },
-  },
-  bagel: {
-    providers: ["fal", "auto"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    provider_aspect_ratios: {
-      fal: ["1024x1024"],
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-      },
-    ],
-  },
-  "imagen4-preview": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      "1: 1": null,
-      " 16: 9": null,
-      "9: 16": null,
-      "3: 4": null,
-      "4: 3": null,
-    },
-    provider_aspect_ratios: {
-      fal: ["1024x1024"],
-    },
-    custom_inputs: [
-      {
-        id: "negativePromptInput",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "What to discourage in the generated images (optional)",
-        default: "",
-      },
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-      },
-    ],
-  },
-  "f-lite-standard": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    provider_aspect_ratios: {
-      fal: ["1024x1024"],
-    },
-    custom_inputs: [
-      {
-        id: "seedInput",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-      },
-      {
-        id: "negative_prompt",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "What to avoid in the image",
-      },
-      {
-        id: "num_inference_steps",
-        type: "number",
-        label: "Inference Steps",
-        placeholder: "e.g. 28",
-        default: 28,
-      },
-      {
-        id: "guidance_scale",
-        type: "number",
-        label: "Guidance Scale",
-        placeholder: "e.g. 3.5",
-        default: 3.5,
-      },
-      {
-        id: "sync_mode",
-        type: "boolean",
-        label: "Sync Mode",
-        default: false,
-      },
-      {
-        id: "num_images",
-        type: "number",
-        label: "Number of Images",
-        placeholder: "e.g. 1",
-        default: 1,
-      },
-      {
-        id: "enable_safety_checker",
-        type: "boolean",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-    ],
-  },
-  "sana-v1.5-4.8b": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      square_hd: null,
-      square: null,
-      portrait_4_3: null,
-      portrait_16_9: null,
-      landscape_4_3: null,
-      landscape_16_9: null,
-    },
-    provider_aspect_ratios: {
-      fal: ["1024x1024"],
-    },
-    custom_inputs: [
-      {
-        id: "seed",
-        type: "number",
-        label: "Seed",
-        placeholder: "e.g. 777888",
-      },
-      {
-        id: "negative_prompt",
-        type: "text",
-        label: "Negative Prompt",
-        placeholder: "What to avoid in the image",
-      },
-      {
-        id: "num_inference_steps",
-        type: "number",
-        label: "Inference Steps",
-        placeholder: "e.g. 18",
-        default: 18,
-      },
-      {
-        id: "guidance_scale",
-        type: "number",
-        label: "Guidance Scale",
-        placeholder: "e.g. 5",
-        default: 5,
-      },
-      {
-        id: "sync_mode",
-        type: "boolean",
-        label: "Sync Mode",
-        default: false,
-      },
-      {
-        id: "num_images",
-        type: "number",
-        label: "Number of Images",
-        placeholder: "e.g. 1",
-        default: 1,
-      },
-      {
-        id: "enable_safety_checker",
-        type: "boolean",
-        label: "Enable Safety Checker",
-        default: true,
-      },
-      {
-        id: "output_format",
-        type: "select",
-        label: "Output Format",
-        default: "jpeg",
-        options: ["jpeg", "png"],
-      },
-      {
-        id: "style_name",
-        type: "select",
-        label: "Style",
-        default: "(No style)",
-        options: [
-          "(No style)",
-          "Cinematic",
-          "Photographic",
-          "Anime",
-          "Manga",
-          "Digital Art",
-          "Pixel art",
-          "Fantasy art",
-          "Neonpunk",
-          "3D Model",
-        ],
-      },
-    ],
-  },
-  "minimax-image-01": {
-    providers: ["auto", "fal"],
-    aspect_ratios: {
-      "1:1": null,
-      "16:9": null,
-      "4:3": null,
-      "3:2": null,
-      "2:3": null,
-      "3:4": null,
-      "9:16": null,
-      "21:9": null,
-    },
-    provider_aspect_ratios: {
-      fal: ["1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9"],
-    },
-    custom_inputs: [],
-  },
-};
-
-const imageModelCredits = {
-  "black-forest-labs-flux-1-1-pro": 5, // fal: 5
-  "black-forest-labs-flux-schnell": 7, // fal: 7
-  "black-forest-labs-flux-1-dev": 4, // together: 4
-  "black-forest-labs-flux-pro": 5, // base64: 4 (but you had 5 in your example)
-  "black-forest-labs-flux-kontext-pro": 4, // replicate: 4
-  "black-forest-labs-flux-kontext-max": 7, // replicate: 7
-  "black-forest-labs-flux-1.1-pro-ultra": 7, // replicate: 7
-  "bytedance-sdxl-lightning-4step": 7, // replicate: 7
-  "stabilityai-sd3-5": 4, // base64: 4
-  "stabilityai-sd3-5-medium": 4, // base64: 4
-  "stabilityai-sdxl-turbo": 4, // base64: 4
-  "recraft-v3": 4, // fal: 4
-  fooocus: 3, // fal: 3
-  "hidream-i1-dev": 4, // fal: 4
-  "hidream-i1-full": 6, // fal: 6
-  "hidream-i1-fast": 6, // fal: 6
-  "ideogram-v3": 7, // fal: 7
-  bagel: 10, // fal: 10
-  "imagen4-preview": 12, // fal: 12
-  "f-lite-standard": 12, // fal: 12
-  "sana-v1.5-4.8b": 12, // fal: 12
-  "minimax-image-01": 12, // fal: 12
-};
-
 let selectedModels = [];
+let imageModelOptions = {};
+let imageModelCredits = {};
+let modelsLoading = false;
+
+// Loading State Management
+function showLoading() {
+  const loadingElement = document.getElementById("loadingOverlay");
+  if (loadingElement) {
+    loadingElement.style.display = "flex";
+  }
+}
+
+function hideLoading() {
+  const loadingElement = document.getElementById("loadingOverlay");
+  if (loadingElement) {
+    loadingElement.style.display = "none";
+  }
+}
+
+function createLoadingOverlay() {
+  const overlay = document.createElement("div");
+  overlay.id = "loadingOverlay";
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.backgroundColor = "rgba(0,0,0,0.5)";
+  overlay.style.display = "none";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
+  overlay.style.zIndex = "9999";
+
+  const spinner = document.createElement("div");
+  spinner.className = "spinner-border text-primary";
+  spinner.style.width = "3rem";
+  spinner.style.height = "3rem";
+  spinner.setAttribute("role", "status");
+
+  const srOnly = document.createElement("span");
+  srOnly.className = "visually-hidden";
+  srOnly.textContent = "Loading...";
+
+  spinner.appendChild(srOnly);
+  overlay.appendChild(spinner);
+
+  document.body.appendChild(overlay);
+}
+
+// Model Data Fetching
+async function fetchImageModelOptions() {
+  try {
+    showLoading();
+    modelsLoading = true;
+
+    const response = await fetch("http://localhost:5000/api/model/image");
+    if (!response.ok) {
+      throw new Error("Failed to fetch model options");
+    }
+    const models = await response.json();
+
+    const modelOptions = {};
+    const modelCredits = {};
+
+    models.forEach((model) => {
+      modelOptions[model.modelId] = {
+        providers: model.provider,
+        custom_inputs: model.custom_inputs,
+        aspect_ratios: model.aspect_ratios,
+        provider_aspect_ratios: model.provider_aspect_ratios,
+        credits: model.credits,
+      };
+
+      modelCredits[model.modelId] = model.credits[0] || 0;
+    });
+
+    imageModelOptions = modelOptions;
+    imageModelCredits = modelCredits;
+    return modelOptions;
+  } catch (error) {
+    console.error("Error fetching model options:", error);
+    return {};
+  } finally {
+    modelsLoading = false;
+    hideLoading();
+  }
+}
+
+// UI Helper Functions
 function prettifyModelName(modelId) {
   return modelId
     .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
 function updateTotalCredits() {
   const creditAmountElement = document.getElementById("creditAmount");
   const creditDisplay = document.getElementById("creditDisplay");
@@ -1658,7 +103,6 @@ function updateTotalCredits() {
   if (!creditAmountElement || !creditDisplay) return;
 
   let totalCredits = 0;
-
   selectedModels.forEach((model) => {
     totalCredits += imageModelCredits[model] || 0;
   });
@@ -1666,16 +110,29 @@ function updateTotalCredits() {
   creditAmountElement.textContent = totalCredits;
   creditDisplay.style.display = selectedModels.length > 0 ? "block" : "none";
 }
-function populateModelCheckboxes() {
+
+// Model Selection Management
+async function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
+
+  if (modelsLoading) {
+    await new Promise((resolve) => {
+      const check = setInterval(() => {
+        if (!modelsLoading) {
+          clearInterval(check);
+          resolve();
+        }
+      }, 100);
+    });
+  }
 
   Object.keys(imageModelOptions).forEach((modelId) => {
     const col = document.createElement("div");
     col.className = "col";
 
     const card = document.createElement("div");
-    card.className = "model-card ";
+    card.className = "model-card";
     card.setAttribute("data-id", modelId);
 
     const checkbox = document.createElement("input");
@@ -1714,132 +171,180 @@ function updateSelectedModels() {
   updateTotalCredits();
 }
 
-document
-  .getElementById("multiModelModeToggle")
-  .addEventListener("change", toggleMultiModelMode);
-
+// Custom Inputs and Settings
 function displayCustomInputs(modelId, containerId) {
   const model = imageModelOptions[modelId];
-  if (!model || !model.custom_inputs) {
-    console.error("Model not found or no custom inputs.");
+  if (!model || !model.custom_inputs || model.custom_inputs.length === 0) {
+    console.log("No custom inputs for this model/provider combination");
     return;
   }
 
   const container = document.getElementById(containerId);
-  container.innerHTML = ""; // Clear previous contents
+  container.innerHTML = "";
+
+  // Add a title for the custom inputs section
+  const title = document.createElement("h6");
+  title.className = "fw-bold text-secondary mt-3";
+  title.textContent = "Model Parameters";
+  container.appendChild(title);
+
+  // Check if aspect ratio or image size is already in custom inputs
+  const hasAspectRatio = model.custom_inputs.some(
+    (input) =>
+      input.id.toLowerCase().includes("aspectratio") ||
+      input.id.toLowerCase().includes("aspect_ratio")
+  );
+  const hasImageSize = model.custom_inputs.some(
+    (input) =>
+      input.id.toLowerCase().includes("imagesize") ||
+      input.id.toLowerCase().includes("size") ||
+      input.id.toLowerCase().includes("resolution")
+  );
 
   model.custom_inputs.forEach((input) => {
-    const wrapper = document.createElement("div");
-    wrapper.style.marginBottom = "15px";
-    wrapper.style.fontFamily = "Arial, sans-serif";
+    // Skip if it's an aspect ratio or image size input (we'll handle these separately)
+    if (
+      input.id.toLowerCase().includes("aspectratio") ||
+      input.id.toLowerCase().includes("aspect_ratio") ||
+      input.id.toLowerCase().includes("imagesize") ||
+      input.id.toLowerCase().includes("size") ||
+      input.id.toLowerCase().includes("resolution")
+    ) {
+      return;
+    }
+
+    const formGroup = document.createElement("div");
+    formGroup.className = "mb-3";
 
     const label = document.createElement("label");
+    label.className = "form-label";
     label.htmlFor = input.id;
     label.textContent = input.label;
-    label.style.display = "block";
-    label.style.marginBottom = "5px";
-    label.style.fontWeight = "bold";
-    label.style.fontSize = "14px";
-    wrapper.appendChild(label);
 
-    let inputEl;
+    let inputElement;
 
     switch (input.type) {
       case "select":
-        inputEl = document.createElement("select");
-        inputEl.style.padding = "8px";
-        inputEl.style.border = "1px solid #ccc";
-        inputEl.style.borderRadius = "4px";
-        inputEl.style.width = "100%";
-        inputEl.style.boxSizing = "border-box";
+        inputElement = document.createElement("select");
+        inputElement.className = "form-select";
         input.options.forEach((option) => {
           const opt = document.createElement("option");
           opt.value = option;
           opt.textContent = option;
           if (option === input.default) opt.selected = true;
-          inputEl.appendChild(opt);
+          inputElement.appendChild(opt);
         });
         break;
 
-      case "text":
       case "number":
-        inputEl = document.createElement("input");
-        inputEl.type = input.type;
-        inputEl.placeholder = input.placeholder || "";
-        inputEl.style.padding = "8px";
-        inputEl.style.border = "1px solid #ccc";
-        inputEl.style.borderRadius = "4px";
-        inputEl.style.width = "100%";
-        inputEl.style.boxSizing = "border-box";
-        if (input.type === "number" && input.default !== undefined) {
-          inputEl.value = input.default;
-        }
+        inputElement = document.createElement("input");
+        inputElement.type = "number";
+        inputElement.className = "form-control";
+        inputElement.value = input.default || "";
+        if (input.placeholder) inputElement.placeholder = input.placeholder;
         break;
 
       case "checkbox":
-        inputEl = document.createElement("input");
-        inputEl.type = "checkbox";
-        inputEl.checked = input.default || false;
-        inputEl.style.marginRight = "10px";
-        label.style.display = "inline-block";
-        label.style.fontWeight = "normal";
-        label.style.fontSize = "13px";
-        label.style.marginBottom = "0";
-        label.style.marginLeft = "5px";
-        wrapper.innerHTML = ""; // For checkbox, reorder label/input
-        wrapper.appendChild(inputEl);
-        wrapper.appendChild(label);
+        formGroup.className = "form-check mb-3";
+        inputElement = document.createElement("input");
+        inputElement.type = "checkbox";
+        inputElement.className = "form-check-input";
+        inputElement.checked = input.default || false;
+        label.className = "form-check-label";
+        formGroup.appendChild(inputElement);
+        formGroup.appendChild(label);
+        container.appendChild(formGroup);
         break;
 
       default:
-        console.warn("Unknown input type:", input.type);
-        return;
+        inputElement = document.createElement("input");
+        inputElement.type = "text";
+        inputElement.className = "form-control";
+        inputElement.value = input.default || "";
+        if (input.placeholder) inputElement.placeholder = input.placeholder;
     }
 
-    inputEl.id = input.id;
-    inputEl.name = input.id;
+    inputElement.id = input.id;
+    inputElement.name = input.id;
 
     if (input.type !== "checkbox") {
-      wrapper.appendChild(inputEl);
+      formGroup.appendChild(label);
+      formGroup.appendChild(inputElement);
     }
 
-    container.appendChild(wrapper);
+    container.appendChild(formGroup);
   });
-}
 
-// Add event listeners for provider selection changes
-providerSelect.addEventListener("change", () => {
-  const selected = providerSelect.value;
-  const modelId = new URLSearchParams(window.location.search).get("id");
-  const outputSettingsContainer = document.getElementById(
-    "outputSettingsContainer"
-  );
-
-  const customInputsContainer = document.getElementById("inputsContainer");
-  customInputsContainer.innerHTML = "";
-
-  // Always clear output settings
-  outputSettingsContainer.style.display = "none";
-  document.getElementById("aspectRatioSelect").innerHTML = "";
-
-  // Handle provider logic
-  if (selected === "auto") {
-    renderAspectRatioOptions(modelId);
+  // If aspect ratio or image size is in custom inputs, move them to output settings
+  if (hasAspectRatio || hasImageSize) {
+    const outputSettingsContainer = document.getElementById(
+      "outputSettingsContainer"
+    );
     outputSettingsContainer.style.display = "block";
-    displayCustomInputs(modelId, "inputsContainer");
-  } else if (
-    selected === "fal" ||
-    selected === "replicate" ||
-    selected === "deepinfra" ||
-    selected === "together"
-  ) {
-    displayCustomInputs(modelId, "inputsContainer");
-    renderAspectRatioOptions(modelId);
-    outputSettingsContainer.style.display = "block";
-  } else {
-    outputSettingsContainer.style.display = "none";
+
+    // Add a separator if there are already elements
+    if (outputSettingsContainer.children.length > 0) {
+      const hr = document.createElement("hr");
+      outputSettingsContainer.appendChild(hr);
+    }
+
+    model.custom_inputs.forEach((input) => {
+      if (
+        input.id.toLowerCase().includes("aspectratio") ||
+        input.id.toLowerCase().includes("aspect_ratio") ||
+        input.id.toLowerCase().includes("imagesize") ||
+        input.id.toLowerCase().includes("size") ||
+        input.id.toLowerCase().includes("resolution")
+      ) {
+        const formGroup = document.createElement("div");
+        formGroup.className = "mb-3";
+
+        const label = document.createElement("label");
+        label.className = "form-label";
+        label.htmlFor = input.id;
+        label.textContent = input.label;
+
+        let inputElement;
+
+        switch (input.type) {
+          case "select":
+            inputElement = document.createElement("select");
+            inputElement.className = "form-select";
+            input.options.forEach((option) => {
+              const opt = document.createElement("option");
+              opt.value = option;
+              opt.textContent = option;
+              if (option === input.default) opt.selected = true;
+              inputElement.appendChild(opt);
+            });
+            break;
+
+          case "number":
+            inputElement = document.createElement("input");
+            inputElement.type = "number";
+            inputElement.className = "form-control";
+            inputElement.value = input.default || "";
+            if (input.placeholder) inputElement.placeholder = input.placeholder;
+            break;
+
+          default:
+            inputElement = document.createElement("input");
+            inputElement.type = "text";
+            inputElement.className = "form-control";
+            inputElement.value = input.default || "";
+            if (input.placeholder) inputElement.placeholder = input.placeholder;
+        }
+
+        inputElement.id = input.id;
+        inputElement.name = input.id;
+
+        formGroup.appendChild(label);
+        formGroup.appendChild(inputElement);
+        outputSettingsContainer.appendChild(formGroup);
+      }
+    });
   }
-});
+}
 
 function renderAspectRatioOptions(modelId) {
   const model = imageModelOptions[modelId];
@@ -1858,26 +363,10 @@ function renderAspectRatioOptions(modelId) {
 
   let ratios = [];
 
-  // Special handling for black-forest-labs-flux-1-1-pro
-  if (modelId === "black-forest-labs-flux-1-1-pro") {
-    if (provider === "fal" && model.provider_aspect_ratios?.fal) {
-      ratios = Object.keys(model.provider_aspect_ratios.fal);
-    } else if (
-      provider === "deepinfra" &&
-      model.provider_aspect_ratios?.deepinfra
-    ) {
-      ratios = model.provider_aspect_ratios.deepinfra;
-    } else {
-      // Default to standard aspect ratios for other cases
-      ratios = Array.isArray(model.aspect_ratios)
-        ? model.aspect_ratios
-        : Object.keys(model.aspect_ratios);
-    }
+  if (model.provider_aspect_ratios && model.provider_aspect_ratios[provider]) {
+    ratios = model.provider_aspect_ratios[provider];
   } else {
-    // Normal behavior for other models
-    ratios = Array.isArray(model.aspect_ratios)
-      ? model.aspect_ratios
-      : Object.keys(model.aspect_ratios);
+    ratios = model.aspect_ratios || [];
   }
 
   if (ratios.length === 0) {
@@ -1893,162 +382,53 @@ function renderAspectRatioOptions(modelId) {
     aspectRatioSelect.appendChild(opt);
   });
 
-  // Select the first option by default if available
   if (ratios.length > 0) {
     aspectRatioSelect.value = ratios[0];
   }
 }
 
-// Update the provider select change listener
-providerSelect.addEventListener("change", () => {
-  const selected = providerSelect.value;
+// Provider Selection Handling
+function handleProviderChange() {
+  const selectedProvider = providerSelect.value;
   const modelId = new URLSearchParams(window.location.search).get("id");
-
   const outputSettingsContainer = document.getElementById(
     "outputSettingsContainer"
   );
   const customInputsContainer = document.getElementById("inputsContainer");
-
-  // Clear aspect ratio
+  const seedInputAuto = document.getElementById("seedInputAuto");
+  const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+  aspectRatioSelect.style.display = "none";
+  // Clear aspect ratio options
   document.getElementById("aspectRatioSelect").innerHTML = "";
 
-  if (selected === "auto") {
-    outputSettingsContainer.style.display = "block";
-    customInputsContainer.style.display = "none";
-    renderAspectRatioOptions(modelId);
-  } else if (selected === "deepinfra") {
-    outputSettingsContainer.style.display = "block";
-    customInputsContainer.style.display = "none";
-    renderAspectRatioOptions(modelId);
-  } else if (selected === "fal") {
-    outputSettingsContainer.style.display = "block";
-    customInputsContainer.style.display = "block";
-    displayCustomInputs(modelId, "inputsContainer");
-    renderAspectRatioOptions(modelId);
-  } else if (selected === "replicate" || selected === "together") {
-    outputSettingsContainer.style.display = "block";
-    customInputsContainer.style.display = "block";
-    displayCustomInputs(modelId, "inputsContainer");
-    renderAspectRatioOptions(modelId);
-  } else {
-    outputSettingsContainer.style.display = "none";
-    customInputsContainer.style.display = "none";
-  }
-});
+  // Show/hide seed input based on provider
+  seedInputAuto.style.display = selectedProvider === "auto" ? "block" : "none";
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM fully loaded and parsed");
-
-  const modelId = new URLSearchParams(window.location.search).get("id");
-
-  if (modelId) {
-    populateImageModelOptions(modelId);
-    renderAspectRatioOptions(modelId);
-  }
-
-  // Force default provider to 'auto'
-  providerSelect.value = "auto";
-
-  const outputSettingsContainer = document.getElementById(
-    "outputSettingsContainer"
-  );
-  const customInputsContainer = document.getElementById("inputsContainer");
-
-  // Only show outputSettingsContainer when provider is 'auto'
-  outputSettingsContainer.style.display = "block";
+  // Reset containers
+  outputSettingsContainer.style.display = "none";
   customInputsContainer.style.display = "none";
+  customInputsContainer.innerHTML = "";
 
-  // Check if there's a prompt to auto-generate
-  const params = new URLSearchParams(window.location.search);
-  const prompt = params.get("prompt");
-  const input = document.getElementById("promptInput");
+  if (!modelId) return;
 
-  if (prompt && input) {
-    input.value = decodeURIComponent(prompt);
-    generateImage();
+  // Handle display logic for each provider type
+  if (selectedProvider === "auto") {
+    outputSettingsContainer.style.display = "block";
+    renderAspectRatioOptions(modelId);
+  } else if (
+    selectedProvider === "fal" ||
+    selectedProvider === "replicate" ||
+    selectedProvider === "deepinfra" ||
+    selectedProvider === "together"
+  ) {
+    outputSettingsContainer.style.display = "block";
+    customInputsContainer.style.display = "block";
+    displayCustomInputs(modelId, "inputsContainer");
+    renderAspectRatioOptions(modelId);
   }
+}
 
-  const selected = providerSelect.value;
-  const falOptions = document.getElementById("falExtraOptions");
-  const replicateOptions = document.getElementById("replicateExtraOptions");
-
-  if (falOptions) displayCustomInputs(modelId, "inputsContainer");
-  if (replicateOptions)
-    replicateOptions.style.display =
-      selected === "replicate" ? "block" : "none";
-
-  // Room creation timestamp
-  const roomCreatedAt = params.get("room");
-  if (roomCreatedAt) {
-    const date = new Date(roomCreatedAt);
-    const formatted = date.toLocaleString(undefined, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    document.getElementById("roomTitle").textContent = "Room created";
-    document.getElementById("roomTimestamp").textContent = formatted;
-  }
-
-  // Add click listeners for "new room" buttons
-  ["newRoomBtnSidebar", "newRoomBtnMobile"].forEach((id) => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const createdAt = new Date().toISOString();
-        const url = `${window.location.origin}${
-          window.location.pathname
-        }?room=${encodeURIComponent(createdAt)}`;
-        window.open(url, "_blank");
-      });
-    }
-  });
-
-  providerSelect.addEventListener("change", () => {
-    const selected = providerSelect.value;
-    const modelId = new URLSearchParams(window.location.search).get("id");
-
-    const outputSettingsContainer = document.getElementById(
-      "outputSettingsContainer"
-    );
-    const customInputsContainer = document.getElementById("inputsContainer");
-    const seedInputAuto = document.getElementById("seedInputAuto");
-    seedInputAuto.style.display =
-      selected === "replicate" || "fal" || "together" ? "none" : "block";
-
-    seedInputAuto.style.display = selected === "auto" ? "block" : "none";
-
-    // Clear aspect ratio
-    document.getElementById("aspectRatioSelect").innerHTML = "";
-
-    if (selected === "auto") {
-      outputSettingsContainer.style.display = "block";
-      customInputsContainer.style.display = "none";
-      renderAspectRatioOptions(modelId);
-    } else if (selected === "deepinfra") {
-      outputSettingsContainer.style.display = "block";
-      customInputsContainer.style.display = "none";
-      renderAspectRatioOptions(modelId);
-    } else if (selected === "fal") {
-      outputSettingsContainer.style.display = "block";
-      customInputsContainer.style.display = "block";
-      displayCustomInputs(modelId, "inputsContainer");
-      renderAspectRatioOptions(modelId);
-    } else if (selected === "replicate" || selected === "together") {
-      outputSettingsContainer.style.display = "block";
-      customInputsContainer.style.display = "block";
-      displayCustomInputs(modelId, "inputsContainer");
-      renderAspectRatioOptions(modelId);
-    } else {
-      outputSettingsContainer.style.display = "none";
-      customInputsContainer.style.display = "none";
-    }
-  });
-});
-
+// Chat Message Functions
 function appendUserMessage(prompt) {
   const userWrapper = document.createElement("div");
   userWrapper.className =
@@ -2066,7 +446,6 @@ function appendGeneratingMessage() {
   const aiDiv = document.createElement("div");
   aiDiv.className = "d-flex justify-content-start mb-3";
 
-  // Unique ID based on timestamp
   const genId = "generating-msg-" + Date.now();
 
   aiDiv.innerHTML = `
@@ -2096,38 +475,6 @@ function replaceWithErrorMessage(msg, genMsgId = null) {
   }
 }
 
-function populateImageModelOptions(modelId) {
-  const config = imageModelOptions[modelId];
-  if (!config) return;
-
-  const ignoredProviders =
-    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
-
-  if (providerSelect) {
-    providerSelect.innerHTML = "";
-
-    const availableProviders = config.providers.filter(
-      (provider) => !ignoredProviders.includes(provider)
-    );
-
-    availableProviders.forEach((provider) => {
-      const option = document.createElement("option");
-      option.value = provider;
-      option.textContent =
-        provider === "auto"
-          ? "Auto (default)"
-          : provider.charAt(0).toUpperCase() + provider.slice(1);
-      providerSelect.appendChild(option);
-    });
-
-    providerSelect.value = availableProviders.includes("auto")
-      ? "auto"
-      : availableProviders[0] || "";
-  }
-
-  // Populate resolution select if needed (left as-is)
-}
-
 function appendErrorMessage(message) {
   const errorDiv = document.createElement("div");
   errorDiv.className = "ai-message p-3 text-danger border border-danger mb-3";
@@ -2138,6 +485,7 @@ function appendErrorMessage(message) {
   chat.scrollTop = chat.scrollHeight;
 }
 
+// Image Generation
 async function generateImage() {
   if (!checkLogin()) {
     alert("You must be logged in to generate images.");
@@ -2230,7 +578,6 @@ async function generateSingleImage({
   provider = "auto",
   isMultiModel,
 }) {
-  // Create a unique message container for this model
   const messageId = `generating-image-${modelId}-${Date.now()}`;
   const aiDiv = document.createElement("div");
   aiDiv.id = messageId;
@@ -2268,20 +615,29 @@ async function generateSingleImage({
     const aspectRatioSelect = document.getElementById("aspectRatioSelect");
     const aspectRatio = aspectRatioSelect?.value || null;
 
+    // Get the resolution from custom inputs if available
+    const resolutionInput =
+      document.getElementById("resolution") ||
+      document.getElementById("size") ||
+      document.getElementById("image_size");
+    const resolution = resolutionInput ? resolutionInput.value : null;
+
     const seedInputAuto = document.getElementById("seedInputAuto");
     let seed = seedInputAuto ? seedInputAuto.value.trim() : "";
 
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-image/${backendModelId}`;
       const parsedSeed =
-        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : undefined;
+        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : 1234;
       if (aspectRatio) requestBody.resolution = aspectRatio;
       if (parsedSeed) requestBody.seed = parsedSeed;
     } else {
+      const parsedSeed =
+        seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : 1234;
+
+      if (parsedSeed) requestBody.seed = parsedSeed;
       requestUrl = `${BACKEND_URL}/api/provider/image/${backendModelId}`;
       requestBody.provider = provider;
-
-      if (aspectRatio) requestBody.resolution = aspectRatio;
 
       modelConfig.custom_inputs?.forEach((inputConfig) => {
         const { id, type } = inputConfig;
@@ -2343,21 +699,27 @@ async function generateSingleImage({
       if (messageDiv) {
         const modelLabel = isMultiModel ? ` (${modelId})` : "";
 
+        // Create display text for resolution info
+        let resolutionInfo = "";
+        if (aspectRatio && resolution) {
+          resolutionInfo = `${aspectRatio} (${resolution})`;
+        } else if (aspectRatio) {
+          resolutionInfo = aspectRatio;
+        } else if (resolution) {
+          resolutionInfo = resolution;
+        } else {
+          resolutionInfo = "default";
+        }
+
         messageDiv.innerHTML = `
           <div class="ai-message p-2">
             <div class="d-flex flex-column align-items-start">
               <div class="mb-2 text-muted small">
-                <i class="bi bi-image-fill me-2"></i>Generated Image${modelLabel} (${
-          aspectRatio || "default"
-        })
+                <i class="bi bi-image-fill me-2"></i>Generated Image${modelLabel} (${resolutionInfo})
               </div>
               <div class="position-relative border rounded overflow-hidden" style="max-width: 512px;">
-                <img src="${
-                  data.imageUrl
-                }" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
-                <a href="${
-                  data.imageUrl
-                }" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
+                <img src="${data.imageUrl}" alt="Generated Image" class="img-fluid" style="width: 100%; height: auto;" />
+                <a href="${data.imageUrl}" target="_blank" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" title="Open in new tab">
                   <i class="bi bi-box-arrow-up-right"></i>
                 </a>
               </div>
@@ -2385,6 +747,7 @@ async function generateSingleImage({
   }
 }
 
+// Utility Functions
 function copyToClipboard(icon) {
   const messageText = icon.previousElementSibling.innerText.trim();
   navigator.clipboard
@@ -2400,45 +763,111 @@ function copyToClipboard(icon) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// Initialization
+async function initializePage() {
   const modelId = new URLSearchParams(window.location.search).get("id");
 
-  document.getElementById("multiModelModeToggle").checked = false;
-
-  providerSelect.value = "auto";
+  // Load model options first
+  await fetchImageModelOptions();
 
   if (modelId) {
-    populateImageModelOptions(modelId); // sets "auto" as default
-    displayCustomInputs(modelId, "inputsContainer");
+    await populateImageModelOptions(modelId);
 
-    const selected = providerSelect.value;
-    if (
-      selected === "auto" ||
-      selected === "fal" ||
-      selected === "replicate" ||
-      selected === "together"
-    ) {
-      renderAspectRatioOptions(modelId);
-      document.getElementById("outputSettingsContainer").style.display =
-        "block";
+    // Set default provider to auto if available
+    const modelConfig = imageModelOptions[modelId];
+    if (modelConfig) {
+      const availableProviders = modelConfig.providers;
+      providerSelect.value = availableProviders.includes("auto")
+        ? "auto"
+        : availableProviders[0];
     }
-    if (selected === "auto")
-      document.getElementById("inputsContainer").style.display = "none";
+
+    // Force initial render of inputs and aspect ratios
+    handleProviderChange();
   }
-  populateModelCheckboxes();
+
+  // Check for prompt in URL
+  const prompt = new URLSearchParams(window.location.search).get("prompt");
+  const input = document.getElementById("promptInput");
+  if (prompt && input) {
+    input.value = decodeURIComponent(prompt);
+  }
+}
+
+// Event Listeners
+document.addEventListener("DOMContentLoaded", () => {
+  createLoadingOverlay();
+  // Remove any duplicate event listeners
+  providerSelect.removeEventListener("change", handleProviderChange);
+  // Add the unified handler
+  providerSelect.addEventListener("change", handleProviderChange);
+  initializePage();
+
+  document
+    .getElementById("applyOptionsBtn")
+    .addEventListener("click", async () => {
+      const modalElement = document.getElementById("modelOptionsModal");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+
+      document
+        .querySelectorAll(".modal-backdrop")
+        .forEach((backdrop) => backdrop.remove());
+      document.body.classList.remove("modal-open");
+      document.body.style = "";
+    });
 });
 
-document
-  .getElementById("applyOptionsBtn")
-  .addEventListener("click", async () => {
-    const modalElement = document.getElementById("modelOptionsModal");
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
+// Model Options Population
+async function populateImageModelOptions(modelId) {
+  await fetchImageModelOptions();
 
-    // Manually remove backdrop just in case
-    document
-      .querySelectorAll(".modal-backdrop")
-      .forEach((backdrop) => backdrop.remove());
-    document.body.classList.remove("modal-open");
-    document.body.style = ""; // clear
-  });
+  const config = imageModelOptions[modelId];
+  if (!config) return;
+
+  const ignoredProviders =
+    JSON.parse(localStorage.getItem("ignoredProviders")) || [];
+
+  if (providerSelect) {
+    providerSelect.innerHTML = "";
+
+    const availableProviders = config.providers.filter(
+      (provider) => !ignoredProviders.includes(provider)
+    );
+
+    availableProviders.forEach((provider) => {
+      const option = document.createElement("option");
+      option.value = provider;
+      option.textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
+      providerSelect.appendChild(option);
+    });
+
+    providerSelect.value = availableProviders.includes("auto")
+      ? "auto"
+      : availableProviders[0] || "";
+  }
+}
+
+function toggleMultiModelMode() {
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  const modelSelectSection = document.getElementById("modelSelectSection");
+  const singleModelSection = document.getElementById("singleModelSection");
+
+  if (isMultiModel) {
+    modelSelectSection.style.display = "block";
+    singleModelSection.style.display = "none";
+  } else {
+    modelSelectSection.style.display = "none";
+    singleModelSection.style.display = "block";
+  }
+}
+
+// Initialize the app
+async function initializeApp() {
+  await initializePage();
+  await populateModelCheckboxes();
+  document
+    .getElementById("multiModelModeToggle")
+    .addEventListener("change", toggleMultiModelMode);
+  toggleMultiModelMode(); // Set initial state
+}

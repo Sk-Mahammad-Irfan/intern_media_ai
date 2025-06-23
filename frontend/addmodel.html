@@ -134,7 +134,13 @@
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="model.html">Models</a></li>
-              <li><a class="dropdown-item" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="audiomodel.html?id=stackadoc-stable-audio"
+                  >Chat</a
+                >
+              </li>
               <li>
                 <a class="dropdown-item" href="rankings.html">Rankings</a>
               </li>
@@ -212,7 +218,11 @@
             <a class="nav-link fw-medium" href="model.html">Models</a>
           </li>
           <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
+            <a
+              class="nav-link fw-medium"
+              href="audiomodel.html?id=stackadoc-stable-audio"
+              >Chat</a
+            >
           </li>
           <li class="nav-item mx-1">
             <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
@@ -329,105 +339,108 @@
       <!-- Main Content -->
       <div class="main-content">
         <div class="container py-4">
-          <h1 class="mb-3">Privacy Settings</h1>
-          <p class="lead">Manage your privacy settings and data preferences.</p>
-
-          <!-- Data Collection Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Collection</h5>
+          <h2>Add New Model</h2>
+          <form id="modelForm">
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Name</label>
+                <input type="text" id="name" required class="form-control" />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Asset Type</label>
+                <select id="assetType" required class="form-select">
+                  <option value="image">Image</option>
+                  <option value="video">Video</option>
+                  <option value="audio">Audio</option>
+                </select>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowAnalytics"
-                  checked
-                />
-                <label class="form-check-label" for="allowAnalytics"
-                  >Allow analytics data collection</label
-                >
-                <div class="text-muted small">
-                  We collect anonymous usage data to improve our services
+            <div id="providersContainer">
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label class="form-label">Provider</label>
+                  <select id="provider" required class="form-select">
+                    <option value="replicate">replicate</option>
+                    <option value="fal">fal</option>
+                    <option value="together">together</option>
+                    <option value="deepinfra">deepinfra</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Credit</label>
+                  <input
+                    type="number"
+                    id="credit"
+                    required
+                    class="form-control"
+                  />
                 </div>
               </div>
-
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowPersonalization"
-                  checked
-                />
-                <label class="form-check-label" for="allowPersonalization"
-                  >Allow personalization</label
+              <button
+                type="button"
+                onclick="addProvider()"
+                class="btn btn-secondary"
+              >
+                Add Provider
+              </button>
+            </div>
+            <div id="providerFields" class="mt-3"></div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Description</label>
+                <textarea id="description" class="form-control"></textarea>
+              </div>
+              <div class="col-6">
+                <label class="form-label">Link</label>
+                <input type="text" id="link" class="form-control" />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Full Details</label>
+                <textarea id="fullDetails" class="form-control"></textarea>
+              </div>
+              <div class="col-6">
+                <label class="form-label">Credit Price</label>
+                <input type="text" id="creditPrice" class="form-control" />
+              </div>
+            </div>
+            <div id="customInputsContainer" class="mt-3">
+              <h3 class="mb-3">Custom Inputs</h3>
+              <button
+                type="button"
+                onclick="addCustomInput()"
+                class="btn btn-secondary"
+              >
+                Add Custom Input
+              </button>
+              <div class="customInputs" id="customInputs"></div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label"
+                  >Aspect Ratios (comma separated)</label
                 >
-                <div class="text-muted small">
-                  We use your data to personalize your experience
-                </div>
+                <input type="text" id="aspectRatios" class="form-control" />
+              </div>
+              <div
+                class="col-6"
+                id="resolutionsContainer"
+                style="display: none"
+              >
+                <label class="form-label">Resolutions (comma separated)</label>
+                <input type="text" id="resolutions" class="form-control" />
               </div>
             </div>
-          </div>
-
-          <!-- Model Usage Data Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Model Usage Data</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="saveModelData"
-                  checked
-                />
-                <label class="form-check-label" for="saveModelData"
-                  >Save model interactions</label
-                >
-                <div class="text-muted small">
-                  Your prompts and model responses will be saved for improving
-                  AI models
-                </div>
-              </div>
-
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="shareModelData"
-                />
-                <label class="form-check-label" for="shareModelData"
-                  >Share data with model providers</label
-                >
-                <div class="text-muted small">
-                  Allow us to share anonymized data with our model providers
-                </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Tags (comma separated)</label>
+                <input type="text" id="tags" class="form-control" />
               </div>
             </div>
-          </div>
-
-          <!-- Data Management Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Management</h5>
-            </div>
-            <div class="card-body">
-              <p>
-                You can download your data or request deletion of all your data
-                from our servers.
-              </p>
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary w-100 w-sm-auto">
-                  Download My Data
-                </button>
-                <button class="btn btn-outline-danger w-100 w-sm-auto">
-                  Request Data Deletion
-                </button>
-              </div>
-            </div>
-          </div>
+            <br /><br />
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </div>
     </div>
@@ -463,6 +476,7 @@
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
     <script src="js/avtar.js"></script>
-    </script>
+    <script src="js/add-model.js"></script>
+    <script></script>
   </body>
 </html>

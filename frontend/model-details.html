@@ -76,28 +76,32 @@
         font-size: 0.9rem;
       }
 
-.card {
-  transition: all 0.3s ease-in-out;
-}
+      .card {
+        transition: all 0.3s ease-in-out;
+      }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
-}
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
+      }
 
-.badge {
-  font-size: 0.85rem;
-  padding: 0.35em 0.6em;
-}
-.faded-hr {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, #737171, transparent);
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  opacity: 0.7;
-}
-
+      .badge {
+        font-size: 0.85rem;
+        padding: 0.35em 0.6em;
+      }
+      .faded-hr {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          #737171,
+          transparent
+        );
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        opacity: 0.7;
+      }
     </style>
   </head>
   <body class="d-flex flex-column min-vh-100">
@@ -426,14 +430,12 @@
             <div>
               <p id="model-full-details" class="text-muted">Model loading...</p>
             </div>
-            
-            <hr class="faded-hr my-5" />
 
+            <hr class="faded-hr my-5" />
 
             <div id="provider-header" class="mb-3"></div>
             <div id="provider-details-section"></div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -467,6 +469,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/model-selector.js"></script>
     <script src="js/search.js"></script>
     <script src="js/script.js"></script>
     <script src="js/model-details.js"></script>

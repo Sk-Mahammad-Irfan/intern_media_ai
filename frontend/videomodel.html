@@ -196,7 +196,7 @@
         border-radius: 0.375rem;
       }
             /* Container spacing */
-      #multiModelSelectionContainer {
+      #modelCheckboxesContainer {
         border-radius: 10px;
       }
 
@@ -541,7 +541,7 @@
           <div
               class="d-flex align-items-center gap-3 flex-grow-1 flex-sm-nowrap flex-wrap"
             >
-              <div class="singleModelControls model-group d-flex align-items-center gap-2">
+              <div class="singleModelControls model-group d-flex align-items-center gap-2" id="singleModelOptions">
                 <label class="fw-semibold mb-0">Model:</label>
                 <select
                   id="modelSelector"
@@ -625,7 +625,7 @@
           </div>
 
           <!-- Multi-model selection (hidden by default) -->
-          <div id="multiModelSelectionContainer" class="p-3 mb-3 mx-auto" style="display: none; max-width: 900px;">
+          <div id="modelCheckboxesContainer" class="p-3 mb-3 mx-auto" style="display: none; max-width: 900px;">
             <div id="modelCheckboxes" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
           </div>          
           
@@ -927,6 +927,7 @@
     <script src="js/search.js"></script>
     <script src="js/model-selector.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/model-selector.js"></script>
     <script src="js/config.js"></script>
     <script src="js/video.js"></script>
     <script src="js/avtar.js"></script>

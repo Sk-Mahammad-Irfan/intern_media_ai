@@ -1,154 +1,40 @@
-const chat = document.getElementById("chat");
-const providerSelect = document.getElementById("providerSelect");
-const resolutionSelect = document.getElementById("resolutionSelect");
-const aspectRatioSelect = document.getElementById("aspectRatioSelect");
-
-const modelOptions = {
-  "lightricks-ltx-video": {
-    providers: ["replicate", "auto"],
-    resolutions: {
-      "360p": 512,
-      "540p": 576,
-      "720p": 640,
-      "768p": 704,
-      "1080p": 960,
-    },
-    aspect_ratios: [
-      "1:1",
-      "1:2",
-      "2:1",
-      "2:3",
-      "3:2",
-      "3:4",
-      "4:3",
-      "4:5",
-      "5:4",
-      "9:16",
-      "16:9",
-      "9:21",
-      "21:9",
-    ],
-  },
-  "luma-ray2-flash": {
-    providers: ["fal", "auto"],
-    resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
-  },
-  "pika-text-to-video-v2-1": {
-    providers: ["fal", "auto"],
-    resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
-  },
-  "pika-text-to-video-v2-2": {
-    providers: ["fal", "auto"],
-    resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "4:3", "3:4", "21:9", "9:21"],
-  },
-  "pixverse-v4": {
-    providers: ["fal", "auto"],
-    resolutions: { "540p": null, "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
-  },
-  "pixverse-v4.5": {
-    providers: ["fal", "replicate", "auto"],
-    resolutions: { "540p": null, "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "4:3", "1:1", "3:4", "9:16"],
-  },
-  "wan-ai-wan21-t2v-13b": {
-    providers: ["fal", "replicate", "deepinfra", "auto"],
-    resolutions: { "480p": null },
-    aspect_ratios: ["16:9", "9:16"],
-  },
-  "wan-ai-wan21-t2v-14b": {
-    providers: ["deepinfra", "auto"],
-    resolutions: { "480p": null, "720p": null },
-    aspect_ratios: ["16:9", "9:16"],
-  },
-  "wavespeedai-wan21-t2v-720p": {
-    providers: ["replicate", "auto"],
-    resolutions: { "720p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1"],
-  },
-  "wavespeedai-wan21-t2v-480p": {
-    providers: ["replicate", "auto"],
-    resolutions: { "480p": null },
-    aspect_ratios: ["16:9", "9:16"],
-  },
-  "google-veo-3": {
-    providers: ["fal", "replicate", "auto"],
-    resolutions: { "720p": null }, // Not specified, same as Veo 2
-    aspect_ratios: ["16:9", "9:16"],
-    durations: [5, 6, 7, 8], // Based on prior Veo standards
-    seed: true, // Both providers support seed
-    image: true, // Starting from an image is supported
-    audio: true, // New feature: audio support in Veo 3
-  },
-  "cogvideox-5b": {
-    providers: ["fal", "auto"],
-    resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: [
-      "square_hd",
-      "square",
-      "portrait_4_3",
-      "portrait_16_9",
-      "landscape_4_3",
-      "landscape_16_9",
-    ],
-  },
-  "kling-video-v2-master": {
-    providers: ["fal", "auto"],
-    resolutions: { "720p": null, "1080p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1"],
-  },
-  "minimax-video-01": {
-    providers: ["fal", "replicate", "auto"],
-    resolutions: { "720p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1"],
-  },
-  "hunyuan-video": {
-    providers: ["fal", "replicate", "auto"],
-    resolutions: { "480p": null, "580p": null, "720p": null },
-    aspect_ratios: ["16:9", "9:16"],
-  },
-  magi: {
-    providers: ["fal", "auto"],
-    resolutions: { "480p": null, "720p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1"],
-  },
-  "vidu-q1": {
-    providers: ["fal", "auto"],
-    resolutions: { "480p": null, "720p": null },
-    aspect_ratios: ["16:9", "9:16", "1:1"],
-  },
-  veo2: {
-    providers: ["fal", "auto"],
-    resolutions: { "480p": null, "720p": null },
-    aspect_ratios: ["16:9", "9:16"],
-  },
-};
-
-const videoModelCredits = {
-  "wan-ai-wan21-t2v-13b": 18, // fal: 18
-  "wan-ai-wan21-t2v-14b": 10, // deepinfra: 10
-  "wavespeedai-wan21-t2v-720p": 22, // Not in handlers, using your value
-  "wavespeedai-wan21-t2v-480p": 12, // replicate: 12
-  "lightricks-ltx-video": 60, // replicate: 60
-  "google-veo-3": 50, // fal: 50
-  "minimax-video-01": 50, // replicate: 50
-  "hunyuan-video": 50, // replicate: 50
-  "pixverse-v4": 15, // fal: 15 (your value)
-  "pixverse-v4.5": 15, // fal: 15
-  "pika-text-to-video-v2-1": 40, // fal: 40
-  "pika-text-to-video-v2-2": 45, // fal: 45
-  "luma-ray2-flash": 25, // fal: 25
-  "kling-video-v2-master": 20, // fal: 20
-  "vidu-q1": 18, // fal: 18
-  magi: 22, // fal: 22
-  veo2: 18, // fal: 18
-  "cogvideox-5b": 25, // fal: 25
-};
-
 let selectedModels = [];
+let modelOptions = {};
+let videoModelCredits = {};
+
+// Fetch model options from backend
+async function fetchModelOptions() {
+  try {
+    const response = await fetch("http://localhost:5000/api/model/video");
+    const models = await response.json();
+
+    // Transform the backend data into the format expected by the frontend
+    models.forEach((model) => {
+      modelOptions[model.modelId] = {
+        name: model.name,
+        providers: model.provider,
+        resolutions: model.resolutions.reduce((acc, res) => {
+          acc[res] = true;
+          return acc;
+        }, {}),
+        aspect_ratios: model.aspect_ratios,
+        provider_aspect_ratios: model.provider_aspect_ratios || {},
+        custom_inputs: model.custom_inputs || [],
+      };
+
+      // Create credits mapping (assuming credits array matches provider order)
+      model.provider.forEach((provider, index) => {
+        videoModelCredits[`${model.modelId}-${provider}`] =
+          model.credits[index] || 0;
+      });
+    });
+
+    return modelOptions;
+  } catch (error) {
+    console.error("Failed to fetch model options:", error);
+    return {};
+  }
+}
 
 function prettifyModelName(modelId) {
   return modelId
@@ -165,16 +51,26 @@ function updateTotalCredits() {
   let totalCredits = 0;
 
   selectedModels.forEach((model) => {
-    totalCredits += videoModelCredits[model] || 0;
+    const config = modelOptions[model];
+    if (config) {
+      config.providers.forEach((provider) => {
+        totalCredits += videoModelCredits[`${model}-${provider}`] || 0;
+      });
+    }
   });
 
   creditAmountElement.textContent = totalCredits;
   creditDisplay.style.display = selectedModels.length > 0 ? "block" : "none";
 }
 
-function populateModelCheckboxes() {
+async function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
   container.innerHTML = "";
+
+  // Ensure model options are loaded
+  if (Object.keys(modelOptions).length === 0) {
+    await fetchModelOptions();
+  }
 
   Object.keys(modelOptions).forEach((modelId) => {
     const col = document.createElement("div");
@@ -194,7 +90,8 @@ function populateModelCheckboxes() {
     const label = document.createElement("label");
     label.className = "model-label";
     label.htmlFor = `model-${modelId}`;
-    label.textContent = prettifyModelName(modelId);
+    label.textContent =
+      modelOptions[modelId].name || prettifyModelName(modelId);
 
     card.appendChild(checkbox);
     card.appendChild(label);
@@ -224,6 +121,7 @@ function getSelectedValue(select) {
 }
 
 function appendUserMessage(prompt) {
+  const chat = document.getElementById("chat");
   const wrapper = document.createElement("div");
   wrapper.className =
     "d-flex flex-column align-items-end mb-3 position-relative";
@@ -236,6 +134,7 @@ function appendUserMessage(prompt) {
 }
 
 function appendGeneratingVideoMessage() {
+  const chat = document.getElementById("chat");
   const aiDiv = document.createElement("div");
   aiDiv.className = "d-flex justify-content-start mb-3 generating-video";
   aiDiv.innerHTML = `
@@ -249,6 +148,7 @@ function appendGeneratingVideoMessage() {
 }
 
 function appendErrorMessage(message) {
+  const chat = document.getElementById("chat");
   const errorDiv = document.createElement("div");
   errorDiv.className = "d-flex justify-content-start mb-3";
   errorDiv.innerHTML = `
@@ -260,6 +160,7 @@ function appendErrorMessage(message) {
 }
 
 function appendGeneratedVideo(videoUrl) {
+  const chat = document.getElementById("chat");
   const loadingMessage = document.querySelector(".generating-video");
   if (loadingMessage) loadingMessage.remove();
 
@@ -571,8 +472,9 @@ async function generateSingleVideo({
       bubble.appendChild(meta);
       bubble.appendChild(wrapper);
       message.appendChild(bubble);
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
+      document.getElementById("chat").appendChild(message);
+      document.getElementById("chat").scrollTop =
+        document.getElementById("chat").scrollHeight;
     } else {
       appendErrorMessage("No video URL returned.");
     }
@@ -595,7 +497,12 @@ function copyToClipboard(icon) {
     .catch((err) => console.error("Copy failed:", err));
 }
 
-function populateModelOptions(modelId) {
+async function populateModelOptions(modelId) {
+  // Ensure model options are loaded
+  if (Object.keys(modelOptions).length === 0) {
+    await fetchModelOptions();
+  }
+
   const config = modelOptions[modelId];
   if (!config) return;
 
@@ -605,7 +512,7 @@ function populateModelOptions(modelId) {
 
   providerSelect.innerHTML = "";
 
-  const availableProviders = modelOptions[modelId].providers.filter(
+  const availableProviders = config.providers.filter(
     (provider) => !ignoredProviders.includes(provider)
   );
 
@@ -619,11 +526,11 @@ function populateModelOptions(modelId) {
     providerSelect.appendChild(option);
   });
 
-  // ✅ Always select "auto" if available and not ignored
+  // Always select "auto" if available and not ignored
   if (availableProviders.includes("auto")) {
     providerSelect.value = "auto";
   } else {
-    providerSelect.value = availableProviders[0] || ""; // fallback to empty if none available
+    providerSelect.value = availableProviders[0] || "";
   }
 
   // Populate resolutions
@@ -636,22 +543,69 @@ function populateModelOptions(modelId) {
   });
   if (config.resolutions["720p"] !== undefined) resolutionSelect.value = "720p";
 
-  // Populate aspect ratios
+  // Populate aspect ratios - use provider-specific if available
+  const currentProvider = providerSelect.value;
+  const aspectRatios = config.provider_aspect_ratios?.[currentProvider] ||
+    config.aspect_ratios || ["16:9"];
+
   aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
-  config.aspect_ratios.forEach((ratio) => {
+  aspectRatios.forEach((ratio) => {
     const option = document.createElement("option");
     option.value = ratio;
     option.textContent = ratio;
     aspectRatioSelect.appendChild(option);
   });
-  if (config.aspect_ratios.includes("16:9")) aspectRatioSelect.value = "16:9";
+  if (aspectRatios.includes("16:9")) aspectRatioSelect.value = "16:9";
+}
+
+function updateAspectRatioOptions() {
+  const modelId = getModelIdFromURL();
+  const config = modelOptions[modelId];
+  if (!config) return;
+
+  const currentProvider = providerSelect.value;
+
+  // Get aspect ratios for current provider or fallback to default
+  const aspectRatios = config.provider_aspect_ratios?.[currentProvider] ||
+    config.aspect_ratios || ["16:9"];
+
+  aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
+  aspectRatios.forEach((ratio) => {
+    const option = document.createElement("option");
+    option.value = ratio;
+    option.textContent = ratio;
+    aspectRatioSelect.appendChild(option);
+  });
+
+  // Set default to 16:9 if available
+  if (aspectRatios.includes("16:9")) {
+    aspectRatioSelect.value = "16:9";
+  }
 }
 
 function getModelIdFromURL() {
   return new URLSearchParams(window.location.search).get("id");
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+function toggleMultiModelMode() {
+  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  document.getElementById("modelCheckboxesContainer").style.display =
+    isMultiModel ? "block" : "none";
+  document.getElementById("singleModelOptions").style.display = isMultiModel
+    ? "none"
+    : "block";
+}
+
+// Initialize the application
+window.addEventListener("DOMContentLoaded", async () => {
+  // Initialize DOM elements
+  const providerSelect = document.getElementById("providerSelect");
+  const resolutionSelect = document.getElementById("resolutionSelect");
+  const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+
+  // Fetch model options first
+  await fetchModelOptions();
+
   const params = new URLSearchParams(window.location.search);
   const prompt = params.get("prompt");
   const modelId = getModelIdFromURL();
@@ -661,9 +615,10 @@ window.addEventListener("DOMContentLoaded", () => {
     .getElementById("multiModelModeToggle")
     .addEventListener("change", toggleMultiModelMode);
   document.getElementById("multiModelModeToggle").checked = false;
+  toggleMultiModelMode();
 
   if (modelId) {
-    populateModelOptions(modelId);
+    await populateModelOptions(modelId);
     updateAspectRatioOptions();
   }
 
@@ -672,95 +627,68 @@ window.addEventListener("DOMContentLoaded", () => {
     generateVideo();
   }
 
-  // Show/hide extra options for fal and replicate based on initial provider selection.
+  // Show/hide extra options based on initial provider selection
   const selected = providerSelect.value;
   const falOptions = document.getElementById("falExtraOptions");
   falOptions.style.display = selected === "fal" ? "block" : "none";
   const replicateOptions = document.getElementById("replicateExtraOptions");
   replicateOptions.style.display = selected === "replicate" ? "block" : "none";
 
-  // Populate model checkboxes (hidden until multi-model mode is enabled)
-  populateModelCheckboxes();
-});
+  // Populate model checkboxes
+  await populateModelCheckboxes();
 
-function updateAspectRatioOptions() {
-  const modelId = getModelIdFromURL();
-  const config = modelOptions[modelId];
+  // Provider change handler
+  providerSelect.addEventListener("change", () => {
+    const selected = providerSelect.value;
+    const falOptions = document.getElementById("falExtraOptions");
+    falOptions.style.display = selected === "fal" ? "block" : "none";
+    const replicateOptions = document.getElementById("replicateExtraOptions");
+    replicateOptions.style.display =
+      selected === "replicate" ? "block" : "none";
 
-  // If model id is 'wan-ai-wan21-t2v-13b' and provider is 'deepinfra', force only 16:9.
-  if (
-    modelId === "wan-ai-wan21-t2v-13b" &&
-    providerSelect.value === "deepinfra"
-  ) {
-    aspectRatioSelect.innerHTML = `<option value="16:9">16:9</option>`;
-    aspectRatioSelect.value = "16:9";
-  } else if (config) {
-    // Otherwise, populate aspect ratios from the model's config
-    aspectRatioSelect.innerHTML = `<option value="" disabled selected>Aspect Ratio</option>`;
-    config.aspect_ratios.forEach((ratio) => {
-      const option = document.createElement("option");
-      option.value = ratio;
-      option.textContent = ratio;
-      aspectRatioSelect.appendChild(option);
-    });
-    // Set a default if possible (here choosing 16:9 if available)
-    if (config.aspect_ratios.includes("16:9")) {
-      aspectRatioSelect.value = "16:9";
-    }
-  }
-}
+    const seedInputAuto = document.getElementById("seedInputAuto");
+    seedInputAuto.style.display = selected === "auto" ? "block" : "none";
 
-providerSelect.addEventListener("change", () => {
-  const selected = providerSelect.value;
-  const falOptions = document.getElementById("falExtraOptions");
-  falOptions.style.display = selected === "fal" ? "block" : "none";
-  const replicateOptions = document.getElementById("replicateExtraOptions");
-  replicateOptions.style.display = selected === "replicate" ? "block" : "none";
-
-  const seedInputAuto = document.getElementById("seedInputAuto");
-  seedInputAuto.style.display =
-    selected === "replicate" || "fal" ? "none" : "block";
-
-  seedInputAuto.style.display = selected === "auto" ? "block" : "none";
-
-  // Update aspect ratios after provider changes
-  updateAspectRatioOptions();
-});
-
-document
-  .getElementById("applyOptionsBtn")
-  .addEventListener("click", async () => {
-    // Get values
-    const resolution = getSelectedValue(resolutionSelect);
-    const aspectRatio = getSelectedValue(aspectRatioSelect);
-
-    const shift = document.getElementById("shiftInput").value || "5";
-    const steps = document.getElementById("stepsInput").value || "10";
-    const guidance = document.getElementById("guidanceInput").value || "7";
-    const negativePrompt =
-      document.getElementById("negativePromptInput").value || "";
-    const seed = document.getElementById("seedInput").value || "";
-    const expansion = document.getElementById("enableExpansion").checked;
-    const safety = document.getElementById("enableSafety").checked;
-
-    // Update values if needed
-    document.getElementById("shiftInput").value = shift;
-    document.getElementById("stepsInput").value = steps;
-    document.getElementById("guidanceInput").value = guidance;
-    document.getElementById("negativePromptInput").value = negativePrompt;
-    document.getElementById("seedInput").value = seed;
-    document.getElementById("enableExpansion").checked = expansion;
-    document.getElementById("enableSafety").checked = safety;
-
-    // Close modal
-    const modalElement = document.getElementById("modelOptionsModal");
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
-
-    // Manually remove backdrop just in case
-    document
-      .querySelectorAll(".modal-backdrop")
-      .forEach((backdrop) => backdrop.remove());
-    document.body.classList.remove("modal-open");
-    document.body.style = ""; // clear
+    // Update aspect ratios after provider changes
+    updateAspectRatioOptions();
   });
+
+  // Apply options button handler
+  document
+    .getElementById("applyOptionsBtn")
+    .addEventListener("click", async () => {
+      // Get values
+      const resolution = getSelectedValue(resolutionSelect);
+      const aspectRatio = getSelectedValue(aspectRatioSelect);
+
+      const shift = document.getElementById("shiftInput").value || "5";
+      const steps = document.getElementById("stepsInput").value || "10";
+      const guidance = document.getElementById("guidanceInput").value || "7";
+      const negativePrompt =
+        document.getElementById("negativePromptInput").value || "";
+      const seed = document.getElementById("seedInput").value || "";
+      const expansion = document.getElementById("enableExpansion").checked;
+      const safety = document.getElementById("enableSafety").checked;
+
+      // Update values if needed
+      document.getElementById("shiftInput").value = shift;
+      document.getElementById("stepsInput").value = steps;
+      document.getElementById("guidanceInput").value = guidance;
+      document.getElementById("negativePromptInput").value = negativePrompt;
+      document.getElementById("seedInput").value = seed;
+      document.getElementById("enableExpansion").checked = expansion;
+      document.getElementById("enableSafety").checked = safety;
+
+      // Close modal
+      const modalElement = document.getElementById("modelOptionsModal");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+
+      // Manually remove backdrop just in case
+      document
+        .querySelectorAll(".modal-backdrop")
+        .forEach((backdrop) => backdrop.remove());
+      document.body.classList.remove("modal-open");
+      document.body.style = "";
+    });
+});
