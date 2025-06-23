@@ -849,25 +849,32 @@ async function populateImageModelOptions(modelId) {
 }
 
 function toggleMultiModelMode() {
-  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
-  const modelSelectSection = document.getElementById("modelSelectSection");
-  const singleModelSection = document.getElementById("singleModelSection");
+  const toggleElement = document.getElementById("multiModelModeToggle");
+  const multiModelSection = document.getElementById("multiModelSelectionContainer");
+  const singleModelSection = document.querySelector(".singleModelControls");
 
-  if (isMultiModel) {
-    modelSelectSection.style.display = "block";
-    singleModelSection.style.display = "none";
-  } else {
-    modelSelectSection.style.display = "none";
-    singleModelSection.style.display = "block";
+  if (!toggleElement || !multiModelSection || !singleModelSection) {
+    console.error("One or more required elements are missing in the DOM.");
+    return;
   }
+
+  const isMultiModel = toggleElement.checked;
+
+  multiModelSection.style.display = isMultiModel ? "block" : "none";
+  singleModelSection.style.display = isMultiModel ? "none" : "flex";
 }
 
-// Initialize the app
 async function initializeApp() {
   await initializePage();
   await populateModelCheckboxes();
-  document
-    .getElementById("multiModelModeToggle")
-    .addEventListener("change", toggleMultiModelMode);
-  toggleMultiModelMode(); // Set initial state
+
+  const toggle = document.getElementById("multiModelModeToggle");
+  if (toggle) {
+    toggle.addEventListener("change", toggleMultiModelMode);
+    toggleMultiModelMode(); // Set initial state
+  } else {
+    console.error("Toggle checkbox not found.");
+  }
 }
+
+document.addEventListener("DOMContentLoaded", initializeApp);
