@@ -296,7 +296,7 @@ async function callFalVideo(modelId, body) {
         }
       },
     });
-    return result;
+    return result.data;
   } catch (err) {
     console.error(`Error calling FAL video for ${modelId}:`, err);
     throw err;

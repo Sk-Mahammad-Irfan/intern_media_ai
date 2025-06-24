@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/usage/stats");
+    const response = await fetch(`${BACKEND_URL}/api/usage/stats`);
     const result = await response.json();
 
     if (!result.success) throw new Error("Failed to load data");
@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       "american-audio": "audio",
       "ideogram-v3": "image",
       "hidream-i1-dev": "image",
-      "fooocus": "image",
+      fooocus: "image",
       "luma-ray2-flash": "video",
       "pika-text-to-video-v2-1": "video",
       "cassattemusic-audio": "audio",
-      "CogVideoX": "video",
+      CogVideoX: "video",
       "kling-video-v2-master": "video",
-      "magi": "video",
+      magi: "video",
       "vidu-q1": "video",
       "imagen4-preview": "image",
       "sana-v1.5-4.8b": "image",
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       "fal-ai-elevenlabs-sound-effects": "audio",
       "fal-ai-lyria2": "audio",
       "fal-ai-mmaudio-v2-text-to-audio": "audio",
-      "bagel": "image",
+      bagel: "image",
       "minimax-image-01": "image",
       "f-lite-standard": "image",
-      "veo2": "video",
+      veo2: "video",
       // add more as needed
     };
 
@@ -64,21 +64,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderLeaderboard(allData);
 
     // Handle category filter
-    document.getElementById("categoryFilter").addEventListener("change", (e) => {
-      const selected = e.target.value;
+    document
+      .getElementById("categoryFilter")
+      .addEventListener("change", (e) => {
+        const selected = e.target.value;
 
-      const filteredData =
-        selected === "all"
-          ? allData
-          : allData.filter((item) => {
-              // Get category from map, default unknown
-              const category = modelCategoryMap[item.model] || "unknown";
-              return category === selected;
-            });
+        const filteredData =
+          selected === "all"
+            ? allData
+            : allData.filter((item) => {
+                // Get category from map, default unknown
+                const category = modelCategoryMap[item.model] || "unknown";
+                return category === selected;
+              });
 
-      renderLeaderboard(filteredData);
-      updateChart(filteredData);
-    });
+        renderLeaderboard(filteredData);
+        updateChart(filteredData);
+      });
 
     // Initial chart render with all data
     const ctx = document.getElementById("usageChart").getContext("2d");

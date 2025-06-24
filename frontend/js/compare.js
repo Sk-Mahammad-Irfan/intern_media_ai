@@ -14,7 +14,7 @@ function initComparePage() {
 // Fetch models from backend
 async function fetchModels() {
   try {
-    const response = await fetch("http://localhost:5000/api/model");
+    const response = await fetch(`${BACKEND_URL}/api/model`);
     if (!response.ok) throw new Error("Failed to fetch models");
     const data = await response.json();
 

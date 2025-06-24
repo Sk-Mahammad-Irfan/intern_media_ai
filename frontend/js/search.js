@@ -1,10 +1,9 @@
-const backendBaseURL = "http://localhost:5000"; // Your backend API base URL
 let models = {}; // This will store our fetched models
 
 // Function to fetch models from backend
 async function fetchModels() {
   try {
-    const response = await fetch(`${backendBaseURL}/api/model`);
+    const response = await fetch(`${BACKEND_URL}/api/model`);
     if (!response.ok) throw new Error("Failed to fetch models");
     const modelsArray = await response.json();
 

@@ -5,7 +5,7 @@ let videoModelCredits = {};
 // Fetch model options from backend
 async function fetchModelOptions() {
   try {
-    const response = await fetch("http://localhost:5000/api/model/video");
+    const response = await fetch(`${BACKEND_URL}/api/model/video`);
     const models = await response.json();
 
     // Transform the backend data into the format expected by the frontend

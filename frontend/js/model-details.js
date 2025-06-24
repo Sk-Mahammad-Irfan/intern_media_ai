@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Fetch specific model data from backend
-    const response = await fetch(`http://localhost:5000/api/model/${modelId}`);
+    const response = await fetch(`${BACKEND_URL}/api/model/${modelId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch model: ${response.statusText}`);
     }

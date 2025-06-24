@@ -20,7 +20,7 @@ async function fetchAllData() {
   `;
 
   try {
-    const response = await fetch(`${backendBaseURL}/api/model`);
+    const response = await fetch(`${BACKEND_URL}/api/model`);
     if (!response.ok) throw new Error("Failed to fetch models");
 
     const modelsArray = await response.json();

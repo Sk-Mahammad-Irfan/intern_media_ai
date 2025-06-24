@@ -14,7 +14,7 @@ const copyUrlBtn = document.getElementById("copyUrlBtn");
 // Function to fetch models from backend and transform the data structure
 async function fetchModels() {
   try {
-    const response = await fetch(`${backendBaseURL}/api/model`);
+    const response = await fetch(`${BACKEND_URL}/api/model`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

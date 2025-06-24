@@ -45,7 +45,7 @@
   // ✅ Fetch models from backend and populate selector
   async function fetchAndPopulateModels() {
     try {
-      const response = await fetch("http://localhost:5000/api/model/");
+      const response = await fetch(`${BACKEND_URL}/api/model`);
       if (!response.ok) {
         throw new Error("Failed to fetch models");
       }

@@ -4,6 +4,7 @@ let selectedModels = [];
 let imageModelOptions = {};
 let imageModelCredits = {};
 let modelsLoading = false;
+let modelsLoaded = false; // New flag to track if models are already loaded
 
 // Loading State Management
 function showLoading() {
@@ -50,13 +51,18 @@ function createLoadingOverlay() {
   document.body.appendChild(overlay);
 }
 
-// Model Data Fetching
-async function fetchImageModelOptions() {
+// Model Data Fetching - Modified to prevent multiple calls
+async function fetchImageModelOptions(forceRefresh = false) {
+  // Return cached data if already loaded and not forcing refresh
+  if (modelsLoaded && !forceRefresh) {
+    return imageModelOptions;
+  }
+
   try {
     showLoading();
     modelsLoading = true;
 
-    const response = await fetch("http://localhost:5000/api/model/image");
+    const response = await fetch(`${BACKEND_URL}/api/model/image`);
     if (!response.ok) {
       throw new Error("Failed to fetch model options");
     }
@@ -79,6 +85,7 @@ async function fetchImageModelOptions() {
 
     imageModelOptions = modelOptions;
     imageModelCredits = modelCredits;
+    modelsLoaded = true; // Mark as loaded
     return modelOptions;
   } catch (error) {
     console.error("Error fetching model options:", error);
@@ -114,8 +121,10 @@ function updateTotalCredits() {
 // Model Selection Management
 async function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
-  container.innerHTML = "";
+  // Don't repopulate if already done
+  if (container.children.length > 0) return;
 
+  // Wait for models to load if they're loading
   if (modelsLoading) {
     await new Promise((resolve) => {
       const check = setInterval(() => {
@@ -763,12 +772,14 @@ function copyToClipboard(icon) {
     });
 }
 
-// Initialization
+// Initialization - Modified to prevent multiple calls
 async function initializePage() {
-  const modelId = new URLSearchParams(window.location.search).get("id");
+  // Only fetch models if not already loaded
+  if (!modelsLoaded) {
+    await fetchImageModelOptions();
+  }
 
-  // Load model options first
-  await fetchImageModelOptions();
+  const modelId = new URLSearchParams(window.location.search).get("id");
 
   if (modelId) {
     await populateImageModelOptions(modelId);
@@ -794,33 +805,12 @@ async function initializePage() {
   }
 }
 
-// Event Listeners
-document.addEventListener("DOMContentLoaded", () => {
-  createLoadingOverlay();
-  // Remove any duplicate event listeners
-  providerSelect.removeEventListener("change", handleProviderChange);
-  // Add the unified handler
-  providerSelect.addEventListener("change", handleProviderChange);
-  initializePage();
-
-  document
-    .getElementById("applyOptionsBtn")
-    .addEventListener("click", async () => {
-      const modalElement = document.getElementById("modelOptionsModal");
-      const modal = bootstrap.Modal.getInstance(modalElement);
-      modal.hide();
-
-      document
-        .querySelectorAll(".modal-backdrop")
-        .forEach((backdrop) => backdrop.remove());
-      document.body.classList.remove("modal-open");
-      document.body.style = "";
-    });
-});
-
 // Model Options Population
 async function populateImageModelOptions(modelId) {
-  await fetchImageModelOptions();
+  // Don't fetch again if already loaded
+  if (!modelsLoaded) {
+    await fetchImageModelOptions();
+  }
 
   const config = imageModelOptions[modelId];
   if (!config) return;
@@ -850,7 +840,9 @@ async function populateImageModelOptions(modelId) {
 
 function toggleMultiModelMode() {
   const toggleElement = document.getElementById("multiModelModeToggle");
-  const multiModelSection = document.getElementById("multiModelSelectionContainer");
+  const multiModelSection = document.getElementById(
+    "multiModelSelectionContainer"
+  );
   const singleModelSection = document.querySelector(".singleModelControls");
 
   if (!toggleElement || !multiModelSection || !singleModelSection) {
@@ -864,10 +856,18 @@ function toggleMultiModelMode() {
   singleModelSection.style.display = isMultiModel ? "none" : "flex";
 }
 
+// Main App Initialization - Modified to ensure proper sequence
 async function initializeApp() {
+  // First create loading overlay
+  createLoadingOverlay();
+
+  // Initialize page (which will fetch models if needed)
   await initializePage();
+
+  // Then populate model checkboxes
   await populateModelCheckboxes();
 
+  // Setup toggle
   const toggle = document.getElementById("multiModelModeToggle");
   if (toggle) {
     toggle.addEventListener("change", toggleMultiModelMode);
@@ -877,4 +877,16 @@ async function initializeApp() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", initializeApp);
+// Single DOMContentLoaded listener with cleanup
+function onDOMContentLoaded() {
+  // Remove this listener to prevent duplicates
+  document.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
+
+  // Initialize the app
+  initializeApp().catch((error) => {
+    console.error("Initialization error:", error);
+  });
+}
+
+// Add the listener
+document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
