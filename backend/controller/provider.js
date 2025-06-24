@@ -49,7 +49,7 @@ export const generateImageForProvider = async (req, res) => {
     // Prepare request body
     const requestBody = {
       prompt: body.prompt,
-      seed: body.seed,
+      seed: body.seed || 1234,
     };
 
     // Apply custom inputs
@@ -164,7 +164,7 @@ export const generateVideoForProvider = async (req, res) => {
     const requestBody = {
       prompt: body.prompt,
       resolution: body.resolution || body.aspect_ratio,
-      seed: body.seed,
+      seed: body.seed || 1234,
     };
 
     // Apply custom inputs
@@ -177,6 +177,11 @@ export const generateVideoForProvider = async (req, res) => {
         }
       });
     }
+
+    if (requestBody.seed === null) {
+      requestBody.seed = 1234;
+    }
+    console.log(requestBody);
 
     let rawData;
     switch (providerType) {
@@ -195,6 +200,8 @@ export const generateVideoForProvider = async (req, res) => {
       default:
         rawData = await callDefaultVideoProvider(model.endpoint, requestBody);
     }
+
+    console.log(rawData);
 
     // Extract video URL based on provider
     let videoUrl;
@@ -243,17 +250,39 @@ export const generateVideoForProvider = async (req, res) => {
 
 // Helper functions for different video providers
 async function callReplicateVideo(endpoint, body) {
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
-    },
-    body: JSON.stringify({
-      input: body,
-    }),
-  });
-  return await response.json();
+  try {
+    const response = await axios.post(
+      endpoint,
+      {
+        input: body,
+      },
+      {
+        headers: {
+          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+          "Content-Type": "application/json",
+          Prefer: "wait",
+        },
+      }
+    );
+    let status = response.data.status;
+    let output = response.data.output;
+    const getUrl = response.data.urls?.get;
+    while (status !== "succeeded" && status !== "failed") {
+      const pollRes = await axios.get(getUrl, {
+        headers: {
+          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+        },
+      });
+      status = pollRes.data.status;
+      output = pollRes.data.output;
+      if (status === "succeeded") return pollRes.data;
+      if (status === "failed") throw new Error("Video generation failed");
+      await new Promise((res) => setTimeout(res, 3000));
+    }
+  } catch (error) {
+    console.error(`Error generating video with Replicate ${endpoint}:`, error);
+    throw error;
+  }
 }
 
 async function callFalVideo(modelId, body) {

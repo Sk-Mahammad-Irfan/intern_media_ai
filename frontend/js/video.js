@@ -65,6 +65,8 @@ function updateTotalCredits() {
 
 async function populateModelCheckboxes() {
   const container = document.getElementById("modelCheckboxes");
+  if (!container) return;
+
   container.innerHTML = "";
 
   // Ensure model options are loaded
@@ -122,6 +124,8 @@ function getSelectedValue(select) {
 
 function appendUserMessage(prompt) {
   const chat = document.getElementById("chat");
+  if (!chat) return;
+
   const wrapper = document.createElement("div");
   wrapper.className =
     "d-flex flex-column align-items-end mb-3 position-relative";
@@ -135,6 +139,8 @@ function appendUserMessage(prompt) {
 
 function appendGeneratingVideoMessage() {
   const chat = document.getElementById("chat");
+  if (!chat) return;
+
   const aiDiv = document.createElement("div");
   aiDiv.className = "d-flex justify-content-start mb-3 generating-video";
   aiDiv.innerHTML = `
@@ -149,6 +155,8 @@ function appendGeneratingVideoMessage() {
 
 function appendErrorMessage(message) {
   const chat = document.getElementById("chat");
+  if (!chat) return;
+
   const errorDiv = document.createElement("div");
   errorDiv.className = "d-flex justify-content-start mb-3";
   errorDiv.innerHTML = `
@@ -161,6 +169,8 @@ function appendErrorMessage(message) {
 
 function appendGeneratedVideo(videoUrl) {
   const chat = document.getElementById("chat");
+  if (!chat) return;
+
   const loadingMessage = document.querySelector(".generating-video");
   if (loadingMessage) loadingMessage.remove();
 
@@ -215,8 +225,8 @@ async function generateVideo() {
     return;
   }
 
-  const prompt = document.getElementById("promptInput").value.trim();
-  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
+  const prompt = document.getElementById("promptInput")?.value.trim();
+  const isMultiModel = document.getElementById("multiModelModeToggle")?.checked;
   const userId = localStorage.getItem("userId") || "guest";
 
   if (!prompt) {
@@ -235,11 +245,11 @@ async function generateVideo() {
   if (isMultiModel) {
     // Fire off all model requests in parallel
     const tasks = selectedModels.map((modelId) => {
-      const availableProviders = modelOptions[modelId].providers
-        .filter((provider) => !ignoredProviders.includes(provider))
-        .filter((provider) => provider !== "auto");
+      const availableProviders = modelOptions[modelId]?.providers
+        ?.filter((provider) => !ignoredProviders.includes(provider))
+        ?.filter((provider) => provider !== "auto");
 
-      if (availableProviders.length === 0) {
+      if (!availableProviders || availableProviders.length === 0) {
         appendErrorMessage(`No available providers for model "${modelId}"`);
         return Promise.resolve(); // skip this one
       }
@@ -270,11 +280,11 @@ async function generateVideo() {
 
   // Single model path
   const modelId = getModelIdFromURL() || "wan";
-  const availableProviders = modelOptions[modelId].providers
-    .filter((provider) => !ignoredProviders.includes(provider))
-    .filter((provider) => provider !== "auto");
+  const availableProviders = modelOptions[modelId]?.providers
+    ?.filter((provider) => !ignoredProviders.includes(provider))
+    ?.filter((provider) => provider !== "auto");
 
-  if (availableProviders.length === 0) {
+  if (!availableProviders || availableProviders.length === 0) {
     appendErrorMessage(
       `No available providers for model "${modelId}". Cannot generate video.`
     );
@@ -283,7 +293,7 @@ async function generateVideo() {
 
   const resolution = getSelectedValue(resolutionSelect) || "480p";
   const aspect_ratio = getSelectedValue(aspectRatioSelect) || "16:9";
-  const provider = providerSelect.value;
+  const provider = providerSelect?.value;
 
   await generateSingleVideo({
     modelId,
@@ -311,6 +321,9 @@ async function generateSingleVideo({
     let requestUrl = "";
     let requestBody = {};
 
+    const config = modelOptions[modelId];
+    if (!config) throw new Error("Model configuration not found");
+
     if (provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-video/${modelId}`;
       const seedInputAuto = document.getElementById("seedInputAuto");
@@ -325,96 +338,43 @@ async function generateSingleVideo({
         seed: parsedSeed,
         userId,
       };
-    } else if (provider === "fal") {
-      const shift = Number(document.getElementById("shiftInput")?.value || 0);
-      const steps = Number(document.getElementById("stepsInput")?.value || 1);
-      const guidance = Number(
-        document.getElementById("guidanceInput")?.value || 1
-      );
-      const negativePrompt =
-        document.getElementById("negativePromptInput")?.value || "";
-      const seed = document.getElementById("seedInput")?.value;
-      const frameNum = Number(
-        document.getElementById("frameNumInput")?.value || 81
-      );
-      const enableExpansion =
-        document.getElementById("enableExpansion")?.checked || false;
-      const enableSafety =
-        document.getElementById("enableSafety")?.checked || false;
-
-      requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
-      requestBody = {
-        provider: "fal",
-        prompt,
-        resolution,
-        aspect_ratio,
-        shift,
-        sampler: "unipc",
-        num_inference_steps: steps,
-        guidance_scale: guidance,
-        negative_prompt: negativePrompt,
-        seed: seed ? Number(seed) : undefined,
-        enable_prompt_expansion: enableExpansion,
-        enable_safety_checker: enableSafety,
-        frame_num: frameNum,
-        userId,
-      };
-    } else if (provider === "replicate") {
-      const guidanceInput = document.getElementById("replicateCfgInput");
-      const stepsInput = document.getElementById("replicateStepsInput");
-      const lengthInput = document.getElementById("replicateLengthInput");
-      const negativePromptInput = document.getElementById(
-        "replicateNegativePromptInput"
-      );
-      const seedInput = document.getElementById("replicateSeedInput");
-      const noiseScaleInput = document.getElementById(
-        "replicateImageNoiseScaleInput"
-      );
-
-      const guidance = guidanceInput
-        ? Number(guidanceInput.value.trim()) || 3
-        : 3;
-      const steps = stepsInput ? Number(stepsInput.value.trim()) || 30 : 30;
-
-      if (steps < 10) {
-        appendErrorMessage("Replicate: Inference steps must be at least 10.");
-        return;
-      }
-
-      const frameNum = lengthInput
-        ? Number(lengthInput.value.trim()) || 81
-        : 81;
-      const negativePrompt = negativePromptInput
-        ? negativePromptInput.value.trim()
-        : "";
-      const seed = seedInput ? Number(seedInput.value) : 1234;
-      const imageNoiseScale = noiseScaleInput
-        ? Number(noiseScaleInput.value)
-        : undefined;
-
-      requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
-      requestBody = {
-        provider: "replicate",
-        prompt,
-        resolution,
-        aspect_ratio,
-        num_inference_steps: steps,
-        guidance_scale: guidance,
-        frame_num: frameNum,
-        negative_prompt: negativePrompt,
-        seed: seed || 1234,
-        image_noise_scale: imageNoiseScale,
-        userId,
-      };
     } else {
       requestUrl = `${BACKEND_URL}/api/provider/video/${modelId}`;
       requestBody = {
-        provider: "deepinfra",
+        provider,
         prompt,
         resolution,
         aspect_ratio,
         userId,
       };
+
+      // Add all custom inputs for this provider
+      const inputsToInclude = config.custom_inputs.filter((input) => {
+        if (input.providers && Array.isArray(input.providers)) {
+          return input.providers.includes(provider);
+        }
+        return true;
+      });
+
+      inputsToInclude.forEach((input) => {
+        const element = document.getElementById(input.id);
+        if (!element) return;
+
+        let value;
+        if (input.type === "checkbox") {
+          value = element.checked;
+        } else if (input.type === "number") {
+          value = element.value !== "" ? Number(element.value) : null;
+        } else {
+          value = element.value;
+        }
+
+        if (value !== null && value !== undefined) {
+          // Convert the input ID to the expected parameter name if needed
+          const paramName = input.paramName || input.id;
+          requestBody[paramName] = value;
+        }
+      });
     }
 
     const response = await fetch(requestUrl, {
@@ -430,51 +390,7 @@ async function generateSingleVideo({
     }
 
     if (data.videoUrl) {
-      const loadingMessage = document.querySelector(".generating-video");
-      if (loadingMessage) loadingMessage.remove();
-
-      const message = document.createElement("div");
-      message.className = "d-flex justify-content-start mb-3";
-
-      const bubble = document.createElement("div");
-      bubble.className = "ai-message p-3";
-
-      const caption = document.createElement("div");
-      caption.textContent = isMultiModel
-        ? `Generated Video (${modelId}):`
-        : "Generated Video:";
-      caption.classList.add("mb-2");
-
-      const meta = document.createElement("div");
-      meta.className = "text-muted mb-2";
-      meta.style.fontSize = "0.9em";
-      meta.textContent = `Resolution: ${resolution}, Aspect Ratio: ${aspect_ratio}`;
-
-      const wrapper = document.createElement("div");
-      wrapper.className = "video-wrapper rounded shadow";
-      wrapper.style.maxWidth = "500px";
-      wrapper.style.width = "100%";
-      wrapper.style.overflow = "hidden";
-      wrapper.style.backgroundColor = "#000";
-
-      const video = document.createElement("video");
-      video.controls = true;
-      video.src = data.videoUrl;
-      video.style.width = "100%";
-      video.style.height = "100%";
-      video.style.objectFit = "contain";
-      video.onloadedmetadata = () => {
-        wrapper.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
-      };
-
-      wrapper.appendChild(video);
-      bubble.appendChild(caption);
-      bubble.appendChild(meta);
-      bubble.appendChild(wrapper);
-      message.appendChild(bubble);
-      document.getElementById("chat").appendChild(message);
-      document.getElementById("chat").scrollTop =
-        document.getElementById("chat").scrollHeight;
+      appendGeneratedVideo(data.videoUrl);
     } else {
       appendErrorMessage("No video URL returned.");
     }
@@ -556,6 +472,131 @@ async function populateModelOptions(modelId) {
     aspectRatioSelect.appendChild(option);
   });
   if (aspectRatios.includes("16:9")) aspectRatioSelect.value = "16:9";
+
+  // Update custom inputs based on provider
+  updateCustomInputs(modelId, providerSelect.value);
+}
+
+function updateCustomInputs(modelId, provider) {
+  const config = modelOptions[modelId];
+  if (!config) return;
+
+  const customInputsContainer = document.getElementById(
+    "customInputsContainer"
+  );
+  if (!customInputsContainer) return;
+
+  customInputsContainer.innerHTML = ""; // Clear previous inputs
+
+  // Filter custom inputs that should be shown for this provider
+  const inputsToShow = config.custom_inputs.filter((input) => {
+    // If input has a providers property, check if it includes current provider
+    if (input.providers && Array.isArray(input.providers)) {
+      return input.providers.includes(provider);
+    }
+    // Otherwise show for all providers
+    return true;
+  });
+
+  if (inputsToShow.length === 0) {
+    customInputsContainer.style.display = "none";
+    return;
+  }
+
+  customInputsContainer.style.display = "block";
+
+  inputsToShow.forEach((input) => {
+    const inputGroup = document.createElement("div");
+    inputGroup.className = "mb-3";
+
+    const label = document.createElement("label");
+    label.className = "form-label";
+    label.htmlFor = input.id;
+    label.textContent = input.label;
+
+    inputGroup.appendChild(label);
+
+    if (input.type === "number") {
+      const numberInput = document.createElement("input");
+      numberInput.type = "number";
+      numberInput.className = "form-control";
+      numberInput.id = input.id;
+      numberInput.placeholder = input.placeholder || "";
+      numberInput.value =
+        input.default !== null && input.default !== undefined
+          ? input.default
+          : "";
+      inputGroup.appendChild(numberInput);
+    } else if (input.type === "checkbox") {
+      const checkboxDiv = document.createElement("div");
+      checkboxDiv.className = "form-check";
+
+      const checkboxInput = document.createElement("input");
+      checkboxInput.type = "checkbox";
+      checkboxInput.className = "form-check-input";
+      checkboxInput.id = input.id;
+      checkboxInput.checked =
+        input.default !== null && input.default !== undefined
+          ? input.default
+          : false;
+
+      const checkboxLabel = document.createElement("label");
+      checkboxLabel.className = "form-check-label";
+      checkboxLabel.htmlFor = input.id;
+      checkboxLabel.textContent = input.label;
+
+      checkboxDiv.appendChild(checkboxInput);
+      checkboxDiv.appendChild(checkboxLabel);
+      inputGroup.innerHTML = ""; // Remove the label we added earlier
+      inputGroup.appendChild(checkboxDiv);
+    } else if (input.type === "select") {
+      const select = document.createElement("select");
+      select.className = "form-select";
+      select.id = input.id;
+
+      // Handle both array of strings and array of objects for options
+      let options = [];
+      if (Array.isArray(input.options)) {
+        if (input.options.length > 0 && typeof input.options[0] === "object") {
+          // Options are objects with value/label properties
+          options = input.options;
+        } else {
+          // Options are simple strings - convert to {value, label} objects
+          options = input.options.map((option) => ({
+            value: option,
+            label: option,
+          }));
+        }
+      }
+
+      // Add options to select
+      options.forEach((option) => {
+        const optElement = document.createElement("option");
+        optElement.value = option.value;
+        optElement.textContent = option.label;
+        if (option.value === input.default || option.label === input.default) {
+          optElement.selected = true;
+        }
+        select.appendChild(optElement);
+      });
+
+      inputGroup.appendChild(select);
+    } else {
+      // Default to text input
+      const textInput = document.createElement("input");
+      textInput.type = "text";
+      textInput.className = "form-control";
+      textInput.id = input.id;
+      textInput.placeholder = input.placeholder || "";
+      textInput.value =
+        input.default !== null && input.default !== undefined
+          ? input.default
+          : "";
+      inputGroup.appendChild(textInput);
+    }
+
+    customInputsContainer.appendChild(inputGroup);
+  });
 }
 
 function updateAspectRatioOptions() {
@@ -563,7 +604,10 @@ function updateAspectRatioOptions() {
   const config = modelOptions[modelId];
   if (!config) return;
 
-  const currentProvider = providerSelect.value;
+  const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+  if (!aspectRatioSelect) return;
+
+  const currentProvider = providerSelect?.value;
 
   // Get aspect ratios for current provider or fallback to default
   const aspectRatios = config.provider_aspect_ratios?.[currentProvider] ||
@@ -581,6 +625,9 @@ function updateAspectRatioOptions() {
   if (aspectRatios.includes("16:9")) {
     aspectRatioSelect.value = "16:9";
   }
+
+  // Also update custom inputs when provider changes
+  updateCustomInputs(modelId, currentProvider);
 }
 
 function getModelIdFromURL() {
@@ -588,12 +635,18 @@ function getModelIdFromURL() {
 }
 
 function toggleMultiModelMode() {
-  const isMultiModel = document.getElementById("multiModelModeToggle").checked;
-  document.getElementById("modelCheckboxesContainer").style.display =
-    isMultiModel ? "block" : "none";
-  document.getElementById("singleModelOptions").style.display = isMultiModel
-    ? "none"
-    : "block";
+  const isMultiModel = document.getElementById("multiModelModeToggle")?.checked;
+  const modelCheckboxesContainer = document.getElementById(
+    "modelCheckboxesContainer"
+  );
+  const singleModelOptions = document.getElementById("singleModelOptions");
+
+  if (modelCheckboxesContainer) {
+    modelCheckboxesContainer.style.display = isMultiModel ? "block" : "none";
+  }
+  if (singleModelOptions) {
+    singleModelOptions.style.display = isMultiModel ? "none" : "block";
+  }
 }
 
 // Initialize the application
@@ -602,6 +655,18 @@ window.addEventListener("DOMContentLoaded", async () => {
   const providerSelect = document.getElementById("providerSelect");
   const resolutionSelect = document.getElementById("resolutionSelect");
   const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+  const multiModelToggle = document.getElementById("multiModelModeToggle");
+
+  // Add null checks for critical elements
+  if (
+    !providerSelect ||
+    !resolutionSelect ||
+    !aspectRatioSelect ||
+    !multiModelToggle
+  ) {
+    console.error("Critical elements not found in DOM");
+    return;
+  }
 
   // Fetch model options first
   await fetchModelOptions();
@@ -611,10 +676,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   const modelId = getModelIdFromURL();
 
   // Initialize multi-model mode
-  document
-    .getElementById("multiModelModeToggle")
-    .addEventListener("change", toggleMultiModelMode);
-  document.getElementById("multiModelModeToggle").checked = false;
+  multiModelToggle.addEventListener("change", toggleMultiModelMode);
+  multiModelToggle.checked = false;
   toggleMultiModelMode();
 
   if (modelId) {
@@ -623,72 +686,99 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (prompt) {
-    document.getElementById("promptInput").value = decodeURIComponent(prompt);
-    generateVideo();
+    const promptInput = document.getElementById("promptInput");
+    if (promptInput) {
+      promptInput.value = decodeURIComponent(prompt);
+      generateVideo();
+    }
   }
-
-  // Show/hide extra options based on initial provider selection
-  const selected = providerSelect.value;
-  const falOptions = document.getElementById("falExtraOptions");
-  falOptions.style.display = selected === "fal" ? "block" : "none";
-  const replicateOptions = document.getElementById("replicateExtraOptions");
-  replicateOptions.style.display = selected === "replicate" ? "block" : "none";
-
-  // Populate model checkboxes
-  await populateModelCheckboxes();
 
   // Provider change handler
   providerSelect.addEventListener("change", () => {
-    const selected = providerSelect.value;
-    const falOptions = document.getElementById("falExtraOptions");
-    falOptions.style.display = selected === "fal" ? "block" : "none";
-    const replicateOptions = document.getElementById("replicateExtraOptions");
-    replicateOptions.style.display =
-      selected === "replicate" ? "block" : "none";
-
-    const seedInputAuto = document.getElementById("seedInputAuto");
-    seedInputAuto.style.display = selected === "auto" ? "block" : "none";
-
-    // Update aspect ratios after provider changes
+    const modelId = getModelIdFromURL();
     updateAspectRatioOptions();
+    updateCustomInputs(modelId, providerSelect.value);
   });
 
+  // Remove duplicate provider change handler
+  // (the one with falOptions and replicateOptions is not needed anymore)
+
   // Apply options button handler
-  document
-    .getElementById("applyOptionsBtn")
-    .addEventListener("click", async () => {
-      // Get values
+  const applyOptionsBtn = document.getElementById("applyOptionsBtn");
+  if (applyOptionsBtn) {
+    applyOptionsBtn.addEventListener("click", async () => {
+      const modelId = getModelIdFromURL();
+      const config = modelOptions[modelId];
+      if (!config) return;
+
+      // Get basic options
       const resolution = getSelectedValue(resolutionSelect);
       const aspectRatio = getSelectedValue(aspectRatioSelect);
+      const seed = document.getElementById("seedInputAuto")?.value || "";
 
-      const shift = document.getElementById("shiftInput").value || "5";
-      const steps = document.getElementById("stepsInput").value || "10";
-      const guidance = document.getElementById("guidanceInput").value || "7";
-      const negativePrompt =
-        document.getElementById("negativePromptInput").value || "";
-      const seed = document.getElementById("seedInput").value || "";
-      const expansion = document.getElementById("enableExpansion").checked;
-      const safety = document.getElementById("enableSafety").checked;
+      // Update basic options
+      if (resolutionSelect) resolutionSelect.value = resolution;
+      if (aspectRatioSelect) aspectRatioSelect.value = aspectRatio;
 
-      // Update values if needed
-      document.getElementById("shiftInput").value = shift;
-      document.getElementById("stepsInput").value = steps;
-      document.getElementById("guidanceInput").value = guidance;
-      document.getElementById("negativePromptInput").value = negativePrompt;
-      document.getElementById("seedInput").value = seed;
-      document.getElementById("enableExpansion").checked = expansion;
-      document.getElementById("enableSafety").checked = safety;
+      const seedInputAuto = document.getElementById("seedInputAuto");
+      if (seedInputAuto) {
+        seedInputAuto.value = seed;
+      }
+
+      // Get all custom inputs and save their values
+      const inputsToInclude = config.custom_inputs.filter((input) => {
+        const currentProvider = providerSelect.value;
+        if (input.providers && Array.isArray(input.providers)) {
+          return input.providers.includes(currentProvider);
+        }
+        return true;
+      });
+
+      inputsToInclude.forEach((input) => {
+        const element = document.getElementById(input.id);
+        if (!element) return;
+
+        // For checkboxes, we want to preserve the checked state
+        if (input.type === "checkbox") {
+          const isChecked = element.checked;
+          // Update the checkbox in the main form if it exists
+          const mainFormCheckbox = document.getElementById(input.id);
+          if (mainFormCheckbox) {
+            mainFormCheckbox.checked = isChecked;
+          }
+        } else {
+          // For other inputs, preserve the value
+          const value = element.value;
+          const mainFormInput = document.getElementById(input.id);
+          if (mainFormInput) {
+            mainFormInput.value = value;
+          }
+        }
+      });
 
       // Close modal
       const modalElement = document.getElementById("modelOptionsModal");
-      const modal = bootstrap.Modal.getInstance(modalElement);
-      modal.hide();
+      if (modalElement) {
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+          modal.hide();
+        }
 
-      // Manually remove backdrop just in case
-      document
-        .querySelectorAll(".modal-backdrop")
-        .forEach((backdrop) => backdrop.remove());
-      document.body.classList.remove("modal-open");
-      document.body.style = "";
+        // Manually remove backdrop just in case
+        document
+          .querySelectorAll(".modal-backdrop")
+          .forEach((backdrop) => backdrop.remove());
+        document.body.classList.remove("modal-open");
+        document.body.style = "";
+      }
     });
+  }
+
+  // Populate model checkboxes
+  await populateModelCheckboxes();
 });
+
+// Global variables for select elements
+const providerSelect = document.getElementById("providerSelect");
+const resolutionSelect = document.getElementById("resolutionSelect");
+const aspectRatioSelect = document.getElementById("aspectRatioSelect");

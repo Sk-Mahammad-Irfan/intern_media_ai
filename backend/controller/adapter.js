@@ -328,7 +328,7 @@ export const generateVideo = async (req, res) => {
         let requestBody = {
           prompt,
           resolution: resolution || aspect_ratio, // Handle both resolution and aspect_ratio
-          seed,
+          seed: seed || 2341,
         };
 
         // Add custom inputs if they exist in the request
@@ -340,6 +340,9 @@ export const generateVideo = async (req, res) => {
               requestBody[input.id] = input.default;
             }
           });
+        }
+        if (requestBody.seed === null) {
+          requestBody.seed = 1234;
         }
 
         // Call the appropriate provider endpoint
@@ -423,29 +426,57 @@ export const generateVideo = async (req, res) => {
 };
 
 async function callReplicateVideo(endpoint, body) {
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
-    },
-    body: JSON.stringify({
-      input: body,
-    }),
-  });
-  return await response.json();
+  try {
+    const response = await axios.post(
+      endpoint,
+      {
+        input: body,
+      },
+      {
+        headers: {
+          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+          "Content-Type": "application/json",
+          Prefer: "wait",
+        },
+      }
+    );
+    let status = response.data.status;
+    let output = response.data.output;
+    const getUrl = response.data.urls?.get;
+    while (status !== "succeeded" && status !== "failed") {
+      const pollRes = await axios.get(getUrl, {
+        headers: {
+          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+        },
+      });
+      status = pollRes.data.status;
+      output = pollRes.data.output;
+      if (status === "succeeded") return pollRes.data;
+      if (status === "failed") throw new Error("Video generation failed");
+      await new Promise((res) => setTimeout(res, 3000));
+    }
+  } catch (error) {
+    console.error(`Error generating video with Replicate ${endpoint}:`, error);
+    throw error;
+  }
 }
 
 async function callFalVideo(modelId, body) {
-  const response = await fetch(`https://fal.run/fal-ai/${modelId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Key ${process.env.FAL_API_KEY}`,
-    },
-    body: JSON.stringify(body),
-  });
-  return await response.json();
+  try {
+    const result = await fal.subscribe(modelId, {
+      input: body,
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS" && Array.isArray(update.logs)) {
+          update.logs.map((log) => log.message).forEach(console.log);
+        }
+      },
+    });
+    return result.data;
+  } catch (error) {
+    console.error(`Error calling FAL video for ${modelId}:`, error);
+    throw error;
+  }
 }
 
 async function callDeepInfraVideo(modelId, body) {

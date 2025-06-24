@@ -43,7 +43,8 @@
         margin-bottom: 10px;
       }
 
-      h2, h4 {
+      h2,
+      h4 {
         font-weight: 600;
       }
 
@@ -313,9 +314,8 @@
         </ul>
       </div>
     </nav>
-    
 
-   <!-- Main Container -->
+    <!-- Main Container -->
     <div class="container-fluid main-container">
       <!-- Desktop Sidebar -->
       <div class="sidebar d-none d-md-block p-3">
@@ -354,206 +354,358 @@
       </div>
 
       <!-- Main Content -->
-      <div class="main-content">
-      <h2 class="fw-semibold ms-5">Add Models</h2>
-      <h6 class="text-muted ms-5">Create and configure a new model using the fields below.</h6>
-        <div class="main-content">
- 
-  <div class="container">
-    <div class="card shadow border-0 rounded-4 p-4">
-      <!-- <h2 class="mb-4 text-dark fw-semibold">Add New Model</h2> -->
-      <form id="modelForm">
-        <!-- Basic Info -->
-        <div class="row">
-          <div class="col-md-6">
-            <h4 class="mb-3 text-secondary">Add Providers</h4>
-            <label for="name" class="form-label">Name</label>
-            <input type="text" id="name" required class="form-control rounded-3" />
-          </div>
-          <div class="col-md-6 d-flex flex-column justify-content-end">
-            <label for="assetType" class="form-label">Asset Type</label>
-            <select id="assetType" required class="form-select rounded-3">
-              <option value="image">Image</option>
-              <option value="video">Video</option>
-              <option value="audio">Audio</option>
-            </select>
+      <div class="main-content px-2 px-md-5">
+        <div class="container">
+          <h2 class="fw-semibold mb-2 px-3 px-md-5">Add Models</h2>
+          <h6 class="text-muted mb-4 px-3 px-md-5">
+            Create and configure a new model using the fields below.
+          </h6>
+
+          <div class="card shadow border-0 rounded-4 p-4">
+            <form id="modelForm">
+              <!-- Basic Info -->
+              <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                  <h4 class="mb-3 text-secondary">Add Providers</h4>
+                  <label for="name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    required
+                    class="form-control rounded-3"
+                  />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label for="assetType" class="form-label">Asset Type</label>
+                  <select id="assetType" required class="form-select rounded-3">
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+                    <option value="audio">Audio</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Providers -->
+              <div id="providersContainer" class="mb-4">
+                <div class="row mb-3">
+                  <div class="col-12 col-md-6">
+                    <label for="provider" class="form-label">Provider</label>
+                    <select
+                      id="provider"
+                      required
+                      class="form-select rounded-3"
+                    >
+                      <option value="replicate">Replicate</option>
+                      <option value="fal">FAL</option>
+                      <option value="together">Together</option>
+                      <option value="deepinfra">Deepinfra</option>
+                    </select>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onclick="addProvider()"
+                  class="btn btn-outline-primary rounded-pill"
+                >
+                  Add Provider
+                </button>
+              </div>
+
+              <div id="providerFields" class="mt-3"></div>
+
+              <!-- Description and Link -->
+              <div class="row mb-4">
+                <div class="col-12 col-md-6 mb-3">
+                  <h4 class="mb-3 text-secondary">More Details</h4>
+                  <label for="description" class="form-label"
+                    >Description</label
+                  >
+                  <textarea
+                    id="description"
+                    class="form-control rounded-3"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="link" class="form-label">Link</label>
+                  <input type="text" id="link" class="form-control rounded-3" />
+                </div>
+              </div>
+
+              <!-- Full Details and Credit Price -->
+              <div class="row mb-4">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                  <label for="fullDetails" class="form-label"
+                    >Full Details</label
+                  >
+                  <textarea
+                    id="fullDetails"
+                    class="form-control rounded-3"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="creditPrice" class="form-label"
+                    >Credit Price</label
+                  >
+                  <input
+                    type="text"
+                    id="creditPrice"
+                    class="form-control rounded-3"
+                  />
+                </div>
+              </div>
+
+              <!-- Custom Inputs -->
+              <div id="customInputsContainer" class="mb-4">
+                <h4 class="mb-3 text-secondary">Custom Inputs</h4>
+                <div id="customInputs" class="mt-3"></div>
+              </div>
+
+              <!-- Aspect Ratios and Resolutions -->
+              <div class="row mb-4">
+                <div class="col-12 col-md-6 mb-3">
+                  <label for="aspectRatios" class="form-label"
+                    >Aspect Ratios (comma separated)</label
+                  >
+                  <input
+                    type="text"
+                    id="aspectRatios"
+                    class="form-control rounded-3"
+                  />
+                </div>
+                <div
+                  class="col-12 col-md-6"
+                  id="resolutionsContainer"
+                  style="display: none"
+                >
+                  <label for="resolutions" class="form-label"
+                    >Resolutions (comma separated)</label
+                  >
+                  <input
+                    type="text"
+                    id="resolutions"
+                    class="form-control rounded-3"
+                  />
+                </div>
+              </div>
+
+              <!-- Tags -->
+              <div class="row mb-4">
+                <div class="col-12 col-md-6">
+                  <label for="tags" class="form-label"
+                    >Tags (comma separated)</label
+                  >
+                  <input type="text" id="tags" class="form-control rounded-3" />
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <button
+                  type="button"
+                  onclick="addCustomInput()"
+                  class="btn btn-outline-secondary rounded-pill"
+                >
+                  Add Custom Input
+                </button>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="text-end">
+                <button
+                  type="submit"
+                  class="btn btn-primary px-4 py-2 rounded-pill w-100 w-md-auto"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
 
-        <!-- Providers -->
-        <div id="providersContainer" class="mb-4">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="provider" class="form-label">Provider</label>
-              <select id="provider" required class="form-select rounded-3">
-                <option value="replicate">Replicate</option>
-                <option value="fal">FAL</option>
-                <option value="together">Together</option>
-                <option value="deepinfra">Deepinfra</option>
-              </select>
+      <!-- Provider Modal -->
+      <div
+        class="modal fade"
+        id="providerModal"
+        tabindex="-1"
+        aria-labelledby="providerModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="providerModalLabel">
+                Add Provider Details
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-
-          </div>
-          <button type="button" onclick="addProvider()" class="btn btn-outline-primary rounded-pill">
-            Add Provider
-          </button>
-        </div>
-
-        <!-- Provider UI Preview -->
-        <div id="providerFields" class="mt-3"></div>
-
-        <!-- Description and Link -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <h4 class="mb-3 text-secondary">More Details</h4>
-            <label for="description" class="form-label">Description</label>
-            <textarea id="description" class="form-control rounded-3" rows="3"></textarea>
-          </div>
-          <div class="col-md-6 d-flex flex-column justify-content-end mb-5">
-            <div class="mt-md-4">
-              <label for="link" class="form-label">Link</label>
-              <input type="text" id="link" class="form-control rounded-3" />
+            <div class="modal-body">
+              <form id="providerModalForm">
+                <div class="mb-3">
+                  <label for="providerCredit" class="form-label">Credit</label>
+                  <input
+                    type="number"
+                    id="providerCredit"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="providerAspectRatiosInput" class="form-label"
+                    >Aspect Ratios (comma separated)</label
+                  >
+                  <input
+                    type="text"
+                    id="providerAspectRatiosInput"
+                    class="form-control"
+                  />
+                </div>
+                <div class="mb-3" id="specificFieldContainer">
+                  <label
+                    for="specificFieldValue"
+                    class="form-label"
+                    id="specificFieldLabel"
+                  ></label>
+                  <input
+                    type="text"
+                    id="specificFieldValue"
+                    class="form-control"
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                id="providerModalSave"
+                class="btn btn-primary"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Full Details and Credit Price -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <label for="fullDetails" class="form-label">Full Details</label>
-            <textarea id="fullDetails" class="form-control rounded-3" rows="3"></textarea>
-          </div>
-          <div class="col-md-6">
-            <label for="creditPrice" class="form-label">Credit Price</label>
-            <input type="text" id="creditPrice" class="form-control rounded-3" />
+      <!-- Custom Input Modal -->
+      <div
+        class="modal fade"
+        id="customInputModal"
+        tabindex="-1"
+        aria-labelledby="customInputModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="customInputModalLabel">
+                Add Custom Input
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form id="customInputModalForm">
+                <div class="mb-3">
+                  <label for="customInputId" class="form-label">Input ID</label>
+                  <input
+                    type="text"
+                    id="customInputId"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="customInputType" class="form-label">Type</label>
+                  <select id="customInputType" class="form-select" required>
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                    <option value="checkbox">Checkbox</option>
+                    <option value="select">Select</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="customInputLabel" class="form-label">Label</label>
+                  <input
+                    type="text"
+                    id="customInputLabel"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="customInputPlaceholder" class="form-label"
+                    >Placeholder (optional)</label
+                  >
+                  <input
+                    type="text"
+                    id="customInputPlaceholder"
+                    class="form-control"
+                  />
+                </div>
+                <div
+                  class="mb-3"
+                  id="customInputOptionsContainer"
+                  style="display: none"
+                >
+                  <label for="customInputOptions" class="form-label"
+                    >Options (comma separated)</label
+                  >
+                  <input
+                    type="text"
+                    id="customInputOptions"
+                    class="form-control"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="customInputDefault" class="form-label"
+                    >Default Value</label
+                  >
+                  <input
+                    type="text"
+                    id="customInputDefault"
+                    class="form-control"
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                id="customInputModalSave"
+                class="btn btn-primary"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
-
-        <!-- Custom Inputs -->
-        <div id="customInputsContainer" class="mb-4">
-          <h4 class="mb-3 text-secondary">Custom Inputs</h4>
-          <div id="customInputs" class="mt-3"></div>
-        </div>
-
-        <!-- Aspect Ratios and Resolutions -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <label for="aspectRatios" class="form-label">Aspect Ratios (comma separated)</label>
-            <input type="text" id="aspectRatios" class="form-control rounded-3" />
-          </div>
-          <div class="col-md-6" id="resolutionsContainer" style="display: none;">
-            <label for="resolutions" class="form-label">Resolutions (comma separated)</label>
-            <input type="text" id="resolutions" class="form-control rounded-3" />
-          </div>
-        </div>
-
-        <!-- Tags -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <label for="tags" class="form-label">Tags (comma separated)</label>
-            <input type="text" id="tags" class="form-control rounded-3" />
-          </div>
-        </div>
-
-        <div>
-          <button type="button" onclick="addCustomInput()" class="btn btn-outline-secondary rounded-pill">
-            Add Custom Input
-          </button>
-          </div>
-
-        <!-- Submit Button -->
-        <div class="text-end">
-          <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Provider Modal -->
-<div class="modal fade" id="providerModal" tabindex="-1" aria-labelledby="providerModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="providerModalLabel">Add Provider Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="providerModalForm">
-          <div class="mb-3">
-            <label for="providerCredit" class="form-label">Credit</label>
-            <input type="number" id="providerCredit" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label for="providerAspectRatiosInput" class="form-label">Aspect Ratios (comma separated)</label>
-            <input type="text" id="providerAspectRatiosInput" class="form-control">
-          </div>
-          <div class="mb-3" id="specificFieldContainer">
-            <label for="specificFieldValue" class="form-label" id="specificFieldLabel"></label>
-            <input type="text" id="specificFieldValue" class="form-control">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="providerModalSave" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Custom Input Modal -->
-<div class="modal fade" id="customInputModal" tabindex="-1" aria-labelledby="customInputModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="customInputModalLabel">Add Custom Input</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="customInputModalForm">
-          <div class="mb-3">
-            <label for="customInputId" class="form-label">Input ID</label>
-            <input type="text" id="customInputId" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label for="customInputType" class="form-label">Type</label>
-            <select id="customInputType" class="form-select" required>
-              <option value="text">Text</option>
-              <option value="number">Number</option>
-              <option value="checkbox">Checkbox</option>
-              <option value="select">Select</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="customInputLabel" class="form-label">Label</label>
-            <input type="text" id="customInputLabel" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label for="customInputPlaceholder" class="form-label">Placeholder (optional)</label>
-            <input type="text" id="customInputPlaceholder" class="form-control">
-          </div>
-          <div class="mb-3" id="customInputOptionsContainer" style="display: none;">
-            <label for="customInputOptions" class="form-label">Options (comma separated)</label>
-            <input type="text" id="customInputOptions" class="form-control">
-          </div>
-          <div class="mb-3">
-            <label for="customInputDefault" class="form-label">Default Value</label>
-            <input type="text" id="customInputDefault" class="form-control">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="customInputModalSave" class="btn btn-primary">Save</button>
       </div>
     </div>
-  </div>
-</div>
-      </div>
-      </div>
     <footer>
       <div class="f-info mt-3">
         <div class="f-info-brand">
