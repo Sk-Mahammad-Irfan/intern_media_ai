@@ -15,7 +15,7 @@ import {
 const router = express.Router();
 
 router.post("/", createModelConfig);
-router.post("/bulk", createMultipleModelConfigs); // <-- New Route
+router.post("/bulk", createMultipleModelConfigs);
 
 router.get("/", getAllModelConfigs);
 router.get("/image", getAllImageModels);

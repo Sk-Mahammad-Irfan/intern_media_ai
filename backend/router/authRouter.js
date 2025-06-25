@@ -7,7 +7,7 @@ import {
   failureGoogleLogin,
 } from "../controller/authController.js";
 import passport from "passport";
-import { requireSignIn } from "../middlewares/authMiddleware.js";
+import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -66,5 +66,10 @@ router.get("/failure", failureGoogleLogin);
 
 // test protected route
 router.get("/test", requireSignIn, testProtectedRoute);
+
+//Protected admin route
+router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 export default router;

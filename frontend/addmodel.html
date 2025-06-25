@@ -39,6 +39,7 @@
         flex-grow: 1;
         padding: 2rem;
       }
+
       .customInputs textarea,
       .customInputs input {
         margin-bottom: 10px;
@@ -58,6 +59,7 @@
       }
     </style>
   </head>
+
   <body class="d-flex flex-column min-vh-100">
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
@@ -150,7 +152,9 @@
                   email@example.com
                 </p>
               </li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li><a class="dropdown-item" href="model.html">Models</a></li>
               <li>
                 <a
@@ -163,7 +167,9 @@
                 <a class="dropdown-item" href="rankings.html">Rankings</a>
               </li>
               <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li><a class="dropdown-item" href="credits.html">Credits</a></li>
               <li>
                 <a class="dropdown-item" href="settings.html">Settings</a>
@@ -176,13 +182,20 @@
                   >Provisioning Keys</a
                 >
               </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
+              <li id="admin-menu-item">
+                <a class="dropdown-item" href="addmodel.html">Add Model</a>
+              </li>
+              <li id="admin-only-link">
+                <a
+                  class="dropdown-item admin-only-link"
+                  href="integrations.html"
                   >Integrations</a
                 >
               </li>
               <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li>
                 <a
                   class="dropdown-item text-danger"
@@ -284,7 +297,9 @@
                   email@example.com
                 </p>
               </li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li>
                 <a class="dropdown-item" href="credits.html">Credit</a>
               </li>
@@ -299,8 +314,10 @@
                   >Provisioning Keys</a
                 >
               </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
+              <li id="admin-only-link">
+                <a
+                  class="dropdown-item admin-only-link"
+                  href="integrations.html"
                   >Integrations</a
                 >
               </li>

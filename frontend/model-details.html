@@ -36,6 +36,7 @@
       .main-content {
         flex-grow: 1;
       }
+
       @media (min-width: 992px) {
         .desktop-search {
           width: 400px;
@@ -89,6 +90,7 @@
         font-size: 0.85rem;
         padding: 0.35em 0.6em;
       }
+
       .faded-hr {
         border: 0;
         height: 1px;
@@ -104,6 +106,7 @@
       }
     </style>
   </head>
+
   <body class="d-flex flex-column min-vh-100">
     <div class="d-flex flex-grow-1">
       <div class="main-content d-flex flex-column w-100">
@@ -201,7 +204,9 @@
                         email@example.com
                       </p>
                     </li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <hr class="dropdown-divider" />
+                    </li>
                   </div>
                   <li><a class="dropdown-item" href="model.html">Models</a></li>
                   <li>
@@ -215,7 +220,9 @@
                     <a class="dropdown-item" href="rankings.html">Rankings</a>
                   </li>
                   <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
                   <div class="mobile-auth-only dnone">
                     <li>
                       <a class="dropdown-item" href="credits.html">Credits</a>
@@ -231,15 +238,19 @@
                         >Provisioning Keys</a
                       >
                     </li>
-                    <li>
-                      <a class="dropdown-item" href="integrations.html"
+                    <li id="admin-only-link">
+                      <a
+                        class="dropdown-item admin-only-link"
+                        href="integrations.html"
                         >Integrations</a
                       >
                     </li>
                     <li>
                       <a class="dropdown-item" href="privacy.html">Privacy</a>
                     </li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <hr class="dropdown-divider" />
+                    </li>
 
                     <li>
                       <a
@@ -352,7 +363,9 @@
                       email@example.com
                     </p>
                   </li>
-                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
                   <li>
                     <a class="dropdown-item" href="credits.html">Credits</a>
                   </li>
@@ -367,8 +380,10 @@
                       >Provisioning Keys</a
                     >
                   </li>
-                  <li>
-                    <a class="dropdown-item" href="integrations.html"
+                  <li id="admin-only-link">
+                    <a
+                      class="dropdown-item admin-only-link"
+                      href="integrations.html"
                       >Integrations</a
                     >
                   </li>
@@ -474,5 +489,17 @@
     <script src="js/script.js"></script>
     <script src="js/model-details.js"></script>
     <script src="js/avtar.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+        const adminLinks = document.getElementsByClassName("admin-only-link");
+
+        if (userData.role !== 1 && adminLinks) {
+          Array.from(adminLinks).forEach((link) => {
+            link.style.display = "none"; // Hide it from non-admins
+          });
+        }
+      });
+    </script>
   </body>
 </html>
