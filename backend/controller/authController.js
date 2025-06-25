@@ -58,6 +58,7 @@ export const registerController = async (req, res) => {
         email: user.email,
         username: user.username,
         credits: user.credits,
+        role: user.role || 0, // Default to "0" if not provided
       },
       token, // ✅ Send token back
     });
@@ -109,6 +110,7 @@ export const loginController = async (req, res) => {
         email: user.email,
         credits: user.credits,
         userId: user._id,
+        role: user.role,
       },
       token,
     });

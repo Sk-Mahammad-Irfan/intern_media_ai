@@ -84,6 +84,7 @@ form.addEventListener("submit", async (e) => {
         credits: data.user.credits,
         username: data.user.username || username || email.split("@")[0],
         loginTime: new Date().toISOString(),
+        role: data.user.role || "0", // Default to "0" if not provided
       };
 
       // Set cookie and localStorage
@@ -93,8 +94,17 @@ form.addEventListener("submit", async (e) => {
       localStorage.setItem("userId", data.user.userId);
 
       // Update UI and redirect
+      const role = data?.user.role; // assume backend sends "role"
+      console.log("User role:", role);
       setAvatarInitials();
-      window.location.href = "index.html";
+
+      if (role === "1") {
+        window.location.href = "integrations.html";
+      } else {
+        window.location.href = "index.html";
+      }
+      // setAvatarInitials();
+      // window.location.href = "index.html";
     } else {
       msg.textContent = data.message;
       msg.classList.add("text-danger");

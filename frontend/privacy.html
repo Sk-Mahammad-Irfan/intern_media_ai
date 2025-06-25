@@ -1,468 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Privacy | OpenMediaFlow</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
-    <link rel="stylesheet" href="css/styles.css" />
-    <style>
-      .main-container {
-        display: flex;
-        flex-direction: row;
-        min-height: calc(100vh - 56px); /* Account for navbar height */
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy | OpenMediaFlow</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-      .main-content {
-        flex-grow: 1;
-        padding: 2rem;
-      }
-    </style>
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-      <div
-        class="container-fluid d-flex align-items-center justify-content-between"
-      >
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="index.html"
-          >&nbsp;<span style="font-weight: 500">Open</span
-          ><span class="media">Media</span
-          ><span style="font-weight: 500">Flow</span>&nbsp;</a
-        >
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      min-height: calc(100vh - 56px);
+      /* Account for navbar height */
+    }
 
-        <!-- Mobile controls -->
-        <div
-          class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
-        >
-          <button
-            id="mobileSearchBtn"
-            class="btn btn-light rounded-circle"
-            style="width: 36px; height: 36px"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+    .main-content {
+      flex-grow: 1;
+      padding: 2rem;
+    }
+  </style>
+</head>
 
-          <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
-          <div
-            id="mobileSearchSidebar"
-            class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-            style="
+<body class="d-flex flex-column min-vh-100">
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <!-- Brand -->
+      <a class="navbar-brand fw-bold" href="index.html">&nbsp;<span style="font-weight: 500">Open</span><span
+          class="media">Media</span><span style="font-weight: 500">Flow</span>&nbsp;</a>
+
+      <!-- Mobile controls -->
+      <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+        <button id="mobileSearchBtn" class="btn btn-light rounded-circle" style="width: 36px; height: 36px">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+        <div id="mobileSearchSidebar" class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none" style="
               width: 100%;
               max-width: 300px;
               height: 100%;
               transform: translateX(-100%);
               transition: transform 0.3s ease;
               z-index: 1050;
-            "
-          >
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Search</h5>
-              <button
-                id="closeSearchSidebar"
-                class="btn btn-sm btn-outline-secondary"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <input
-              type="text"
-              class="form-control rounded-pill mb-3"
-              id="mobileSearchInput"
-              placeholder="Search models..."
-            />
-            <div
-              id="mobileSearchResults"
-              class="mt-3"
-              style="max-height: 60vh; overflow-y: auto"
-            >
-              <!-- Results will be appended here -->
-            </div>
+            ">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Search</h5>
+            <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
-          <div class="dropdown">
-            <a
-              href="#"
-              class="d-flex align-items-center text-decoration-none dropdown-toggle"
-              id="navbarDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
+          <input type="text" class="form-control rounded-pill mb-3" id="mobileSearchInput"
+            placeholder="Search models..." />
+          <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto">
+            <!-- Results will be appended here -->
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="navbar-avatar"
+              class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+              style="width: 32px; height: 32px; font-size: 14px">
+              U
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+            <li>
+              <h6 class="dropdown-header" id="account-username-mobile">
+                Username
+              </h6>
+              <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                email@example.com
+              </p>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="model.html">Models</a></li>
+            <li><a class="dropdown-item" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a></li>
+            <li>
+              <a class="dropdown-item" href="rankings.html">Rankings</a>
+            </li>
+            <li><a class="dropdown-item" href="docs.html">Docs</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+            <li>
+              <a class="dropdown-item" href="settings.html">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="api-keys.html">API Keys</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+            </li>
+            <li id="admin-only-link">
+              <a class="dropdown-item admin-only-link" href="integrations.html">Integrations</a>
+            </li>
+            <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" href="index.html" onclick="logout()">Logout</a>
+            </li>
+            <li>
+              <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                <button type="button" class="btn btn-outline-primary w-100">
+                  Sign in
+                </button>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Search (Desktop only) -->
+      <form class="d-none d-lg-block mx-3 flex-grow-1">
+        <div class="position-relative w-100">
+          <!-- Left search icon -->
+          <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+
+          <!-- Input -->
+          <input class="form-control rounded-pill bg-light ps-5 pe-4" id="navbarSearch" type="search"
+            placeholder="Search models" />
+
+          <!-- Right slash icon -->
+          <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+            style="font-family: monospace">
+            /
+          </span>
+        </div>
+      </form>
+
+      <!-- Desktop Nav Items -->
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="model.html">Models</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="docs.html">Docs</a>
+        </li>
+        <li class="nav-item mx-1" id="signInDesktop">
+          <a class="nav-link fw-medium" href="auth.html">
+            <button type="button" class="btn btn-outline-primary">
+              Sign in
+            </button>
+          </a>
+        </li>
+        <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="navbar-avatar"
+              class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+              style="width: 32px; height: 32px; font-size: 14px">
+              U
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li>
+              <h6 class="dropdown-header" id="account-username">Username</h6>
+            </li>
+            <li>
+              <p class="dropdown-item-text mb-1 small" id="account-email">
+                email@example.com
+              </p>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item" href="credits.html">Credit</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="settings.html">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="api-keys.html">API Keys</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+            </li>
+            <li id="admin-only-link">
+              <a class="dropdown-item admin-only-link" href="integrations.html">Integrations</a>
+            </li>
+            <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container-fluid main-container">
+    <!-- Desktop Sidebar -->
+    <div class="sidebar d-none d-md-block p-3">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+          <a href="settings.html" class="nav-link text-secondary">
+            <i class="bi bi-gear me-2"></i> Settings
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="credits.html" class="nav-link text-secondary">
+            <i class="bi bi-credit-card me-2"></i> Credits
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="api-keys.html" class="nav-link text-secondary">
+            <i class="bi bi-key me-2"></i> API Keys
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="provisioning.html" class="nav-link">
+            <i class="bi bi-hdd me-2"></i> Provisioning Keys
+          </a>
+        </li>
+        <li class="nav-item mb-2 admin-only-link">
+          <a href="integrations.html" class="nav-link text-secondary">
+            <i class="bi bi-puzzle me-2"></i> Integrations
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="privacy.html" class="nav-link active">
+            <i class="bi bi-shield-lock me-2"></i> Privacy
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container py-4">
+        <h1 class="mb-3">Privacy Settings</h1>
+        <p class="lead">Manage your privacy settings and data preferences.</p>
+
+        <!-- Data Collection Card -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <h5 class="mb-0">Data Collection</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="allowAnalytics" checked />
+              <label class="form-check-label" for="allowAnalytics">Allow analytics data collection</label>
+              <div class="text-muted small">
+                We collect anonymous usage data to improve our services
               </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="mobileAvatarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username-mobile">
-                  Username
-                </h6>
-                <p
-                  class="dropdown-item-text mb-1 small"
-                  id="account-email-mobile"
-                >
-                  email@example.com
-                </p>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="model.html">Models</a></li>
-              <li><a class="dropdown-item" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a></li>
-              <li>
-                <a class="dropdown-item" href="rankings.html">Rankings</a>
-              </li>
-              <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a
-                  class="dropdown-item text-danger"
-                  href="index.html"
-                  onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-              <li>
-                <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">
-                    Sign in
-                  </button>
-                </a>
-              </li>
-            </ul>
+            </div>
+
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="allowPersonalization" checked />
+              <label class="form-check-label" for="allowPersonalization">Allow personalization</label>
+              <div class="text-muted small">
+                We use your data to personalize your experience
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Search (Desktop only) -->
-        <form class="d-none d-lg-block mx-3 flex-grow-1">
-          <div class="position-relative w-100">
-            <!-- Left search icon -->
-            <span
-              class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"
-            >
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-
-            <!-- Input -->
-            <input
-              class="form-control rounded-pill bg-light ps-5 pe-4"
-              id="navbarSearch"
-              type="search"
-              placeholder="Search models"
-            />
-
-            <!-- Right slash icon -->
-            <span
-              class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
-              style="font-family: monospace"
-            >
-              /
-            </span>
+        <!-- Model Usage Data Card -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <h5 class="mb-0">Model Usage Data</h5>
           </div>
-        </form>
+          <div class="card-body">
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="saveModelData" checked />
+              <label class="form-check-label" for="saveModelData">Save model interactions</label>
+              <div class="text-muted small">
+                Your prompts and model responses will be saved for improving
+                AI models
+              </div>
+            </div>
 
-        <!-- Desktop Nav Items -->
-        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="model.html">Models</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="docs.html">Docs</a>
-          </li>
-          <li class="nav-item mx-1" id="signInDesktop">
-            <a class="nav-link fw-medium" href="auth.html">
-              <button type="button" class="btn btn-outline-primary">
-                Sign in
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="shareModelData" />
+              <label class="form-check-label" for="shareModelData">Share data with model providers</label>
+              <div class="text-muted small">
+                Allow us to share anonymized data with our model providers
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Management Card -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <h5 class="mb-0">Data Management</h5>
+          </div>
+          <div class="card-body">
+            <p>
+              You can download your data or request deletion of all your data
+              from our servers.
+            </p>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+              <button class="btn btn-outline-primary w-100 w-sm-auto">
+                Download My Data
               </button>
-            </a>
-          </li>
-          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
-              </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username">Username</h6>
-              </li>
-              <li>
-                <p class="dropdown-item-text mb-1 small" id="account-email">
-                  email@example.com
-                </p>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="credits.html">Credit</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li>
-                <a class="dropdown-item text-danger" href="#" onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- Main Container -->
-    <div class="container-fluid main-container">
-      <!-- Desktop Sidebar -->
-      <div class="sidebar d-none d-md-block p-3">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a href="settings.html" class="nav-link text-secondary">
-              <i class="bi bi-gear me-2"></i> Settings
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="credits.html" class="nav-link text-secondary">
-              <i class="bi bi-credit-card me-2"></i> Credits
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="api-keys.html" class="nav-link text-secondary">
-              <i class="bi bi-key me-2"></i> API Keys
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="provisioning.html" class="nav-link">
-              <i class="bi bi-hdd me-2"></i> Provisioning Keys
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="integrations.html" class="nav-link text-secondary">
-              <i class="bi bi-puzzle me-2"></i> Integrations
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="privacy.html" class="nav-link active">
-              <i class="bi bi-shield-lock me-2"></i> Privacy
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="container py-4">
-          <h1 class="mb-3">Privacy Settings</h1>
-          <p class="lead">Manage your privacy settings and data preferences.</p>
-
-          <!-- Data Collection Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Collection</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowAnalytics"
-                  checked
-                />
-                <label class="form-check-label" for="allowAnalytics"
-                  >Allow analytics data collection</label
-                >
-                <div class="text-muted small">
-                  We collect anonymous usage data to improve our services
-                </div>
-              </div>
-
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="allowPersonalization"
-                  checked
-                />
-                <label class="form-check-label" for="allowPersonalization"
-                  >Allow personalization</label
-                >
-                <div class="text-muted small">
-                  We use your data to personalize your experience
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Model Usage Data Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Model Usage Data</h5>
-            </div>
-            <div class="card-body">
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="saveModelData"
-                  checked
-                />
-                <label class="form-check-label" for="saveModelData"
-                  >Save model interactions</label
-                >
-                <div class="text-muted small">
-                  Your prompts and model responses will be saved for improving
-                  AI models
-                </div>
-              </div>
-
-              <div class="form-check form-switch mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="shareModelData"
-                />
-                <label class="form-check-label" for="shareModelData"
-                  >Share data with model providers</label
-                >
-                <div class="text-muted small">
-                  Allow us to share anonymized data with our model providers
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Data Management Card -->
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-              <h5 class="mb-0">Data Management</h5>
-            </div>
-            <div class="card-body">
-              <p>
-                You can download your data or request deletion of all your data
-                from our servers.
-              </p>
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary w-100 w-sm-auto">
-                  Download My Data
-                </button>
-                <button class="btn btn-outline-danger w-100 w-sm-auto">
-                  Request Data Deletion
-                </button>
-              </div>
+              <button class="btn btn-outline-danger w-100 w-sm-auto">
+                Request Data Deletion
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <footer>
-      <div class="f-info mt-3">
-        <div class="f-info-brand">
-          <div class="f-info-brand-name">
-            <p>&copy; 2023 - 2025 &nbsp;&nbsp;OpenMediaFlow, Inc</p>
-          </div>
-          <div class="f-info-socails">
-            <i class="fa-brands fa-discord"></i>
-            <i class="fa-brands fa-github"></i>
-            <i class="fa-brands fa-linkedin"></i>
-            <i class="fa-brands fa-x-twitter"></i>
-          </div>
+  <footer>
+    <div class="f-info mt-3">
+      <div class="f-info-brand">
+        <div class="f-info-brand-name">
+          <p>&copy; 2023 - 2025 &nbsp;&nbsp;OpenMediaFlow, Inc</p>
         </div>
-        <div class="f-info-options">
-          <a href="#">Status</a>
-          <a href="#">Anouncment</a>
-          <a href="#">Partners</a>
-          <a href="#">Career</a>
-          <a href="#">Pricing</a>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
+        <div class="f-info-socails">
+          <i class="fa-brands fa-discord"></i>
+          <i class="fa-brands fa-github"></i>
+          <i class="fa-brands fa-linkedin"></i>
+          <i class="fa-brands fa-x-twitter"></i>
         </div>
       </div>
-    </footer>
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/model-selector.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/avtar.js"></script>
-    </script>
-  </body>
+      <div class="f-info-options">
+        <a href="#">Status</a>
+        <a href="#">Anouncment</a>
+        <a href="#">Partners</a>
+        <a href="#">Career</a>
+        <a href="#">Pricing</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/model-selector.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/avtar.js"></script>
+
+  <script src="js/authUser.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const userData = JSON.parse(localStorage.getItem("user_data") || "{}");
+      const adminLinks = document.getElementsByClassName("admin-only-link");
+
+      if (userData.role !== 1 && adminLinks) {
+        Array.from(adminLinks).forEach(link => {
+          link.style.display = "none"; // Hide it from non-admins
+        });
+      }
+    });
+  </script>
+</body>
+
 </html>

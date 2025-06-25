@@ -124,3 +124,12 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
+// --- AUTHENTICATION CHECK ---
+// Check if user is authenticated
+// const token = document.cookie
+//   .split("; ")
+//   .find((row) => row.startsWith("auth_token="));
+// if (!token) {
+//   window.location.href = "auth.html"; // Redirect to login/register page
+// }
