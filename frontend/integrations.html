@@ -214,11 +214,29 @@
     </div>
 
     <!-- Page content -->
-    <div class="container py-4">
+    <!-- <div class="container py-4">
       <h1>Integrations Page</h1>
       <li id="admin-link" class="d-none">
         <a class="dropdown-item" href="addmodel.html">Add model</a>
       </li>
+    </div> -->
+    <div class="container py-5">
+      <div class="row mb-4">
+        <div class="col text-center">
+          <h1 class="display-4">Integrations Page</h1>
+        </div>
+      </div>
+
+      <!-- Admin Link (initially hidden using Bootstrap d-none) -->
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <ul class="list-unstyled">
+            <li id="admin-link" class="d-none">
+              <a class="btn btn-primary" href="addmodel.html">Add Model</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -262,7 +280,6 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const userData = JSON.parse(localStorage.getItem("user_data"));
-      console.log(userData);
 
       if (!userData || userData?.role !== 1) {
         alert("Access denied. Admins only.");

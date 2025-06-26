@@ -1,776 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Models | OpenMediaFlow</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/admodel.css" />
-    <style>
-      .main-container {
-        display: flex;
-        flex-direction: row;
-        min-height: calc(100vh - 56px); /* Account for navbar height */
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Models | OpenMediaFlow</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-      .main-content {
-        flex-grow: 1;
-        padding: 2rem;
-      }
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/admodel.css" />
+  <style>
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      min-height: calc(100vh - 56px);
+      /* Account for navbar height */
+    }
 
-      .customInputs textarea,
-      .customInputs input {
-        margin-bottom: 10px;
-      }
+    .main-content {
+      flex-grow: 1;
+      padding: 2rem;
+    }
 
-      h2,
-      h4 {
-        font-weight: 600;
-      }
+    .customInputs textarea,
+    .customInputs input {
+      margin-bottom: 10px;
+    }
 
-      .card {
-        background-color: #fff;
-      }
+    h2,
+    h4 {
+      font-weight: 600;
+    }
 
-      label.form-label {
-        font-size: 0.95rem;
-      }
-    </style>
-  </head>
+    .card {
+      background-color: #fff;
+    }
 
-  <body class="d-flex flex-column min-vh-100">
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-      <div
-        class="container-fluid d-flex align-items-center justify-content-between"
-      >
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="index.html"
-          >&nbsp;<span style="font-weight: 500">Open</span
-          ><span class="media">Media</span
-          ><span style="font-weight: 500">Flow</span>&nbsp;</a
-        >
+    label.form-label {
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
 
-        <!-- Mobile controls -->
-        <div
-          class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small"
-        >
-          <button
-            id="mobileSearchBtn"
-            class="btn btn-light rounded-circle"
-            style="width: 36px; height: 36px"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+<body class="d-flex flex-column min-vh-100">
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <!-- Brand -->
+      <a class="navbar-brand fw-bold" href="index.html">&nbsp;<span style="font-weight: 500">Open</span><span
+          class="media">Media</span><span style="font-weight: 500">Flow</span>&nbsp;</a>
 
-          <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
-          <div
-            id="mobileSearchSidebar"
-            class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none"
-            style="
+      <!-- Mobile controls -->
+      <div class="d-lg-none d-flex align-items-center gap-1 px-2 py-1 rounded-pill shadow-sm small">
+        <button id="mobileSearchBtn" class="btn btn-light rounded-circle" style="width: 36px; height: 36px">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <!-- Mobile Search Sidebar (Visible on Mobile Only) -->
+        <div id="mobileSearchSidebar" class="position-fixed top-0 start-0 bg-white shadow-lg p-3 d-lg-none" style="
               width: 100%;
               max-width: 300px;
               height: 100%;
               transform: translateX(-100%);
               transition: transform 0.3s ease;
               z-index: 1050;
-            "
-          >
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Search</h5>
-              <button
-                id="closeSearchSidebar"
-                class="btn btn-sm btn-outline-secondary"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <input
-              type="text"
-              class="form-control rounded-pill mb-3"
-              id="mobileSearchInput"
-              placeholder="Search models..."
-            />
-            <div
-              id="mobileSearchResults"
-              class="mt-3"
-              style="max-height: 60vh; overflow-y: auto"
-            >
-              <!-- Results will be appended here -->
-            </div>
+            ">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Search</h5>
+            <button id="closeSearchSidebar" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
-          <div class="dropdown">
-            <a
-              href="#"
-              class="d-flex align-items-center text-decoration-none dropdown-toggle"
-              id="navbarDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
-              </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="mobileAvatarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username-mobile">
-                  Username
-                </h6>
-                <p
-                  class="dropdown-item-text mb-1 small"
-                  id="account-email-mobile"
-                >
-                  email@example.com
-                </p>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="model.html">Models</a></li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="audiomodel.html?id=stackadoc-stable-audio"
-                  >Chat</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="rankings.html">Rankings</a>
-              </li>
-              <li><a class="dropdown-item" href="docs.html">Docs</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="credits.html">Credits</a></li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li id="admin-menu-item">
-                <a class="dropdown-item" href="addmodel.html">Add Model</a>
-              </li>
-              <li id="admin-only-link">
-                <a
-                  class="dropdown-item admin-only-link"
-                  href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a
-                  class="dropdown-item text-danger"
-                  href="index.html"
-                  onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-              <li>
-                <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
-                  <button type="button" class="btn btn-outline-primary w-100">
-                    Sign in
-                  </button>
-                </a>
-              </li>
-            </ul>
+          <input type="text" class="form-control rounded-pill mb-3" id="mobileSearchInput"
+            placeholder="Search models..." />
+          <div id="mobileSearchResults" class="mt-3" style="max-height: 60vh; overflow-y: auto">
+            <!-- Results will be appended here -->
           </div>
         </div>
-
-        <!-- Search (Desktop only) -->
-        <form class="d-none d-lg-block mx-3 flex-grow-1">
-          <div class="position-relative w-100">
-            <!-- Left search icon -->
-            <span
-              class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted"
-            >
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
-
-            <!-- Input -->
-            <input
-              class="form-control rounded-pill bg-light ps-5 pe-4"
-              id="navbarSearch"
-              type="search"
-              placeholder="Search models"
-            />
-
-            <!-- Right slash icon -->
-            <span
-              class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
-              style="font-family: monospace"
-            >
-              /
-            </span>
-          </div>
-        </form>
-
-        <!-- Desktop Nav Items -->
-        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="model.html">Models</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a
-              class="nav-link fw-medium"
-              href="audiomodel.html?id=stackadoc-stable-audio"
-              >Chat</a
-            >
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
-          </li>
-          <li class="nav-item mx-1">
-            <a class="nav-link fw-medium" href="docs.html">Docs</a>
-          </li>
-          <li class="nav-item mx-1" id="signInDesktop">
-            <a class="nav-link fw-medium" href="auth.html">
-              <button type="button" class="btn btn-outline-primary">
-                Sign in
-              </button>
-            </a>
-          </li>
-          <li class="nav-item dropdown d-none" id="userAvatarDropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div
-                id="navbar-avatar"
-                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px; font-size: 14px"
-              >
-                U
-              </div>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdown"
-            >
-              <li>
-                <h6 class="dropdown-header" id="account-username">Username</h6>
-              </li>
-              <li>
-                <p class="dropdown-item-text mb-1 small" id="account-email">
-                  email@example.com
-                </p>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item" href="credits.html">Credit</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="api-keys.html">API Keys</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="provisioning.html"
-                  >Provisioning Keys</a
-                >
-              </li>
-              <li id="admin-only-link">
-                <a
-                  class="dropdown-item admin-only-link"
-                  href="integrations.html"
-                  >Integrations</a
-                >
-              </li>
-              <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-              <li>
-                <a class="dropdown-item text-danger" href="#" onclick="logout()"
-                  >Logout</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="navbar-avatar"
+              class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+              style="width: 32px; height: 32px; font-size: 14px">
+              U
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAvatarDropdown">
+            <li>
+              <h6 class="dropdown-header" id="account-username-mobile">
+                Username
+              </h6>
+              <p class="dropdown-item-text mb-1 small" id="account-email-mobile">
+                email@example.com
+              </p>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="model.html">Models</a></li>
+            <li>
+              <a class="dropdown-item" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="rankings.html">Rankings</a>
+            </li>
+            <li><a class="dropdown-item" href="docs.html">Docs</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="credits.html">Credits</a></li>
+            <li>
+              <a class="dropdown-item" href="settings.html">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="api-keys.html">API Keys</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+            </li>
+            <li id="admin-menu-item">
+              <a class="dropdown-item" href="addmodel.html">Add Model</a>
+            </li>
+            <li id="admin-only-link">
+              <a class="dropdown-item admin-only-link" href="integrations.html">Integrations</a>
+            </li>
+            <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" href="index.html" onclick="logout()">Logout</a>
+            </li>
+            <li>
+              <a class="mt-3 d-lg-none" href="auth.html" id="signInMobile">
+                <button type="button" class="btn btn-outline-primary w-100">
+                  Sign in
+                </button>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </nav>
 
-    <!-- Main Container -->
-    <div class="container-fluid main-container">
-      <!-- Desktop Sidebar -->
+      <!-- Search (Desktop only) -->
+      <form class="d-none d-lg-block mx-3 flex-grow-1">
+        <div class="position-relative w-100">
+          <!-- Left search icon -->
+          <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
 
-      <!-- Main Content -->
-      <div class="main-content px-2 px-md-5">
-        <div class="container">
-          <div class="page-header">
-            <h1 class="page-title">Add Models</h1>
-            <p class="page-subtitle">
-              Create and configure a new model using the beautiful form below
-            </p>
-          </div>
+          <!-- Input -->
+          <input class="form-control rounded-pill bg-light ps-5 pe-4" id="navbarSearch" type="search"
+            placeholder="Search models" />
 
-          <div class="main-card">
-            <form id="modelForm">
-              <!-- Basic Info -->
-              <div class="row">
-                <div class="col-12 col-md-6 mb-4">
-                  <h4 class="section-title">
-                    <i class="fas fa-plus-circle me-2"></i>Add Providers
-                  </h4>
-                  <label for="name" class="form-label">
-                    <i class="fas fa-tag me-1"></i>Name
+          <!-- Right slash icon -->
+          <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
+            style="font-family: monospace">
+            /
+          </span>
+        </div>
+      </form>
+
+      <!-- Desktop Nav Items -->
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="model.html">Models</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="audiomodel.html?id=stackadoc-stable-audio">Chat</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="rankings.html">Rankings</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link fw-medium" href="docs.html">Docs</a>
+        </li>
+        <li class="nav-item mx-1" id="signInDesktop">
+          <a class="nav-link fw-medium" href="auth.html">
+            <button type="button" class="btn btn-outline-primary">
+              Sign in
+            </button>
+          </a>
+        </li>
+        <li class="nav-item dropdown d-none" id="userAvatarDropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="navbar-avatar"
+              class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+              style="width: 32px; height: 32px; font-size: 14px">
+              U
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li>
+              <h6 class="dropdown-header" id="account-username">Username</h6>
+            </li>
+            <li>
+              <p class="dropdown-item-text mb-1 small" id="account-email">
+                email@example.com
+              </p>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item" href="credits.html">Credit</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="settings.html">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="api-keys.html">API Keys</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="provisioning.html">Provisioning Keys</a>
+            </li>
+            <li id="admin-only-link">
+              <a class="dropdown-item admin-only-link" href="integrations.html">Integrations</a>
+            </li>
+            <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container-fluid main-container">
+    <!-- Desktop Sidebar -->
+
+    <!-- Main Content -->
+    <div class="main-content px-2 px-md-5">
+      <div class="container">
+        <div class="page-header">
+          <h1 class="page-title">Add Models</h1>
+          <p class="page-subtitle">Create and manage your AI models with ease.</p>
+
+        </div>
+
+        <div class="main-card">
+          <form id="modelForm">
+            <!-- Basic Info -->
+            <div class="row">
+              <div class="col-12 col-md-6 mb-4">
+                <h4 class="section-title">
+                  <i class="fas fa-plus-circle me-2"></i>Add Providers
+                </h4>
+                <label for="name" class="form-label">
+                  <i class="fas fa-tag me-1"></i>Name
+                </label>
+                <input type="text" id="name" required class="form-control" placeholder="Enter model name" />
+              </div>
+              <div class="col-12 col-md-6 mb-4">
+                <label for="assetType" class="form-label">
+                  <i class="fas fa-cube me-1"></i>Asset Type
+                </label>
+                <select id="assetType" required class="form-select">
+                  <option value="image">🖼️ Image</option>
+                  <option value="video">🎥 Video</option>
+                  <option value="audio">🎵 Audio</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Providers -->
+            <div id="providersContainer" class="mb-5">
+              <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                  <label for="provider" class="form-label">
+                    <i class="fas fa-server me-1"></i>Provider
                   </label>
-                  <input
-                    type="text"
-                    id="name"
-                    required
-                    class="form-control"
-                    placeholder="Enter model name"
-                  />
-                </div>
-                <div class="col-12 col-md-6 mb-4">
-                  <label for="assetType" class="form-label">
-                    <i class="fas fa-cube me-1"></i>Asset Type
-                  </label>
-                  <select id="assetType" required class="form-select">
-                    <option value="image">🖼️ Image</option>
-                    <option value="video">🎥 Video</option>
-                    <option value="audio">🎵 Audio</option>
+                  <select id="provider" required class="form-select">
+                    <option value="replicate">🔄 Replicate</option>
+                    <option value="fal">⚡ FAL</option>
+                    <option value="together">🤝 Together</option>
+                    <option value="deepinfra">🧠 Deepinfra</option>
                   </select>
                 </div>
               </div>
+              <button type="button" onclick="addProvider()" class="btn btn-outline-primary icon-button">
+                <i class="fas fa-plus"></i>Add Provider
+              </button>
+            </div>
 
-              <!-- Providers -->
-              <div id="providersContainer" class="mb-5">
-                <div class="row mb-3">
-                  <div class="col-12 col-md-6">
-                    <label for="provider" class="form-label">
-                      <i class="fas fa-server me-1"></i>Provider
-                    </label>
-                    <select id="provider" required class="form-select">
-                      <option value="replicate">🔄 Replicate</option>
-                      <option value="fal">⚡ FAL</option>
-                      <option value="together">🤝 Together</option>
-                      <option value="deepinfra">🧠 Deepinfra</option>
-                    </select>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onclick="addProvider()"
-                  class="btn btn-outline-primary icon-button"
-                >
-                  <i class="fas fa-plus"></i>Add Provider
-                </button>
-              </div>
+            <div id="providerFields" class="mt-4"></div>
 
-              <div id="providerFields" class="mt-4"></div>
-
-              <!-- Description and Link -->
-              <div class="row mb-5">
-                <div class="col-12 col-md-6 mb-4">
-                  <h4 class="section-title">
-                    <i class="fas fa-info-circle me-2"></i>More Details
-                  </h4>
-                  <label for="description" class="form-label">
-                    <i class="fas fa-align-left me-1"></i>Description
-                  </label>
-                  <textarea
-                    id="description"
-                    class="form-control"
-                    rows="4"
-                    placeholder="Describe your model..."
-                  ></textarea>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="link" class="form-label">
-                    <i class="fas fa-link me-1"></i>Link
-                  </label>
-                  <input
-                    type="text"
-                    id="link"
-                    class="form-control"
-                    placeholder="https://example.com"
-                  />
-                </div>
-              </div>
-
-              <!-- Full Details and Credit Price -->
-              <div class="row mb-5">
-                <div class="col-12 col-md-6 mb-4 mb-md-0">
-                  <label for="fullDetails" class="form-label">
-                    <i class="fas fa-file-alt me-1"></i>Full Details
-                  </label>
-                  <textarea
-                    id="fullDetails"
-                    class="form-control"
-                    rows="4"
-                    placeholder="Detailed information about the model..."
-                  ></textarea>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="creditPrice" class="form-label">
-                    <i class="fas fa-coins me-1"></i>Credit Price
-                  </label>
-                  <input
-                    type="text"
-                    id="creditPrice"
-                    class="form-control"
-                    placeholder="0.00"
-                  />
-                </div>
-              </div>
-
-              <!-- Custom Inputs -->
-              <div id="customInputsContainer" class="mb-5">
+            <!-- Description and Link -->
+            <div class="row mb-5">
+              <div class="col-12 col-md-6 mb-4">
                 <h4 class="section-title">
-                  <i class="fas fa-cogs me-2"></i>Custom Inputs
+                  <i class="fas fa-info-circle me-2"></i>More Details
                 </h4>
-                <div id="customInputs" class="mt-3"></div>
-                <button
-                  type="button"
-                  onclick="addCustomInput()"
-                  class="btn btn-outline-secondary icon-button"
-                >
-                  <i class="fas fa-plus"></i>Add Custom Input
-                </button>
+                <label for="description" class="form-label">
+                  <i class="fas fa-align-left me-1"></i>Description
+                </label>
+                <textarea id="description" class="form-control" rows="4"
+                  placeholder="Describe your model..."></textarea>
               </div>
-
-              <!-- Aspect Ratios and Resolutions -->
-              <div class="row mb-5">
-                <div class="col-12 col-md-6 mb-3">
-                  <label for="aspectRatios" class="form-label">
-                    <i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios
-                  </label>
-                  <input
-                    type="text"
-                    id="aspectRatios"
-                    class="form-control"
-                    placeholder="16:9, 4:3, 1:1"
-                  />
-                  <small class="text-muted">Comma separated values</small>
-                </div>
-                <div
-                  class="col-12 col-md-6"
-                  id="resolutionsContainer"
-                  style="display: none"
-                >
-                  <label for="resolutions" class="form-label">
-                    <i class="fas fa-desktop me-1"></i>Resolutions
-                  </label>
-                  <input
-                    type="text"
-                    id="resolutions"
-                    class="form-control"
-                    placeholder="1920x1080, 1280x720"
-                  />
-                  <small class="text-muted">Comma separated values</small>
-                </div>
+              <div class="col-12 col-md-6">
+                <label for="link" class="form-label">
+                  <i class="fas fa-link me-1"></i>Link
+                </label>
+                <input type="text" id="link" class="form-control" placeholder="https://example.com" />
               </div>
+            </div>
 
-              <!-- Tags -->
-              <div class="row mb-5">
-                <div class="col-12 col-md-6">
-                  <label for="tags" class="form-label">
-                    <i class="fas fa-tags me-1"></i>Tags
-                  </label>
-                  <input
-                    type="text"
-                    id="tags"
-                    class="form-control"
-                    placeholder="AI, ML, Generation"
-                  />
-                  <small class="text-muted">Comma separated values</small>
-                </div>
+            <!-- Full Details and Credit Price -->
+            <div class="row mb-5">
+              <div class="col-12 col-md-6 mb-4 mb-md-0">
+                <label for="fullDetails" class="form-label">
+                  <i class="fas fa-file-alt me-1"></i>Full Details
+                </label>
+                <textarea id="fullDetails" class="form-control" rows="4"
+                  placeholder="Detailed information about the model..."></textarea>
               </div>
+              <div class="col-12 col-md-6">
+                <label for="creditPrice" class="form-label">
+                  <i class="fas fa-coins me-1"></i>Credit Price
+                </label>
+                <input type="text" id="creditPrice" class="form-control" placeholder="0.00" />
+              </div>
+            </div>
 
-              <!-- Submit Button -->
-              <div class="text-center">
-                <button
-                  type="submit"
-                  class="btn btn-primary submit-button icon-button"
-                >
-                  <i class="fas fa-rocket me-2"></i>Create Model
-                </button>
+            <!-- Custom Inputs -->
+            <div id="customInputsContainer" class="mb-5">
+              <h4 class="section-title">
+                <i class="fas fa-cogs me-2"></i>Custom Inputs
+              </h4>
+              <div id="customInputs" class="mt-3"></div>
+              <button type="button" onclick="addCustomInput()" class="btn btn-outline-secondary icon-button">
+                <i class="fas fa-plus"></i>Add Custom Input
+              </button>
+            </div>
+
+            <!-- Aspect Ratios and Resolutions -->
+            <div class="row mb-5">
+              <div class="col-12 col-md-6 mb-3">
+                <label for="aspectRatios" class="form-label">
+                  <i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios
+                </label>
+                <input type="text" id="aspectRatios" class="form-control" placeholder="16:9, 4:3, 1:1" />
+                <small class="text-muted">Comma separated values</small>
+              </div>
+              <div class="col-12 col-md-6" id="resolutionsContainer" style="display: none">
+                <label for="resolutions" class="form-label">
+                  <i class="fas fa-desktop me-1"></i>Resolutions
+                </label>
+                <input type="text" id="resolutions" class="form-control" placeholder="1920x1080, 1280x720" />
+                <small class="text-muted">Comma separated values</small>
+              </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="row mb-5">
+              <div class="col-12 col-md-6">
+                <label for="tags" class="form-label">
+                  <i class="fas fa-tags me-1"></i>Tags
+                </label>
+                <input type="text" id="tags" class="form-control" placeholder="AI, ML, Generation" />
+                <small class="text-muted">Comma separated values</small>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary submit-button icon-button">
+                <i class="fas fa-rocket me-2"></i>Create Model
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Provider Modal -->
+    <div class="modal fade" id="providerModal" tabindex="-1" aria-labelledby="providerModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="providerModalLabel">
+              <i class="fas fa-server me-2"></i>Add Provider Details
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="providerModalForm">
+              <div class="mb-3">
+                <label for="providerCredit" class="form-label">
+                  <i class="fas fa-coins me-1"></i>Credit
+                </label>
+                <input type="number" id="providerCredit" class="form-control" required placeholder="0" />
+              </div>
+              <div class="mb-3">
+                <label for="providerAspectRatiosInput" class="form-label">
+                  <i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios
+                </label>
+                <input type="text" id="providerAspectRatiosInput" class="form-control" placeholder="16:9, 4:3, 1:1" />
+                <small class="text-muted">Comma separated values</small>
+              </div>
+              <div class="mb-3" id="specificFieldContainer">
+                <label for="specificFieldValue" class="form-label" id="specificFieldLabel">
+                  <i class="fas fa-key me-1"></i>Provider Info
+                </label>
+                <input type="text" id="specificFieldValue" class="form-control"
+                  placeholder="Enter provider specific value" />
               </div>
             </form>
           </div>
-        </div>
-      </div>
-
-      <!-- Provider Modal -->
-      <div
-        class="modal fade"
-        id="providerModal"
-        tabindex="-1"
-        aria-labelledby="providerModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="providerModalLabel">
-                <i class="fas fa-server me-2"></i>Add Provider Details
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form id="providerModalForm">
-                <div class="mb-3">
-                  <label for="providerCredit" class="form-label">
-                    <i class="fas fa-coins me-1"></i>Credit
-                  </label>
-                  <input
-                    type="number"
-                    id="providerCredit"
-                    class="form-control"
-                    required
-                    placeholder="0"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="providerAspectRatiosInput" class="form-label">
-                    <i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios
-                  </label>
-                  <input
-                    type="text"
-                    id="providerAspectRatiosInput"
-                    class="form-control"
-                    placeholder="16:9, 4:3, 1:1"
-                  />
-                  <small class="text-muted">Comma separated values</small>
-                </div>
-                <div class="mb-3" id="specificFieldContainer">
-                  <label
-                    for="specificFieldValue"
-                    class="form-label"
-                    id="specificFieldLabel"
-                  >
-                    <i class="fas fa-key me-1"></i>Provider Info
-                  </label>
-                  <input
-                    type="text"
-                    id="specificFieldValue"
-                    class="form-control"
-                    placeholder="Enter provider specific value"
-                  />
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                <i class="fas fa-times me-1"></i>Cancel
-              </button>
-              <button
-                type="button"
-                id="providerModalSave"
-                class="btn btn-primary"
-              >
-                <i class="fas fa-save me-1"></i>Save Provider
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Custom Input Modal -->
-      <div
-        class="modal fade"
-        id="customInputModal"
-        tabindex="-1"
-        aria-labelledby="customInputModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="customInputModalLabel">
-                <i class="fas fa-cogs me-2"></i>Add Custom Input
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form id="customInputModalForm">
-                <div class="mb-3">
-                  <label for="customInputId" class="form-label">
-                    <i class="fas fa-id-badge me-1"></i>Input ID
-                  </label>
-                  <input
-                    type="text"
-                    id="customInputId"
-                    class="form-control"
-                    required
-                    placeholder="unique-input-id"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="customInputType" class="form-label">
-                    <i class="fas fa-list me-1"></i>Type
-                  </label>
-                  <select id="customInputType" class="form-select" required>
-                    <option value="text">📝 Text</option>
-                    <option value="number">🔢 Number</option>
-                    <option value="checkbox">☑️ Checkbox</option>
-                    <option value="select">📋 Select</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="customInputLabel" class="form-label">
-                    <i class="fas fa-tag me-1"></i>Label
-                  </label>
-                  <input
-                    type="text"
-                    id="customInputLabel"
-                    class="form-control"
-                    required
-                    placeholder="Display label"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="customInputPlaceholder" class="form-label">
-                    <i class="fas fa-edit me-1"></i>Placeholder
-                    <small class="text-muted">(optional)</small>
-                  </label>
-                  <input
-                    type="text"
-                    id="customInputPlaceholder"
-                    class="form-control"
-                    placeholder="Enter placeholder text"
-                  />
-                </div>
-                <div
-                  class="mb-3"
-                  id="customInputOptionsContainer"
-                  style="display: none"
-                >
-                  <label for="customInputOptions" class="form-label">
-                    <i class="fas fa-list-ul me-1"></i>Options
-                  </label>
-                  <input
-                    type="text"
-                    id="customInputOptions"
-                    class="form-control"
-                    placeholder="Option 1, Option 2, Option 3"
-                  />
-                  <small class="text-muted">Comma separated values</small>
-                </div>
-                <div class="mb-3">
-                  <label for="customInputDefault" class="form-label">
-                    <i class="fas fa-star me-1"></i>Default Value
-                  </label>
-                  <input
-                    type="text"
-                    id="customInputDefault"
-                    class="form-control"
-                    placeholder="Default value"
-                  />
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                <i class="fas fa-times me-1"></i>Cancel
-              </button>
-              <button
-                type="button"
-                id="customInputModalSave"
-                class="btn btn-primary"
-              >
-                <i class="fas fa-save me-1"></i>Save Input
-              </button>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-1"></i>Cancel
+            </button>
+            <button type="button" id="providerModalSave" class="btn btn-primary">
+              <i class="fas fa-save me-1"></i>Save Provider
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <footer>
-      <div class="f-info mt-3">
-        <div class="f-info-brand">
-          <div class="f-info-brand-name">
-            <p>&copy; 2023 - 2025 &nbsp;&nbsp;OpenMediaFlow, Inc</p>
+
+    <!-- Custom Input Modal -->
+    <div class="modal fade" id="customInputModal" tabindex="-1" aria-labelledby="customInputModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customInputModalLabel">
+              <i class="fas fa-cogs me-2"></i>Add Custom Input
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="f-info-socails">
-            <i class="fa-brands fa-discord"></i>
-            <i class="fa-brands fa-github"></i>
-            <i class="fa-brands fa-linkedin"></i>
-            <i class="fa-brands fa-x-twitter"></i>
+          <div class="modal-body">
+            <form id="customInputModalForm">
+              <div class="mb-3">
+                <label for="customInputId" class="form-label">
+                  <i class="fas fa-id-badge me-1"></i>Input ID
+                </label>
+                <input type="text" id="customInputId" class="form-control" required placeholder="unique-input-id" />
+              </div>
+              <div class="mb-3">
+                <label for="customInputType" class="form-label">
+                  <i class="fas fa-list me-1"></i>Type
+                </label>
+                <select id="customInputType" class="form-select" required>
+                  <option value="text">📝 Text</option>
+                  <option value="number">🔢 Number</option>
+                  <option value="checkbox">☑️ Checkbox</option>
+                  <option value="select">📋 Select</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="customInputLabel" class="form-label">
+                  <i class="fas fa-tag me-1"></i>Label
+                </label>
+                <input type="text" id="customInputLabel" class="form-control" required placeholder="Display label" />
+              </div>
+              <div class="mb-3">
+                <label for="customInputPlaceholder" class="form-label">
+                  <i class="fas fa-edit me-1"></i>Placeholder
+                  <small class="text-muted">(optional)</small>
+                </label>
+                <input type="text" id="customInputPlaceholder" class="form-control"
+                  placeholder="Enter placeholder text" />
+              </div>
+              <div class="mb-3" id="customInputOptionsContainer" style="display: none">
+                <label for="customInputOptions" class="form-label">
+                  <i class="fas fa-list-ul me-1"></i>Options
+                </label>
+                <input type="text" id="customInputOptions" class="form-control"
+                  placeholder="Option 1, Option 2, Option 3" />
+                <small class="text-muted">Comma separated values</small>
+              </div>
+              <div class="mb-3">
+                <label for="customInputDefault" class="form-label">
+                  <i class="fas fa-star me-1"></i>Default Value
+                </label>
+                <input type="text" id="customInputDefault" class="form-control" placeholder="Default value" />
+              </div>
+            </form>
           </div>
-        </div>
-        <div class="f-info-options">
-          <a href="#">Status</a>
-          <a href="#">Anouncment</a>
-          <a href="#">Partners</a>
-          <a href="#">Career</a>
-          <a href="#">Pricing</a>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-1"></i>Cancel
+            </button>
+            <button type="button" id="customInputModalSave" class="btn btn-primary">
+              <i class="fas fa-save me-1"></i>Save Input
+            </button>
+          </div>
         </div>
       </div>
-    </footer>
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/avtar.js"></script>
-    <script src="js/add-model.js"></script>
-    <script></script>
-  </body>
+    </div>
+  </div>
+  <footer>
+    <div class="f-info mt-3">
+      <div class="f-info-brand">
+        <div class="f-info-brand-name">
+          <p>&copy; 2023 - 2025 &nbsp;&nbsp;OpenMediaFlow, Inc</p>
+        </div>
+        <div class="f-info-socails">
+          <i class="fa-brands fa-discord"></i>
+          <i class="fa-brands fa-github"></i>
+          <i class="fa-brands fa-linkedin"></i>
+          <i class="fa-brands fa-x-twitter"></i>
+        </div>
+      </div>
+      <div class="f-info-options">
+        <a href="#">Status</a>
+        <a href="#">Anouncment</a>
+        <a href="#">Partners</a>
+        <a href="#">Career</a>
+        <a href="#">Pricing</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/avtar.js"></script>
+  <script src="js/add-model.js"></script>
+  <script></script>
+</body>
+
 </html>
