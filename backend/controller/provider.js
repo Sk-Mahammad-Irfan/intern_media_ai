@@ -408,7 +408,9 @@ async function callTogether(modelId, body) {
       const width = Math.round(targetHeight * ratio);
       return { width, height: targetHeight };
     };
-    const { width, height } = getDimensionsFromAspectRatio(body.resolution);
+    const { width, height } = getDimensionsFromAspectRatio(
+      body.resolution || "1:1"
+    );
 
     const input = {
       model: modelId,
@@ -518,8 +520,11 @@ export const generateAudioForProvider = async (req, res) => {
       });
     }
 
+    const text = body.prompt;
+
     // Prepare request body
     const requestBody = {
+      text: text || body.prompt,
       prompt: body.prompt,
       duration: body.duration,
       step: body.step,
@@ -577,7 +582,8 @@ export const generateAudioForProvider = async (req, res) => {
         break;
       default:
         if (providerType === "fal") {
-          audioUrl = rawData?.audio?.url || rawData?.audio_url;
+          console.log(rawData);
+          audioUrl = rawData?.audio?.url;
         } else if (providerType === "replicate") {
           audioUrl = rawData?.output;
         } else {
@@ -698,12 +704,19 @@ async function callFalAudio(modelId, body) {
         }
       },
     });
-    return result;
+    return result.data;
   } catch (error) {
     console.error(
       `FAL handler failed for model ${modelId}:`,
-      error.message || error
+      error.response?.data?.error || error.message || error
     );
+    console.error("Error details:", {
+      status: error.body || "Unknown status",
+      body: error.body?.detail[0] || "No body available",
+    });
+    if (error.response && error.response.data) {
+      console.error("Error details:", error.response.data);
+    }
     throw error;
   }
 }

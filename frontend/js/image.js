@@ -515,24 +515,11 @@ async function generateImage() {
 
   if (isMultiModel) {
     const tasks = selectedModels.map((modelId) => {
-      const availableProviders = imageModelOptions[modelId].providers
-        .filter((provider) => !ignoredProviders.includes(provider))
-        .filter((provider) => provider !== "auto");
-
-      if (availableProviders.length === 0) {
-        appendErrorMessage(`No available providers for model "${modelId}"`);
-        return Promise.resolve();
-      }
-
-      const provider = availableProviders.includes("auto")
-        ? "auto"
-        : availableProviders[0];
-
       return generateSingleImage({
         modelId,
         prompt,
         userId,
-        provider,
+        provider: "auto", // Always use auto provider in multi-model mode
         isMultiModel: true,
       });
     });
@@ -625,7 +612,8 @@ async function generateSingleImage({
     const seedInputAuto = document.getElementById("seedInputAuto");
     let seed = seedInputAuto ? seedInputAuto.value.trim() : "";
 
-    if (provider === "auto") {
+    // Always use the auto endpoint for multi-model mode
+    if (isMultiModel || provider === "auto") {
       requestUrl = `${BACKEND_URL}/api/ai/generate-image/${backendModelId}`;
       const parsedSeed =
         seed !== "" && !isNaN(seed) ? parseInt(seed, 10) : 1234;

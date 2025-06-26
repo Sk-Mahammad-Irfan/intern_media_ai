@@ -546,6 +546,7 @@ export const generateAudio = async (req, res) => {
         credits: model.credits[index] || 0, // Default to 0 if credits not specified
       }))
       .sort((a, b) => a.credits - b.credits);
+    console.log(providers);
 
     // Try each provider in order of increasing cost
     for (const { name: provider, credits } of providers) {
@@ -555,12 +556,13 @@ export const generateAudio = async (req, res) => {
         if (!hasEnoughCredits) {
           continue; // Try next provider
         }
+        const text = prompt;
 
         // Prepare request body based on provider
         let requestBody = {
+          text: text || prompt,
           prompt,
           duration,
-          step,
         };
 
         // Add custom inputs if they exist in the request
@@ -573,6 +575,8 @@ export const generateAudio = async (req, res) => {
             }
           });
         }
+
+        console.log(requestBody);
 
         // Call the appropriate provider endpoint
         let audioUrl;
@@ -695,12 +699,13 @@ async function callFalAudio(modelId, body) {
         }
       },
     });
-    return result;
+    return result.data;
   } catch (error) {
     console.error(
       `FAL handler failed for model ${modelId}:`,
-      error.message || error
+      error.error.body?.detail[0] || error.message || error
     );
+    console.log(error);
     throw error;
   }
 }

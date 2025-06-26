@@ -174,7 +174,7 @@ function appendGeneratedVideo(videoUrl) {
   const loadingMessage = document.querySelector(".generating-video");
   if (loadingMessage) loadingMessage.remove();
 
-  const resolution = getSelectedValue(resolutionSelect) || "720p";
+  const resolution = getSelectedValue(resolutionSelect) || "480p";
   const aspect_ratio = getSelectedValue(aspectRatioSelect) || "16:9";
 
   const message = document.createElement("div");
