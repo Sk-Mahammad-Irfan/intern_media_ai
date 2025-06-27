@@ -150,18 +150,25 @@ export const generateImage = async (req, res) => {
   }
 };
 
-// Helper functions for different providers
 async function callReplicate(endpoint, body) {
   const headers = {
     Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
     "Content-Type": "application/json",
     Prefer: "wait",
   };
+
+  const input = { input: body };
+
   try {
-    const response = await axios.post(endpoint, body, headers);
-    return await response.data;
+    const response = await axios.post(endpoint, input, {
+      headers, // Correctly wrapped in an object
+    });
+    return response.data;
   } catch (error) {
-    console.error("Error in callReplicate:", error.message || error);
+    console.error(
+      "Error in callReplicate:",
+      error.response?.data || error.message || error
+    );
     throw error;
   }
 }

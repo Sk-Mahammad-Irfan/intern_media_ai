@@ -346,14 +346,26 @@ async function callDefaultVideoProvider(endpoint, body) {
 }
 
 async function callReplicate(endpoint, body) {
-  console.log(body);
   const headers = {
     Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
     "Content-Type": "application/json",
     Prefer: "wait",
   };
-  const response = await axios.post(endpoint, { input: body }, { headers });
-  return await response.data;
+
+  const input = { input: body };
+
+  try {
+    const response = await axios.post(endpoint, input, {
+      headers, // Correctly wrapped in an object
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error in callReplicate:",
+      error.response?.data || error.message || error
+    );
+    throw error;
+  }
 }
 
 async function callFal(modelId, body) {
