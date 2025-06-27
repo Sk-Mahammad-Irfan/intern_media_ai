@@ -445,6 +445,13 @@ async function populateModelOptions(modelId) {
   // Always select "auto" if available and not ignored
   if (availableProviders.includes("auto")) {
     providerSelect.value = "auto";
+    // Hide custom inputs when auto is selected initially
+    const customInputsContainer = document.getElementById(
+      "customInputsContainer"
+    );
+    if (customInputsContainer) {
+      customInputsContainer.style.display = "none";
+    }
   } else {
     providerSelect.value = availableProviders[0] || "";
   }
@@ -488,13 +495,19 @@ function updateCustomInputs(modelId, provider) {
 
   customInputsContainer.innerHTML = ""; // Clear previous inputs
 
+  // Hide custom inputs if provider is "auto"
+  if (provider === "auto") {
+    customInputsContainer.style.display = "none";
+    return;
+  }
+
   // Filter custom inputs that should be shown for this provider
   const inputsToShow = config.custom_inputs.filter((input) => {
     // If input has a providers property, check if it includes current provider
     if (input.providers && Array.isArray(input.providers)) {
       return input.providers.includes(provider);
     }
-    // Otherwise show for all providers
+    // Otherwise show for all providers (except auto which we already handled)
     return true;
   });
 
@@ -699,9 +712,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     updateAspectRatioOptions();
     updateCustomInputs(modelId, providerSelect.value);
   });
-
-  // Remove duplicate provider change handler
-  // (the one with falOptions and replicateOptions is not needed anymore)
 
   // Apply options button handler
   const applyOptionsBtn = document.getElementById("applyOptionsBtn");

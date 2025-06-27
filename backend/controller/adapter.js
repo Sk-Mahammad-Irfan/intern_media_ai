@@ -293,7 +293,6 @@ async function callDefaultProvider(endpoint, body) {
 }
 
 export const generateVideo = async (req, res) => {
-  console.log("aat aala");
   const { id } = req.params;
   const { prompt, userId, aspect_ratio, resolution, seed } = req.body;
 
@@ -312,12 +311,28 @@ export const generateVideo = async (req, res) => {
       return res.status(400).json({ error: "Invalid or inactive model ID." });
     }
 
-    // Prepare providers with their credits, sorted by cheapest first
+    // Prepare providers with their computed total costs, sorted by cheapest first
     const providers = model.provider
-      .map((provider, index) => ({
-        name: provider,
-        credits: model.credits[index] || 0, // Default to 0 if credits not specified
-      }))
+      .map((provider, index) => {
+        const perSecondCost = model.credits[index] || 0;
+        let totalCost = perSecondCost * 6; // base cost for 6 seconds
+        console.log(`Initial cost for ${provider}: ${totalCost}`);
+
+        // If resolution is higher than 480p, double the cost
+        const resValue =
+          typeof resolution === "string" ? parseInt(resolution) : resolution;
+        if (resValue && resValue > 480) {
+          totalCost *= 2;
+          console.log(
+            `Doubled cost for ${provider} due to high res: ${totalCost}`
+          );
+        }
+
+        return {
+          name: provider,
+          credits: parseFloat(totalCost.toFixed(4)),
+        };
+      })
       .sort((a, b) => a.credits - b.credits);
 
     console.log(providers);
@@ -325,7 +340,6 @@ export const generateVideo = async (req, res) => {
     // Try each provider in order of increasing cost
     for (const { name: provider, credits } of providers) {
       try {
-        // Check if user has enough credits
         const hasEnoughCredits = await checkCredits(userId, credits);
         if (!hasEnoughCredits) {
           continue; // Try next provider
@@ -334,7 +348,7 @@ export const generateVideo = async (req, res) => {
         // Prepare request body based on provider
         let requestBody = {
           prompt,
-          resolution: resolution || aspect_ratio, // Handle both resolution and aspect_ratio
+          resolution: resolution || aspect_ratio,
           seed: seed || 2341,
         };
 
@@ -364,6 +378,8 @@ export const generateVideo = async (req, res) => {
             break;
 
           case "fal":
+            console.log("fal");
+            console.log(requestBody);
             const falResponse = await callFalVideo(model.falid, requestBody);
             videoUrl = falResponse?.video?.url;
             break;
@@ -390,7 +406,6 @@ export const generateVideo = async (req, res) => {
             break;
 
           default:
-            // For 'auto' or unknown providers, use the default endpoint
             const defaultResponse = await callDefaultVideoProvider(
               model.endpoint,
               requestBody
@@ -401,16 +416,19 @@ export const generateVideo = async (req, res) => {
               defaultResponse;
         }
 
-        if (!videoUrl) {
+        if (
+          !videoUrl ||
+          typeof videoUrl !== "string" ||
+          videoUrl.trim() === ""
+        ) {
           console.warn(
-            `No video URL returned from provider ${provider}, trying next one...`
+            `No valid video URL returned from provider ${provider}, trying next one...`
           );
           continue;
         }
 
-        // Deduct credits if we got a successful response
+        // Deduct credits if successful
         await decreaseCredits(userId, credits);
-
         return res.status(200).json({ videoUrl });
       } catch (error) {
         console.error(
@@ -519,13 +537,7 @@ async function callTogetherVideo(modelId, body) {
 }
 
 async function callDefaultVideoProvider(endpoint, body) {
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  return false;
 }
 export const generateAudio = async (req, res) => {
   const { id } = req.params;
@@ -638,10 +650,7 @@ export const generateAudio = async (req, res) => {
               model.endpoint,
               requestBody
             );
-            audioUrl =
-              defaultResponse?.output ||
-              defaultResponse?.audio_url ||
-              defaultResponse;
+            audioUrl = defaultResponse;
         }
 
         if (!audioUrl) {
@@ -773,12 +782,5 @@ async function callDeepInfraAudio(modelId, body) {
 }
 
 async function callDefaultAudioProvider(endpoint, body) {
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  return await response.json();
+  return false;
 }

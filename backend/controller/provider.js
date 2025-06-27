@@ -120,11 +120,17 @@ export const generateImageForProvider = async (req, res) => {
 export const generateVideoForProvider = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  const { userId, provider } = body;
+  const { userId, provider, prompt, resolution, aspect_ratio, seed } = body;
 
   if (!userId || !provider) {
     return res.status(400).json({
       error: "User ID and provider are required.",
+    });
+  }
+
+  if (!prompt) {
+    return res.status(400).json({
+      error: "Prompt is required.",
     });
   }
 
@@ -150,39 +156,64 @@ export const generateVideoForProvider = async (req, res) => {
       });
     }
 
-    const credits = model.credits[providerIndex] || 0;
-    const hasEnoughCredits = await checkCredits(userId, credits);
+    // Base per-second credit cost
+    let credits = model.credits[providerIndex] || 0;
+    let totalCost = credits * 6; // 6 seconds base
 
+    console.log(`Base cost: ${totalCost.toFixed(4)}`);
+
+    const resValue =
+      typeof resolution === "string" ? parseInt(resolution) : resolution;
+    if (resValue && resValue > 480) {
+      totalCost *= 2; // double cost for high res
+      console.log(
+        `High resolution (${resValue}) - cost doubled to: ${totalCost.toFixed(
+          4
+        )}`
+      );
+    }
+
+    totalCost = parseFloat(totalCost.toFixed(4));
+
+    // Check for credit availability
+    const hasEnoughCredits = await checkCredits(userId, totalCost);
     if (!hasEnoughCredits) {
       return res.status(402).json({
         error: "Not enough credits.",
-        requiredCredits: credits,
+        requiredCredits: totalCost,
       });
     }
 
     // Prepare request body
     const requestBody = {
-      prompt: body.prompt,
-      resolution: body.resolution || body.aspect_ratio,
-      seed: body.seed || 1234,
+      prompt,
+      resolution: resolution || aspect_ratio,
+      seed: seed ?? 1234,
     };
 
     // Apply custom inputs
-    if (model.custom_inputs) {
-      model.custom_inputs.forEach((input) => {
-        if (body[input.id] !== undefined) {
-          requestBody[input.id] = body[input.id];
-        } else if (input.default !== undefined) {
-          requestBody[input.id] = input.default;
+    model?.custom_inputs?.forEach(({ id, default: defaultValue }) => {
+      let inputValue = body[id] ?? defaultValue;
+
+      if (id === "duration") {
+        if (
+          typeof inputValue === "string" &&
+          inputValue.trim().toLowerCase().endsWith("s")
+        ) {
+          // Keep as string if it ends with 's', e.g. "5s"
+          requestBody[id] = inputValue.trim();
+        } else {
+          // Convert to integer if it's a numeric string like "5" or number
+          requestBody[id] = parseInt(inputValue);
         }
-      });
-    }
+      } else {
+        requestBody[id] = inputValue;
+      }
+    });
 
-    if (requestBody.seed === null) {
-      requestBody.seed = 1234;
-    }
-    console.log(requestBody);
+    console.log("Prepared request body:", requestBody);
 
+    // Call appropriate provider function
     let rawData;
     switch (providerType) {
       case "replicate":
@@ -201,9 +232,7 @@ export const generateVideoForProvider = async (req, res) => {
         rawData = await callDefaultVideoProvider(model.endpoint, requestBody);
     }
 
-    console.log(rawData);
-
-    // Extract video URL based on provider
+    // Extract video URL
     let videoUrl;
     switch (providerType) {
       case "replicate":
@@ -231,16 +260,17 @@ export const generateVideoForProvider = async (req, res) => {
       });
     }
 
-    // Deduct credits and return response
-    await decreaseCredits(userId, credits);
-    res.json({
+    // Deduct dynamic credits
+    await decreaseCredits(userId, totalCost);
+
+    return res.status(200).json({
       videoUrl,
       provider: providerType,
-      creditsDeducted: credits,
+      creditsDeducted: totalCost,
     });
   } catch (err) {
     console.error(`Error generating video for ${id} with ${provider}:`, err);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Video generation failed.",
       provider: provider,
       details: err?.message || err,

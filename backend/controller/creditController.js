@@ -119,8 +119,8 @@ export const checkCredits = async (userId, credits) => {
   if (!user) {
     throw new Error("User not found");
   }
-
-  return user.credits >= credits;
+  console.log(Number((user.credits - credits).toFixed(2)));
+  return Number((user.credits - credits).toFixed(2)) >= 0;
 };
 
 // ✅ Get credit history for a user

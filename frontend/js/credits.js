@@ -157,7 +157,8 @@ async function fetchAndRenderCreditHistory(userId, page = 1) {
 // Update credits text
 function updateCreditsDisplay(credits) {
   const creditsElement = document.querySelector(".display-4.fw-bold.text-dark");
-  if (creditsElement) creditsElement.textContent = credits;
+  if (creditsElement)
+    creditsElement.textContent = parseFloat(credits).toFixed(3);
 }
 
 // Get token helper
@@ -205,6 +206,7 @@ function handleConfirmAddCredits() {
     return;
   }
 
+  // Allow floating point numbers
   const method = paymentMethodSelect?.value || "card";
 
   updateUserCredits(userId, amount, method);
