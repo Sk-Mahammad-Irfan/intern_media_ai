@@ -451,27 +451,15 @@ export const generateVideo = async (req, res) => {
 };
 
 async function callReplicateVideo(endpoint, body) {
-  try {
-    const response = await axios.post(
-      endpoint,
-      {
-        input: body,
-      },
-      {
-        headers: {
-          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
-          "Content-Type": "application/json",
-          Prefer: "wait",
-        },
-      }
-    );
-    let status = response.data.status;
-    let output = response.data.output;
-    const getUrl = response.data.urls?.get;
-    while (status !== "succeeded" && status !== "failed") {
+  const token = process.env.REPLICATE_API_TOKEN;
+
+  // Helper function for polling Replicate predictions
+  const pollPrediction = async (getUrl) => {
+    let status, output;
+    while (true) {
       const pollRes = await axios.get(getUrl, {
         headers: {
-          Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+          Authorization: `Token ${token}`,
         },
       });
       status = pollRes.data.status;
@@ -480,9 +468,61 @@ async function callReplicateVideo(endpoint, body) {
       if (status === "failed") throw new Error("Video generation failed");
       await new Promise((res) => setTimeout(res, 3000));
     }
+  };
+
+  try {
+    // Try using the provided endpoint first
+    const response = await axios.post(
+      endpoint,
+      { input: body },
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+          Prefer: "wait",
+        },
+      }
+    );
+    const status = response.data.status;
+    if (status === "succeeded") return response.data;
+    if (status === "failed") throw new Error("Video generation failed");
+
+    const getUrl = response.data.urls?.get;
+    return await pollPrediction(getUrl);
   } catch (error) {
-    console.error(`Error generating video with Replicate ${endpoint}:`, error);
-    throw error;
+    console.warn(
+      "Custom endpoint failed. Falling back to version-based call..."
+    );
+    try {
+      // Fallback to replicate API using version
+      const fallbackResponse = await axios.post(
+        "https://api.replicate.com/v1/predictions",
+        {
+          version: endpoint,
+          input: body,
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+            Prefer: "wait",
+          },
+        }
+      );
+      const status = fallbackResponse.data.status;
+      if (status === "succeeded") return fallbackResponse.data;
+      if (status === "failed")
+        throw new Error("Fallback video generation failed");
+
+      const getUrl = fallbackResponse.data.urls?.get;
+      return await pollPrediction(getUrl);
+    } catch (fallbackError) {
+      console.error(
+        "Fallback to version-based API also failed:",
+        fallbackError
+      );
+      throw fallbackError;
+    }
   }
 }
 
