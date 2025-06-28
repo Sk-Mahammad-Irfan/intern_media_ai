@@ -11,18 +11,31 @@ function initComparePage() {
   setupDropdownListener();
 }
 
-// Fetch models from backend
+// ✅ Fetch models from localStorage or backend
 async function fetchModels() {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/model`);
-    if (!response.ok) throw new Error("Failed to fetch models");
-    const data = await response.json();
+    const cached = localStorage.getItem("models");
+    let modelsData = [];
 
-    // Store models by modelId
-    data.forEach((model) => {
+    if (cached && cached !== "undefined") {
+      modelsData = JSON.parse(cached);
+      console.log("📦 Loaded models from localStorage.");
+    } else {
+      const response = await fetch(`${BACKEND_URL}/api/model`);
+      if (!response.ok) throw new Error("Failed to fetch models");
+      modelsData = await response.json();
+
+      // ✅ Save to localStorage
+      localStorage.setItem("models", JSON.stringify(modelsData));
+      console.log("🌐 Fetched models from backend and cached.");
+    }
+
+    // Populate global cache
+    modelsData.forEach((model) => {
       allModels[model.modelId] = model;
     });
 
+    // Handle URL param
     const urlParams = new URLSearchParams(window.location.search);
     const model1Id = urlParams.get("id");
 
@@ -33,7 +46,7 @@ async function fetchModels() {
       if (model1Type) populateDropdown(model1Type, model1Id);
     }
   } catch (error) {
-    console.error("Failed to fetch models:", error);
+    console.error("❌ Failed to load models:", error);
   }
 }
 

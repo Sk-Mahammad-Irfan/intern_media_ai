@@ -1,4 +1,3 @@
-// Wrap everything in an IIFE to avoid global scope pollution
 (function () {
   // Global variable to store fetched models
   let models = {};
@@ -35,28 +34,38 @@
           JSON.stringify(Array.from(ignoredProviders))
         );
         updateOutput();
-        window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
+        window.dispatchEvent(new Event("ignoredProvidersUpdated"));
       };
 
       output.appendChild(badge);
     });
   }
 
-  // ✅ Fetch models from backend and populate selector
+  // ✅ Fetch models from localStorage or backend and populate selector
   async function fetchAndPopulateModels() {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/model`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch models");
+      const cachedModels = localStorage.getItem("models");
+      console.log(cachedModels);
+      let modelsData;
+      if (cachedModels === "[]") {
+        // If cached model is [], send request to fetch latest models
+        const response = await fetch(`${BACKEND_URL}/api/model`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch models");
+        }
+        modelsData = await response.json();
+        localStorage.setItem("models", JSON.stringify(modelsData));
+      } else if (cachedModels && cachedModels.length >= 1) {
+        modelsData = JSON.parse(cachedModels);
+        console.log("📦 Loaded models from localStorage.");
       }
-      const modelsData = await response.json();
 
       // Transform the array into an object with modelId as keys
       models = modelsData.reduce((acc, model) => {
         acc[model.modelId] = {
           id: model.modelId,
           title: model.name,
-          provider: model.provider[0], // Taking first provider if multiple exist
+          provider: model.provider[0], // Taking first provider
           chatPage: model.chatPage || "imagemodel.html",
           assetType: model.assetType,
           credits: model.credits,
@@ -80,7 +89,7 @@
   // ✅ Populate dropdown, skipping ignored providers
   function populateModelSelector() {
     const selector = document.getElementById("modelSelector");
-    selector.innerHTML = ""; // Clear old options
+    selector.innerHTML = "";
 
     const grouped = {
       "Text-to-Image": [],
@@ -128,7 +137,6 @@
       }
     }
 
-    // Set selected model based on URL
     const selectedIdFromURL = getModelIdFromURL();
     if (selectedIdFromURL && models[selectedIdFromURL]) {
       selector.value = selectedIdFromURL;
@@ -178,12 +186,12 @@
           JSON.stringify(Array.from(ignoredProviders))
         );
         updateOutput();
-        window.dispatchEvent(new Event("ignoredProvidersUpdated")); // Notify selector update
+        window.dispatchEvent(new Event("ignoredProvidersUpdated"));
       }
     });
   }
 
-  // Multi-model mode toggle (unchanged)
+  // Multi-model mode toggle
   function toggleMultiModelMode() {
     const isChecked = document.getElementById("multiModelModeToggle").checked;
     const singleModelControlsList = document.querySelectorAll(
@@ -196,7 +204,6 @@
       document.getElementById("aspectRatioSelect")?.parentElement;
 
     const providerSelect = document.getElementById("providerSelect");
-
     providerSelect.value = "auto";
 
     if (isChecked) {
@@ -227,7 +234,7 @@
     }
   }
 
-  // Make necessary functions available globally
+  // Make functions globally accessible
   window.handleModelChange = handleModelChange;
   window.toggleMultiModelMode = toggleMultiModelMode;
 })();

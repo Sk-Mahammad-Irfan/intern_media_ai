@@ -56,7 +56,7 @@ async function fetchImageModelOptions() {
     showLoading();
     modelsLoading = true;
 
-    const response = await fetch("http://localhost:5000/api/model/image");
+    const response = await fetch(`${BACKEND_URL}/api/model/image`);
     if (!response.ok) {
       throw new Error("Failed to fetch model options");
     }

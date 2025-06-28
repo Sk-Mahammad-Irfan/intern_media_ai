@@ -11,16 +11,23 @@ const modelSelect = document.getElementById("modelSelect");
 const modelUrl = document.getElementById("modelUrl");
 const copyUrlBtn = document.getElementById("copyUrlBtn");
 
-// Function to fetch models from backend and transform the data structure
 async function fetchModels() {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/model`);
+    const cached = localStorage.getItem("models");
+    let modelsArray = [];
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (cached && cached !== "undefined") {
+      modelsArray = JSON.parse(cached);
+      console.log("📦 Loaded models from localStorage.");
+    } else {
+      const response = await fetch(`${BACKEND_URL}/api/model`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      modelsArray = await response.json();
+      localStorage.setItem("models", JSON.stringify(modelsArray));
+      console.log("🌐 Fetched models from backend and cached.");
     }
-
-    const modelsArray = await response.json();
 
     // Transform the array into the required structure
     modelsinfo = {
@@ -31,7 +38,6 @@ async function fetchModels() {
 
     modelsArray.forEach((model) => {
       if (model.isActive) {
-        // Only include active models
         const type = model.assetType.toLowerCase();
         if (modelsinfo[type]) {
           modelsinfo[type][model.modelId] = model.name;
@@ -42,7 +48,6 @@ async function fetchModels() {
     populateModels("image"); // Default to image models
   } catch (error) {
     console.error("Error fetching models:", error);
-    // Show error to user
     modelSelect.innerHTML = '<option value="">Failed to load models</option>';
   }
 }
@@ -58,7 +63,6 @@ function populateModels(type) {
     return;
   }
 
-  // Create a default option
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Select a Model";
@@ -66,7 +70,6 @@ function populateModels(type) {
   defaultOption.disabled = true;
   modelSelect.appendChild(defaultOption);
 
-  // Add all models
   for (const id in typeModels) {
     const option = document.createElement("option");
     option.value = id;
@@ -106,7 +109,6 @@ function copyToClipboard() {
 modelTypeSelect.addEventListener("change", () => {
   populateModels(modelTypeSelect.value);
 });
-
 modelSelect.addEventListener("change", updateUrl);
 copyUrlBtn.addEventListener("click", copyToClipboard);
 

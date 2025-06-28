@@ -74,8 +74,9 @@ document.getElementById("modelForm").addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
+    localStorage.setItem("models", JSON.stringify(data));
+    console.log("🌐 Fetched models from backend and cached.");
     alert("✅ Model added successfully!");
-    console.log("🟢 Response:", data);
   } catch (error) {
     console.error("❌ Submission failed:", error);
     alert("Failed to submit model. Check console.");

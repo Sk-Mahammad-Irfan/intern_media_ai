@@ -1,33 +1,26 @@
 let models = {}; // This will store our fetched models
 
-// Function to fetch models from backend
+// Function to fetch models from backend or localStorage
 async function fetchModels() {
   try {
+    const cachedModels = localStorage.getItem("models");
+
+    if (cachedModels) {
+      // Load from localStorage
+      const modelsArray = JSON.parse(cachedModels);
+      processModels(modelsArray);
+      return;
+    }
+
+    // Otherwise, fetch from backend
     const response = await fetch(`${BACKEND_URL}/api/model`);
     if (!response.ok) throw new Error("Failed to fetch models");
     const modelsArray = await response.json();
 
-    // Convert array to object with modelId as key
-    models = modelsArray.reduce((acc, model) => {
-      acc[model.modelId] = {
-        id: model.modelId,
-        title: model.name,
-        description: model.description,
-        link: model.link,
-        fullDetails: model.fullDetails,
-        chatPage: model.chatPage,
-        creditPrice: model.creditPrice,
-        providers: Array.isArray(model.provider)
-          ? model.provider
-          : [model.provider],
-        tags: model.tags || [],
-        isActive: model.isActive,
-      };
-      return acc;
-    }, {});
+    // Store fetched models in localStorage
+    localStorage.setItem("models", JSON.stringify(modelsArray));
 
-    // Initialize search functionality after data is loaded
-    initSearch();
+    processModels(modelsArray);
   } catch (error) {
     console.error("Error fetching models:", error);
     // Show error to user
@@ -47,6 +40,30 @@ async function fetchModels() {
       }
     });
   }
+}
+
+// Function to process and structure models
+function processModels(modelsArray) {
+  models = modelsArray.reduce((acc, model) => {
+    acc[model.modelId] = {
+      id: model.modelId,
+      title: model.name,
+      description: model.description,
+      link: model.link,
+      fullDetails: model.fullDetails,
+      chatPage: model.chatPage,
+      creditPrice: model.creditPrice,
+      providers: Array.isArray(model.provider)
+        ? model.provider
+        : [model.provider],
+      tags: model.tags || [],
+      isActive: model.isActive,
+    };
+    return acc;
+  }, {});
+
+  // Initialize search functionality after data is loaded
+  initSearch();
 }
 
 // Search functionality

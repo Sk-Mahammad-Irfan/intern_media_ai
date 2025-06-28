@@ -5,7 +5,7 @@ let allmodels = {
   audio: [],
 };
 
-// Function to fetch all required data from backend
+// Function to fetch all required data from backend or localStorage
 async function fetchAllData() {
   const container = document.querySelector(".main-content");
 
@@ -20,11 +20,27 @@ async function fetchAllData() {
   `;
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/model`);
-    if (!response.ok) throw new Error("Failed to fetch models");
+    // Check if models are cached
+    const cachedModels = localStorage.getItem("models");
 
-    const modelsArray = await response.json();
+    let modelsArray;
 
+    if (cachedModels === "[]") {
+      const response = await fetch(`${BACKEND_URL}/api/model`);
+      if (!response.ok) throw new Error("Failed to fetch models");
+
+      modelsArray = await response.json();
+
+      // Cache models in localStorage
+      localStorage.setItem("models", JSON.stringify(modelsArray));
+    } else {
+      modelsArray = JSON.parse(cachedModels);
+      console.log("📦 Loaded models from localStorage.");
+    }
+
+    if (!modelsArray) throw new Error("Models array is undefined.");
+
+    // Categorize and transform models
     allmodels = {
       image: modelsArray
         .filter((model) => model.assetType.toLowerCase() === "image")
