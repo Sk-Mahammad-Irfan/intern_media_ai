@@ -60,6 +60,21 @@ export const deleteModelConfig = async (req, res) => {
   }
 };
 
+export const deleteModelsByAssetType = async (req, res) => {
+  try {
+    const deletedModels = await ModelConfig.deleteMany({
+      assetType: req.params.assetType,
+    });
+    if (deletedModels.deletedCount === 0)
+      return res.status(404).json({ error: "No models found" });
+    res.status(200).json({
+      message: `${deletedModels.deletedCount} models deleted successfully`,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Get all image models
 export const getAllImageModels = async (req, res) => {
   try {

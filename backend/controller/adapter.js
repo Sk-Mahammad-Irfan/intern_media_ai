@@ -715,13 +715,18 @@ async function callFalAudio(modelId, body) {
         }
       },
     });
+
+    if (!result || !result.data) {
+      throw new Error("No data returned from FAL");
+    }
+
     return result.data;
   } catch (error) {
+    const detailMsg = error?.error?.body?.detail?.[0];
     console.error(
       `FAL handler failed for model ${modelId}:`,
-      error.error.body?.detail[0] || error.message || error
+      detailMsg || error?.message || error
     );
-    console.log(error);
     throw error;
   }
 }

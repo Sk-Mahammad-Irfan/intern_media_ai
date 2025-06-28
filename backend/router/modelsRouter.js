@@ -4,6 +4,7 @@ import {
   createModelConfig,
   createMultipleModelConfigs,
   deleteModelConfig,
+  deleteModelsByAssetType,
   getAllAudioModels,
   getAllImageModels,
   getAllModelConfigs,
@@ -24,5 +25,6 @@ router.get("/audio", getAllAudioModels);
 router.get("/:id", getModelConfigById);
 router.put("/:id", updateModelConfig);
 router.delete("/:id", deleteModelConfig);
+router.delete("/asset/:assetType", deleteModelsByAssetType);
 
 export default router;
