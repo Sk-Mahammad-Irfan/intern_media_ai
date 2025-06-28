@@ -244,7 +244,7 @@ function renderAllModels() {
               <div class="d-flex justify-content-between align-items-center mt-3">
                 <span class="badge bg-light text-dark border rounded-pill">
                   <i class="bi bi-coin me-1"></i>
-                  ${model.price || "?"} credits
+                  ${model.price || "?"} dollars
                 </span>
                 ${
                   model.link
