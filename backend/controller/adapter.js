@@ -322,7 +322,7 @@ export const generateVideo = async (req, res) => {
         const resValue =
           typeof resolution === "string" ? parseInt(resolution) : resolution;
         if (resValue && resValue > 480) {
-          totalCost *= 2;
+          totalCost *= 1.5;
           console.log(
             `Doubled cost for ${provider} due to high res: ${totalCost}`
           );

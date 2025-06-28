@@ -165,7 +165,7 @@ export const generateVideoForProvider = async (req, res) => {
     const resValue =
       typeof resolution === "string" ? parseInt(resolution) : resolution;
     if (resValue && resValue > 480) {
-      totalCost *= 2; // double cost for high res
+      totalCost *= 1.5; // double cost for high res
       console.log(
         `High resolution (${resValue}) - cost doubled to: ${totalCost.toFixed(
           4

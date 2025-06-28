@@ -119,7 +119,6 @@ export const checkCredits = async (userId, credits) => {
   if (!user) {
     throw new Error("User not found");
   }
-  console.log(Number((user.credits - credits).toFixed(2)));
   return Number((user.credits - credits).toFixed(2)) >= 0;
 };
 

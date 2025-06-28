@@ -20,42 +20,58 @@ async function fetchAllData() {
   `;
 
   try {
-    // Check if models are cached
-    const cachedModels = localStorage.getItem("models");
+    let modelsArray = [];
 
-    let modelsArray;
+    // Try to load from cache
+    try {
+      const cached = localStorage.getItem("models");
 
-    if (cachedModels === "[]") {
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          modelsArray = parsed;
+          console.log("📦 Loaded models from localStorage.");
+        } else {
+          throw new Error("Empty or invalid cached models.");
+        }
+      } else {
+        throw new Error("No cached models found.");
+      }
+    } catch (cacheError) {
+      console.warn(
+        "⚠️ Cache issue. Fetching from backend instead.",
+        cacheError.message
+      );
+
       const response = await fetch(`${BACKEND_URL}/api/model`);
-      if (!response.ok) throw new Error("Failed to fetch models");
+      if (!response.ok) throw new Error("Failed to fetch models from backend");
 
       modelsArray = await response.json();
 
-      // Cache models in localStorage
-      localStorage.setItem("models", JSON.stringify(modelsArray));
-    } else {
-      modelsArray = JSON.parse(cachedModels);
-      console.log("📦 Loaded models from localStorage.");
-    }
+      if (!Array.isArray(modelsArray)) {
+        throw new Error("Invalid data format from backend");
+      }
 
-    if (!modelsArray) throw new Error("Models array is undefined.");
+      // Store fresh models in localStorage
+      localStorage.setItem("models", JSON.stringify(modelsArray));
+    }
 
     // Categorize and transform models
     allmodels = {
       image: modelsArray
-        .filter((model) => model.assetType.toLowerCase() === "image")
+        .filter((model) => model.assetType?.toLowerCase() === "image")
         .map((model) => ({
           ...model,
           price: model.credits ? Math.max(...model.credits) : 0,
         })),
       video: modelsArray
-        .filter((model) => model.assetType.toLowerCase() === "video")
+        .filter((model) => model.assetType?.toLowerCase() === "video")
         .map((model) => ({
           ...model,
           price: model.credits ? Math.max(...model.credits) : 0,
         })),
       audio: modelsArray
-        .filter((model) => model.assetType.toLowerCase() === "audio")
+        .filter((model) => model.assetType?.toLowerCase() === "audio")
         .map((model) => ({
           ...model,
           price: model.credits ? Math.max(...model.credits) : 0,
@@ -305,12 +321,17 @@ function renderAllModels() {
   document
     .getElementById("sort-by")
     .addEventListener("change", filterAndRenderModels);
-  document.getElementById("reset-filters").addEventListener("click", () => {
-    document.getElementById("model-search").value = "";
-    document.getElementById("category-filter").value = "all";
-    document.getElementById("sort-by").value = "name-asc";
-    filterAndRenderModels();
-  });
+  document
+    .getElementById("reset-filters")
+    .addEventListener("click", async () => {
+      document.getElementById("model-search").value = "";
+      document.getElementById("category-filter").value = "all";
+      document.getElementById("sort-by").value = "name-asc";
+
+      localStorage.removeItem("models");
+
+      await fetchAllData(); // ✅ Re-fetch without reload
+    });
 }
 
 function getCategoryIcon(category) {
