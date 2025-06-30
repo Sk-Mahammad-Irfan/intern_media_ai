@@ -1,0 +1,33 @@
+.message {
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.message-success {
+  background-color: #edf7ed;
+  color: #1e4620;
+  border: 1px solid #a5d6a7;
+}
+
+.message-error {
+  background-color: #fde8e8;
+  color: #5f2120;
+  border: 1px solid #ef9a9a;
+}
+
+.input-error {
+  border-color: #f44336 !important;
+}
+
+.error-text {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

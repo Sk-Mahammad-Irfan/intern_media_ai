@@ -5,6 +5,8 @@ import {
   testProtectedRoute,
   successGoogleLogin,
   failureGoogleLogin,
+  verifyEmailController,
+  resendVerificationEmailController,
 } from "../controller/authController.js";
 import passport from "passport";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
@@ -63,6 +65,9 @@ router.get("/redirect-with-user", (req, res) => {
 router.get("/success", successGoogleLogin);
 
 router.get("/failure", failureGoogleLogin);
+
+router.get("/verify-email", verifyEmailController);
+router.post("/resend-verification", resendVerificationEmailController);
 
 // test protected route
 router.get("/test", requireSignIn, testProtectedRoute);

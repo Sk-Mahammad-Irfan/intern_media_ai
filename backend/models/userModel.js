@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       minLength: 8,
       maxLength: 100,
     },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: String,
+    verificationTokenExpires: Date,
     credits: {
       type: Number,
       default: 0,
