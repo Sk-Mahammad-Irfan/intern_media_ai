@@ -55,13 +55,19 @@ export const generateImageForProvider = async (req, res) => {
     // Apply custom inputs
     if (model.custom_inputs) {
       model.custom_inputs.forEach((input) => {
-        if (body[input.id] !== undefined) {
-          requestBody[input.id] = body[input.id];
+        if (req.body[input.id] !== undefined) {
+          if (input.id === "safety_tolerance") {
+            requestBody[input.id] = parseInt(req.body[input.id]);
+          } else {
+            requestBody[input.id] = req.body[input.id];
+          }
         } else if (input.default !== undefined) {
           requestBody[input.id] = input.default;
         }
       });
     }
+
+    console.log(requestBody);
 
     let rawData;
     switch (providerType) {
@@ -443,7 +449,10 @@ async function callFal(modelId, body) {
 
 async function callTogether(modelId, body) {
   try {
-    const getDimensionsFromAspectRatio = (aspectRatio, targetHeight = 768) => {
+    const getDimensionsFromAspectRatio = (
+      aspectRatio = "1:1",
+      targetHeight = 768
+    ) => {
       const [w, h] = aspectRatio.split(":").map(Number);
       if (!w || !h) throw new Error("Invalid aspect ratio format.");
       const ratio = w / h;

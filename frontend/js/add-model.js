@@ -109,10 +109,8 @@ function addProvider() {
   modal.show();
 
   document.getElementById("providerModalSave").onclick = () => {
-    const credit = parseInt(
-      document.getElementById("providerCredit").value,
-      10
-    );
+    const creditInput = document.getElementById("providerCredit").value;
+    const credit = parseFloat(creditInput); // Changed from parseInt to parseFloat
     const aspectRatiosRaw = document.getElementById(
       "providerAspectRatiosInput"
     ).value;
@@ -123,7 +121,7 @@ function addProvider() {
     const specificFieldValue =
       document.getElementById("specificFieldValue").value;
 
-    if (!credit || !specificFieldValue) {
+    if (isNaN(credit) || !specificFieldValue) {
       alert("Please fill all provider details.");
       return;
     }
@@ -144,19 +142,19 @@ function addProvider() {
 
     // UI update
     const html = `
-                    <div class="provider-section">
-                        <strong class="d-block mb-2">
-                            <i class="fas fa-server me-2"></i>${provider.toUpperCase()}
-                        </strong>
-                        <p class="mb-1"><strong><i class="fas fa-coins me-1"></i>Credit:</strong> ${credit}</p>
-                        <p class="mb-1"><strong><i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios:</strong> ${
-                          aspectRatios.join(", ") || "N/A"
-                        }</p>
-                        <p class="mb-0"><strong><i class="fas fa-key me-1"></i>${
-                          labelMap[provider]
-                        }:</strong> ${specificFieldValue}</p>
-                    </div>
-                `;
+                  <div class="provider-section">
+                      <strong class="d-block mb-2">
+                          <i class="fas fa-server me-2"></i>${provider.toUpperCase()}
+                      </strong>
+                      <p class="mb-1"><strong><i class="fas fa-coins me-1"></i>Credit:</strong> ${credit}</p>
+                      <p class="mb-1"><strong><i class="fas fa-expand-arrows-alt me-1"></i>Aspect Ratios:</strong> ${
+                        aspectRatios.join(", ") || "N/A"
+                      }</p>
+                      <p class="mb-0"><strong><i class="fas fa-key me-1"></i>${
+                        labelMap[provider]
+                      }:</strong> ${specificFieldValue}</p>
+                  </div>
+              `;
     document.getElementById("providerFields").innerHTML += html;
 
     modal.hide();
