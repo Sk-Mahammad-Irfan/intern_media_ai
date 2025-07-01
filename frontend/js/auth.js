@@ -8,14 +8,6 @@ const usernameField = document.getElementById("username-field");
 
 let isLogin = true;
 
-// Function to set cookie
-function setCookie(name, value, days) {
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  const expires = "expires=" + date.toUTCString();
-  document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
 // Function to get cookie
 function getCookie(name) {
   const cookieName = name + "=";
@@ -49,76 +41,210 @@ toggleLink.addEventListener("click", (e) => {
 // Form submission handler
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  msg.textContent = "";
 
-  // Disable the button and show loading state
+  // Reset UI states
+  msg.textContent = "";
+  msg.className = "message"; // Base message class
   submitBtn.disabled = true;
+  const originalBtnText = submitBtn.textContent;
   submitBtn.textContent = isLogin ? "Logging in..." : "Registering...";
 
-  const formData = new FormData(form);
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const username = formData.get("username");
+  // Clear previous error states
+  document.querySelectorAll(".input-error").forEach((el) => {
+    el.classList.remove("input-error");
+    const errorText = el.nextElementSibling;
+    if (errorText && errorText.classList.contains("error-text")) {
+      errorText.remove();
+    }
+  });
 
-  const endpoint = isLogin ? "/login" : "/register";
-  const body = isLogin ? { email, password } : { username, email, password };
+  // Get form data
+  const formData = new FormData(form);
+  const email = formData.get("email").trim();
+  const password = formData.get("password");
+  const username = isLogin ? null : formData.get("username").trim();
+
+  // Client-side validation
+  if (!email || !password || (!isLogin && !username)) {
+    showFieldError("Please fill all required fields");
+    if (!email) highlightErrorField("email");
+    if (!password) highlightErrorField("password");
+    if (!isLogin && !username) highlightErrorField("username");
+    return;
+  }
+
+  if (!isLogin && username.length < 3) {
+    showFieldError("Username must be at least 3 characters");
+    highlightErrorField("username");
+    return;
+  }
+
+  if (!validator.isEmail(email)) {
+    showFieldError("Please enter a valid email address");
+    highlightErrorField("email");
+    return;
+  }
+
+  if (password.length < 8) {
+    showFieldError("Password must be at least 8 characters");
+    highlightErrorField("password");
+    return;
+  }
 
   try {
-    const res = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
+    const endpoint = isLogin ? "/login" : "/register";
+    const body = isLogin ? { email, password } : { username, email, password };
+
+    const response = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if (data.success && data.token) {
+    if (!response.ok) {
+      // Handle API validation errors
+      if (data.field) {
+        showFieldError(data.message, data.field);
+      } else {
+        throw new Error(data.message || "Request failed");
+      }
+      return;
+    }
+
+    // Handle successful response
+    if (data.success) {
+      msg.classList.add("message-success");
+      msg.textContent = data.message;
+
+      if (data.token) {
+        // Store user data
+        const userData = {
+          userId: data.user.userId,
+          email: email,
+          credits: data.user.credits,
+          username: data.user.username || username || email.split("@")[0],
+          role: data.user.role || "0",
+          verified: data.user.verified || false,
+        };
+
+        // Set cookies and local storage
+        setCookie("auth_token", data.token, 7);
+        localStorage.setItem("user_data", JSON.stringify(userData));
+        localStorage.setItem("userId", data.user.userId);
+
+        // Handle redirection based on verification status
+        if (data.user.verified) {
+          setTimeout(() => {
+            window.location.href =
+              data.user.role === "1" ? "integrations.html" : "index.html";
+          }, 1500);
+        } else {
+          localStorage.setItem("unverifiedEmail", email);
+          setTimeout(() => {
+            window.location.href = `verify-email.html?email=${encodeURIComponent(
+              email
+            )}`;
+          }, 1500);
+        }
+      } else {
+        // Registration without immediate login
+        form.reset();
+        localStorage.setItem("unverifiedEmail", email);
+      }
+    }
+  } catch (error) {
+    console.error("Authentication error:", error);
+    msg.classList.add("message-error");
+
+    // Special handling for unverified email
+    if (error.message.includes("verify your email")) {
+      msg.innerHTML = `${error.message} <a href="#" id="resend-link">Resend verification email</a>`;
+      document.getElementById("resend-link").addEventListener("click", (e) => {
+        e.preventDefault();
+        resendVerificationEmail(email);
+      });
+    } else {
+      msg.textContent =
+        error.message ||
+        (isLogin
+          ? "Login failed. Please try again."
+          : "Registration failed. Please try again.");
+    }
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  }
+});
+
+// Helper functions
+function showFieldError(message, fieldName = null) {
+  msg.classList.add("message-error");
+  msg.textContent = message;
+
+  if (fieldName) {
+    highlightErrorField(fieldName);
+  }
+}
+
+function highlightErrorField(fieldName) {
+  const field = form.querySelector(`[name="${fieldName}"]`);
+  if (field) {
+    field.classList.add("input-error");
+
+    // Add error text if not already present
+    if (
+      !field.nextElementSibling ||
+      !field.nextElementSibling.classList.contains("error-text")
+    ) {
+      const errorText = document.createElement("p");
+      errorText.className = "error-text";
+      errorText.textContent =
+        fieldName === "password"
+          ? "Password must be at least 8 characters with uppercase, number, and special character"
+          : `Please enter a valid ${fieldName}`;
+      field.insertAdjacentElement("afterend", errorText);
+    }
+  }
+}
+
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = "expires=" + date.toUTCString();
+  document.cookie =
+    `${name}=${value}; ${expires}; path=/; SameSite=Lax` +
+    (location.protocol === "https:" ? "; Secure" : "");
+}
+
+// Add resend verification function
+async function resendVerificationEmail(email) {
+  try {
+    const res = await fetch(
+      "http://localhost:5000/api/auth/resend-verification",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await res.json();
+    if (data.success) {
+      msg.textContent = "Verification email resent. Please check your inbox.";
       msg.classList.remove("text-danger");
       msg.classList.add("text-success");
-      msg.textContent = data.message;
-
-      // Auto-login after successful registration
-      const userData = {
-        userId: data.user.userId,
-        email: email,
-        credits: data.user.credits,
-        username: data.user.username || username || email.split("@")[0],
-        loginTime: new Date().toISOString(),
-        role: data.user.role || "0", // Default to "0" if not provided
-      };
-
-      // Set cookie and localStorage
-      setCookie("auth_token", data.token, 7);
-      document.cookie = `token=${data.token}; Path=/;`;
-      localStorage.setItem("user_data", JSON.stringify(userData));
-      localStorage.setItem("userId", data.user.userId);
-
-      // Update UI and redirect
-      const role = data?.user.role; // assume backend sends "role"
-      console.log("User role:", role);
-      setAvatarInitials();
-
-      if (role === "1") {
-        window.location.href = "integrations.html";
-      } else {
-        window.location.href = "index.html";
-      }
-      // setAvatarInitials();
-      // window.location.href = "index.html";
     } else {
-      msg.textContent = data.message;
+      msg.textContent = data.message || "Failed to resend verification email";
       msg.classList.add("text-danger");
     }
   } catch (err) {
     console.error(err);
-    msg.textContent = "An error occurred.";
+    msg.textContent = "An error occurred while resending verification email";
     msg.classList.add("text-danger");
-  } finally {
-    // Re-enable the button and reset text
-    submitBtn.disabled = false;
-    submitBtn.textContent = isLogin ? "Login" : "Register";
   }
-});
+}
 
 // Google login handler
 document.getElementById("google-login").addEventListener("click", () => {
@@ -131,8 +257,13 @@ window.addEventListener("load", () => {
   const userData = localStorage.getItem("user_data");
 
   if (token && userData) {
-    // User is already logged in, redirect to dashboard
-    window.location.href = "credits.html";
+    const user = JSON.parse(userData);
+    if (!user.verified) {
+      window.location.href =
+        "verify-email.html?email=" + encodeURIComponent(user.email);
+    } else {
+      window.location.href = "credits.html";
+    }
   }
 });
 
@@ -143,7 +274,11 @@ function isAuthenticated() {
   const userData = localStorage.getItem("user_data");
   const authToken = getCookie("auth_token");
 
-  return !!(userData || authToken);
+  if (userData && authToken) {
+    const user = JSON.parse(userData);
+    return user.verified; // Only return true if user is verified
+  }
+  return false;
 }
 
 // Update UI based on authentication state
