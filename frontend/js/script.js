@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed");
+
   // --- USER AUTH STATE ---
   const userData = localStorage.getItem("user_data");
 
@@ -59,27 +61,65 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.add("text-secondary");
     }
   });
+
+  console.log("Current page:", path);
+
+  // --- ADMIN CHECK FOR ADDMODEL PAGE ---
+  if (path === "addmodel.html") {
+    console.log("Checking admin access...");
+    checkAdminAccess();
+  }
 });
+
+// --- ADMIN CHECK FUNCTION ---
+async function checkAdminAccess() {
+  const token = getCookie("auth_token");
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/auth/admin-auth`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      console.log("Not an admin");
+      window.location.href = "index.html"; // Not an admin
+    }
+  } catch (error) {
+    console.error("Error checking admin access:", error);
+    window.location.href = "index.html"; // Fallback redirect
+  }
+}
+
+// --- HELPER TO GET COOKIE ---
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? match[2] : null;
+}
 
 // --- LOGOUT FUNCTION ---
 function logout() {
-  // Remove specific cookies
   const removeCookie = (name) => {
     document.cookie =
       name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   };
 
-  // Clear cookies
   removeCookie("auth_token");
-  removeCookie("token"); // original token name in your script
+  removeCookie("token");
 
-  // Clear localStorage items
   localStorage.removeItem("auth_token");
   localStorage.removeItem("user_data");
   localStorage.removeItem("userId");
   localStorage.removeItem("ignoredProviders");
 
-  // Redirect to homepage
   window.location.href = "index.html";
 }
 
@@ -89,10 +129,7 @@ function checkLogin() {
     .split("; ")
     .some((row) => row.startsWith(`${cookieName}=`));
 
-  if (!cookieExists) {
-    return false;
-  }
-  return true;
+  return cookieExists;
 }
 
 // --- MOBILE SEARCH SIDEBAR TOGGLE ---
@@ -115,21 +152,11 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", function (event) {
-  // If "/" is pressed and not inside an input/textarea
   if (event.key === "/" && !event.target.matches("input, textarea")) {
-    event.preventDefault(); // Prevent default "/" character
+    event.preventDefault();
     const searchInput = document.getElementById("navbarSearch");
     if (searchInput) {
       searchInput.focus();
     }
   }
 });
-
-// --- AUTHENTICATION CHECK ---
-// Check if user is authenticated
-// const token = document.cookie
-//   .split("; ")
-//   .find((row) => row.startsWith("auth_token="));
-// if (!token) {
-//   window.location.href = "auth.html"; // Redirect to login/register page
-// }

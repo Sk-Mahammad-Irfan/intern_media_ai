@@ -95,7 +95,7 @@ form.addEventListener("submit", async (e) => {
     const endpoint = isLogin ? "/login" : "/register";
     const body = isLogin ? { email, password } : { username, email, password };
 
-    const response = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
+    const response = await fetch(`${BACKEND_URL}/api/auth${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -221,14 +221,11 @@ function setCookie(name, value, days) {
 // Add resend verification function
 async function resendVerificationEmail(email) {
   try {
-    const res = await fetch(
-      "http://localhost:5000/api/auth/resend-verification",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/api/auth/resend-verification`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
     const data = await res.json();
     if (data.success) {

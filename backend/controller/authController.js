@@ -88,7 +88,7 @@ export const registerController = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      credits: 20,
+      credits: 0,
       verified: false,
       verificationToken,
       verificationTokenExpires,
